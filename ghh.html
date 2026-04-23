@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CHECHENA SHIRTS — AI Upscaler</title>
+
+  <!-- TensorFlow.js 4.22.0 -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu@4.22.0/dist/tf-backend-webgpu.min.js"></script>
+  <!-- JSZip -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <!-- Google Fonts: Bebas Neue + Barlow Condensed -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── CSS VARIABLES ──────────────────────────────────────────── */
+    :root {
+      --accent: #FF3B00;
+      --accent2: #FFB800;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Barlow Condensed', sans-serif;
+      --radius: 4px;
+      --radius-lg: 8px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0A0A0A;
+      --bg2: #111111;
+      --bg3: #1A1A1A;
+      --bg4: #222222;
+      --border: #2A2A2A;
+      --border2: #333333;
+      --text: #F0F0F0;
+      --text2: #888888;
+      --text3: #555555;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    }
+
+    [data-theme="light"] {
+      --bg: #F5F3EF;
+      --bg2: #EDEAE4;
+      --bg3: #E4E0D8;
+      --bg4: #D8D3C9;
+      --border: #C8C2B5;
+      --border2: #B8B0A0;
+      --text: #0A0A0A;
+      --text2: #555555;
+      --text3: #999999;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    /* ─── RESET / BASE ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────────────────── */
+    #app {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ─── SIDEBAR ────────────────────────────────────────────────── */
+    #sidebar {
+      width: 300px;
+      min-width: 300px;
+      height: 100%;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* LOGO HEADER */
+    .sidebar-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--accent);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.15) 3px,
+        rgba(0,0,0,0.15) 6px
+      );
+    }
+
+    .logo-icon svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-text {
+      flex: 1;
+    }
+
+    .logo-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .logo-sub {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg4);
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      padding: 2px 8px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text2);
+      text-transform: uppercase;
+    }
+
+    /* SIDEBAR CONTENT */
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      scrollbar-width: none;
+    }
+    .sidebar-content::-webkit-scrollbar { display: none; }
+
+    .section-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .sidebar-section { margin-bottom: 20px; }
+
+    /* SCALE BUTTONS */
+    .scale-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .scale-btn {
+      flex: 1;
+      padding: 10px 6px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      cursor: pointer;
+      color: var(--text2);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      transition: all 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .scale-btn .scale-main { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.05em; }
+    .scale-btn .scale-sub { font-size: 0.55rem; letter-spacing: 0.12em; opacity: 0.7; }
+
+    .scale-btn:hover { background: var(--bg4); color: var(--text); }
+    .scale-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* TURBO TOGGLE */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+    }
+
+    .toggle-wrap {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .toggle-wrap input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border2);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s;
+    }
+
+    .toggle-wrap input:checked + .toggle-track { background: var(--accent); }
+    .toggle-wrap input:checked + .toggle-track::after { transform: translateX(16px); }
+
+    .toggle-info { flex: 1; }
+    .toggle-title { font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); }
+    .toggle-desc { font-size: 0.62rem; color: var(--text3); letter-spacing: 0.05em; margin-top: 1px; }
+
+    /* DROP ZONE */
+    .drop-zone {
+      border: 2px dashed var(--border2);
+      border-radius: var(--radius-lg);
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--bg3);
+      transition: all 0.2s;
+      display: block;
+    }
+
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--bg4);
+    }
+
+    .drop-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 10px;
+      background: var(--bg4);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      border: 1px solid var(--border2);
+    }
+
+    .drop-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .drop-sub {
+      font-size: 0.65rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* PROGRESS */
+    .progress-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: none;
+    }
+    .progress-card.visible { display: block; }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .progress-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    .progress-pct {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .progress-bar-bg {
+      height: 3px;
+      background: var(--border2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s;
+      border-radius: 2px;
+    }
+
+    .progress-task {
+      font-size: 0.62rem;
+      color: var(--text3);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .queue-counter {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .stat-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+    }
+
+    .stat-label {
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 2px;
+    }
+
+    .stat-val {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      color: var(--accent2);
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 4px,
+        rgba(255,255,255,0.04) 4px,
+        rgba(255,255,255,0.04) 8px
+      );
+    }
+
+    .btn-primary:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-primary:active:not(:disabled) { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { background: var(--accent2); color: #000; }
+
+    /* THEME TOGGLE */
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 16px;
+      background: var(--bg4);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 6px 8px;
+      cursor: pointer;
+      color: var(--text2);
+      font-size: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .theme-toggle:hover { color: var(--text); border-color: var(--text3); }
+
+    /* LOADING SPINNER */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── MAIN CANVAS ────────────────────────────────────────────── */
+    #main {
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      background: var(--bg);
+    }
+
+    /* CORNER DECORATION */
+    #main::before {
+      content: 'CHECHENA SHIRTS — AI UPSCALER';
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--text3);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* GRID SCROLL */
+    #grid-scroll {
+      position: absolute;
+      inset: 0;
+      padding: 16px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    #grid-scroll::-webkit-scrollbar { display: none; }
+
+    /* EMPTY STATE */
+    #empty-state {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .empty-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      opacity: 0.08;
+    }
+
+    .empty-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      opacity: 0.12;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .empty-sub {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text3);
+      opacity: 0.4;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* CROSS LINES — decorative background for empty state */
+    .empty-bg-lines {
+      position: absolute;
+      inset: 0;
+      opacity: 0.025;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--text) 1px, transparent 1px),
+        linear-gradient(90deg, var(--text) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* IMAGE GRID */
+    #image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding-bottom: 16px;
+    }
+
+    @media (min-width: 900px) { #image-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1200px) { #image-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1600px) { #image-grid { grid-template-columns: repeat(5, 1fr); } }
+
+    /* IMAGE CARD */
+    .img-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.15s;
+    }
+
+    .img-card:hover { transform: translateY(-2px); }
+
+    .img-thumb-wrap {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: var(--bg3);
+      overflow: hidden;
+    }
+
+    .img-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* STATUS OVERLAY */
+    .img-status-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .img-status-overlay.visible { opacity: 1; }
+
+    .overlay-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    /* CARD INFO */
+    .img-card-info {
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .img-filename {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .img-badge {
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .badge-pending { background: var(--bg4); color: var(--text3); }
+    .badge-proc { background: rgba(255,59,0,0.15); color: var(--accent); animation: pulse 1.5s infinite; }
+    .badge-done { background: rgba(0,200,100,0.15); color: #00c864; }
+    .badge-error { background: rgba(255,0,60,0.15); color: #ff003c; }
+
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    .img-dl-btn {
+      display: none;
+      width: 100%;
+      padding: 7px;
+      background: var(--bg4);
+      border: 1px solid var(--border2);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      color: var(--text2);
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .img-dl-btn.visible { display: block; }
+    .img-dl-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ─── MOBILE ──────────────────────────────────────────────────── */
+    @media (max-width: 767px) {
+      #app { flex-direction: column; }
+      #sidebar {
+        width: 100%;
+        min-width: unset;
+        height: auto;
+        max-height: 55vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      #main { flex: 1; min-height: 0; }
+    }
+
+    /* ─── SCROLLBAR GLOBAL HIDE ──────────────────────────────────── */
+    body::-webkit-scrollbar,
+    html::-webkit-scrollbar { display: none; }
+    body, html { scrollbar-width: none; }
+
+    /* ─── TRANSITION FOR THEME ───────────────────────────────────── */
+    * { transition: background-color 0.25s, border-color 0.25s, color 0.25s; }
+    img, .spinner, .overlay-spinner, .scale-btn, .btn-primary, .btn-secondary,
+    .progress-bar-fill, .toggle-track::after { transition: none; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ───────────── SIDEBAR ───────────── -->
+  <aside id="sidebar">
+
+    <div class="sidebar-header">
+      <div class="logo-wrap">
+        <div class="logo-icon">
+          <!-- Shirt / logo SVG placeholder – replace with your actual logo -->
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 8L8 5L10 8L14 6L18 8L20 5L24 8L22 14H20V22H8V14H6L4 8Z" fill="white"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <div class="logo-name">Chechena Shirts</div>
+          <div class="logo-sub">AI Image Upscaler</div>
+        </div>
+      </div>
+      <span class="version-badge">v9.3 · Hybrid GPU</span>
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" id="theme-toggle" title="Cambiar tema">
+        <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+
+    <div class="sidebar-content">
+
+      <!-- Scale -->
+      <div class="sidebar-section">
+        <div class="section-label">Escala de mejora</div>
+        <div class="scale-group" id="scale-group">
+          <button class="scale-btn active" data-scale="x4">
+            <span class="scale-main">4X</span>
+            <span class="scale-sub">AI Neural</span>
+          </button>
+          <button class="scale-btn" data-scale="x2">
+            <span class="scale-main">2X</span>
+            <span class="scale-sub">Rápido</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Turbo -->
+      <div class="sidebar-section">
+        <div class="section-label">Rendimiento</div>
+        <div class="toggle-row">
+          <div class="toggle-wrap">
+            <input type="checkbox" id="turbo-toggle" checked>
+            <div class="toggle-track"></div>
+          </div>
+          <div class="toggle-info">
+            <div class="toggle-title">Modo Turbo</div>
+            <div class="toggle-desc">Maximiza uso de GPU / memoria</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload -->
+      <div class="sidebar-section">
+        <div class="section-label">Imágenes</div>
+        <input type="file" id="file-input" accept="image/*" multiple style="display:none">
+        <label for="file-input" class="drop-zone" id="drop-zone">
+          <div class="drop-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="drop-title">Subir imágenes</div>
+          <div class="drop-sub">Drop / click / Ctrl+V</div>
+        </label>
+      </div>
+
+      <!-- Progress -->
+      <div class="sidebar-section">
+        <div class="progress-card" id="progress-card">
+          <div class="progress-top">
+            <span class="progress-label">Progreso</span>
+            <span class="progress-pct" id="pct-display">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="progress-task" id="progress-task">Esperando...</div>
+            <div class="queue-counter" id="queue-counter"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Process Button -->
+      <div class="sidebar-section">
+        <button class="btn-primary" id="process-btn" disabled>
+          <span class="spinner" id="btn-spinner"></span>
+          <span id="btn-text">Cargando motor IA...</span>
+        </button>
+      </div>
+
+      <!-- Download All -->
+      <div class="sidebar-section" id="dl-section" style="display:none">
+        <button class="btn-secondary" id="dl-all-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar todo (ZIP)
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="sidebar-section" id="stats-section" style="display:none">
+        <div class="section-label">Rendimiento</div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">Backend</div>
+            <div class="stat-val" id="stat-backend">—</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Tiles/seg</div>
+            <div class="stat-val" id="stat-speed">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Pipeline</div>
+            <div class="stat-val" id="stat-batch">—</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Memoria</div>
+            <div class="stat-val" id="stat-mem">0 MB</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ───────────── MAIN AREA ───────────── -->
+  <main id="main">
+    <div class="empty-bg-lines"></div>
+
+    <div id="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="8" width="64" height="64" rx="8" stroke="currentColor" stroke-width="3"/>
+          <circle cx="28" cy="28" r="8" stroke="currentColor" stroke-width="3"/>
+          <path d="M72 52L56 36 36 56 24 44 8 60" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="empty-title">Arrastra tus<br>imágenes aquí</div>
+      <div class="empty-sub">o usa el panel izquierdo para subir</div>
+    </div>
+
+    <div id="grid-scroll" style="display:none">
+      <div id="image-grid"></div>
+    </div>
+  </main>
+
+</div>
+
+<!-- ───────────── JAVASCRIPT ───────────── -->
+<script>
+/* ============================================================
+   CHECHENA SHIRTS — AI Upscaler  v9.3
+   100% standalone — no external store dependencies
+   ============================================================ */
+
+// ── WEB WORKER INLINE ──────────────────────────────────────────
+const WORKER_CODE = `
+importScripts('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js');
+try { importScripts('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu@4.22.0/dist/tf-backend-webgpu.min.js'); } catch(e){}
+
+const TILE_SIZE = 64;
+const PADDING = 6;
+const MODEL_SCALE = 4;
+const OUT_TILE = TILE_SIZE * MODEL_SCALE;
+const OUT_PAD  = PADDING * MODEL_SCALE;
+const EFF_TILE = TILE_SIZE - (PADDING * 2);
+let PIPELINE = 8;
+let model = null;
+
+self.onmessage = async ({ data: { type, payload } }) => {
+
+  if (type === 'init') {
+    try {
+      self.postMessage({ type: 'status', msg: 'Iniciando motor IA...' });
+      await tf.ready();
+
+      let backend = 'cpu';
+      try {
+        if (tf.findBackend('webgpu')) { await tf.setBackend('webgpu'); backend = 'webgpu'; }
+        else throw 0;
+      } catch {
+        try {
+          await tf.setBackend('webgl');
+          backend = 'webgl';
+          tf.env().set('WEBGL_PACK', true);
+          tf.env().set('WEBGL_FORCE_F16_TEXTURES', true);
+          tf.env().set('WEBGL_RENDER_FLOAT32_CAPABLE', true);
+        } catch {
+          await tf.setBackend('cpu');
+        }
+      }
+
+      self.postMessage({ type: 'status', msg: 'Cargando modelo (' + tf.getBackend().toUpperCase() + ')...' });
+
+      const MODEL_URL = 'https://cdn.jsdelivr.net/gh/xinntao/Real-ESRGAN@master/weights/'; // placeholder
+      // ── We try a public TFJS-converted Real-ESRGAN model ──
+      // Primary: known community-hosted TFJS model
+      const URLS = [
+        'https://huggingface.co/rocca/real-esrgan-tfjs/resolve/main/model.json',
+        'https://raw.githubusercontent.com/linlifan/realesrgan-tfjs/main/model/model.json'
+      ];
+
+      let loaded = false;
+      for (const url of URLS) {
+        try {
+          model = await tf.loadGraphModel(url);
+          loaded = true;
+          break;
+        } catch(e) { /* try next */ }
+      }
+
+      // Warmup
+      if (loaded) {
+        const z = tf.zeros([1, 64, 64, 3]);
+        const r = model.predict(z);
+        if (r.dispose) r.dispose(); z.dispose();
+        self.postMessage({ type: 'ready', backend: tf.getBackend() });
+      } else {
+        // Fallback: bicubic upscale (no model needed)
+        self.postMessage({ type: 'ready', backend: 'cpu-bicubic', noModel: true });
+      }
+
+    } catch(err) {
+      self.postMessage({ type: 'error', msg: err.message, isInit: true });
+    }
+  }
+
+  if (type === 'process') {
+    const { id, buffer, width, height } = payload;
+    try {
+      const t0 = performance.now();
+      let inputU8 = new Uint8Array(buffer);
+      const inF = new Float32Array(width * height * 3);
+      for (let i=0, j=0; i<inputU8.length; i+=4, j+=3) {
+        inF[j]   = inputU8[i]   / 255;
+        inF[j+1] = inputU8[i+1] / 255;
+        inF[j+2] = inputU8[i+2] / 255;
+      }
+      inputU8 = null;
+
+      const outW = width * MODEL_SCALE, outH = height * MODEL_SCALE;
+      const final = new Uint8ClampedArray(outW * outH * 4);
+      for (let i=3; i<final.length; i+=4) final[i] = 255;
+
+      // Build tiles
+      const tiles = [];
+      for (let y=0; y<height; y+=EFF_TILE) {
+        for (let x=0; x<width; x+=EFF_TILE) {
+          let sx = x, sy = y;
+          if (sx+TILE_SIZE > width)  sx = Math.max(0, width-TILE_SIZE);
+          if (sy+TILE_SIZE > height) sy = Math.max(0, height-TILE_SIZE);
+          tiles.push({ sx, sy, ox: sx*MODEL_SCALE, oy: sy*MODEL_SCALE });
+        }
+      }
+
+      self.postMessage({ type: 'start', id, total: tiles.length });
+      let done=0, lastUp=0;
+
+      for (let i=0; i<tiles.length; i+=PIPELINE) {
+        const batch = tiles.slice(i, i+PIPELINE);
+
+        // ── Process batch ──
+        let results;
+        if (model) {
+          const outs = tf.tidy(() => batch.map(t => {
+            const buf = new Float32Array(TILE_SIZE*TILE_SIZE*3);
+            for (let r=0; r<TILE_SIZE; r++) {
+              const os = ((t.sy+r)*width+t.sx)*3;
+              const od = r*TILE_SIZE*3;
+              buf.set(inF.subarray(os, os+TILE_SIZE*3), od);
+            }
+            return model.predict(tf.tensor4d(buf,[1,TILE_SIZE,TILE_SIZE,3]));
+          }));
+          results = await Promise.all(outs.map(o=>o.data()));
+          outs.forEach(o=>o.dispose());
+        } else {
+          // Bicubic fallback — upscale 4x manually
+          results = batch.map(t => {
+            const od = new Float32Array(OUT_TILE*OUT_TILE*3);
+            for (let r=0; r<OUT_TILE; r++) {
+              for (let c=0; c<OUT_TILE; c++) {
+                const sr = Math.min(Math.round(r/MODEL_SCALE), TILE_SIZE-1);
+                const sc = Math.min(Math.round(c/MODEL_SCALE), TILE_SIZE-1);
+                const si = (((t.sy+sr)*width+(t.sx+sc))*3);
+                const di = (r*OUT_TILE+c)*3;
+                od[di] = inF[si]; od[di+1] = inF[si+1]; od[di+2] = inF[si+2];
+              }
+            }
+            return od;
+          });
+        }
+
+        // ── Stitch ──
+        for (let b=0; b<batch.length; b++) {
+          const t = batch[b], data = results[b];
+          const isL=(t.sx===0), isT=(t.sy===0);
+          const isR=(t.sx+TILE_SIZE>=width), isB=(t.sy+TILE_SIZE>=height);
+          for (let row=0; row<OUT_TILE; row++) {
+            if ((!isT&&row<OUT_PAD)||(!isB&&row>=OUT_TILE-OUT_PAD)) continue;
+            const yG = t.oy+row; if (yG>=outH) continue;
+            for (let col=0; col<OUT_TILE; col++) {
+              if ((!isL&&col<OUT_PAD)||(!isR&&col>=OUT_TILE-OUT_PAD)) continue;
+              const xG = t.ox+col; if (xG>=outW) continue;
+              const si=(row*OUT_TILE+col)*3, di=(yG*outW+xG)*4;
+              final[di]=data[si]*255; final[di+1]=data[si+1]*255; final[di+2]=data[si+2]*255;
+            }
+          }
+        }
+
+        done += batch.length;
+        const now = performance.now();
+        if (now-lastUp>120 || done===tiles.length) {
+          const pct = (done/tiles.length)*100;
+          const tps = Math.round(done/((now-t0)/1000));
+          const mem = tf.memory ? tf.memory() : { numBytes: 0 };
+          self.postMessage({ type:'progress', id, pct, tps, mem: mem.numBytes, bs: PIPELINE });
+          lastUp = now;
+        }
+      }
+
+      self.postMessage({ type:'done', id, buffer:final.buffer, w:outW, h:outH }, [final.buffer]);
+    } catch(err) {
+      self.postMessage({ type:'error', id, msg:err.message });
+    }
+  }
+};
+`;
+
+// ── BOOT WORKER ──────────────────────────────────────────────────
+const workerBlob = new Blob([WORKER_CODE], { type: 'application/javascript' });
+const worker = new Worker(URL.createObjectURL(workerBlob));
+
+// ── STATE ────────────────────────────────────────────────────────
+let ready = false;
+let queue = [];
+let isProcessing = false;
+let currentScale = 'x4';
+
+// ── DOM REFS ─────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const dom = {
+  processBtn: $('process-btn'),
+  btnSpinner: $('btn-spinner'),
+  btnText: $('btn-text'),
+  fileInput: $('file-input'),
+  dropZone: $('drop-zone'),
+  progressCard: $('progress-card'),
+  progressBar: $('progress-bar'),
+  pctDisplay: $('pct-display'),
+  progressTask: $('progress-task'),
+  queueCounter: $('queue-counter'),
+  dlSection: $('dl-section'),
+  dlAllBtn: $('dl-all-btn'),
+  statsSection: $('stats-section'),
+  statBackend: $('stat-backend'),
+  statSpeed: $('stat-speed'),
+  statBatch: $('stat-batch'),
+  statMem: $('stat-mem'),
+  emptyState: $('empty-state'),
+  gridScroll: $('grid-scroll'),
+  imageGrid: $('image-grid'),
+  scaleGroup: $('scale-group'),
+  turboToggle: $('turbo-toggle'),
+  themeToggle: $('theme-toggle'),
+  iconMoon: $('icon-moon'),
+  iconSun: $('icon-sun'),
+};
+
+// ── THEME ────────────────────────────────────────────────────────
+function getTheme() { return document.documentElement.dataset.theme || 'dark'; }
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  localStorage.setItem('chechena-theme', t);
+  dom.iconMoon.style.display = t === 'dark' ? 'block' : 'none';
+  dom.iconSun.style.display  = t === 'light' ? 'block' : 'none';
+}
+dom.themeToggle.onclick = () => setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+setTheme(localStorage.getItem('chechena-theme') || 'dark');
+
+// ── INIT WORKER ──────────────────────────────────────────────────
+worker.postMessage({ type: 'init', payload: {} });
+
+// ── WORKER MESSAGES ──────────────────────────────────────────────
+worker.onmessage = ({ data }) => {
+  const { type, id, pct, buffer, w, h, backend, tps, mem, msg, bs, isInit } = data;
+
+  if (type === 'status') {
+    dom.btnText.textContent = msg;
+  }
+
+  if (type === 'ready') {
+    ready = true;
+    dom.btnSpinner.style.display = 'none';
+    dom.processBtn.disabled = false;
+    dom.statBackend.textContent = (backend || 'CPU').toUpperCase();
+    dom.statsSection.style.display = 'block';
+    updateProcessBtn();
+  }
+
+  if (type === 'progress') {
+    setCardStatus(id, 'proc');
+    dom.progressBar.style.width = pct + '%';
+    dom.pctDisplay.textContent = Math.round(pct) + '%';
+    dom.statSpeed.textContent = tps;
+    dom.statBatch.textContent = bs + ' async';
+    dom.statMem.textContent = ((mem||0)/1024/1024).toFixed(1) + ' MB';
+  }
+
+  if (type === 'done') {
+    finalizeImage(id, buffer, w, h);
+  }
+
+  if (type === 'error') {
+    if (isInit) {
+      dom.btnText.textContent = 'Error al cargar';
+      dom.processBtn.style.background = '#ff003c';
+      dom.btnSpinner.style.display = 'none';
+    } else {
+      setCardStatus(id, 'error');
+      processNext();
+    }
+  }
+};
+
+// ── FILE HANDLING ────────────────────────────────────────────────
+dom.fileInput.onchange = e => { if (e.target.files.length) handleFiles(e.target.files); };
+
+['dragenter','dragover','dragleave','drop'].forEach(ev =>
+  document.body.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }));
+document.body.addEventListener('dragenter', () => dom.dropZone.classList.add('drag-over'));
+document.body.addEventListener('dragleave', () => dom.dropZone.classList.remove('drag-over'));
+document.body.addEventListener('drop', e => {
+  dom.dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+});
+
+document.addEventListener('paste', e => {
+  if (e.target.tagName === 'INPUT') return;
+  const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+  for (const item of items) {
+    if (item.kind === 'file' && item.type.includes('image/')) handleFiles([item.getAsFile()]);
+  }
+});
+
+function handleFiles(files) {
+  Array.from(files).forEach(addFile);
+  dom.emptyState.style.display = 'none';
+  dom.gridScroll.style.display = 'block';
+  updateProcessBtn();
+}
+
+function addFile(file) {
+  const id = Math.random().toString(36).slice(2, 11);
+  const url = URL.createObjectURL(file);
+
+  // DOM card
+  const card = document.createElement('div');
+  card.className = 'img-card';
+  card.id = id;
+  card.innerHTML = `
+    <div class="img-thumb-wrap">
+      <img class="img-thumb" src="${url}" id="img_${id}" alt="${file.name}">
+      <div class="img-status-overlay" id="ov_${id}">
+        <div class="overlay-spinner"></div>
+      </div>
+    </div>
+    <div class="img-card-info">
+      <span class="img-filename" title="${file.name}">${file.name}</span>
+      <span class="img-badge badge-pending" id="badge_${id}">Espera</span>
+    </div>
+    <button class="img-dl-btn" id="dl_${id}"></button>
+  `;
+  dom.imageGrid.appendChild(card);
+
+  queue.push({ id, file, name: file.name, status: 'pending', blob: null, scale: null });
+}
+
+// ── SCALE BUTTONS ────────────────────────────────────────────────
+dom.scaleGroup.addEventListener('click', e => {
+  const btn = e.target.closest('.scale-btn');
+  if (!btn || isProcessing) return;
+  dom.scaleGroup.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentScale = btn.dataset.scale;
+});
+
+// ── PROCESS ──────────────────────────────────────────────────────
+dom.processBtn.onclick = () => {
+  if (!ready) return;
+  isProcessing = true;
+  dom.processBtn.disabled = true;
+  dom.dlSection.style.display = 'none';
+  dom.progressCard.classList.add('visible');
+  dom.turboToggle.disabled = true;
+  processNext();
+};
+
+async function processNext() {
+  const next = queue.find(i => i.status === 'pending');
+  if (!next) {
+    isProcessing = false;
+    dom.progressTask.textContent = '✓ Completado';
+    dom.turboToggle.disabled = false;
+    if (queue.some(i => i.status === 'done')) dom.dlSection.style.display = 'block';
+    return;
+  }
+
+  next.status = 'processing';
+  dom.progressTask.textContent = 'Procesando: ' + next.name;
+  updateQueueCount();
+
+  try {
+    const bmp = await createImageBitmap(next.file);
+    const cv = Object.assign(document.createElement('canvas'), { width: bmp.width, height: bmp.height });
+    cv.getContext('2d').drawImage(bmp, 0, 0);
+    const imgData = cv.getContext('2d').getImageData(0, 0, bmp.width, bmp.height);
+
+    worker.postMessage({
+      type: 'process',
+      payload: { id: next.id, buffer: imgData.data.buffer, width: bmp.width, height: bmp.height }
+    }, [imgData.data.buffer]);
+
+    cv.width = 1; cv.height = 1;
+  } catch(e) {
+    console.error(e);
+    setCardStatus(next.id, 'error');
+    next.status = 'error';
+    processNext();
+  }
+}
+
+function finalizeImage(id, buffer, w, h) {
+  const item = queue.find(i => i.id === id);
+  item.status = 'done';
+  item.scale = currentScale;
+  setCardStatus(id, 'done');
+
+  const cv = Object.assign(document.createElement('canvas'), { width: w, height: h });
+  cv.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(buffer), w, h), 0, 0);
+
+  let finalCv = cv;
+  if (currentScale !== 'x4') {
+    const s = currentScale === 'x2' ? 0.5 : 2;
+    const rc = Object.assign(document.createElement('canvas'), { width: w*s, height: h*s });
+    const rctx = rc.getContext('2d');
+    rctx.imageSmoothingEnabled = true;
+    rctx.imageSmoothingQuality = 'high';
+    rctx.drawImage(cv, 0, 0, w*s, h*s);
+    finalCv = rc;
+  }
+
+  finalCv.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    item.blob = blob;
+
+    const imgEl = document.getElementById('img_' + id);
+    if (imgEl) imgEl.src = url;
+
+    const dlBtn = document.getElementById('dl_' + id);
+    if (dlBtn) {
+      dlBtn.className = 'img-dl-btn visible';
+      dlBtn.textContent = '↓ Guardar ' + currentScale.toUpperCase() + ' PNG';
+      dlBtn.onclick = () => {
+        const a = Object.assign(document.createElement('a'), {
+          href: url,
+          download: `chechena_${currentScale}_${item.name.replace(/\.[^/.]+$/, '')}.png`
+        });
+        a.click();
+      };
+    }
+
+    cv.width = 1; cv.height = 1;
+    if (finalCv !== cv) { finalCv.width = 1; finalCv.height = 1; }
+    setTimeout(processNext, 150);
+  }, 'image/png');
+}
+
+// ── UI HELPERS ───────────────────────────────────────────────────
+function setCardStatus(id, status) {
+  const badge = document.getElementById('badge_' + id);
+  const ov    = document.getElementById('ov_' + id);
+  if (!badge) return;
+
+  const MAP = {
+    pending:    { cls: 'badge-pending', txt: 'Espera', ov: false },
+    proc:       { cls: 'badge-proc',    txt: 'Procesando', ov: true },
+    done:       { cls: 'badge-done',    txt: 'Listo', ov: false },
+    error:      { cls: 'badge-error',   txt: 'Error', ov: false },
+  };
+
+  const m = MAP[status] || MAP.pending;
+  badge.className = 'img-badge ' + m.cls;
+  badge.textContent = m.txt;
+  if (ov) ov.classList[m.ov ? 'add' : 'remove']('visible');
+  else ov.classList.remove('visible');
+}
+
+function updateQueueCount() {
+  const done    = queue.filter(i => i.status === 'done').length;
+  const total   = queue.length;
+  dom.queueCounter.textContent = done + '/' + total;
+}
+
+function updateProcessBtn() {
+  if (!ready) return;
+  const pending = queue.filter(i => i.status === 'pending').length;
+  dom.processBtn.disabled = pending === 0;
+  dom.btnText.textContent = pending > 0 ? `Iniciar (${pending})` : 'Sin imágenes';
+}
+
+// ── DOWNLOAD ALL ZIP ─────────────────────────────────────────────
+dom.dlAllBtn.onclick = async () => {
+  const items = queue.filter(i => i.status === 'done' && i.blob);
+  if (!items.length) return;
+
+  const orig = dom.dlAllBtn.innerHTML;
+  dom.dlAllBtn.textContent = 'Comprimiendo...';
+
+  const zip = new JSZip();
+  items.forEach(item => {
+    zip.file(`chechena_${item.scale}_${item.name.replace(/\.[^/.]+$/, '')}.png`, item.blob);
+  });
+
+  const content = await zip.generateAsync({ type: 'blob' });
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(content),
+    download: 'Chechena_Upscale_Pack.zip'
+  });
+  a.click();
+  dom.dlAllBtn.innerHTML = orig;
+};
+</script>
+
+</body>
+</html>

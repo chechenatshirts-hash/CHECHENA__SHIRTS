@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mockup Studio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Almendra+Display&family=Audiowide&family=Bangers&family=Bebas+Neue&family=Black+Ops+One&family=Bruno+Ace&family=Bungee&family=Butcherman&family=Caesar+Dressing&family=Chakra+Petch:wght@400;700&family=Creepster&family=Diplomata&family=Eater&family=Ewert&family=Fascinate+Inline&family=Faster+One&family=Flavors&family=FrederickatheGreat&family=Frijole&family=Germania+One&family=Grenze+Gotisch:wght@400;700&family=Griffy&family=Henny+Penny&family=Inter:wght@300;400;600&family=Jolly+Lodger&family=Kanit:wght@400;900&family=Kirang+Haerang&family=Kranky&family=Londrina+Outline&family=Major+Mono+Display&family=MedievalSharp&family=Megrim&family=Metal&family=Metal+Mania&family=Miniver&family=Monoton&family=Montserrat&family=Mystery+Quest&family=New+Rocker&family=Nosifer&family=Orbitron&family=Oswald&family=Permanent+Marker&family=Piedra&family=Pirata+One&family=Plaster&family=Poppins&family=Raleway&family=Risque&family=Roboto&family=Rock+Salt&family=Rubik+Glitch&family=Rubik+Mono+One&family=Rye&family=Saira+Stencil+One&family=Sancreek&family=Seaweed+Script&family=Shojumaru&family=Silkscreen&family=Sirin+Stencil&family=Snowburst+One&family=Special+Elite&family=Stalemate&family=Stardos+Stencil&family=Syne:wght@400;800&family=Texturina:opsz,wght@12..72,400;12..72,900&family=Trade+Winds&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia&family=Vast+Shadow&family=Wallpoet&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.3.0/fontfaceobserver.standalone.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background: #e0e0e0; }
+
+    /* --- ESTILOS BASE --- */
+    #ms-app-wrapper {
+      --c-bg-app: #e0e0e0; --c-panel: #ffffff; --c-text: #111111; --c-blue-action: #2962ff; --c-border: #d1d1d1;
+      --f-main: 'Inter', sans-serif; --f-title: 'Bebas Neue', sans-serif;
+      font-family: var(--f-main); background-color: var(--c-bg-app); color: var(--c-text);
+      width: 100%; height: 100vh; display: flex; overflow: hidden; position: relative; border: 1px solid var(--c-border);
+    }
+    #ms-app-wrapper * { box-sizing: border-box; }
+    #ms-app-wrapper .mobile-only-header { display: none; }
+    #ms-app-wrapper .studio-sidebar { width: 360px; min-width: 360px; background: var(--c-panel); border-right: 1px solid var(--c-border); display: flex; flex-direction: column; height: 100%; z-index: 10; }
+    #ms-app-wrapper .sidebar-header-area { padding: 20px; border-bottom: 2px solid #000; }
+    #ms-app-wrapper .sidebar-header-area h2 { font-family: var(--f-title); font-size: 28px; margin: 0; color: #000; }
+    #ms-app-wrapper .sidebar-scroll-area { flex: 1; overflow-y: auto; }
+    #ms-app-wrapper details.am-section { border-bottom: 1px solid #eee; }
+    #ms-app-wrapper summary.am-summary { padding: 16px 20px; cursor: pointer; list-style: none; font-weight: 800; font-size: 13px; color: #111; display: flex; justify-content: space-between; text-transform: uppercase; }
+    #ms-app-wrapper .am-content { padding: 0 20px 20px 20px; }
+    #ms-app-wrapper .section-header { font-weight: 800; font-size: 10px; text-transform: uppercase; margin-bottom: 8px; display: block; color: #888; }
+    #ms-app-wrapper .grid-2, #ms-app-wrapper .grid-3, #ms-app-wrapper .grid-4 { display: grid; gap: 8px; }
+    #ms-app-wrapper .grid-2 { grid-template-columns: 1fr 1fr; }
+    #ms-app-wrapper .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    #ms-app-wrapper .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    #ms-app-wrapper .btn-ui { background: #fff; border: 1px solid #ddd; color: #333; padding: 10px 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 4px; width: 100%; }
+    #ms-app-wrapper .btn-ui.active { background: #111; color: #fff; border-color: #111; }
+    #ms-app-wrapper .product-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+    #ms-app-wrapper .am-select, #ms-app-wrapper .am-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; margin-bottom: 6px; background: #fff; }
+    #ms-app-wrapper .color-bar { display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; padding: 8px; border-radius: 4px; margin-bottom: 5px; }
+    #ms-app-wrapper input[type="color"] { -webkit-appearance: none; border: none; width: 24px; height: 24px; cursor: pointer; background: none; }
+    #ms-app-wrapper .sidebar-footer-area { padding: 20px; border-top: 1px solid #eee; background: #fff; }
+    #ms-app-wrapper .btn-blue-action { background: var(--c-blue-action); color: #fff; width: 100%; padding: 15px; font-family: var(--f-title); font-size: 22px; border: none; cursor: pointer; border-radius: 6px; font-weight: normal; }
+    #ms-app-wrapper .studio-viewport { flex: 1; display: flex; justify-content: center; align-items: center; background-color: var(--c-bg-app); position: relative; }
+    #ms-app-wrapper .canvas-scaler { box-shadow: 0 30px 60px rgba(0,0,0,0.2); background: #fff; transform-origin: center center; }
+
+    /* --- AJUSTES MÓVIL Y TABLETAS --- */
+    @media (max-width: 1100px) {
+      #ms-app-wrapper { flex-direction: column !important; height: auto !important; overflow-y: auto !important; display: flex !important; }
+      #ms-app-wrapper .mobile-only-header { display: block !important; order: 1 !important; background: #fff; padding: 15px; border-bottom: 2px solid #000; text-align: center; }
+      #ms-app-wrapper .mobile-only-header h2 { font-family: var(--f-title); font-size: 24px; margin: 0; color: #000; }
+      #ms-app-wrapper .studio-viewport { order: 2 !important; width: 100% !important; height: 480px !important; flex: none !important; padding: 10px 0 !important; background-color: var(--c-bg-app); display: flex !important; align-items: center; justify-content: center; }
+      #ms-app-wrapper .studio-sidebar { order: 3 !important; width: 100% !important; min-width: 0 !important; height: auto !important; border-right: none !important; border-top: 1px solid var(--c-border); }
+      #ms-app-wrapper .studio-sidebar .sidebar-header-area { display: none !important; }
+      body { overflow: auto !important; }
+    }
+
+
+
+    .brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  margin-top:20px;
+}
+
+.brand img{
+  height:60px;
+}
+
+.brand h2{
+  font-size:40px;
+  font-family:"Old English Text MT", serif;
+}
+
+#header{
+  text-align:center;
+  margin-top:20px;
+}
+
+#header h1{
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+#header p{
+  color:#bbb;
+}
+  </style>
+</head>
+<body>
+<div class="brand">
+  <img src="logo.png" alt="Chechena Shirts">
+  <h2>Chechena Shirts</h2>
+</div>
+<div id="ms-app-wrapper">
+  <div class="mobile-only-header"><h2>MOCKUP STUDIO</h2></div>
+  <div class="studio-sidebar">
+    <div class="sidebar-header-area"><h2>MOCKUP STUDIO</h2></div>
+    <div class="sidebar-scroll-area">
+      <details class="am-section" open>
+        <summary class="am-summary">01. Formato y Layout</summary>
+        <div class="am-content">
+          <span class="section-header">Resolución</span>
+          <div class="grid-3" id="format-buttons">
+            <button class="btn-ui active" onclick="setFormat(1080, 1080, this)">1:1 POST</button>
+            <button class="btn-ui" onclick="setFormat(1080, 1350, this)">4:5 INSTAGRAM POST</button>
+            <button class="btn-ui" onclick="setFormat(1080, 1920, this)">9:16 HISTORIA</button>
+          </div>
+          <span class="section-header" style="margin-top:15px;">Layout de Prendas</span>
+          <div class="grid-4" id="group-layout">
+            <button class="btn-ui active" onclick="changeLayout('row', this)">FILA</button>
+            <button class="btn-ui" onclick="changeLayout('diagonal', this)">DIAG.</button>
+            <button class="btn-ui" onclick="changeLayout('col', this)">VERT.</button>
+            <button class="btn-ui" onclick="changeLayout('free', this)">LIBRE</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="am-section">
+        <summary class="am-summary">02. Mockups y Color</summary>
+        <div class="am-content">
+          <div class="product-grid" id="product-container"></div>
+          <div style="margin-top:15px;">
+            <div class="color-bar">
+              <span class="section-header" style="margin:0;">Tela</span>
+              <input type="color" id="garmentColor" value="#ffffff" oninput="changeGarmentColor(this.value)">
+            </div>
+            <div class="color-bar">
+              <span class="section-header" style="margin:0;">Fondo</span>
+              <input type="color" id="bgColor" value="#f4f4f4" oninput="changeBgColor(this.value)">
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="am-section">
+        <summary class="am-summary">03. Textos y stickers</summary>
+        <div class="am-content">
+          <span class="section-header">Logo</span>
+          <div class="grid-2" style="margin-bottom:12px;">
+            <button class="btn-ui" onclick="document.getElementById('logoUpload').click()">Subir Logo</button>
+            <button class="btn-ui" onclick="toggleLogoInvert()">Invertir</button>
+          </div>
+          <input type="file" id="logoUpload" hidden accept="image/*">
+
+          <span class="section-header">Superior</span>
+          <div style="display:flex; gap:5px; margin-bottom:6px;">
+            <input type="text" id="textTop" class="am-input" style="margin:0;" placeholder="Título..." oninput="updateTexts()">
+            <input type="color" id="colorTop" value="#000000" oninput="updateTexts()">
+          </div>
+          <select id="fontTop" class="am-select scroll-enabled" onchange="updateTexts()"></select>
+
+          <span class="section-header">Subtítulo</span>
+          <div style="display:flex; gap:5px; margin-bottom:6px;">
+            <input type="text" id="textSub" class="am-input" style="margin:0;" placeholder="Subtítulo..." oninput="updateTexts()">
+            <input type="color" id="colorSub" value="#000000" oninput="updateTexts()">
+          </div>
+          <select id="fontSub" class="am-select scroll-enabled" onchange="updateTexts()"></select>
+
+          <span class="section-header">Inferior</span>
+          <div style="display:flex; gap:5px; margin-bottom:6px;">
+            <input type="text" id="textBot" class="am-input" style="margin:0;" placeholder="@marca..." oninput="updateTexts()">
+            <input type="color" id="colorBot" value="#000000" oninput="updateTexts()">
+          </div>
+          <select id="fontBot" class="am-select scroll-enabled" onchange="updateTexts()"></select>
+
+          <span class="section-header" style="margin-top:10px;">Stickers (80+)</span>
+          <select id="stickerSelect" class="am-select scroll-enabled" onchange="changeSticker(this.value)">
+            <option value="">Seleccionar Sticker...</option>
+          </select>
+        </div>
+      </details>
+
+      <details class="am-section">
+        <summary class="am-summary">04. Fondo Personalizado</summary>
+        <div class="am-content">
+          <button class="btn-ui" style="border:1px dashed #ccc;" onclick="document.getElementById('bgUpload').click()">+ CARGAR FONDO</button>
+          <input type="file" id="bgUpload" hidden accept="image/*">
+          <div style="margin-top:15px;">
+            <div style="display:flex; justify-content:space-between;">
+              <span class="section-header">Blur</span>
+              <span class="section-header" id="blurVal">0%</span>
+            </div>
+            <input type="range" min="0" max="1" step="0.01" value="0" style="width:100%" oninput="updateBlur(this.value)">
+          </div>
+        </div>
+      </details>
+
+      <details class="am-section" open>
+        <summary class="am-summary">05. Diseños Multi-Capa</summary>
+        <div class="am-content">
+          <button class="btn-blue-action" style="font-size:14px; padding:12px; background:#111;" onclick="document.getElementById('designUpload').click()">+ AGREGAR DISEÑO</button>
+          <input type="file" id="designUpload" hidden accept="image/*" multiple>
+          <button id="btnDelete" class="btn-ui" style="color:red; margin-top:10px; opacity:0.5;" onclick="deleteSelected()" disabled>BORRAR SELECCIONADO</button>
+        </div>
+      </details>
+    </div>
+    <div class="sidebar-footer-area">
+      <button class="btn-blue-action" onclick="downloadImage()">DESCARGAR MOCKUP</button>
+    </div>
+  </div>
+
+  <div class="studio-viewport">
+    <div class="canvas-scaler">
+      <canvas id="c"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- BASES DE DATOS ---
+  const PRODUCT_DB = [
+    {id:'over_1',name:'OVER 1',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/1_Over_FRENTE.png?v=1768275788',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/1_Over_ESPALDA.png?v=1768275788'},
+    {id:'over_2',name:'OVER 2',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_2_frente.png?v=1768366829',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_2_espalda.png?v=1768366829'},
+    {id:'over_3',name:'OVER 3',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_3_frente.png?v=1768366913',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_3_espalda.png?v=1768366913'},
+    {id:'boxy_1',name:'BOXY 1',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_1_frente.png?v=1768367004',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_1_espalda.png?v=1768367003'},
+    {id:'boxy_2',name:'BOXY 2',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_2_frente.png?v=1768367037',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_2_espalda.png?v=1768367037'},
+    {id:'boxy_3',name:'BOXY 3',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_3_frente.png?v=1768367067',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_3_espalda.png?v=1768367068'},
+    {id:'reg_1',name:'REG 1',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_1_frente.png?v=1768367110',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_1_espalda.png?v=1768367110'},
+    {id:'reg_2',name:'REG 2',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_2_frente.png?v=1768367137',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_2_espalda.png?v=1768367137'},
+    {id:'reg_3',name:'REG 3',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/REGULAR_3_FRENTE.png?v=1768367172',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/REGULAR_3_ESPALDA.png?v=1768367172'},
+    {id:'sud_1',name:'SUD 1',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_1_frente.png?v=1768367202',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_1_espalda.png?v=1768367203'},
+    {id:'sud_2',name:'SUD 2',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_2_frente.png?v=1768367240',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_2_espalda.png?v=1768367240'},
+    {id:'sud_3',name:'SUD 3',front:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_3_frente.png?v=1768367276',back:'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_3_espalda.png?v=1768367276'}
+  ];
+
+  const FONT_DB = ['Inter','Bebas Neue','Oswald','Montserrat','Roboto','UnifrakturMaguntia','Pirata One','New Rocker','Creepster','Butcherman','Nosifer','Metal Mania','Sancreek','Rye','Diplomata','Ewert','Flavors','Frijole','Jolly Lodger','Kranky','Orbitron','Audiowide','Syne','Bruno Ace','Chakra Petch','Wallpoet','Megrim','Plaster','Permanent Marker','Rock Salt','Rubik Glitch','Rubik Mono One','Bungee Shade','Black Ops One','Special Elite','Saira Stencil One','Sirin Stencil','Stardos Stencil','Shojumaru','FrederickatheGreat','Germania One','Caesar Dressing','Grenze Gotisch','Texturina','Almendra Display','Eater','Griffy','Henny Penny','Kirang Haerang','Metal','Miniver','Mystery Quest','Risque','Seaweed Script','Snowburst One','Stalemate','Trade Winds','UnifrakturCook','Vast Shadow','Londrina Outline','Bungee','Silkscreen','Fascinate Inline','Major Mono Display'].sort();
+
+  const RAW_STICKERS = ['https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_2.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_4.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/GLOBO.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_374.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_3.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_395.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PUAS.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_299.png?v=1768531497','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_129.png?v=1768531497','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_210.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_188.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_298.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_297.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_207.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_115.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_393.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_116.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_243.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_146.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_378.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_208.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_226.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_162.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_127.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_135.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_360.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_102.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_361.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_163.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_214.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_1.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_216.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_150.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_364.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_253.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_93.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_346.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_59.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_405.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_267.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_232.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_404.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_87.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_178.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_95.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_151.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_88.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_152.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_220.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_187.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_5.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_377.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_123.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_137.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_159.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_130.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_124.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_126.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_213.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_268.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_255.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_260.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_86.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_37.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_94.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_258.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_43.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_73.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_175.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_252.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_111.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_29.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_176.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_18.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_106.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_72.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_27.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_242.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_147.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_105.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_239.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_238.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_70.png?v=1768531510','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_149.png?v=1768531510'];
+
+  const isTouch = window.innerWidth <= 1100;
+  fabric.Object.prototype.set({
+    transparentCorners: false, cornerColor: '#2962ff', borderColor: '#2962ff',
+    cornerSize: isTouch ? 35 : 14, borderScaleFactor: isTouch ? 5 : 2, padding: isTouch ? 12 : 6, centeredScaling: true
+  });
+
+  const canvas = new fabric.Canvas('c', {
+    width: 1080, height: 1080, backgroundColor: '#f4f4f4',
+    preserveObjectStacking: true, selection: !isTouch
+  });
+
+  let fObj, bObj, bgLayer, logoLayer, stickerLayer, tTop, tSub, tBot;
+  let shirtColor = '#ffffff', currentLayout = 'row', isLogoInverted = false, stickerTimer = null;
+
+  function initUI() {
+    const pCont = document.getElementById('product-container');
+    PRODUCT_DB.forEach((p, i) => {
+      const b = document.createElement('button');
+      b.className = `btn-ui ${i===0?'active':''}`;
+      b.innerText = p.name;
+      b.onclick = () => {
+        pCont.querySelectorAll('.btn-ui').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        changeBaseProduct(p.id);
+      };
+      pCont.appendChild(b);
+    });
+
+    const selects = [document.getElementById('fontTop'), document.getElementById('fontSub'), document.getElementById('fontBot')];
+    selects.forEach(s => {
+      FONT_DB.forEach(f => s.add(new Option(f, f)));
+      s.value = s.id === 'fontTop' ? 'Bebas Neue' : 'Inter';
+    });
+
+    const sSel = document.getElementById('stickerSelect');
+    RAW_STICKERS.forEach((url, i) => {
+      sSel.add(new Option(`Sticker ${i+1}`, `${url}${url.includes('?')?'&':'?'}width=400`));
+    });
+
+    document.querySelectorAll('.scroll-enabled').forEach(sel => {
+      sel.addEventListener('wheel', e => {
+        e.preventDefault();
+        if (e.deltaY > 0 && sel.selectedIndex < sel.options.length - 1) sel.selectedIndex++;
+        else if (e.deltaY < 0 && sel.selectedIndex > 0) sel.selectedIndex--;
+        sel.dispatchEvent(new Event('change'));
+        updateTexts();
+      });
+    });
+  }
+
+  function changeBaseProduct(id) {
+    const toRem = canvas.getObjects().filter(o => o.isGarment);
+    toRem.forEach(o => canvas.remove(o));
+    const p = PRODUCT_DB.find(x => x.id === id);
+    fabric.Image.fromURL(p.back, (imgB) => {
+      bObj = imgB; imgB.isGarment = true; imgB.set({ selectable: false, evented: false });
+      applyTint(imgB, shirtColor);
+      canvas.insertAt(imgB, 1, false);
+      fabric.Image.fromURL(p.front, (imgF) => {
+        fObj = imgF; imgF.isGarment = true; imgF.set({ selectable: false, evented: false });
+        applyTint(imgF, shirtColor);
+        canvas.insertAt(imgF, 2, false);
+        applyLayout(true);
+      }, { crossOrigin: 'anonymous' });
+    }, { crossOrigin: 'anonymous' });
+  }
+
+  function applyTint(obj, color) {
+    if(!obj) return;
+    obj.filters = color !== '#ffffff' ? [new fabric.Image.filters.BlendColor({ color, mode: 'multiply' })] : [];
+    obj.applyFilters();
+  }
+
+  window.changeGarmentColor = (val) => {
+    shirtColor = val;
+    applyTint(fObj, val);
+    applyTint(bObj, val);
+    canvas.renderAll();
+  };
+
+  window.changeBgColor = (val) => {
+    if(bgLayer) { canvas.remove(bgLayer); bgLayer = null; }
+    canvas.setBackgroundColor(val, canvas.renderAll.bind(canvas));
+  };
+
+  window.changeLayout = (mode, btn) => {
+    currentLayout = mode;
+    document.getElementById('group-layout').querySelectorAll('.btn-ui').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyLayout(true);
+  };
+
+  function applyLayout(animate = false) {
+    if(!fObj || !bObj) return;
+    const W = canvas.width, H = canvas.height, isFree = currentLayout === 'free';
+    fObj.set({ selectable: isFree, evented: isFree });
+    bObj.set({ selectable: isFree, evented: isFree });
+    if(isFree && !animate) return;
+    let sc = 0.46, posF = {x:0.27, y:0.5}, posB = {x:0.73, y:0.5};
+    if(currentLayout === 'diagonal') { sc = 0.48; posF = {x:0.3, y:0.42}; posB = {x:0.7, y:0.58}; }
+    else if(currentLayout === 'col') { sc = 0.52; posF = {x:0.5, y:0.28}; posB = {x:0.5, y:0.72}; }
+    const s = (W * sc) / fObj.width;
+    const conf = { onChange: canvas.renderAll.bind(canvas), duration: 300 };
+    fObj.animate({ left: W*posF.x, top: H*posF.y, scaleX: s, scaleY: s }, conf);
+    bObj.animate({ left: W*posB.x, top: H*posB.y, scaleX: s, scaleY: s }, conf);
+    fObj.set({ originX:'center', originY:'center' });
+    bObj.set({ originX:'center', originY:'center' });
+    syncResolution();
+  }
+
+  function syncResolution() {
+    const W = canvas.width, H = canvas.height;
+    if(bgLayer) {
+      const scale = Math.max(W/bgLayer._element.width, H/bgLayer._element.height) * 1.01;
+      bgLayer.set({ scaleX: scale, scaleY: scale, left: W/2, top: H/2 });
+      bgLayer.setCoords();
+    }
+    if(logoLayer) { logoLayer.set({ left: W * 0.95, top: H * 0.95 }); logoLayer.bringToFront(); }
+    if(stickerLayer) { stickerLayer.set({ left: W * 0.05, top: H * 0.95, originX: 'left', originY: 'bottom' }); stickerLayer.bringToFront(); }
+    updateTexts();
+    canvas.getObjects().forEach(o => { if(!o.isGarment && o !== bgLayer) o.bringToFront(); });
+  }
+
+  async function updateTexts() {
+    const W = canvas.width, H = canvas.height;
+    const data = [
+      {id:'textTop', font:'fontTop', layer:'tTop', y:0.08, sz:0.07, col:'colorTop'},
+      {id:'textSub', font:'fontSub', layer:'tSub', y:0.04, sz:0.03, col:'colorSub'},
+      {id:'textBot', font:'fontBot', layer:'tBot', y:0.90, sz:0.04, col:'colorBot'}
+    ];
+    for(let d of data) {
+      const val = document.getElementById(d.id).value;
+      const fnt = document.getElementById(d.font).value;
+      const cVal = document.getElementById(d.col).value;
+      if(!val) {
+        if(window[d.layer]) { canvas.remove(window[d.layer]); window[d.layer]=null; }
+        continue;
+      }
+      try {
+        await new FontFaceObserver(fnt).load(null, 5000);
+        if(!window[d.layer]) {
+          window[d.layer] = new fabric.Text('', { originX:'center', selectable: false, evented: false });
+          canvas.add(window[d.layer]);
+        }
+        window[d.layer].set({ text: val.toUpperCase(), fontFamily: fnt, fontSize: W * d.sz, left: W/2, top: H * d.y, fill: cVal });
+        window[d.layer].bringToFront();
+      } catch(e) {
+        if(!window[d.layer]) {
+          window[d.layer] = new fabric.Text('', { originX:'center', selectable: false, evented: false });
+          canvas.add(window[d.layer]);
+        }
+        window[d.layer].set({ text: val.toUpperCase(), fontFamily: 'sans-serif', fontSize: W * d.sz, left: W/2, top: H * d.y, fill: cVal });
+      }
+    }
+    canvas.renderAll();
+  }
+
+  function changeSticker(url) {
+    if(stickerTimer) clearTimeout(stickerTimer);
+    if(stickerLayer) { canvas.remove(stickerLayer); stickerLayer = null; }
+    if(!url) return;
+    stickerTimer = setTimeout(() => {
+      fabric.Image.fromURL(url, (img) => {
+        stickerLayer = img;
+        img.scaleToWidth(canvas.width * 0.16);
+        img.set({ left: canvas.width * 0.05, top: canvas.height * 0.95, originX: 'left', originY: 'bottom', selectable: true });
+        canvas.add(img); img.bringToFront(); canvas.renderAll();
+      }, { crossOrigin: 'anonymous' });
+    }, 500);
+  }
+
+  document.getElementById('logoUpload').addEventListener('change', async (e) => {
+    const f = e.target.files[0]; if(!f) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      fabric.Image.fromURL(ev.target.result, (img) => {
+        if(logoLayer) canvas.remove(logoLayer);
+        logoLayer = img;
+        img.scaleToWidth(canvas.width * 0.15);
+        img.set({ left: canvas.width * 0.95, top: canvas.height * 0.95, originX: 'right', originY: 'bottom', selectable: true });
+        canvas.add(img); applyLogoFilters(); img.bringToFront();
+      });
+    };
+    reader.readAsDataURL(f);
+  });
+
+  function applyLogoFilters() {
+    if(!logoLayer) return;
+    logoLayer.filters = isLogoInverted ? [new fabric.Image.filters.Invert()] : [];
+    logoLayer.applyFilters();
+    canvas.renderAll();
+  }
+
+  function toggleLogoInvert() {
+    isLogoInverted = !isLogoInverted;
+    applyLogoFilters();
+  }
+
+  document.getElementById('designUpload').addEventListener('change', function(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(f => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        fabric.Image.fromURL(ev.target.result, (img) => {
+          img.scaleToWidth(canvas.width * 0.3);
+          img.set({ left: canvas.width/2, top: canvas.height/2, originX: 'center', originY: 'center' });
+          canvas.add(img); img.bringToFront(); canvas.setActiveObject(img);
+        });
+      };
+      reader.readAsDataURL(f);
+    });
+    e.target.value = '';
+  });
+
+  document.getElementById('bgUpload').addEventListener('change', function(e) {
+    const f = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      fabric.Image.fromURL(ev.target.result, (img) => {
+        if(bgLayer) canvas.remove(bgLayer);
+        bgLayer = img;
+        img.set({ originX: 'center', originY: 'center', selectable: false, evented: false, lockMovementX: true, lockMovementY: true, objectCaching: false });
+        canvas.insertAt(img, 0, false);
+        syncResolution();
+      });
+    };
+    reader.readAsDataURL(f);
+  });
+
+  window.updateBlur = (val) => {
+    document.getElementById('blurVal').innerText = Math.round(val*100) + '%';
+    if(bgLayer) {
+      bgLayer.set({ objectCaching: false });
+      bgLayer.filters = val > 0 ? [new fabric.Image.filters.Blur({ blur: val })] : [];
+      bgLayer.applyFilters();
+      bgLayer.setCoords();
+      canvas.requestRenderAll();
+    }
+  };
+
+  window.setFormat = (w, h, btn) => {
+    document.getElementById('format-buttons').querySelectorAll('.btn-ui').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    canvas.setDimensions({ width: w, height: h });
+    syncResolution();
+    applyLayout(true);
+    resizeCanvasToFit();
+  };
+
+  function resizeCanvasToFit() {
+    const vp = document.querySelector('.studio-viewport');
+    const sc = Math.min((vp.clientWidth-40)/canvas.width, (vp.clientHeight-40)/canvas.height);
+    document.querySelector('.canvas-scaler').style.transform = `scale(${sc})`;
+  }
+
+  window.downloadImage = () => {
+    canvas.discardActiveObject();
+    canvas.renderAll();
+    const link = document.createElement('a');
+    link.download = 'MOCKUP_MANUAL.png';
+    link.href = canvas.toDataURL({ format: 'png', multiplier: 1 });
+    link.click();
+  };
+
+  window.deleteSelected = () => {
+    const act = canvas.getActiveObject();
+    if(act && !act.isGarment && act !== bgLayer) {
+      canvas.remove(act);
+      canvas.discardActiveObject();
+    }
+  };
+
+  canvas.on('selection:created', () => {
+    document.getElementById('btnDelete').disabled = false;
+    document.getElementById('btnDelete').style.opacity = 1;
+  });
+  canvas.on('selection:cleared', () => {
+    document.getElementById('btnDelete').disabled = true;
+    document.getElementById('btnDelete').style.opacity = 0.5;
+  });
+
+  window.addEventListener('resize', resizeCanvasToFit);
+  window.onload = () => {
+    initUI();
+    changeBaseProduct(PRODUCT_DB[0].id);
+    setTimeout(resizeCanvasToFit, 200);
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador QR Pro — Chechena Shirts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+
+    <style>
+        :root {
+            --black: #000000;
+            --black2: #111111;
+            --black3: #1a1a1a;
+            --white: #ffffff;
+            --grey: #888888;
+            --border: #2c2c2c;
+            --accent: #7b2ff7;
+            --accent2: #c026d3;
+            --font-gothic: 'UnifrakturMaguntia', cursive;
+            --font-ui: 'Oswald', sans-serif;
+            --font-body: 'Roboto', sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-body);
+            min-height: 100vh;
+        }
+
+        /* TICKER */
+        .ticker-wrap { background: var(--white); border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 8px 0; }
+        .ticker-inner { display: inline-flex; animation: marquee 30s linear infinite; }
+        .ticker-item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--black); padding: 0 48px; }
+        .ticker-icon { color: #ff6b00; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* NAVBAR */
+        .navbar { background: var(--black); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 500; }
+        .nav-top { display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 68px; position: relative; }
+        .nav-logo { font-family: var(--font-gothic); font-size: clamp(1.5rem, 3vw, 2.2rem); color: var(--white); letter-spacing: .02em; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; text-decoration: none; }
+        .nav-left { display: flex; align-items: center; gap: 8px; }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .nav-icon-btn { background: none; border: none; color: var(--white); font-size: 18px; padding: 6px; line-height: 1; cursor: pointer; }
+        .nav-links-row { display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--border); }
+        .nav-links-row a { font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--white); padding: 10px 18px; border-right: 1px solid var(--border); transition: background .15s; text-decoration: none; }
+        .nav-links-row a:first-child { border-left: 1px solid var(--border); }
+        .nav-links-row a.active, .nav-links-row a:hover { background: var(--black3); }
+
+        /* MAIN CONTENT */
+        .main-wrap { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; display: flex; flex-direction: column-reverse; gap: 24px; }
+        @media (min-width: 1024px) { .main-wrap { flex-direction: row; align-items: flex-start; } }
+
+        /* PANELS */
+        .panel { background: var(--black2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+        .panel-title { font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--grey); margin-bottom: 20px; }
+        .panel-heading { font-family: var(--font-ui); font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--white); display: flex; align-items: center; gap: 12px; }
+        .panel-sub { font-family: var(--font-ui); font-size: 12px; color: var(--grey); letter-spacing: .04em; margin-top: 4px; }
+
+        /* CONTROLS */
+        .control-label { display: block; font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--grey); margin-bottom: 8px; }
+        
+        .cs-input { width: 100%; background: var(--black); border: 1px solid var(--border); color: var(--white); font-family: var(--font-ui); font-size: 14px; padding: 12px 14px; outline: none; transition: border-color .2s; border-radius: 6px; }
+        .cs-input:focus { border-color: var(--accent); }
+
+        .input-icon-wrap { position: relative; }
+        .input-icon-wrap .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--grey); width: 16px; height: 16px; }
+        .input-icon-wrap .cs-input { padding-left: 38px; }
+
+        /* ACCORDION */
+        .accordion { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--black2); }
+        .accordion-toggle { width: 100%; background: none; border: none; color: var(--white); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-align: left; transition: background .15s; }
+        .accordion-toggle:hover { background: var(--black3); }
+        .accordion-toggle-inner { display: flex; align-items: center; gap: 12px; }
+        .accordion-icon-box { width: 36px; height: 36px; background: var(--black3); border: 1px solid var(--border); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--grey); flex-shrink: 0; }
+        .accordion-toggle h3 { font-family: var(--font-ui); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--white); }
+        .accordion-toggle p { font-family: var(--font-ui); font-size: 11px; color: var(--grey); margin-top: 2px; }
+        .accordion-chevron { color: var(--grey); transition: transform .3s; flex-shrink: 0; }
+        .accordion-chevron.open { transform: rotate(180deg); }
+        
+        .accordion-content { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .35s ease, opacity .3s ease, padding .3s ease; padding: 0 20px; border-top: 0px solid var(--border); }
+        .accordion-content.open { max-height: 1600px; opacity: 1; padding: 20px; border-top: 1px solid var(--border); }
+
+        /* OPTION BUTTONS */
+        .option-btn { border: 1px solid var(--border); background: var(--black); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color .2s, background .2s; }
+        .option-btn:hover { border-color: #555; background: var(--black3); }
+        .option-btn.active { border-color: var(--accent) !important; background: rgba(123,47,247,.1); box-shadow: 0 0 0 1px var(--accent); }
+
+        /* COLOR PICKER */
+        .color-picker-wrapper { position: relative; overflow: hidden; border-radius: 6px; border: 1px solid var(--border); height: 42px; width: 100%; }
+        .color-picker-wrapper input[type="color"] { position: absolute; top: -8px; left: -8px; width: calc(100% + 16px); height: calc(100% + 16px); cursor: pointer; border: none; padding: 0; background: none; }
+
+        /* GRID HELPERS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .grid-5 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        @media (min-width: 480px) { .grid-5 { grid-template-columns: repeat(5, 1fr); } }
+
+        /* PREVIEW PANEL */
+        .preview-wrap { width: 100%; }
+        @media (min-width: 1024px) { .preview-wrap { width: 40%; min-width: 320px; position: sticky; top: 90px; } }
+        
+        .controls-wrap { width: 100%; display: flex; flex-direction: column; gap: 16px; }
+        @media (min-width: 1024px) { .controls-wrap { width: 60%; } }
+
+        .qr-preview-bg { background: var(--black3); border: 1px solid var(--border); border-radius: 16px; padding: 24px; display: flex; align-items: center; justify-content: center; aspect-ratio: 1/1; margin-bottom: 20px; }
+        .qr-preview-bg canvas { max-width: 100%; max-height: 100%; }
+
+        /* DOWNLOAD BUTTON */
+        .btn-download { width: 100%; background: var(--white); color: var(--black); font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .15em; text-transform: uppercase; padding: 14px; border: none; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 6px; }
+        .btn-download:hover { background: #ddd; }
+
+        .res-slider-wrap { background: var(--black3); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+        .res-label { font-family: var(--font-ui); font-size: 11px; color: var(--grey); letter-spacing: .1em; text-transform: uppercase; display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .res-label span { color: var(--white); background: var(--black); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; }
+        
+        input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+        /* LOGO UPLOAD */
+        .upload-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; position: relative; cursor: pointer; transition: border-color .2s, background .2s; }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(123,47,247,.05); }
+        .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .upload-zone .upload-icon { color: var(--grey); margin: 0 auto 8px; display: block; }
+        .upload-zone span { font-family: var(--font-ui); font-size: 12px; color: var(--accent); display: block; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+        .upload-zone small { color: var(--grey); font-size: 11px; margin-top: 4px; display: block; }
+
+        /* FRAME PREVIEW SHAPES */
+        .frame-sq { width: 55%; height: 55%; border: 2.5px solid var(--white); border-radius: 2px; }
+        .frame-band { background: var(--white); border-radius: 2px; font-size: 7px; color: var(--black); font-family: var(--font-ui); font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 1px 0; }
+
+        /* MOBILE NAV */
+        .hamburger { display: none; background: none; border: none; color: var(--white); font-size: 22px; line-height: 1; cursor: pointer; }
+        @media (max-width: 680px) {
+            .nav-links-row { display: none; }
+            .hamburger { display: block; }
+            .nav-top { padding: 0 16px; }
+        }
+
+        /* SECTION DIVIDER */
+        .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+        /* BADGE */
+        .badge-purple { display: inline-block; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+    <div class="ticker-inner">
+        <span class="ticker-item"><span class="ticker-icon">🎨</span> GENERADOR QR GRATIS PARA TU NEGOCIO</span>
+        <span class="ticker-item"><span class="ticker-icon">⚡</span> DESCARGA EN ALTA RESOLUCIÓN — HASTA 4000PX</span>
+        <span class="ticker-item"><span class="ticker-icon">🔥</span> HERRAMIENTA EXCLUSIVA CHECHENA SHIRTS</span>
+        <span class="ticker-item"><span class="ticker-icon">💀</span> PERSONALIZA COLORES, FORMAS Y LOGO</span>
+        <span class="ticker-item"><span class="ticker-icon">🎨</span> GENERADOR QR GRATIS PARA TU NEGOCIO</span>
+        <span class="ticker-item"><span class="ticker-icon">⚡</span> DESCARGA EN ALTA RESOLUCIÓN — HASTA 4000PX</span>
+        <span class="ticker-item"><span class="ticker-icon">🔥</span> HERRAMIENTA EXCLUSIVA CHECHENA SHIRTS</span>
+        <span class="ticker-item"><span class="ticker-icon">💀</span> PERSONALIZA COLORES, FORMAS Y LOGO</span>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-top">
+        <div class="nav-left">
+            <button class="nav-icon-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+        </div>
+        <a href="#" class="nav-logo">Chechena Shirts</a>
+        <div class="nav-right">
+            <button class="nav-icon-btn">🛒</button>
+            <button class="hamburger">☰</button>
+        </div>
+    </div>
+    <div class="nav-links-row">
+<a href="index.html" class="nav-link">INICIO</a>
+<a href="PROM.html" class="nav-link">PROMTS IA</a>
+<a href="CL.html" class="nav-link">CLINICA</a>
+<a href="BOR.html" class="nav-link">GALLERY</a>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- ===== PANEL DE CONTROLES ===== -->
+    <div class="controls-wrap">
+
+        <!-- Header -->
+        <div class="panel">
+            <div class="panel-heading">
+                <span style="font-size:28px;">▣</span>
+                <div>
+                    Generador QR <span class="badge-purple">Studio</span>
+                    <div class="panel-sub">Personaliza y descarga códigos QR en alta resolución para tu negocio.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- URL Input -->
+        <div class="panel">
+            <label class="control-label">URL del destino o Texto</label>
+            <div class="input-icon-wrap">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <input type="text" id="dataInput" class="cs-input" value="https://chechena-shirts.com" placeholder="Ej: https://tu-tienda.com/producto">
+            </div>
+        </div>
+
+        <!-- Marco -->
+        <div class="accordion">
+            <button class="accordion-toggle" data-target="marco-content">
+                <div class="accordion-toggle-inner">
+                    <div class="accordion-icon-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                    </div>
+                    <div>
+                        <h3>Marco del QR</h3>
+                        <p>Llama la atención con un borde y llamado a la acción</p>
+                    </div>
+                </div>
+                <svg class="accordion-chevron open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="marco-content" class="accordion-content open">
+                <div class="grid-5" style="margin-bottom:16px;">
+                    <!-- Sin marco -->
+                    <button class="option-btn active" style="aspect-ratio:1;padding:8px;" data-frame="none" onclick="selectFrame('none',this)">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                    </button>
+                    <!-- Marco inferior -->
+                    <button class="option-btn" style="aspect-ratio:1;padding:8px;flex-direction:column;gap:3px;" data-frame="bottom" onclick="selectFrame('bottom',this)">
+                        <div class="frame-sq"></div>
+                        <div class="frame-band" style="width:55%;padding:2px 0;">SCAN</div>
+                    </button>
+                    <!-- Marco superior -->
+                    <button class="option-btn" style="aspect-ratio:1;padding:8px;flex-direction:column;gap:3px;" data-frame="top" onclick="selectFrame('top',this)">
+                        <div class="frame-band" style="width:55%;padding:2px 0;">SCAN</div>
+                        <div class="frame-sq"></div>
+                    </button>
+                    <!-- Solo borde -->
+                    <button class="option-btn" style="aspect-ratio:1;padding:8px;" data-frame="border" onclick="selectFrame('border',this)">
+                        <div style="width:70%;height:70%;border:3px solid var(--white);border-radius:8px;"></div>
+                    </button>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <label class="control-label">Texto del Marco</label>
+                        <input type="text" id="frameTextInput" class="cs-input" value="SCAN ME">
+                    </div>
+                    <div>
+                        <label class="control-label">Color del Marco</label>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="frameColorInput" value="#ffffff">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diseño y Colores -->
+        <div class="accordion">
+            <button class="accordion-toggle" data-target="shapes-content">
+                <div class="accordion-toggle-inner">
+                    <div class="accordion-icon-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="13.5" r="2.5"/><circle cx="13.5" cy="13.5" r="2.5"/></svg>
+                    </div>
+                    <div>
+                        <h3>Diseño y Colores</h3>
+                        <p>Ajusta la forma de los puntos y esquinas</p>
+                    </div>
+                </div>
+                <svg class="accordion-chevron open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="shapes-content" class="accordion-content open">
+                <!-- Forma puntos -->
+                <label class="control-label" style="margin-bottom:10px;">Forma del patrón central</label>
+                <div class="grid-4" style="margin-bottom:16px;">
+                    <button class="option-btn shape-btn active" style="aspect-ratio:1;padding:8px;" onclick="setShape('dots','square',this)" title="Cuadrado">
+                        <svg viewBox="0 0 24 24" style="width:100%;height:100%;fill:#fff;"><path d="M4 4h4v4H4zM10 4h4v4h-4zM16 4h4v4h-4zM4 10h4v4H4zM10 10h4v4h-4zM16 10h4v4h-4zM4 16h4v4H4zM10 16h4v4h-4zM16 16h4v4h-4z"/></svg>
+                    </button>
+                    <button class="option-btn shape-btn" style="aspect-ratio:1;padding:8px;" onclick="setShape('dots','dots',this)" title="Puntos">
+                        <svg viewBox="0 0 24 24" style="width:100%;height:100%;fill:#fff;"><circle cx="6" cy="6" r="2.5"/><circle cx="12" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="18" cy="12" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/></svg>
+                    </button>
+                    <button class="option-btn shape-btn" style="aspect-ratio:1;padding:8px;" onclick="setShape('dots','rounded',this)" title="Redondeado">
+                        <svg viewBox="0 0 24 24" style="width:100%;height:100%;fill:#fff;"><rect x="4" y="4" width="4" height="4" rx="1.5"/><rect x="10" y="4" width="4" height="4" rx="1.5"/><rect x="16" y="4" width="4" height="4" rx="1.5"/><rect x="4" y="10" width="4" height="4" rx="1.5"/><rect x="10" y="10" width="4" height="4" rx="1.5"/><rect x="16" y="10" width="4" height="4" rx="1.5"/><rect x="4" y="16" width="4" height="4" rx="1.5"/><rect x="10" y="16" width="4" height="4" rx="1.5"/><rect x="16" y="16" width="4" height="4" rx="1.5"/></svg>
+                    </button>
+                    <button class="option-btn shape-btn" style="aspect-ratio:1;padding:8px;" onclick="setShape('dots','classy',this)" title="Clásico">
+                        <svg viewBox="0 0 24 24" style="width:100%;height:100%;fill:#fff;"><path d="M4 4h4v4H4zm12 0h4v4h-4zM4 16h4v4H4zm12 0h4v4h-4zm-6-6h4v4h-4z"/></svg>
+                    </button>
+                </div>
+
+                <div class="grid-2" style="margin-bottom:16px;">
+                    <div>
+                        <label class="control-label" style="margin-bottom:8px;">Borde esquina</label>
+                        <div class="grid-3">
+                            <button class="option-btn corner-sq-btn active" style="aspect-ratio:1;" onclick="setShape('cornersSquare','square',this)">
+                                <div style="width:70%;height:70%;border:2.5px solid #fff;"></div>
+                            </button>
+                            <button class="option-btn corner-sq-btn" style="aspect-ratio:1;" onclick="setShape('cornersSquare','extra-rounded',this)">
+                                <div style="width:70%;height:70%;border:2.5px solid #fff;border-radius:50%;"></div>
+                            </button>
+                            <button class="option-btn corner-sq-btn" style="aspect-ratio:1;" onclick="setShape('cornersSquare','dot',this)">
+                                <div style="width:70%;height:70%;border:2.5px solid #fff;border-radius:8px;"></div>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="control-label" style="margin-bottom:8px;">Centro esquina</label>
+                        <div class="grid-3">
+                            <button class="option-btn corner-dot-btn active" style="aspect-ratio:1;" onclick="setShape('cornersDot','square',this)">
+                                <div style="width:40%;height:40%;background:#fff;"></div>
+                            </button>
+                            <button class="option-btn corner-dot-btn" style="aspect-ratio:1;" onclick="setShape('cornersDot','dot',this)">
+                                <div style="width:40%;height:40%;background:#fff;border-radius:50%;"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+                <div class="grid-2">
+                    <div>
+                        <label class="control-label">Color del QR</label>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="qrColorInput" value="#000000">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="control-label">Fondo del QR</label>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="bgColorInput" value="#ffffff">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logo -->
+        <div class="accordion">
+            <button class="accordion-toggle" data-target="logo-content">
+                <div class="accordion-toggle-inner">
+                    <div class="accordion-icon-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                    <div>
+                        <h3>Logotipo Central</h3>
+                        <p>Añade la identidad de tu marca</p>
+                    </div>
+                </div>
+                <svg class="accordion-chevron open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="logo-content" class="accordion-content open">
+                <button class="option-btn logo-btn active" style="width:100%;padding:12px;margin-bottom:12px;gap:8px;border-radius:8px;" onclick="setLogo(null,this)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                    <span style="font-family:var(--font-ui);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--white);">Sin Logotipo</span>
+                </button>
+                <div id="commercial-logos-grid" class="grid-5" style="margin-bottom:12px;"></div>
+                <div class="upload-zone">
+                    <input type="file" id="logoUpload" accept="image/png,image/jpeg,image/svg+xml">
+                    <svg class="upload-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                    <span>Sube tu propio logo</span>
+                    <small>PNG, JPG o SVG (Max 2MB)</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PANEL PREVIEW ===== -->
+    <div class="preview-wrap">
+        <div class="panel">
+            <div class="panel-title">Vista Previa</div>
+            <div class="qr-preview-bg">
+                <canvas id="previewCanvas"></canvas>
+            </div>
+            <div class="res-slider-wrap">
+                <div class="res-label">
+                    <span>Calidad de exportación</span>
+                    <span id="resValue">1000</span>
+                </div>
+                <input type="range" id="sizeInput" min="500" max="4000" step="100" value="1000">
+            </div>
+            <button id="downloadBtn" class="btn-download">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Descargar Imagen
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Hidden container for QR lib -->
+<div id="qr-hidden-container" style="display:none;"></div>
+
+<script>
+lucide.createIcons();
+
+// Brand logos SVGs
+const brandLogos = {
+    'instagram': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>',
+    'facebook': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+    'x': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>',
+    'tiktok': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.78-1.15 5.54-3.33 7.39-1.84 1.56-4.29 2.1-6.65 1.76-2.56-.37-4.88-1.89-6.07-4.13-1.11-2.1-.96-4.71.3-6.67 1.13-1.74 3-2.92 5.05-3.14 1.05-.11 2.12-.01 3.14.3.01 1.34-.01 2.68.01 4.02-1.01-.33-2.14-.37-3.17-.07-1.14.33-2.13 1.3-2.43 2.45-.31 1.21.05 2.56.91 3.44.89.9 2.22 1.21 3.44.91 1.27-.31 2.28-1.34 2.52-2.61.12-.66.08-1.35.08-2.02.02-6.52.01-13.04.01-19.56z"/></svg>',
+    'whatsapp': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#25D366"><path d="M11.996 0C5.372 0 0 5.373 0 11.999c0 2.112.551 4.17 1.595 5.986L.015 24l6.18-1.62c1.78.96 3.791 1.466 5.801 1.466 6.623 0 11.998-5.373 11.998-11.999S18.62 0 11.996 0zm0 21.84c-1.854 0-3.666-.497-5.253-1.44l-.377-.223-3.905 1.024 1.042-3.81-.245-.39c-1.036-1.65-1.583-3.566-1.583-5.54 0-5.523 4.492-10.015 10.015-10.015 5.523 0 10.015 4.492 10.015 10.015S17.52 21.84 11.996 21.84zm5.503-7.518c-.302-.15-1.785-.882-2.062-.983-.277-.101-.48-.15-.682.152-.202.302-.782.983-.958 1.185-.176.202-.353.227-.655.076-1.282-.64-2.474-1.41-3.415-2.612-.24-.306-.024-.469.127-.618.136-.135.302-.353.453-.53.15-.177.2-.303.301-.504.101-.202.05-.378-.025-.53-.076-.151-.682-1.644-.934-2.253-.245-.592-.494-.51-.682-.52-.176-.01-.378-.01-.58-.01-.202 0-.53.076-.807.378-.277.302-1.058 1.033-1.058 2.52 0 1.488 1.083 2.924 1.234 3.126.151.202 2.13 3.25 5.161 4.557 2.06.887 2.825.962 3.327.91.564-.058 1.785-.73 2.037-1.437.252-.707.252-1.312.176-1.438-.076-.126-.277-.202-.58-.353z"/></svg>',
+    'youtube': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+    'pinterest': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E60023"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.168 0 7.41 2.967 7.41 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.592 0 12.017 0z"/></svg>',
+    'linkedin': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>'
+};
+
+// Render brand logos
+const logosGrid = document.getElementById('commercial-logos-grid');
+Object.keys(brandLogos).forEach(brand => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn logo-btn';
+    btn.style.cssText = 'aspect-ratio:1;padding:8px;';
+    btn.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${brandLogos[brand]}</div>`;
+    btn.onclick = function() { setBrandLogo(brand, this); };
+    logosGrid.appendChild(btn);
+});
+
+// State
+const state = {
+    data: "https://chechena-shirts.com",
+    frame: "none",
+    frameText: "SCAN ME",
+    frameColor: "#ffffff",
+    qrColor: "#000000",
+    bgColor: "#ffffff",
+    dotsType: "square",
+    cornersSquareType: "square",
+    cornersDotType: "square",
+    logoUrl: null,
+    size: 1000,
+    innerQrSize: 300
+};
+
+const previewCanvas = document.getElementById('previewCanvas');
+const ctx = previewCanvas.getContext('2d');
+const hiddenContainer = document.getElementById('qr-hidden-container');
+
+// Accordion
+document.querySelectorAll('.accordion-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const content = document.getElementById(targetId);
+        const chevron = btn.querySelector('.accordion-chevron');
+        content.classList.toggle('open');
+        chevron.classList.toggle('open');
+    });
+});
+
+// Frame selection
+function selectFrame(frameType, btnElement) {
+    document.querySelectorAll('[data-frame]').forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active');
+    state.frame = frameType;
+    debounceRender();
+}
+
+// Shape selection
+function setShape(category, type, btnElement) {
+    const cls = category === 'dots' ? 'shape-btn' : category === 'cornersSquare' ? 'corner-sq-btn' : 'corner-dot-btn';
+    document.querySelectorAll('.' + cls).forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active');
+    if(category === 'dots') state.dotsType = type;
+    if(category === 'cornersSquare') state.cornersSquareType = type;
+    if(category === 'cornersDot') state.cornersDotType = type;
+    debounceRender();
+}
+
+// Logo
+function setLogo(url, btnElement) {
+    document.querySelectorAll('.logo-btn').forEach(b => b.classList.remove('active'));
+    if(btnElement) btnElement.classList.add('active');
+    state.logoUrl = url;
+    debounceRender();
+}
+
+function setBrandLogo(brand, btnElement) {
+    document.querySelectorAll('.logo-btn').forEach(b => b.classList.remove('active'));
+    if(btnElement) btnElement.classList.add('active');
+    const svgString = brandLogos[brand];
+    if(svgString) {
+        const encoded = window.btoa(unescape(encodeURIComponent(svgString)));
+        state.logoUrl = `data:image/svg+xml;base64,${encoded}`;
+        debounceRender();
+    }
+}
+
+// Input listeners
+document.getElementById('dataInput').addEventListener('input', e => { state.data = e.target.value; debounceRender(); });
+document.getElementById('frameTextInput').addEventListener('input', e => { state.frameText = e.target.value; debounceRender(); });
+document.getElementById('frameColorInput').addEventListener('input', e => { state.frameColor = e.target.value; debounceRender(); });
+document.getElementById('qrColorInput').addEventListener('input', e => { state.qrColor = e.target.value; debounceRender(); });
+document.getElementById('bgColorInput').addEventListener('input', e => { state.bgColor = e.target.value; debounceRender(); });
+document.getElementById('sizeInput').addEventListener('input', e => {
+    state.size = parseInt(e.target.value);
+    document.getElementById('resValue').textContent = state.size;
+});
+document.getElementById('logoUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = ev => setLogo(ev.target.result, null);
+        reader.readAsDataURL(file);
+    }
+});
+
+// QR Generation
+async function getBaseQRCode() {
+    return new Promise(resolve => {
+        hiddenContainer.innerHTML = '';
+        const options = {
+            width: state.innerQrSize,
+            height: state.innerQrSize,
+            data: state.data || " ",
+            margin: 10,
+            qrOptions: { typeNumber: 0, mode: "Byte", errorCorrectionLevel: "Q" },
+            imageOptions: { hideBackgroundDots: true, imageSize: 0.4, margin: 5, crossOrigin: "anonymous" },
+            dotsOptions: { type: state.dotsType, color: state.qrColor },
+            backgroundOptions: { color: state.bgColor },
+            cornersSquareOptions: { type: state.cornersSquareType, color: state.qrColor },
+            cornersDotOptions: { type: state.cornersDotType, color: state.qrColor }
+        };
+        if(state.logoUrl) options.image = state.logoUrl;
+        const qrCode = new QRCodeStyling(options);
+        qrCode.append(hiddenContainer);
+        setTimeout(() => resolve(hiddenContainer.querySelector('canvas')), 100);
+    });
+}
+
+function drawRoundedRect(c, x, y, w, h, r, fill, stroke, sw) {
+    c.beginPath();
+    c.moveTo(x+r, y);
+    c.lineTo(x+w-r, y);
+    c.quadraticCurveTo(x+w, y, x+w, y+r);
+    c.lineTo(x+w, y+h-r);
+    c.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    c.lineTo(x+r, y+h);
+    c.quadraticCurveTo(x, y+h, x, y+h-r);
+    c.lineTo(x, y+r);
+    c.quadraticCurveTo(x, y, x+r, y);
+    c.closePath();
+    if(fill) { c.fillStyle = fill; c.fill(); }
+    if(stroke) { c.lineWidth = sw; c.strokeStyle = stroke; c.stroke(); }
+}
+
+async function renderFinalCanvas(scale) {
+    if(!state.data) return;
+    const s = scale || 1;
+    const baseQrCanvas = await getBaseQRCode();
+    if(!baseQrCanvas) return;
+
+    const qSize = state.innerQrSize;
+    let cw = qSize, ch = qSize, qrX = 0, qrY = 0;
+    const pad = 30, th = 40, tm = 10, bt = 12, cr = 24;
+
+    if(state.frame === 'border') { cw = qSize+pad*2; ch = qSize+pad*2; qrX = pad; qrY = pad; }
+    else if(state.frame === 'bottom') { cw = qSize+pad*2; ch = qSize+pad*2+th+tm; qrX = pad; qrY = pad; }
+    else if(state.frame === 'top') { cw = qSize+pad*2; ch = qSize+pad*2+th+tm; qrX = pad; qrY = pad+th+tm; }
+
+    const canvas = scale ? document.createElement('canvas') : previewCanvas;
+    const c = canvas.getContext('2d');
+    canvas.width = cw; canvas.height = ch;
+    c.clearRect(0, 0, cw, ch);
+
+    if(state.frame === 'none') { c.fillStyle = state.bgColor; c.fillRect(0, 0, cw, ch); }
+    if(state.frame !== 'none') drawRoundedRect(c, bt/2, bt/2, cw-bt, ch-bt, cr, state.bgColor, state.frameColor, bt);
+
+    if(state.frame === 'bottom' || state.frame === 'top') {
+        const ty = state.frame === 'bottom' ? ch-pad-th+10 : pad-10;
+        drawRoundedRect(c, pad, ty, cw-pad*2, th, 10, state.frameColor, null, 0);
+        c.fillStyle = state.bgColor;
+        c.font = `bold 22px 'Oswald', sans-serif`;
+        c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.fillText((state.frameText || 'SCAN ME').toUpperCase(), cw/2, ty+th/2);
+    }
+
+    c.drawImage(baseQrCanvas, qrX, qrY, qSize, qSize);
+    return canvas;
+}
+
+let renderTimeout;
+function debounceRender() { clearTimeout(renderTimeout); renderTimeout = setTimeout(() => renderFinalCanvas(), 150); }
+
+// Download
+document.getElementById('downloadBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('downloadBtn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '⏳ Procesando...';
+    btn.disabled = true;
+
+    try {
+        const origSize = state.innerQrSize;
+        const targetSize = state.size;
+        const scaleFactor = targetSize / 300;
+        state.innerQrSize = origSize * scaleFactor;
+
+        const hrCanvas = await renderFinalCanvas(true);
+        const dataUrl = hrCanvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = `QR_Chechena_Shirts_${state.size}px.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        state.innerQrSize = origSize;
+        renderFinalCanvas();
+    } catch(e) {
+        alert('Error al generar la imagen. Intenta de nuevo.');
+    } finally {
+        btn.innerHTML = orig;
+        btn.disabled = false;
+    }
+});
+
+// Init
+renderFinalCanvas();
+</script>
+
+</body>
+</html>

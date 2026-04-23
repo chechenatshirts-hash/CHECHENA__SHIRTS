@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chechena Shirts — Removedor Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#1a1008;
+  --cream:#f5f0e8;
+  --warm:#e8dcc8;
+  --amber:#c8860a;
+  --rust:#a83218;
+  --sand:#d4b896;
+  --panel:#211608;
+  --border:#3d2a14;
+  --muted:#7a6040;
+  --text:#f0e8d8;
+}
+
+body{
+  background:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  -webkit-user-select:none;user-select:none;
+  overflow:hidden;height:100vh;width:100%;
+}
+
+/* LOADER */
+#security-loader{
+  position:fixed;inset:0;
+  background:var(--ink);
+  z-index:99999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.7s ease;
+}
+.loader-logo{
+  font-family:'Bebas Neue',display;
+  font-size:3.5rem;
+  color:var(--cream);
+  letter-spacing:0.12em;
+  line-height:1;
+  margin-bottom:6px;
+}
+.loader-sub{
+  font-size:10px;
+  font-weight:600;
+  color:var(--amber);
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  margin-bottom:40px;
+}
+.sec-bar{
+  width:180px;height:2px;
+  background:var(--border);
+  border-radius:2px;overflow:hidden;
+}
+.sec-bar-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--amber),var(--rust));
+  animation:loadbar 1s ease-out forwards;
+}
+@keyframes loadbar{to{width:100%;}}
+
+#loader{
+  position:fixed;inset:0;background:rgba(26,16,8,0.94);z-index:9999;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
+}
+.spinner{
+  width:40px;height:40px;
+  border:3px solid var(--border);
+  border-top-color:var(--amber);
+  border-radius:50%;animation:spin 0.8s infinite linear;
+  margin-bottom:18px;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+#contenido-protegido{
+  visibility:hidden;opacity:0;transition:opacity 0.6s ease;
+  height:100vh;width:100%;display:flex;
+}
+
+/* ═══════════════════ SIDEBAR ═══════════════════ */
+.sidebar{
+  width:288px;
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  z-index:50;flex-shrink:0;overflow:hidden;
+}
+
+.sidebar-header{
+  padding:20px 22px 18px;
+  border-bottom:1px solid var(--border);
+  background:var(--ink);
+}
+.brand-name{
+  font-family:'Bebas Neue',display;
+  font-size:1.55rem;
+  color:var(--cream);
+  letter-spacing:0.1em;
+  line-height:1;
+}
+.brand-tag{
+  font-size:9px;
+  font-weight:700;
+  color:var(--amber);
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  margin-top:3px;
+}
+
+.sidebar-content{
+  flex:1;overflow-y:auto;padding:18px 16px;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.sidebar-content::-webkit-scrollbar{width:3px;}
+.sidebar-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* ═══════ UPLOAD BTN ═══════ */
+.btn-upload{
+  width:100%;padding:13px 16px;border-radius:8px;
+  font-weight:700;font-size:10px;font-family:'DM Sans',sans-serif;
+  text-transform:uppercase;letter-spacing:0.12em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  border:none;cursor:pointer;margin-bottom:22px;
+  background:linear-gradient(135deg,var(--amber) 0%,var(--rust) 100%);
+  color:var(--cream);
+  box-shadow:0 4px 18px rgba(200,134,10,0.3);
+  transition:all 0.2s;
+}
+.btn-upload:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(200,134,10,0.45);
+}
+
+/* ═══════ LABELS ═══════ */
+.section-label{
+  font-size:9px;font-weight:700;
+  color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.2em;
+  margin:18px 0 9px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-label::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+/* ═══════ TOOL BUTTONS ═══════ */
+.btn-tool{
+  width:100%;padding:10px 14px;margin-bottom:6px;border-radius:7px;
+  font-weight:600;font-size:10px;font-family:'DM Sans',sans-serif;
+  text-transform:uppercase;letter-spacing:0.08em;
+  display:flex;align-items:center;gap:10px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);
+  color:var(--sand);
+  transition:all 0.15s;cursor:pointer;
+}
+.btn-tool:hover{
+  background:rgba(200,134,10,0.1);
+  color:var(--cream);
+  border-color:var(--amber);
+}
+.btn-tool.active{
+  background:rgba(200,134,10,0.15);
+  color:var(--amber);
+  border-color:var(--amber);
+  box-shadow:0 0 14px rgba(200,134,10,0.2);
+}
+.btn-tool.ai-btn{
+  border-color:rgba(168,50,24,0.4);
+  color:#e09080;
+}
+.btn-tool.ai-btn:hover{
+  background:rgba(168,50,24,0.15);
+  border-color:var(--rust);
+  color:var(--cream);
+}
+
+.btn-row{display:flex;gap:6px;margin-bottom:6px;}
+.btn-row .btn-tool{flex:1;justify-content:center;}
+
+.btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;}
+.btn-grid .btn-tool{justify-content:center;font-size:9px;}
+
+/* ═══════ SEGMENTED ═══════ */
+.segmented{
+  display:flex;
+  background:rgba(0,0,0,0.3);
+  border-radius:7px;padding:3px;
+  border:1px solid var(--border);margin-bottom:10px;
+}
+.seg-btn{
+  flex:1;padding:6px;text-align:center;font-size:9px;font-weight:700;
+  color:var(--muted);border-radius:5px;cursor:pointer;transition:0.2s;
+  text-transform:uppercase;letter-spacing:0.06em;font-family:'DM Sans',sans-serif;
+}
+.seg-btn.active{background:var(--amber);color:var(--ink);box-shadow:0 2px 8px rgba(200,134,10,0.35);}
+.seg-btn:hover:not(.active){background:rgba(255,255,255,0.07);color:var(--cream);}
+
+/* ═══════ SLIDERS ═══════ */
+.ctrl-wrap{
+  background:rgba(0,0,0,0.3);
+  border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:6px;
+}
+.ctrl-label{
+  display:flex;justify-content:space-between;
+  font-size:9px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;
+  font-family:'DM Sans',sans-serif;
+}
+.ctrl-label span.val{color:var(--amber);}
+input[type=range]{
+  width:100%;cursor:pointer;height:3px;
+  -webkit-appearance:none;appearance:none;
+  background:linear-gradient(90deg,var(--amber) 0%, var(--border) 0%);
+  border-radius:2px;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--amber);
+  border:2px solid var(--ink);
+  cursor:pointer;
+}
+
+/* ═══════ FOOTER ═══════ */
+.sidebar-footer{padding:16px;border-top:1px solid var(--border);background:var(--ink);}
+.btn-actions{display:flex;gap:6px;margin-bottom:10px;}
+.btn-action{
+  flex:1;padding:10px;border-radius:7px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);
+  color:var(--muted);cursor:pointer;transition:0.15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.btn-action:hover{background:rgba(255,255,255,0.08);color:var(--cream);}
+
+.btn-download{
+  width:100%;padding:13px 16px;border-radius:8px;
+  font-weight:700;font-size:10px;font-family:'DM Sans',sans-serif;
+  text-transform:uppercase;letter-spacing:0.12em;
+  border:none;cursor:pointer;
+  background:linear-gradient(135deg,#4a7c59,#2d5a3d);
+  color:#c8f0d8;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 4px 16px rgba(74,124,89,0.3);transition:all 0.2s;
+}
+.btn-download:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(74,124,89,0.4);
+}
+
+/* ═══════════════════ WORK AREA ═══════════════════ */
+.work-area{
+  flex:1;position:relative;
+  background:#2a2018;
+  overflow:hidden;cursor:default;
+}
+.work-area.cursor-wand{cursor:crosshair;}
+.work-area.cursor-eraser{cursor:cell;}
+.work-area.cursor-restore{cursor:copy;}
+.work-area.cursor-pan{cursor:grab;}
+.work-area.cursor-panning{cursor:grabbing;}
+
+/* Checker BG */
+#canvasStack{
+  position:relative;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="10" height="10" fill="%233a2e22"/><rect x="10" y="10" width="10" height="10" fill="%233a2e22"/><rect x="10" y="0" width="10" height="10" fill="%23241c14"/><rect x="0" y="10" width="10" height="10" fill="%23241c14"/></svg>');
+  background-size:20px 20px;
+  box-shadow:0 0 80px rgba(0,0,0,0.7);
+}
+#viewport{position:absolute;top:0;left:0;transform-origin:0 0;}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block;image-rendering:pixelated;}
+#cOriginal,#cMask{visibility:hidden;pointer-events:none;}
+#cFinal{z-index:10;}
+#cCursor{z-index:20;pointer-events:none;}
+
+/* ═══════ EMPTY MSG ═══════ */
+#emptyMsg{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;z-index:1;
+}
+#emptyMsg svg{width:72px;height:72px;color:var(--border);margin:0 auto 16px;display:block;opacity:0.5;}
+#emptyMsg p{color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.15em;font-size:11px;}
+
+/* ═══════ FLOAT BAR ═══════ */
+.float-bar{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  background:rgba(26,16,8,0.92);backdrop-filter:blur(12px);
+  padding:10px 20px;border-radius:40px;
+  display:flex;gap:10px;z-index:100;
+  border:1px solid var(--border);
+  align-items:center;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.bg-sw{
+  width:26px;height:26px;border-radius:6px;cursor:pointer;
+  border:2px solid transparent;transition:all 0.2s;flex-shrink:0;
+}
+.bg-sw:hover{transform:scale(1.18);}
+.bg-sw.active{border-color:var(--amber);box-shadow:0 0 0 2px rgba(200,134,10,0.4);}
+.float-divider{width:1px;height:22px;background:var(--border);}
+.float-btn{
+  background:none;border:none;cursor:pointer;color:var(--muted);
+  padding:4px;border-radius:6px;transition:0.15s;display:flex;align-items:center;
+}
+.float-btn:hover{color:var(--cream);background:rgba(255,255,255,0.08);}
+
+/* ═══════ ZOOM ═══════ */
+#zoomIndicator{
+  position:absolute;top:16px;right:16px;
+  background:rgba(26,16,8,0.85);backdrop-filter:blur(8px);
+  padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;
+  color:var(--muted);border:1px solid var(--border);z-index:100;
+  font-family:'DM Sans',sans-serif;letter-spacing:0.05em;
+}
+
+/* ═══════ TOAST ═══════ */
+#toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);
+  background:var(--panel);
+  border:1px solid var(--border);color:var(--cream);
+  padding:10px 22px;border-radius:8px;font-size:11px;font-weight:700;
+  opacity:0;transition:all 0.3s;z-index:9000;pointer-events:none;
+  text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Sans',sans-serif;
+  border-left:3px solid var(--amber);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.hidden{display:none!important;}
+.icon{width:14px;height:14px;flex-shrink:0;display:inline-block;}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="security-loader">
+  <div class="loader-logo">CHECHENA</div>
+  <div class="loader-sub">Shirts · Studio</div>
+  <div class="sec-bar"><div class="sec-bar-fill"></div></div>
+</div>
+
+<!-- LOADER OPERACIÓN -->
+<div id="loader">
+  <div class="spinner"></div>
+  <h2 id="loaderMsg" style="color:var(--cream);font-weight:700;text-transform:uppercase;letter-spacing:0.15em;font-size:11px;font-family:'DM Sans',sans-serif;">Procesando...</h2>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- APP -->
+<div id="contenido-protegido">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-name">CHECHENA SHIRTS</div>
+      <div class="brand-tag">Removedor de Fondo Pro</div>
+    </div>
+
+    <div class="sidebar-content">
+
+      <!-- UPLOAD -->
+      <button class="btn-upload" onclick="document.getElementById('fileIn').click()">
+        <svg class="icon" style="width:15px;height:15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        SUBIR IMAGEN
+      </button>
+      <input type="file" id="fileIn" accept="image/*" hidden onchange="loadFile(this.files[0])">
+
+      <!-- AUTOMÁTICO -->
+      <div class="section-label">Automático (IA)</div>
+      <div class="btn-row">
+        <button class="btn-tool ai-btn" onclick="runIA()" id="btn-ia">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"/></svg>
+          IA SUJETO
+        </button>
+        <button class="btn-tool" onclick="setTool('magic')" id="btn-magic">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          VARITA
+        </button>
+      </div>
+      <button class="btn-tool" onclick="setTool('global')" id="btn-global" style="justify-content:center;">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        ELIMINAR GLOBAL
+      </button>
+
+      <div id="globalTolControl" class="ctrl-wrap hidden">
+        <div class="ctrl-label"><span>Tolerancia Color</span><span class="val" id="gTolVal">30</span></div>
+        <input type="range" id="gTolerance" min="1" max="100" value="30" oninput="document.getElementById('gTolVal').textContent=this.value">
+      </div>
+
+      <!-- MANUAL -->
+      <div class="section-label">Manual (Avanzado)</div>
+      <div class="btn-row">
+        <button class="btn-tool" onclick="setTool('eraser')" id="btn-eraser">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 20H7L3 16l9.586-9.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 10l8 8"/></svg>
+          BORRAR
+        </button>
+        <button class="btn-tool" onclick="setTool('restore')" id="btn-restore">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+          RESTAURAR
+        </button>
+      </div>
+
+      <div id="manualOptions" class="ctrl-wrap hidden">
+        <div class="ctrl-label" style="margin-bottom:8px;"><span>Forma del Pincel</span></div>
+        <div class="segmented">
+          <div class="seg-btn active" id="seg-brush" onclick="setSubTool('brush',this)">Pincel</div>
+          <div class="seg-btn" id="seg-lasso" onclick="setSubTool('lasso',this)">Lazo</div>
+          <div class="seg-btn" id="seg-wand" onclick="setSubTool('wand',this)">Varita</div>
+        </div>
+        <div id="ctrl-brush">
+          <div class="ctrl-label"><span>Tamaño</span><span class="val" id="brushVal">50px</span></div>
+          <input type="range" id="brushSize" min="5" max="200" value="50" oninput="document.getElementById('brushVal').textContent=this.value+'px'; updateBrushSize()">
+        </div>
+        <div id="ctrl-tol" class="hidden" style="margin-top:10px;">
+          <div class="ctrl-label"><span>Tolerancia</span><span class="val" id="tolVal">30</span></div>
+          <input type="range" id="tolerance" min="1" max="100" value="30" oninput="document.getElementById('tolVal').textContent=this.value">
+        </div>
+      </div>
+
+      <div id="magicTolControl" class="ctrl-wrap hidden">
+        <div class="ctrl-label"><span>Tolerancia Varita</span><span class="val" id="magTolVal">30</span></div>
+        <input type="range" id="magTolerance" min="1" max="100" value="30" oninput="document.getElementById('magTolVal').textContent=this.value">
+      </div>
+
+      <!-- TRANSFORMAR -->
+      <div class="section-label">Transformar</div>
+      <div class="btn-grid">
+        <button class="btn-tool" onclick="flipImage()" style="color:#6ecfa0;border-color:rgba(110,207,160,0.2);">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          ESPEJO
+        </button>
+        <button class="btn-tool" onclick="invertMask()" style="color:#f0c070;border-color:rgba(240,192,112,0.2);">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+          INVERTIR
+        </button>
+      </div>
+
+      <!-- BORDES -->
+      <div class="section-label">Bordes</div>
+      <div class="btn-grid">
+        <button class="btn-tool" onclick="modifyEdges('erode')">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+          REDUCIR
+        </button>
+        <button class="btn-tool" onclick="modifyEdges('dilate')">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16M4 12h16"/></svg>
+          AUMENTAR
+        </button>
+      </div>
+      <button class="btn-tool" onclick="smoothEdges()" style="width:100%;justify-content:center;margin-top:0;">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 109 9"/></svg>
+        SUAVIZAR BORDES
+      </button>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="sidebar-footer">
+      <div class="btn-actions">
+        <button class="btn-action" onclick="undo()" title="Deshacer (Ctrl+Z)">
+          <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6M3 10l6-6"/></svg>
+        </button>
+        <button class="btn-action" onmousedown="startCompare()" onmouseup="endCompare()" onmouseleave="endCompare()" title="Ver Original" style="color:var(--amber);">
+          <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </button>
+        <button class="btn-action" onclick="resetEditor()" title="Reiniciar" style="color:#e07070;">
+          <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+        <button class="btn-action" onclick="fitToScreen()" title="Ajustar pantalla">
+          <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+        </button>
+      </div>
+      <button class="btn-download" onclick="downloadResult()">
+        <svg style="width:15px;height:15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        DESCARGAR PNG
+      </button>
+    </div>
+  </aside>
+
+  <!-- ÁREA DE TRABAJO -->
+  <main class="work-area" id="workArea">
+    <div id="emptyMsg">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      <p>Sube una imagen para comenzar</p>
+      <p style="font-size:10px;color:var(--border);margin-top:8px;letter-spacing:0.08em;">PNG · JPG · WEBP · GIF</p>
+    </div>
+
+    <div id="viewport">
+      <div id="canvasStack">
+        <canvas id="cOriginal"></canvas>
+        <canvas id="cMask"></canvas>
+        <canvas id="cFinal"></canvas>
+        <canvas id="cCursor"></canvas>
+      </div>
+    </div>
+
+    <div id="zoomIndicator">100%</div>
+
+    <!-- BARRA FLOTANTE -->
+    <div class="float-bar">
+      <span style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;">Fondo:</span>
+      <button class="bg-sw active" onclick="changeBg('trans',this)" title="Transparente"
+        style="background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\'><rect width=\'5\' height=\'5\' fill=\'%23aaa\'/><rect x=\'5\' y=\'5\' width=\'5\' height=\'5\' fill=\'%23aaa\'/><rect x=\'5\' y=\'0\' width=\'5\' height=\'5\' fill=\'%23eee\'/><rect x=\'0\' y=\'5\' width=\'5\' height=\'5\' fill=\'%23eee\'/></svg>');background-color:white;background-size:6px;">
+      </button>
+      <button class="bg-sw" onclick="changeBg('white',this)" title="Blanco" style="background:white;"></button>
+      <button class="bg-sw" onclick="changeBg('black',this)" title="Negro" style="background:#1a1008;"></button>
+      <button class="bg-sw" onclick="changeBg('red',this)" title="Rojo" style="background:#a83218;"></button>
+      <button class="bg-sw" onclick="changeBg('magenta',this)" title="Magenta (halos)" style="background:#c054a0;"></button>
+      <div class="float-divider"></div>
+      <button class="float-btn" onclick="fitToScreen()" title="Ajustar">
+        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+      </button>
+    </div>
+  </main>
+
+</div>
+
+<script>
+// =====================================================
+//  BOOT
+// =====================================================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const ldr = document.getElementById('security-loader');
+    ldr.style.opacity = '0';
+    setTimeout(() => {
+      ldr.style.display = 'none';
+      const app = document.getElementById('contenido-protegido');
+      app.style.visibility = 'visible';
+      app.style.opacity = '1';
+    }, 600);
+  }, 900);
+});
+
+// =====================================================
+//  ESTADO GLOBAL
+// =====================================================
+const state = {
+  loaded: false,
+  W: 0, H: 0,
+  tool: null,
+  subTool: 'brush',
+  history: [],
+  zoom: 1,
+  panX: 0, panY: 0,
+  isPanning: false,
+  panStart: null,
+  isDrawing: false,
+  lassoPoints: [],
+  bgMode: 'trans',
+};
+
+const cOrig   = document.getElementById('cOriginal');
+const cMask   = document.getElementById('cMask');
+const cFinal  = document.getElementById('cFinal');
+const cCursor = document.getElementById('cCursor');
+const ctxOrig  = cOrig.getContext('2d', {willReadFrequently:true});
+const ctxMask  = cMask.getContext('2d', {willReadFrequently:true});
+const ctxFinal = cFinal.getContext('2d', {willReadFrequently:true});
+const ctxCursor= cCursor.getContext('2d');
+const workArea = document.getElementById('workArea');
+const viewport = document.getElementById('viewport');
+const canvasStack = document.getElementById('canvasStack');
+
+// =====================================================
+//  CARGAR IMAGEN
+// =====================================================
+function loadFile(file) {
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    state.W = img.naturalWidth;
+    state.H = img.naturalHeight;
+    [cOrig, cMask, cFinal, cCursor].forEach(c => { c.width = state.W; c.height = state.H; });
+    canvasStack.style.width  = state.W + 'px';
+    canvasStack.style.height = state.H + 'px';
+    ctxOrig.drawImage(img, 0, 0);
+    ctxMask.fillStyle = 'white';
+    ctxMask.fillRect(0, 0, state.W, state.H);
+    state.loaded = true;
+    state.history = [];
+    saveHistory();
+    composeFinal();
+    fitToScreen();
+    document.getElementById('emptyMsg').style.display = 'none';
+    URL.revokeObjectURL(url);
+    toast('Imagen cargada ✓');
+  };
+  img.src = url;
+}
+
+workArea.addEventListener('dragover', e => e.preventDefault());
+workArea.addEventListener('drop', e => {
+  e.preventDefault();
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) loadFile(f);
+});
+
+// =====================================================
+//  COMPOSICIÓN FINAL
+// =====================================================
+function composeFinal() {
+  if (!state.loaded) return;
+  ctxFinal.clearRect(0, 0, state.W, state.H);
+  if (state.bgMode !== 'trans') {
+    ctxFinal.fillStyle = state.bgMode;
+    ctxFinal.fillRect(0, 0, state.W, state.H);
+  }
+  const orig = ctxOrig.getImageData(0, 0, state.W, state.H);
+  const mask = ctxMask.getImageData(0, 0, state.W, state.H);
+  const out  = ctxFinal.getImageData(0, 0, state.W, state.H);
+  for (let i = 0; i < orig.data.length; i += 4) {
+    const alpha = mask.data[i];
+    out.data[i]   = orig.data[i];
+    out.data[i+1] = orig.data[i+1];
+    out.data[i+2] = orig.data[i+2];
+    out.data[i+3] = state.bgMode === 'trans' ? alpha : (alpha > 10 ? 255 : 0);
+    if (state.bgMode !== 'trans' && alpha < 10) {
+      const hex = state.bgMode;
+      const rgb = hexToRgb(hex);
+      if (rgb) { out.data[i]=rgb[0]; out.data[i+1]=rgb[1]; out.data[i+2]=rgb[2]; out.data[i+3]=255; }
+    }
+  }
+  ctxFinal.putImageData(out, 0, 0);
+}
+
+// =====================================================
+//  HERRAMIENTAS
+// =====================================================
+const TOOLS = ['magic','global','eraser','restore'];
+
+function setTool(name) {
+  if (!state.loaded) { toast('Carga una imagen primero'); return; }
+  state.tool = state.tool === name ? null : name;
+  TOOLS.forEach(t => {
+    const b = document.getElementById('btn-' + t);
+    if (b) b.classList.toggle('active', state.tool === t);
+  });
+  document.getElementById('manualOptions').classList.add('hidden');
+  document.getElementById('globalTolControl').classList.add('hidden');
+  document.getElementById('magicTolControl').classList.add('hidden');
+  if (state.tool === 'eraser' || state.tool === 'restore') document.getElementById('manualOptions').classList.remove('hidden');
+  if (state.tool === 'global') document.getElementById('globalTolControl').classList.remove('hidden');
+  if (state.tool === 'magic') document.getElementById('magicTolControl').classList.remove('hidden');
+  updateCursor();
+}
+
+function setSubTool(name, el) {
+  state.subTool = name;
+  document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const showBrush = name === 'brush';
+  const showTol   = name === 'wand';
+  document.getElementById('ctrl-brush').classList.toggle('hidden', !showBrush);
+  document.getElementById('ctrl-tol').classList.toggle('hidden', !showTol);
+}
+
+function updateCursor() {
+  workArea.className = 'work-area';
+  if (!state.tool) return;
+  if (state.tool === 'magic' || state.tool === 'global') workArea.classList.add('cursor-wand');
+  else if (state.tool === 'eraser') workArea.classList.add('cursor-eraser');
+  else if (state.tool === 'restore') workArea.classList.add('cursor-restore');
+}
+
+function updateBrushSize() { ctxCursor.clearRect(0, 0, state.W, state.H); }
+
+// =====================================================
+//  INTERACCIÓN CON EL CANVAS
+// =====================================================
+workArea.addEventListener('mousedown', onMouseDown);
+workArea.addEventListener('mousemove', onMouseMove);
+workArea.addEventListener('mouseup',   onMouseUp);
+workArea.addEventListener('mouseleave', onMouseUp);
+workArea.addEventListener('wheel', onWheel, {passive:false});
+
+function getCanvasPos(e) {
+  const rect = canvasStack.getBoundingClientRect();
+  return {
+    x: Math.round((e.clientX - rect.left) / state.zoom),
+    y: Math.round((e.clientY - rect.top)  / state.zoom),
+  };
+}
+
+function onMouseDown(e) {
+  if (e.button === 1 || e.button === 2 || (!state.tool && e.button === 0)) {
+    state.isPanning = true;
+    state.panStart  = {x: e.clientX - state.panX, y: e.clientY - state.panY};
+    workArea.classList.add('cursor-panning');
+    return;
+  }
+  if (!state.loaded || !state.tool) return;
+  e.preventDefault();
+  const pos = getCanvasPos(e);
+  if (state.tool === 'magic') { applyMagicWand(pos.x, pos.y); return; }
+  if (state.tool === 'global') { applyGlobal(pos.x, pos.y); return; }
+  if (state.tool === 'eraser' || state.tool === 'restore') {
+    if (state.subTool === 'brush') {
+      saveHistory();
+      state.isDrawing = true;
+      paintBrush(pos.x, pos.y);
+    } else if (state.subTool === 'lasso') {
+      state.isDrawing = true;
+      state.lassoPoints = [{x:pos.x, y:pos.y}];
+    } else if (state.subTool === 'wand') {
+      applySubWand(pos.x, pos.y);
+    }
+  }
+}
+
+function onMouseMove(e) {
+  if (state.isPanning) {
+    state.panX = e.clientX - state.panStart.x;
+    state.panY = e.clientY - state.panStart.y;
+    applyTransform();
+    return;
+  }
+  if (!state.loaded) return;
+  const pos = getCanvasPos(e);
+  if ((state.tool === 'eraser' || state.tool === 'restore') && state.subTool === 'brush') {
+    drawBrushCursor(pos.x, pos.y);
+  } else {
+    ctxCursor.clearRect(0, 0, state.W, state.H);
+  }
+  if (state.isDrawing) {
+    if (state.subTool === 'brush') { paintBrush(pos.x, pos.y); }
+    else if (state.subTool === 'lasso') { state.lassoPoints.push({x:pos.x, y:pos.y}); drawLassoPreview(); }
+  }
+}
+
+function onMouseUp(e) {
+  if (state.isPanning) {
+    state.isPanning = false;
+    workArea.classList.remove('cursor-panning');
+    updateCursor();
+    return;
+  }
+  if (state.isDrawing) {
+    if (state.subTool === 'lasso' && state.lassoPoints.length > 2) {
+      saveHistory();
+      applyLasso();
+    }
+    state.isDrawing = false;
+    state.lassoPoints = [];
+    ctxCursor.clearRect(0, 0, state.W, state.H);
+    composeFinal();
+  }
+}
+
+// =====================================================
+//  VARITA MÁGICA
+// =====================================================
+function applyMagicWand(sx, sy) {
+  if (sx<0||sy<0||sx>=state.W||sy>=state.H) return;
+  const tol = parseInt(document.getElementById('magTolerance').value);
+  saveHistory();
+  floodFill(sx, sy, tol, 'erase');
+  composeFinal();
+  toast('Varita aplicada');
+}
+
+function applySubWand(sx, sy) {
+  const tol = parseInt(document.getElementById('tolerance').value);
+  saveHistory();
+  const action = state.tool === 'eraser' ? 'erase' : 'restore';
+  floodFill(sx, sy, tol, action);
+  composeFinal();
+}
+
+// =====================================================
+//  GLOBAL
+// =====================================================
+function applyGlobal(sx, sy) {
+  if (sx<0||sy<0||sx>=state.W||sy>=state.H) return;
+  const tol = parseInt(document.getElementById('gTolerance').value);
+  const orig = ctxOrig.getImageData(0, 0, state.W, state.H);
+  const mask = ctxMask.getImageData(0, 0, state.W, state.H);
+  const idx  = (sy * state.W + sx) * 4;
+  const tr = orig.data[idx], tg = orig.data[idx+1], tb = orig.data[idx+2];
+  saveHistory();
+  for (let i = 0; i < orig.data.length; i += 4) {
+    const dist = colorDist(orig.data[i], orig.data[i+1], orig.data[i+2], tr, tg, tb);
+    if (dist <= tol) mask.data[i] = mask.data[i+1] = mask.data[i+2] = 0;
+  }
+  ctxMask.putImageData(mask, 0, 0);
+  composeFinal();
+  toast('Fondo global eliminado');
+}
+
+// =====================================================
+//  FLOOD FILL
+// =====================================================
+function floodFill(sx, sy, tol, action) {
+  const orig = ctxOrig.getImageData(0, 0, state.W, state.H);
+  const mask = ctxMask.getImageData(0, 0, state.W, state.H);
+  const W = state.W, H = state.H;
+  const startIdx = (sy * W + sx) * 4;
+  const tr = orig.data[startIdx], tg = orig.data[startIdx+1], tb = orig.data[startIdx+2];
+  const visited = new Uint8Array(W * H);
+  const queue   = [sy * W + sx];
+  visited[sy * W + sx] = 1;
+  const val = action === 'erase' ? 0 : 255;
+  while (queue.length) {
+    const pos = queue.pop();
+    const px = pos % W, py = Math.floor(pos / W);
+    mask.data[pos*4]=mask.data[pos*4+1]=mask.data[pos*4+2]=val;
+    const neighbors = [pos-1, pos+1, pos-W, pos+W];
+    for (const n of neighbors) {
+      const nx = n % W, ny = Math.floor(n / W);
+      if (nx<0||nx>=W||ny<0||ny>=H||visited[n]) continue;
+      const ni = n * 4;
+      if (colorDist(orig.data[ni], orig.data[ni+1], orig.data[ni+2], tr, tg, tb) <= tol) {
+        visited[n] = 1;
+        queue.push(n);
+      }
+    }
+  }
+  ctxMask.putImageData(mask, 0, 0);
+}
+
+// =====================================================
+//  PINCEL
+// =====================================================
+function paintBrush(cx, cy) {
+  const r = parseInt(document.getElementById('brushSize').value) / 2;
+  const mask = ctxMask.getImageData(0, 0, state.W, state.H);
+  const val  = state.tool === 'eraser' ? 0 : 255;
+  const r2 = r * r;
+  const x0 = Math.max(0, Math.floor(cx - r));
+  const y0 = Math.max(0, Math.floor(cy - r));
+  const x1 = Math.min(state.W-1, Math.ceil(cx + r));
+  const y1 = Math.min(state.H-1, Math.ceil(cy + r));
+  for (let y = y0; y <= y1; y++) {
+    for (let x = x0; x <= x1; x++) {
+      const dx = x - cx, dy = y - cy;
+      if (dx*dx + dy*dy <= r2) {
+        const i = (y * state.W + x) * 4;
+        mask.data[i]=mask.data[i+1]=mask.data[i+2]=val;
+      }
+    }
+  }
+  ctxMask.putImageData(mask, 0, 0);
+  composeFinal();
+}
+
+function drawBrushCursor(cx, cy) {
+  ctxCursor.clearRect(0, 0, state.W, state.H);
+  const r = parseInt(document.getElementById('brushSize').value) / 2;
+  ctxCursor.beginPath();
+  ctxCursor.arc(cx, cy, r, 0, Math.PI*2);
+  ctxCursor.strokeStyle = state.tool === 'eraser' ? 'rgba(168,50,24,0.9)' : 'rgba(110,207,160,0.9)';
+  ctxCursor.lineWidth = 2 / state.zoom;
+  ctxCursor.setLineDash([4/state.zoom, 4/state.zoom]);
+  ctxCursor.stroke();
+  ctxCursor.setLineDash([]);
+}
+
+// =====================================================
+//  LAZO
+// =====================================================
+function drawLassoPreview() {
+  ctxCursor.clearRect(0, 0, state.W, state.H);
+  if (state.lassoPoints.length < 2) return;
+  ctxCursor.beginPath();
+  ctxCursor.moveTo(state.lassoPoints[0].x, state.lassoPoints[0].y);
+  state.lassoPoints.forEach(p => ctxCursor.lineTo(p.x, p.y));
+  ctxCursor.strokeStyle = 'rgba(200,134,10,0.9)';
+  ctxCursor.lineWidth = 2 / state.zoom;
+  ctxCursor.setLineDash([6/state.zoom, 3/state.zoom]);
+  ctxCursor.stroke();
+  ctxCursor.setLineDash([]);
+}
+
+function applyLasso() {
+  if (state.lassoPoints.length < 3) return;
+  const mask = ctxMask.getImageData(0, 0, state.W, state.H);
+  const val  = state.tool === 'eraser' ? 0 : 255;
+  let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
+  state.lassoPoints.forEach(p => {
+    minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x);
+    minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y);
+  });
+  minX=Math.max(0,Math.floor(minX)); maxX=Math.min(state.W-1,Math.ceil(maxX));
+  minY=Math.max(0,Math.floor(minY)); maxY=Math.min(state.H-1,Math.ceil(maxY));
+  for (let y = minY; y <= maxY; y++) {
+    for (let x = minX; x <= maxX; x++) {
+      if (pointInPolygon(x, y, state.lassoPoints)) {
+        const i = (y * state.W + x) * 4;
+        mask.data[i]=mask.data[i+1]=mask.data[i+2]=val;
+      }
+    }
+  }
+  ctxMask.putImageData(mask, 0, 0);
+  composeFinal();
+}
+
+function pointInPolygon(px, py, poly) {
+  let inside = false;
+  for (let i=0, j=poly.length-1; i<poly.length; j=i++) {
+    const xi=poly[i].x, yi=poly[i].y, xj=poly[j].x, yj=poly[j].y;
+    if (((yi>py)!==(yj>py)) && (px < (xj-xi)*(py-yi)/(yj-yi)+xi)) inside=!inside;
+  }
+  return inside;
+}
+
+// =====================================================
+//  IA SUJETO
+// =====================================================
+function runIA() {
+  if (!state.loaded) { toast('Carga una imagen primero'); return; }
+  showLoader('IA: Detectando sujeto...');
+  setTimeout(() => {
+    saveHistory();
+    const orig = ctxOrig.getImageData(0, 0, state.W, state.H);
+    const mask = ctxMask.getImageData(0, 0, state.W, state.H);
+    const W=state.W, H=state.H;
+    const edgeColors = [];
+    const sampleBorder = (x, y) => {
+      const i = (y*W+x)*4;
+      edgeColors.push([orig.data[i], orig.data[i+1], orig.data[i+2]]);
+    };
+    for (let x=0;x<W;x+=4){ sampleBorder(x,0); sampleBorder(x,H-1); }
+    for (let y=0;y<H;y+=4){ sampleBorder(0,y); sampleBorder(W-1,y); }
+    const avgColor = edgeColors.reduce((a,c)=>[a[0]+c[0],a[1]+c[1],a[2]+c[2]],[0,0,0]).map(v=>v/edgeColors.length);
+    const tol = 55;
+    const visited = new Uint8Array(W*H);
+    const queue = [];
+    const seed = (x,y) => {
+      const pos = y*W+x;
+      if (visited[pos]) return;
+      const i = pos*4;
+      if (colorDist(orig.data[i],orig.data[i+1],orig.data[i+2],avgColor[0],avgColor[1],avgColor[2]) <= tol) {
+        visited[pos]=1; queue.push(pos);
+      }
+    };
+    for (let x=0;x<W;x++){ seed(x,0); seed(x,H-1); }
+    for (let y=0;y<H;y++){ seed(0,y); seed(W-1,y); }
+    while (queue.length) {
+      const pos = queue.pop();
+      mask.data[pos*4]=mask.data[pos*4+1]=mask.data[pos*4+2]=0;
+      const px=pos%W, py=Math.floor(pos/W);
+      [[px-1,py],[px+1,py],[px,py-1],[px,py+1]].forEach(([nx,ny])=>{
+        if(nx<0||nx>=W||ny<0||ny>=H) return;
+        const np=ny*W+nx;
+        if(visited[np]) return;
+        const ni=np*4;
+        if(colorDist(orig.data[ni],orig.data[ni+1],orig.data[ni+2],avgColor[0],avgColor[1],avgColor[2])<=tol){
+          visited[np]=1; queue.push(np);
+        }
+      });
+    }
+    ctxMask.putImageData(mask, 0, 0);
+    applyBlurMask(1);
+    composeFinal();
+    hideLoader();
+    toast('IA completada ✓');
+  }, 100);
+}
+
+// =====================================================
+//  INVERTIR / ESPEJO
+// =====================================================
+function invertMask() {
+  if (!state.loaded) return;
+  saveHistory();
+  const mask = ctxMask.getImageData(0, 0, state.W, state.H);
+  for (let i=0; i<mask.data.length; i+=4) {
+    const v = 255 - mask.data[i];
+    mask.data[i]=mask.data[i+1]=mask.data[i+2]=v;
+  }
+  ctxMask.putImageData(mask, 0, 0);
+  composeFinal();
+  toast('Máscara invertida');
+}
+
+function flipImage() {
+  if (!state.loaded) return;
+  saveHistory();
+  const tmp = document.createElement('canvas');
+  tmp.width=state.W; tmp.height=state.H;
+  const tc = tmp.getContext('2d');
+  tc.save(); tc.scale(-1,1); tc.drawImage(cOrig, -state.W, 0); tc.restore();
+  ctxOrig.clearRect(0,0,state.W,state.H);
+  ctxOrig.drawImage(tmp,0,0);
+  const tmpm = document.createElement('canvas');
+  tmpm.width=state.W; tmpm.height=state.H;
+  const tcm = tmpm.getContext('2d');
+  tcm.save(); tcm.scale(-1,1); tcm.drawImage(cMask,-state.W,0); tcm.restore();
+  ctxMask.clearRect(0,0,state.W,state.H);
+  ctxMask.drawImage(tmpm,0,0);
+  composeFinal();
+  toast('Imagen espejada');
+}
+
+// =====================================================
+//  BORDES
+// =====================================================
+function modifyEdges(mode) {
+  if (!state.loaded) return;
+  saveHistory();
+  const mask = ctxMask.getImageData(0,0,state.W,state.H);
+  const src  = new Uint8ClampedArray(mask.data);
+  const W=state.W, H=state.H;
+  for (let y=1;y<H-1;y++) {
+    for (let x=1;x<W-1;x++) {
+      const i=(y*W+x)*4;
+      const cur = src[i];
+      const neighbors = [src[((y-1)*W+x)*4],src[((y+1)*W+x)*4],src[(y*W+x-1)*4],src[(y*W+x+1)*4]];
+      if (mode==='erode') {
+        if (cur>128 && neighbors.some(v=>v<128)) mask.data[i]=mask.data[i+1]=mask.data[i+2]=0;
+      } else {
+        if (cur<128 && neighbors.some(v=>v>128)) mask.data[i]=mask.data[i+1]=mask.data[i+2]=255;
+      }
+    }
+  }
+  ctxMask.putImageData(mask,0,0);
+  composeFinal();
+  toast(mode==='erode'?'Bordes reducidos':'Bordes aumentados');
+}
+
+function smoothEdges() {
+  if (!state.loaded) return;
+  saveHistory();
+  applyBlurMask(2);
+  composeFinal();
+  toast('Bordes suavizados');
+}
+
+function applyBlurMask(passes) {
+  for (let p=0; p<passes; p++) {
+    const mask = ctxMask.getImageData(0,0,state.W,state.H);
+    const src  = new Uint8ClampedArray(mask.data);
+    const W=state.W, H=state.H;
+    for (let y=1;y<H-1;y++) {
+      for (let x=1;x<W-1;x++) {
+        const i=(y*W+x)*4;
+        const avg = Math.round((
+          src[((y-1)*W+x)*4]+src[((y+1)*W+x)*4]+
+          src[(y*W+x-1)*4]+src[(y*W+x+1)*4]+src[i]
+        )/5);
+        mask.data[i]=mask.data[i+1]=mask.data[i+2]=avg;
+      }
+    }
+    ctxMask.putImageData(mask,0,0);
+  }
+}
+
+// =====================================================
+//  HISTORIAL (UNDO)
+// =====================================================
+function saveHistory() {
+  if (!state.loaded) return;
+  const snap = {
+    mask: ctxMask.getImageData(0,0,state.W,state.H),
+    orig: ctxOrig.getImageData(0,0,state.W,state.H),
+  };
+  state.history.push(snap);
+  if (state.history.length > 20) state.history.shift();
+}
+
+function undo() {
+  if (state.history.length < 2) { toast('Nada que deshacer'); return; }
+  state.history.pop();
+  const prev = state.history[state.history.length-1];
+  ctxMask.putImageData(prev.mask, 0, 0);
+  ctxOrig.putImageData(prev.orig, 0, 0);
+  composeFinal();
+  toast('Deshecho ✓');
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey||e.metaKey) && e.key==='z') { e.preventDefault(); undo(); }
+});
+
+// =====================================================
+//  COMPARAR ORIGINAL
+// =====================================================
+function startCompare() {
+  if (!state.loaded) return;
+  ctxFinal.clearRect(0,0,state.W,state.H);
+  ctxFinal.drawImage(cOrig,0,0);
+}
+function endCompare() {
+  if (!state.loaded) return;
+  composeFinal();
+}
+
+// =====================================================
+//  FONDO DE PREVISUALIZACIÓN
+// =====================================================
+function changeBg(mode, btn) {
+  document.querySelectorAll('.bg-sw').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const colors = {white:'#ffffff',black:'#1a1008',red:'#a83218',magenta:'#c054a0'};
+  state.bgMode = mode === 'trans' ? 'trans' : (colors[mode]||mode);
+  composeFinal();
+}
+
+// =====================================================
+//  ZOOM & PAN
+// =====================================================
+function onWheel(e) {
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.12 : 0.9;
+  const rect = workArea.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const newZoom = Math.min(16, Math.max(0.05, state.zoom * factor));
+  state.panX = mx - (mx - state.panX) * (newZoom / state.zoom);
+  state.panY = my - (my - state.panY) * (newZoom / state.zoom);
+  state.zoom = newZoom;
+  applyTransform();
+}
+
+function applyTransform() {
+  viewport.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.zoom})`;
+  document.getElementById('zoomIndicator').textContent = Math.round(state.zoom*100)+'%';
+}
+
+function fitToScreen() {
+  if (!state.loaded) return;
+  const wa = workArea.getBoundingClientRect();
+  const scaleX = (wa.width  - 80) / state.W;
+  const scaleY = (wa.height - 80) / state.H;
+  state.zoom = Math.min(scaleX, scaleY, 1);
+  state.panX = (wa.width  - state.W * state.zoom) / 2;
+  state.panY = (wa.height - state.H * state.zoom) / 2;
+  applyTransform();
+}
+
+// =====================================================
+//  DESCARGA
+// =====================================================
+function downloadResult() {
+  if (!state.loaded) { toast('Nada que descargar'); return; }
+  const mask = ctxMask.getImageData(0,0,state.W,state.H);
+  let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+  for (let y=0;y<state.H;y++){
+    for (let x=0;x<state.W;x++){
+      if (mask.data[(y*state.W+x)*4]>10){
+        if(x<minX)minX=x; if(x>maxX)maxX=x;
+        if(y<minY)minY=y; if(y>maxY)maxY=y;
+      }
+    }
+  }
+  if (minX===Infinity) { toast('La imagen está completamente vacía'); return; }
+  const nw=maxX-minX+1, nh=maxY-minY+1;
+  const out = document.createElement('canvas');
+  out.width=nw; out.height=nh;
+  const octx = out.getContext('2d');
+  const orig = ctxOrig.getImageData(minX, minY, nw, nh);
+  const msk  = ctxMask.getImageData(minX, minY, nw, nh);
+  const res  = octx.getImageData(0,0,nw,nh);
+  for (let i=0;i<orig.data.length;i+=4){
+    res.data[i]  = orig.data[i];
+    res.data[i+1]= orig.data[i+1];
+    res.data[i+2]= orig.data[i+2];
+    res.data[i+3]= msk.data[i];
+  }
+  octx.putImageData(res,0,0);
+  const link = document.createElement('a');
+  link.download = 'chechena_shirts_resultado.png';
+  link.href = out.toDataURL('image/png',1.0);
+  link.click();
+  toast('PNG descargado ✓');
+}
+
+// =====================================================
+//  RESET
+// =====================================================
+function resetEditor() {
+  if (!confirm('¿Reiniciar todo?')) return;
+  state.loaded=false; state.history=[];
+  [ctxOrig,ctxMask,ctxFinal,ctxCursor].forEach(c=>c.clearRect(0,0,state.W,state.H));
+  state.W=0; state.H=0;
+  document.getElementById('emptyMsg').style.display='';
+  document.getElementById('fileIn').value='';
+  setTool(null);
+  state.tool=null;
+  TOOLS.forEach(t=>{ const b=document.getElementById('btn-'+t); if(b) b.classList.remove('active'); });
+  document.getElementById('manualOptions').classList.add('hidden');
+  document.getElementById('globalTolControl').classList.add('hidden');
+  document.getElementById('magicTolControl').classList.add('hidden');
+  toast('Editor reiniciado');
+}
+
+// =====================================================
+//  UTILS
+// =====================================================
+function colorDist(r1,g1,b1,r2,g2,b2){
+  return Math.sqrt((r1-r2)**2+(g1-g2)**2+(b1-b2)**2);
+}
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  if(isNaN(r))return null;
+  return[r,g,b];
+}
+
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2200);
+}
+function showLoader(msg='Procesando...'){
+  document.getElementById('loaderMsg').textContent=msg;
+  document.getElementById('loader').style.display='flex';
+}
+function hideLoader(){
+  document.getElementById('loader').style.display='none';
+}
+</script>
+</body>
+</html>

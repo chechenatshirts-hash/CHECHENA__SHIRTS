@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chechena Shirts</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #000000;
+      --black2: #111111;
+      --black3: #1a1a1a;
+      --white: #ffffff;
+      --grey: #888888;
+      --grey2: #555555;
+      --border: #2c2c2c;
+      --offer: #7b2ff7;
+      --offer2: #c026d3;
+      --font-gothic: 'UnifrakturMaguntia', cursive;
+      --font-ui: 'Oswald', sans-serif;
+      --font-body: 'Roboto', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--font-ui); }
+
+    /* TICKER */
+    .ticker-wrap { background: var(--white); border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 9px 0; }
+    .ticker-inner { display: inline-flex; animation: marquee 35s linear infinite; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--black); padding: 0 48px; }
+    .ticker-icon { color: #ff6b00; }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* NAVBAR */
+    .navbar { background: var(--black); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 500; }
+    .nav-top { display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 68px; position: relative; }
+    .nav-search-btn { background: none; border: none; color: var(--white); font-size: 18px; padding: 6px; line-height: 1; }
+    .nav-logo { font-family: var(--font-gothic); font-size: clamp(1.7rem, 3.5vw, 2.6rem); color: var(--white); letter-spacing: .02em; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-lang-box { display: flex; align-items: center; gap: 4px; border: 1px solid var(--border); padding: 5px 10px; font-family: var(--font-ui); font-size: 12px; color: var(--white); }
+    .nav-lang-box select { background: none; border: none; color: var(--white); font-family: var(--font-ui); font-size: 12px; outline: none; cursor: pointer; }
+    .nav-lang-box select option { background: #111; }
+    .nav-cart-btn { background: none; border: none; color: var(--white); font-size: 20px; position: relative; padding: 4px; line-height: 1; }
+    .cart-dot { position: absolute; top: -2px; right: -2px; background: var(--white); color: var(--black); width: 16px; height: 16px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: var(--font-ui); }
+    .hamburger { display: none; background: none; border: none; color: var(--white); font-size: 22px; line-height: 1; }
+    .nav-links-row { display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--border); }
+    .nav-links-row a { font-family: var(--font-ui); font-size: 13px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--white); padding: 12px 22px; border-right: 1px solid var(--border); transition: background .15s; }
+    .nav-links-row a:first-child { border-left: 1px solid var(--border); }
+    .nav-links-row a.active, .nav-links-row a:hover { background: var(--black3); }
+    .mobile-nav { display: none; flex-direction: column; background: var(--black2); border-top: 1px solid var(--border); position: absolute; width: 100%; z-index: 499; top: 100%; }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { font-family: var(--font-ui); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; padding: 14px 20px; border-bottom: 1px solid var(--border); color: var(--white); }
+    .search-row { display: none; background: var(--black2); border-bottom: 1px solid var(--border); padding: 12px 40px; gap: 10px; align-items: center; }
+    .search-row.open { display: flex; }
+    .search-row input { flex: 1; background: var(--black); border: 1px solid var(--border); color: var(--white); font-family: var(--font-ui); font-size: 14px; padding: 10px 14px; outline: none; }
+    .search-row input:focus { border-color: #666; }
+    .search-row button { background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; padding: 10px 20px; }
+
+    /* HERO */
+.hero { position: relative; overflow: hidden; background: var(--black); }
+.slide-1 { 
+  width: 100%; 
+  height: clamp(280px, 52vw, 560px); 
+  position: relative; 
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%), url('banner1.jpg') center/cover no-repeat; 
+}
+.slide-content { 
+  position: relative; 
+  z-index: 2; 
+  text-align: center;
+  padding: 0 clamp(16px, 5vw, 60px); 
+  max-width: 560px;
+  width: 100%;
+}
+.slide-label { 
+  display: inline-block; 
+  border: 1px solid rgba(255,255,255,.25); 
+  font-family: var(--font-ui); 
+  font-size: clamp(9px, 1.5vw, 11px);
+  font-weight: 500; 
+  letter-spacing: .2em; 
+  text-transform: uppercase; 
+  color: var(--white); 
+  padding: 5px 14px; 
+  margin-bottom: clamp(8px, 2vw, 14px);
+  background: rgba(255,255,255,.07); 
+}
+.slide-title { 
+  font-family: var(--font-ui); 
+  font-weight: 700; 
+  font-size: clamp(1.2rem, 4vw, 2.2rem);  /* ← se achica en celular automático */
+  text-transform: uppercase; 
+  line-height: 1.1; 
+  color: var(--white); 
+  margin-bottom: clamp(8px, 2vw, 12px);
+}
+.slide-desc { 
+  font-family: var(--font-ui); 
+  font-size: clamp(10px, 1.8vw, 12px);    /* ← se achica en celular automático */
+  font-weight: 400; 
+  letter-spacing: .06em; 
+  text-transform: uppercase; 
+  color: rgba(255,255,255,0.7); 
+  line-height: 1.6; 
+  margin-bottom: clamp(16px, 3vw, 24px);
+}
+.slide-btn { 
+  display: inline-block; 
+  background: var(--white); 
+  color: var(--black); 
+  font-family: var(--font-ui); 
+  font-weight: 700; 
+  font-size: clamp(11px, 1.5vw, 13px);
+  letter-spacing: .15em; 
+  text-transform: uppercase; 
+  padding: clamp(10px, 2vw, 12px) clamp(20px, 4vw, 30px); /* ← botón proporcional */
+  border: none; 
+  transition: background .2s; 
+  cursor: pointer;
+  text-decoration: none;
+}
+.slide-btn:hover { background: #ddd; }
+
+    /* PROMO 4X3 */
+    .promo-band { background: var(--black2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto; }
+    .promo-band-text { padding: 24px 40px; }
+    .promo-band-text h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .05em; color: var(--white); margin-bottom: 6px; }
+    .promo-band-text p { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); }
+    .promo-band-btn { background: var(--white); color: var(--black); font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .15em; text-transform: uppercase; border: none; padding: 0 40px; white-space: nowrap; transition: background .2s; }
+    .promo-band-btn:hover { background: #ddd; }
+
+    /* SECTION TITLES */
+    .sec-head { text-align: center; padding: 50px 20px 30px; }
+    .sec-head h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .08em; }
+    .sec-head p { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); margin-top: 6px; }
+
+    /* PRODUCTS */
+    .products-wrap { padding: 0 20px 60px; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+    .p-card { background: var(--black2); border: 1px solid var(--border); overflow: hidden; position: relative; transition: border-color .2s, transform .25s; }
+    .p-card:hover { border-color: #555; transform: translateY(-3px); }
+    .p-thumb { width: 100%; aspect-ratio: 1/1; background: var(--black3); display: flex; align-items: center; justify-content: center; font-size: 72px; position: relative; }
+    .p-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
+    .p-card:hover .p-overlay { opacity: 1; }
+    .p-add-btn { background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 11px 22px; transition: background .15s; }
+    .p-add-btn:hover { background: #eee; }
+    .badge-oferta { position: absolute; top: 10px; left: 10px; z-index: 3; background: linear-gradient(135deg, var(--offer), var(--offer2)); color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; }
+    .badge-nuevo { position: absolute; top: 10px; left: 10px; z-index: 3; background: #166534; color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; }
+    .p-info { padding: 14px; }
+    .p-name { font-family: var(--font-ui); font-weight: 600; font-size: 14px; color: var(--white); margin-bottom: 10px; line-height: 1.3; }
+    .p-prices { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .p-price { font-family: var(--font-ui); font-weight: 700; font-size: 17px; color: var(--white); }
+    .p-price-usd { font-family: var(--font-ui); font-size: 13px; color: var(--grey); }
+    .p-price-old { font-family: var(--font-ui); font-size: 13px; color: var(--grey2); text-decoration: line-through; }
+    .p-btn { width: 100%; background: transparent; color: var(--white); border: 1px solid var(--border); font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 10px; transition: background .2s, color .2s; }
+    .p-btn:hover { background: var(--white); color: var(--black); }
+
+    /* CATEGORIES */
+    .cats-wrap { padding: 0 20px 60px; }
+    .cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; }
+    .cat-card { background: var(--black2); border: 1px solid var(--border); padding: 26px 14px; text-align: center; transition: border-color .2s, background .2s; cursor: pointer; }
+    .cat-card:hover { border-color: #666; background: var(--black3); }
+    .cat-icon { font-size: 34px; display: block; margin-bottom: 10px; }
+    .cat-name { font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+    .cat-count { font-family: var(--font-ui); font-size: 11px; color: var(--grey); margin-top: 4px; }
+
+    /* MEMBERSHIP */
+    .memb-wrap { padding: 0 20px 60px; }
+    .memb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+    .m-card { background: var(--black2); border: 1px solid var(--border); padding: 28px 22px; display: flex; flex-direction: column; transition: border-color .2s; }
+    .m-card.highlight { border-color: var(--white); background: var(--black3); }
+    .m-badge { display: inline-block; align-self: flex-start; background: linear-gradient(135deg, var(--offer), var(--offer2)); color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; margin-bottom: 14px; }
+    .m-title { font-family: var(--font-ui); font-weight: 700; font-size: 1.4rem; text-transform: uppercase; letter-spacing: .06em; color: var(--white); margin-bottom: 6px; }
+    .m-price { font-family: var(--font-ui); font-weight: 700; font-size: 2.2rem; color: var(--white); }
+    .m-price sub { font-size: 1rem; color: var(--grey); font-weight: 400; }
+    .m-usd { font-family: var(--font-ui); font-size: 12px; color: var(--grey); margin-bottom: 20px; margin-top: 2px; }
+    .m-features { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .m-features li { font-family: var(--font-ui); font-size: 13px; color: #ccc; display: flex; gap: 10px; }
+    .m-features li::before { content: "✓"; color: var(--white); font-weight: 700; flex-shrink: 0; }
+    .m-btn { width: 100%; background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 13px; transition: background .2s; }
+    .m-btn:hover { background: #ddd; }
+    .m-btn.outline { background: transparent; color: var(--white); border: 1px solid var(--border); }
+    .m-btn.outline:hover { background: var(--white); color: var(--black); }
+
+    /* CONTACT */
+    .contact-form { max-width: 500px; margin: 0 auto; padding: 0 20px 60px; display: flex; flex-direction: column; gap: 10px; }
+    .contact-form input, .contact-form textarea { background: var(--black); border: 1px solid var(--border); color: var(--white); font-family: var(--font-ui); font-size: 14px; padding: 13px 16px; outline: none; width: 100%; transition: border-color .2s; }
+    .contact-form input:focus, .contact-form textarea:focus { border-color: #666; }
+    .contact-form textarea { resize: none; }
+    .contact-form button { background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; padding: 14px; }
+    .contact-form button:hover { background: #ddd; }
+    .contact-note { font-family: var(--font-ui); font-size: 12px; color: var(--grey); text-align: center; }
+
+    /* FOOTER */
+    footer { background: var(--black2); border-top: 1px solid var(--border); padding: 50px 40px 26px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-logo { font-family: var(--font-gothic); font-size: 2rem; color: var(--white); display: block; margin-bottom: 12px; }
+    .footer-desc { font-size: 13px; color: var(--grey); line-height: 1.7; max-width: 250px; }
+    .f-col h4 { font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--grey); margin-bottom: 14px; }
+    .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .f-col ul a { font-family: var(--font-ui); font-size: 13px; color: #bbb; transition: color .2s; }
+    .f-col ul a:hover { color: var(--white); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-family: var(--font-ui); font-size: 12px; color: var(--grey); }
+    .socials { display: flex; gap: 8px; }
+    .socials a { width: 34px; height: 34px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--grey); transition: border-color .2s, color .2s; }
+    .socials a:hover { border-color: var(--white); color: var(--white); }
+
+    /* CART PANEL */
+    .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.78); z-index: 800; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .backdrop.open { opacity: 1; pointer-events: all; }
+    .cart-side { position: fixed; right: 0; top: 0; bottom: 0; width: min(380px, 100vw); background: var(--black2); border-left: 1px solid var(--border); z-index: 900; display: flex; flex-direction: column; transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1); }
+    .cart-side.open { transform: translateX(0); }
+    .cs-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--border); }
+    .cs-head h3 { font-family: var(--font-ui); font-weight: 700; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; }
+    .cs-close { background: none; border: none; color: var(--grey); font-size: 22px; line-height: 1; }
+    .cs-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .cs-empty { text-align: center; padding: 50px 0; font-family: var(--font-ui); font-size: 14px; letter-spacing: .06em; color: var(--grey); }
+    .cs-line { display: flex; gap: 12px; align-items: center; background: var(--black3); border: 1px solid var(--border); padding: 12px; }
+    .cs-icon { font-size: 30px; flex-shrink: 0; }
+    .cs-info { flex: 1; }
+    .cs-iname { font-family: var(--font-ui); font-weight: 600; font-size: 13px; color: var(--white); }
+    .cs-iprice { font-family: var(--font-ui); font-size: 13px; color: var(--grey); }
+    .cs-rm { background: none; border: none; color: var(--grey); font-size: 18px; transition: color .2s; line-height: 1; }
+    .cs-rm:hover { color: var(--white); }
+    .cs-foot { padding: 16px; border-top: 1px solid var(--border); }
+    .cs-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .cs-total span { font-family: var(--font-ui); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); }
+    .cs-total strong { font-family: var(--font-ui); font-weight: 700; font-size: 20px; }
+    .cs-checkout { width: 100%; background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; padding: 14px; transition: background .2s; }
+    .cs-checkout:hover { background: #ddd; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--white); color: var(--black); font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; padding: 13px 22px; z-index: 1000; transform: translateY(60px); opacity: 0; transition: all .3s; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 680px) {
+      .nav-links-row { display: none; }
+      .hamburger { display: block; }
+      .nav-lang-box { display: none; }
+      .nav-top { padding: 0 16px; }
+      .promo-band { grid-template-columns: 1fr; }
+      .promo-band-btn { padding: 18px; }
+      .search-row { padding: 12px 16px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      footer { padding: 40px 20px 22px; }
+    }
+    @media (max-width: 480px) {
+      .slide-title { font-size: 1.7rem; }
+      .products-wrap, .cats-wrap, .memb-wrap { padding: 0 10px 40px; }
+    }
+
+.nav-logo-img {
+  height: 60px;           /* ← TAMAÑO: sube/baja para hacerlo más grande o pequeño */
+  width: auto;
+  object-fit: contain;
+
+  /* POSICIÓN — ajusta estos valores a tu gusto */
+  position: relative;
+  top: 0px;               /* ← ARRIBA/ABAJO: positivo = baja, negativo = sube */
+  left: 470px;              /* ← IZQ/DER: positivo = mueve derecha, negativo = izquierda */
+
+  margin-left: 4px;       /* ← ESPACIO entre la lupa y el logo */
+}
+
+
+
+/* MEGAPACKS */
+.megapacks {
+  background: var(--white);
+  padding: clamp(32px, 6vw, 64px) clamp(16px, 5vw, 48px);
+  text-align: center;
+}
+.megapacks-header {
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+.megapacks-tag {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: clamp(10px, 1.5vw, 12px);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 10px;
+}
+.megapacks-title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 4vw, 2.2rem);
+  text-transform: uppercase;
+  color: var(--black);
+  line-height: 1.1;
+}
+.megapacks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(16px, 3vw, 32px);
+  max-width: 860px;
+  margin: 0 auto;
+}
+.mpack-card {
+  background: #fff;
+  border: 1px solid #eee;
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+.mpack-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+}
+.mpack-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+.mpack-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .4s ease;
+}
+.mpack-card:hover .mpack-img { transform: scale(1.04); }
+.mpack-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  z-index: 2;
+}
+.mpack-offer {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: #e00;
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  z-index: 2;
+}
+.mpack-info {
+  padding: clamp(12px, 2vw, 20px);
+  text-align: left;
+}
+.mpack-name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(13px, 2vw, 16px);
+  text-transform: uppercase;
+  color: var(--black);
+  margin-bottom: 4px;
+}
+.mpack-desc {
+  font-family: var(--font-ui);
+  font-size: clamp(10px, 1.4vw, 12px);
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 10px;
+}
+.mpack-prices {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.mpack-old {
+  font-family: var(--font-ui);
+  font-size: clamp(11px, 1.4vw, 13px);
+  color: #aaa;
+  text-decoration: line-through;
+}
+.mpack-new {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(14px, 2vw, 17px);
+  color: var(--black);
+}
+.mpack-btn {
+  display: block;
+  width: 100%;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(11px, 1.5vw, 13px);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: 11px 0;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  transition: background .2s;
+  cursor: pointer;
+}
+.mpack-btn:hover { background: #333; }
+
+@media (max-width: 480px) {
+  .megapacks-grid { grid-template-columns: 1fr; }
+}
+
+.divider { display: flex; align-items: center; gap: 14px; margin-bottom: 36px; }
+.divider span { flex: 1; height: 1px; background: var(--border); }
+.divider p { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+
+.grupo-wrapper { margin-bottom: 32px; text-align: center; }
+.grupo-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.grupo-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: #fff; text-decoration: none; padding: 14px 32px; font-weight: 700; letter-spacing: 0.1em; border-radius: 2px; transition: opacity 0.2s, transform 0.15s; box-shadow: 0 4px 20px rgba(37,211,102,0.25); }
+.grupo-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+.social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.social-btn { display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; padding: 13px 10px; font-size: 0.88rem; font-weight: 500; border: 1px solid var(--border); color: var(--white); background: #141414; transition: background 0.2s, border-color 0.2s, transform 0.15s; border-radius: 2px; }
+.social-btn:hover { transform: translateY(-2px); }
+.social-btn.whatsapp:hover { background: rgba(37,211,102,0.12); border-color: #25D366; color: #25D366; }
+.social-btn.instagram:hover { background: rgba(225,48,108,0.12); border-color: #E1306C; color: #E1306C; }
+.social-btn.facebook:hover { background: rgba(24,119,242,0.12); border-color: #1877F2; color: #1877F2; }
+.social-btn.tiktok:hover { background: rgba(255,255,255,0.06); border-color: #eee; color: #eee; }
+
+
+
+
+/* CONTACTO */
+
+.contacto{
+  background:#0f0f0f;
+  color:#f5f5f5;
+  padding:80px 20px;
+  font-family:'Barlow',sans-serif;
+}
+
+.contacto .container{
+  max-width:1000px;
+  margin:auto;
+}
+
+/* TITULOS */
+
+.contacto h2{
+  text-align:center;
+  font-size:28px;
+  letter-spacing:.15em;
+  margin-bottom:10px;
+  animation:fadeUp 1s ease;
+}
+
+.contacto .sub{
+  text-align:center;
+  color:#aaa;
+  margin-bottom:35px;
+  animation:fadeUp 1.2s ease;
+}
+
+/* FORMULARIO */
+
+.form-contacto{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-bottom:10px;
+  animation:fadeUp 1.4s ease;
+}
+
+.form-contacto input,
+.form-contacto textarea{
+  background:#151515;
+  border:1px solid #2a2a2a;
+  padding:13px;
+  border-radius:6px;
+  color:#fff;
+  font-size:14px;
+  transition:all .25s ease;
+}
+
+.form-contacto textarea{
+  min-height:110px;
+}
+
+/* EFECTO INPUT */
+
+.form-contacto input:focus,
+.form-contacto textarea:focus{
+  outline:none;
+  border-color:#25D366;
+  box-shadow:0 0 0 2px rgba(37,211,102,.2);
+}
+
+/* BOTON */
+
+.form-contacto button{
+  background:#1a1a1a;
+  border:1px solid #333;
+  color:#f5f5f5;
+  font-weight:700;
+  letter-spacing:.12em;
+  padding:13px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all .25s ease;
+}
+
+.form-contacto button:hover{
+  border-color:#25D366;
+  transform:translateY(-2px);
+}
+
+/* TEXTO WHATSAPP */
+
+.whatsapp{
+  text-align:center;
+  color:#888;
+  font-size:13px;
+  margin:15px 0 25px;
+}
+
+/* LINEA */
+
+.linea{
+  height:1px;
+  background:#1f1f1f;
+  margin:20px 0 10px;
+}
+
+.titulo-redes{
+  text-align:center;
+  font-size:12px;
+  letter-spacing:.2em;
+  color:#777;
+  margin-bottom:25px;
+}
+
+/* GRID */
+
+.bottom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+/* TARJETA GRUPO */
+
+.grupo-box{
+  background:#121212;
+  border:1px solid #25D366;
+  border-radius:10px;
+  padding:22px;
+  transition:all .3s ease;
+  animation:fadeUp 1.6s ease;
+}
+
+.grupo-box:hover{
+  transform:translateY(-6px);
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+
+.badge{
+  background:rgba(37,211,102,.15);
+  color:#25D366;
+  font-size:11px;
+  padding:4px 9px;
+  border-radius:20px;
+}
+
+.grupo-box h3{
+  margin:12px 0;
+  font-size:18px;
+}
+
+.grupo-box p{
+  color:#aaa;
+  font-size:13px;
+}
+
+/* BOTON GRUPO */
+
+.btn-grupo{
+  display:inline-block;
+  margin-top:15px;
+  background:#25D366;
+  color:#000;
+  font-weight:700;
+  padding:10px 18px;
+  border-radius:6px;
+  text-decoration:none;
+  transition:all .25s ease;
+}
+
+.btn-grupo:hover{
+  transform:scale(1.05);
+  box-shadow:0 6px 20px rgba(37,211,102,.4);
+}
+
+/* REDES */
+
+.redes{
+  animation:fadeUp 1.8s ease;
+}
+
+.redes-title{
+  font-size:12px;
+  letter-spacing:.2em;
+  color:#777;
+  margin-bottom:10px;
+}
+
+/* BOTONES REDES */
+
+.red-btn{
+  display:block;
+  border:1px solid #2a2a2a;
+  background:#121212;
+  padding:12px;
+  border-radius:6px;
+  margin-bottom:10px;
+  text-decoration:none;
+  color:#ddd;
+  transition:all .25s ease;
+}
+
+.red-btn:hover{
+  border-color:#25D366;
+  transform:translateX(6px);
+}
+
+/* ANIMACION GLOBAL */
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(25px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:720px){
+
+  .bottom-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* BOTONES REDES */
+
+.red-btn{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:1px solid #2a2a2a;
+  background:#121212;
+  padding:13px 16px;
+  border-radius:8px;
+  margin-bottom:12px;
+  text-decoration:none;
+  color:#ddd;
+  font-weight:600;
+  transition:all .3s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ICONOS */
+
+.red-btn i{
+  font-size:18px;
+  transition:transform .3s ease;
+}
+
+/* HOVER GENERAL */
+
+.red-btn:hover{
+  transform:translateX(8px) scale(1.03);
+  border-color:#25D366;
+}
+
+/* ICONO MOVIMIENTO */
+
+.red-btn:hover i{
+  transform:rotate(-10deg) scale(1.2);
+}
+
+/* EFECTO BRILLO */
+
+.red-btn::before{
+  content:"";
+  position:absolute;
+  left:-100%;
+  top:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.2),transparent);
+  transition:.6s;
+}
+
+.red-btn:hover::before{
+  left:100%;
+}
+
+/* COLORES REDES */
+
+.whatsapp:hover{
+  border-color:#25D366;
+  box-shadow:0 0 10px rgba(37,211,102,.5);
+}
+
+.instagram:hover{
+  border-color:#E1306C;
+  box-shadow:0 0 10px rgba(225,48,108,.5);
+}
+
+.facebook:hover{
+  border-color:#1877F2;
+  box-shadow:0 0 10px rgba(24,119,242,.5);
+}
+
+.tiktok:hover{
+  border-color:#ff0050;
+  box-shadow:0 0 10px rgba(255,0,80,.5);
+}
+
+/* ANIMACION DE ENTRADA */
+
+.red-btn{
+  animation:slideFade .8s ease forwards;
+  opacity:0;
+}
+
+.red-btn:nth-child(2){animation-delay:.2s;}
+.red-btn:nth-child(3){animation-delay:.4s;}
+.red-btn:nth-child(4){animation-delay:.6s;}
+.red-btn:nth-child(5){animation-delay:.8s;}
+
+@keyframes slideFade{
+  from{
+    opacity:0;
+    transform:translateX(-20px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+#currency{
+font-size:15px;
+padding:10px 16px;
+border-radius:8px;
+border:1px solid #ddd;
+background:#000000;
+}
+
+
+
+
+.dropdown{
+  position:relative;
+}
+
+.dropdown-content{
+  display:none;
+  position:absolute;
+  top:30px;
+  background:#111;
+  border-radius:8px;
+  overflow:hidden;
+  min-width:180px;
+}
+
+.dropdown-content a{
+  display:block;
+  padding:10px 15px;
+  color:white;
+  text-decoration:none;
+}
+
+.dropdown-content a:hover{
+  background:#222;
+}
+
+.dropdown:hover .dropdown-content{
+  display:block;
+}
+
+/* ═══════════════════════════════════════
+   ANIMACIONES DE ENTRADA AL SCROLL
+════════════════════════════════════════ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,159,67,0); }
+  50%       { box-shadow: 0 0 18px 4px rgba(255,159,67,0.25); }
+}
+
+/* Clases de animación reutilizables */
+.anim-fadeup   { opacity: 0; transform: translateY(32px); transition: opacity .55s ease, transform .55s ease; }
+.anim-fadein   { opacity: 0; transition: opacity .55s ease; }
+.anim-scalein  { opacity: 0; transform: scale(0.93); transition: opacity .5s ease, transform .5s ease; }
+.anim-left     { opacity: 0; transform: translateX(-28px); transition: opacity .55s ease, transform .55s ease; }
+.anim-right    { opacity: 0; transform: translateX(28px);  transition: opacity .55s ease, transform .55s ease; }
+.anim-visible  { opacity: 1 !important; transform: none !important; }
+
+/* Delays escalonados */
+.anim-d1 { transition-delay: .08s; }
+.anim-d2 { transition-delay: .16s; }
+.anim-d3 { transition-delay: .24s; }
+.anim-d4 { transition-delay: .32s; }
+.anim-d5 { transition-delay: .40s; }
+
+/* Slide de hero al cargar */
+.slide-content {
+  animation: fadeInUp .8s ease both;
+}
+
+/* Hover mejorado en botones principales */
+.slide-btn {
+  position: relative;
+  overflow: hidden;
+}
+.slide-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background .2s;
+}
+.slide-btn:hover::after { background: rgba(0,0,0,0.08); }
+
+/* Navbar animada al cargar */
+.navbar {
+  animation: slideDown .5s ease both;
+}
+
+/* Ticker más suave */
+.ticker-wrap {
+  transition: opacity .3s;
+}
+
+/* Botones de megapack con brillo en hover */
+.mpack-btn {
+  position: relative;
+  overflow: hidden;
+}
+.mpack-btn::before {
+  content:'';
+  position:absolute;
+  left:-120%;top:0;width:60%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.15),transparent);
+  transition:.5s;
+}
+.mpack-btn:hover::before { left:120%; }
+
+/* Cards de productos con sombra en hover */
+.p-card {
+  transition: border-color .25s, transform .3s cubic-bezier(.2,.8,.3,1), box-shadow .3s;
+}
+.p-card:hover {
+  border-color: #555;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.5);
+}
+
+/* Botón carrito pulso */
+.nav-cart-btn:hover { animation: pulse-glow .6s ease; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE MEJORADO — MÓVIL
+════════════════════════════════════════ */
+
+/* Logo imagen centrado en móvil */
+@media (max-width: 680px) {
+  .nav-logo-img {
+    height: 44px;
+    left: 0;
+    position: static;
+    margin-left: 8px;
+  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Hero más compacto */
+  .slide-1 {
+    height: clamp(220px, 65vw, 340px);
+  }
+  .slide-title {
+    font-size: clamp(1.1rem, 5.5vw, 1.5rem) !important;
+  }
+  .slide-desc {
+    font-size: 11px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .slide-btn {
+    font-size: 12px !important;
+    padding: 11px 22px !important;
+  }
+  .slide-label { font-size: 10px; }
+
+  /* Promo band */
+  .promo-band-text { padding: 18px 16px; }
+  .promo-band-text h2 { font-size: 1.2rem; }
+  .promo-band-text p  { font-size: 11px; }
+
+  /* Megapacks — 1 columna centrada en móvil */
+  .megapacks-grid {
+    grid-template-columns: 1fr !important;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .megapacks { padding: 28px 16px 36px; }
+
+  /* Reviews scroller — tarjetas más pequeñas */
+  #reviews { padding: 40px 16px 48px; }
+  #reviews > div:first-child { flex-wrap: wrap; gap: 10px; }
+  #reviews h2 { font-size: 20px !important; }
+
+  /* Scroller cards más angostas en móvil */
+  .scroller-track > div[style*="width:350px"] {
+    width: 280px !important;
+  }
+
+  /* Academia / guías */
+  .sec-head { padding: 36px 16px 20px; }
+
+  /* Pack de la semana — stack vertical ya manejado pero mejorado */
+  #regalo-semana { padding: 40px 16px 56px; }
+  #regalo-semana > div:last-child > div:last-child { padding: 24px 18px !important; }
+  #regalo-semana h2 { font-size: 1.3rem !important; }
+
+  /* TikTok section */
+  #tiktok-videos .sec-head { padding: 36px 16px 20px; }
+
+  /* FAQ */
+  #preguntas-frecuentes { padding: 48px 14px; }
+
+  /* Contacto */
+  .contacto { padding: 48px 16px; }
+  .bottom-grid { gap: 16px; }
+  .grupo-box { padding: 18px; }
+  .grupo-box h3 { font-size: 16px; }
+
+  /* Footer */
+  footer { padding: 36px 16px 20px; }
+  .footer-logo { font-size: 1.6rem; }
+  .footer-desc { font-size: 12px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+  /* Categorías — 2 col en móvil */
+  .cats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Membresías — 1 col */
+  .memb-grid { grid-template-columns: 1fr; }
+
+  /* Productos — 2 col en móvil */
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .p-name { font-size: 12px; }
+  .p-price { font-size: 14px; }
+  .p-btn { font-size: 11px; padding: 9px 6px; }
+  .p-info { padding: 10px; }
+
+  /* Social grid — 1 col en pantallas muy pequeñas */
+  .social-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .social-btn { padding: 11px 8px; font-size: 0.82rem; }
+
+  /* Toast posición móvil */
+  .toast { right: 10px; left: 10px; bottom: 16px; text-align: center; }
+}
+
+@media (max-width: 380px) {
+  .products-grid { grid-template-columns: 1fr; }
+  .social-grid   { grid-template-columns: 1fr; }
+  .nav-logo { font-size: 1.3rem; }
+}
+
+/* ═══════════════════════════════════════
+   LAPTOP / DESKTOP — MEJOR APROVECHADO
+════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .megapacks-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 920px;
+  }
+  .products-grid { grid-template-columns: repeat(4, 1fr); }
+  .cats-grid     { grid-template-columns: repeat(6, 1fr); }
+  .memb-grid     { grid-template-columns: repeat(3, 1fr); }
+  .nav-top       { padding: 0 48px; }
+  #reviews       { padding: 64px 48px 80px; }
+}
+
+@media (min-width: 1280px) {
+  .products-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+  </style>
+</head>
+<body>
+
+
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA</span>
+    <span class="ticker-item"><span class="ticker-icon">⚡</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
+    <span class="ticker-item"><span class="ticker-icon">🔥</span> MEGAPACK OJITO</span>
+    <span class="ticker-item"><span class="ticker-icon">💀</span> +50,000 DISEÑOS LISTOS PARA MANDAR A IMPRIMIR MEGAPACK OJITO</span>
+    <span class="ticker-item"><span class="ticker-icon">🎁</span> UNETE A NUESTRO GRUPO DE WHATSAPP</span>
+    <span class="ticker-item"><span class="ticker-icon">⚡</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
+    <span class="ticker-item"><span class="ticker-icon">🔥</span> ACCESO INMEDIATO</span>
+    <span class="ticker-item"><span class="ticker-icon">💀</span> +40,000 DISEÑOS LISTOS PARA MANDAR A IMPRIMIR MEGAPACK CHECHENA</span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-top">
+<!-- IZQUIERDA: Lupa + Logo imagen -->
+<div class="nav-left">
+  <button class="nav-search-btn" onclick="toggleSearch()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </button>
+
+  <img src="logo.png" alt="Logo" class="nav-logo-img" />
+</div>
+
+    <!-- CENTRO: Nombre de la tienda -->
+    <a href="#" class="nav-logo">Chechena Shirts</a>
+
+    <!-- DERECHA: Idioma y moneda -->
+    <div class="nav-right">
+      <div class="nav-lang-box">
+<select id="currency">
+  <option value="MXN">MXN $</option>
+  <option value="USD">USD $</option>
+</select>
+      </div>
+      <button class="nav-cart-btn" onclick="toggleCart()">🛒<span class="cart-dot" id="cart-count">0</span></button>
+      <button class="hamburger" onclick="toggleMob()">☰</button>
+    </div>
+  </div>
+  <div class="search-row" id="search-row">
+    <input type="text" placeholder="Buscar diseños, paquetes..." id="search-inp"/>
+    <button onclick="doSearch()">Buscar</button>
+  </div>
+<div class="nav-links-row">
+  <a href="#" class="active">HOME</a>
+  <a href="#megapacks">MEGAPACKS</a>
+  <a href="#tiktok-videos">TIKTOKS</a>
+
+<a href="herramientas.html" class="nav-link">HERRAMIENTAS</a>
+<a href="PROM.html" class="nav-link">PROMTS IA</a>
+<a href="BOR.html" class="nav-link">GALLERY</a>
+  <a href="#contacto">CONTACTO</a>
+</div>
+
+<div class="mobile-nav" id="mob-nav">
+  <a href="#" onclick="closeMob()">HOME</a>
+  <a href="#megapacks" onclick="closeMob()">MEGAPACKS</a>
+  <a href="#tiktok-videos" onclick="closeMob()">TIKTOKS</a>
+
+  <a href="herramientas.html" onclick="closeMob()">HERRAMIENTAS</a>
+  <a href="PROM.html" onclick="closeMob()">PROMTS IA</a>
+  <a href="BOR.html" onclick="closeMob()">GALLERY</a>
+
+  <a href="#preguntas-frecuentes" onclick="closeMob()">❓ Preguntas Frecuentes</a>
+  <a href="#contacto" onclick="closeMob()">CONTACTO</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="slide-1">
+    <div class="slide-content">
+      <div class="slide-label">🔥 Oferta Especial</div>
+      <h1 class="slide-title">MEGAPACKS CON MILES DE DISEÑOS LISTOS PARA MANDAR A IMPRIMIR</h1>
+      <p class="slide-desc">DEJA DE PERDER TIEMPO DISEÑANDO Y ADQUIERE UN MEGAPACK DE DISEÑO.</p>
+      <a href="#megapacks" class="slide-btn">VER MÁS</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- MEGAPACKS -->
+<section id="megapacks" class="megapacks">
+  <div class="megapacks-header">
+    <span class="megapacks-tag">⭐ Mejor valorado por nuestros clientes</span>
+    <h2 class="megapacks-title">MEGAPACKS MÁS VENDIDOS</h2>
+  </div>
+
+  <div class="megapacks-grid">
+
+    <!-- CARD 1 -->
+    <div class="mpack-card">
+      <div class="mpack-img-wrap">
+        <span class="mpack-badge">Más Vendido</span>
+        <img src="pack1.jpg" alt="Megapack Chechena" class="mpack-img" />
+        <span class="mpack-offer">Oferta</span>
+      </div>
+      <div class="mpack-info">
+        <h3 class="mpack-name">MEGAPACK CHECHENA</h3>
+        <p class="mpack-desc">Sublimación, Serigrafía, DTF & DTG</p>
+        <div class="mpack-prices">
+<span class="mpack-old" data-mxn="439"> $ 439 MXN</span>
+<span class="mpack-new" data-mxn="250"> $ 250 MXN</span>
+        </div>
+        <a href="pack-chechena.html" class="mpack-btn">VER MÁS</a>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="mpack-card">
+      <div class="mpack-img-wrap">
+        <span class="mpack-badge">Actualizado</span>
+        <img src="pack2.jpg" alt="Megapack Ojito" class="mpack-img" />
+        <span class="mpack-offer">Oferta</span>
+      </div>
+      <div class="mpack-info">
+        <h3 class="mpack-name">MEGAPACK OJITO</h3>
+        <p class="mpack-desc">Diseños DTF DTG 2026</p>
+        <div class="mpack-prices">
+<span class="mpack-old" data-mxn="800"> $ 800 MXN</span>
+<span class="mpack-new" data-mxn="400"> $ 400 MXN</span>
+        </div>
+        <a href="pack-ojito.html" class="mpack-btn">VER MÁS</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- MEGAPACKS -->
+<section id="megapacks" class="megapacks">
+  <div class="megapacks-header">
+    <span class="megapacks-tag">⭐ Mejor valorado por nuestros clientes</span>
+    <h2 class="megapacks-title">PAQUETE EMPRENDEDOR ENVIO GRATIS</h2>
+  </div>
+
+  <div class="megapacks-grid">
+
+    <!-- CARD 1 -->
+    <div class="mpack-card">
+      <div class="mpack-img-wrap">
+        <span class="mpack-badge">Más Vendido</span>
+        <img src="em.png" alt="Megapack Chechena" class="mpack-img" />
+        <span class="mpack-offer">Oferta</span>
+      </div>
+      <div class="mpack-info">
+        <h3 class="mpack-name">PAQUETE EMPRENDEDOR</h3>
+        <p class="mpack-desc">8 playeras premium con los diseños que tú eliges + etiqueta de cuello personalizada con tu marca. Envío gratis a todo México.</p>
+        <div class="mpack-prices">
+<span class="mpack-old" data-mxn="3000"> $ 3000 MXN</span>
+<span class="mpack-new" data-mxn="2000"> $ 2000 MXN</span>
+        </div>
+        <a href="emprendedor.html" class="mpack-btn">VER MÁS</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECCIÓN: COMUNIDAD GRATUITA                       -->
+<!-- ══════════════════════════════════════════════════ -->
+<section id="comunidad" class="comunidad-section">
+  <div class="comunidad-header">
+    <div class="sec-tag">✦ Comunidad Gratuita</div>
+    <h2>ÚNETE A NUESTROS GRUPOS</h2>
+    <p>Aprende, comparte y recibe todos los nuevos diseños directo en tu celular</p>
+  </div>
+
+  <div class="comunidad-grid">
+
+    <!-- WhatsApp -->
+    <div class="com-card whatsapp-card">
+      <span class="com-card-badge"><i class="fa-brands fa-whatsapp"></i> WhatsApp</span>
+      <div class="com-card-icon">💬</div>
+      <h3>GRUPO DE<br>EMPRENDEDORES</h3>
+      <p>Comparte tips, ayudas y todos los nuevos diseños que agrego al megapack. Aprende, inspírate y lleva tu negocio al siguiente nivel.</p>
+      <a href="https://chat.whatsapp.com/E7sagZb9fAn7ekZk1p5INI" target="_blank" class="com-card-btn">
+        <i class="fa-brands fa-whatsapp"></i> UNIRME AL GRUPO
+      </a>
+    </div>
+
+    <!-- Telegram -->
+    <div class="com-card telegram-card">
+      <span class="com-card-badge"><i class="fa-brands fa-telegram"></i> Telegram</span>
+      <div class="com-card-icon">✈️</div>
+      <h3>CANAL DE<br>TELEGRAM</h3>
+      <p>Recibe notificaciones de nuevos diseños, ofertas exclusivas y recursos gratis directamente en Telegram. Rápido y sin spam.</p>
+      <a href="https://t.me/chechenashirts" target="_blank" class="com-card-btn">
+        <i class="fa-brands fa-telegram"></i> UNIRME AL CANAL
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .scroller-mask {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+  .scroller-track {
+    animation: scroll-infinito 40s linear infinite;
+  }
+  .scroller-track:hover {
+    animation-play-state: paused;
+  }
+  @keyframes scroll-infinito {
+    to { transform: translateX(calc(-50% - 12px)); }
+  }
+</style>
+
+<div id="reviews" style="max-width:1600px; margin:0 auto; padding: 64px 40px 80px; border-top: 1px solid #1f1f1f; overflow:hidden;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:40px;">
+    </div>
+    <div>
+<h2 style="font-family:'Bebas Neue', sans-serif; font-size:36px; font-weight:900; color:#e0e0e0; margin:0; letter-spacing:2px;">
+  OPINIONES REALES DE 
+  <span style="color:#00ff9d;">IMPRESORES COMO TÚ</span>
+</h2>
+    </div>
+  </div>
+
+  <div class="scroller-mask" style="overflow:hidden; display:flex; width:100%; padding:16px 0;">
+    <div class="scroller-track" style="display:flex; gap:24px; width:max-content;">
+
+      <!-- TARJETA 1 -->
+      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
+          <div>
+            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Juan Pérez</h4>
+            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+          </div>
+        </div>
+        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
+      </div>
+
+      <!-- TARJETA 2 -->
+      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">A</div>
+          <div>
+            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Yazminarellano</h4>
+            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+          </div>
+        </div>
+        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
+      </div>
+
+<!-- RESEÑA: Fernanda -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">F</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Fernanda Ríos</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
+</div>
+
+<!-- RESEÑA: Megapack Chechena -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Sandra Reyes</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 40,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
+</div>
+
+<!-- RESEÑA: Megapack Chechena -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(34,197,94,0.2); color:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">O</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Omar Estampados GDL</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
+</div>
+
+<!-- RESEÑA: Megapack Chechena -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">T</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Taller Textil Monterrey</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
+</div>
+
+<!-- RESEÑA: Megapack Ojito -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(99,102,241,0.2); color:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">G</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Gabriela (Print House)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 50,000 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
+</div>
+
+<!-- RESEÑA: Megapack Ojito -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(20,184,166,0.2); color:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">R</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Raúl (DTG Express CDMX)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
+</div>
+
+<!-- RESEÑA: Megapack Ojito -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(234,179,8,0.2); color:#eab308; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">I</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Imprenta Ibarra</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
+</div>
+
+<!-- RESEÑA: Calculadora DTF -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(168,85,247,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">J</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Jesús Velázquez</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
+</div>
+
+<!-- RESEÑA: Calculadora DTF -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(249,115,22,0.2); color:#f97316; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">L</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Lupita (Estampados Puebla)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
+</div>
+
+<!-- RESEÑA: Calculadora DTF -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">E</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Eduardo (Taller EG)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
+</div>
+
+      <!-- DUPLICADOS para loop infinito -->
+      <!-- TARJETA 1 duplicada -->
+      <!-- TARJETA 1 -->
+      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
+          <div>
+            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Juan Pérez</h4>
+            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+          </div>
+        </div>
+        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
+      </div>
+
+      <!-- TARJETA 2 -->
+      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">A</div>
+          <div>
+            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Yazminarellano</h4>
+            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+          </div>
+        </div>
+        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
+      </div>
+
+<!-- RESEÑA: Fernanda -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">F</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Fernanda Ríos</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
+</div>
+
+<!-- RESEÑA: Megapack Chechena -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Sandra Reyes</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 40,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
+</div>
+
+<!-- RESEÑA: Megapack Chechena -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(34,197,94,0.2); color:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">O</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Omar Estampados GDL</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
+</div>
+
+<!-- RESEÑA: Megapack Chechena -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">T</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Taller Textil Monterrey</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
+</div>
+
+<!-- RESEÑA: Megapack Ojito -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(99,102,241,0.2); color:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">G</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Gabriela (Print House)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 50,000 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
+</div>
+
+<!-- RESEÑA: Megapack Ojito -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(20,184,166,0.2); color:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">R</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Raúl (DTG Express CDMX)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
+</div>
+
+<!-- RESEÑA: Megapack Ojito -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(234,179,8,0.2); color:#eab308; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">I</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Imprenta Ibarra</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
+</div>
+
+<!-- RESEÑA: Calculadora DTF -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(168,85,247,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">J</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Jesús Velázquez</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
+</div>
+
+<!-- RESEÑA: Calculadora DTF -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(249,115,22,0.2); color:#f97316; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">L</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Lupita (Estampados Puebla)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
+</div>
+
+<!-- RESEÑA: Calculadora DTF -->
+<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">E</div>
+    <div>
+      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Eduardo (Taller EG)</h4>
+      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+    </div>
+  </div>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
+</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ====================== ACADEMIA CHECHENA ====================== -->
+<section id="academia-chechena" style="background:#050505; padding:90px 20px; border-top:1px solid #1a1a1a;">
+  <div style="max-width:1200px; margin:0 auto;">
+
+    <div style="text-align:center; margin-bottom:70px;">
+      <span style="display:inline-block; background:#111; border:1px solid #1f1f1f; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:#777; padding:8px 20px; margin-bottom:16px;">KNOWLEDGE BASE</span>
+      <h2 style="font-family:'Oswald',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin-bottom:14px;">
+        RECURSOS <span style="color:#9d0000;">CHECHENA</span>
+      </h2>
+      <p style="font-family:'Inter',sans-serif; font-size:15px; color:#aaa; max-width:520px; margin:0 auto; line-height:1.6;">
+        Todo lo que necesitas saber para imprimir como profesional
+      </p>
+    </div>
+
+<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:28px;">
+
+  <!-- GUÍA 1 - Temperaturas -->
+  <a href="2 GUIA PARÁMETROS CHECHENA .pdf" 
+     download="Guia_Temperaturas_Chechena.pdf" 
+     class="guia-card" 
+     style="text-decoration:none;">
+    <div class="icon">🌡️</div>
+    <h3>Tabla de Temperaturas DTF</h3>
+    <p>Tiempos y grados exactos para cada tipo de tela. Evita quemaduras y despegues.</p>
+    <span class="link">Descargar PDF ↓</span>
+  </a>
+
+  <!-- GUÍA 2 - Centrado -->
+  <a href="reglas_centrado_chechena.pdf" 
+     download="Plantillas_Centrado_Chechena.pdf" 
+     class="guia-card" 
+     style="text-decoration:none;">
+    <div class="icon">📏</div>
+    <h3>Plantillas de Centrado Pro</h3>
+    <p>PDF para imprimir y centrar tus diseños perfectamente en cuellos y pechos.</p>
+    <span class="link">Descargar PDF ↓</span>
+  </a>
+
+  <!-- GUÍA 3 - Cuidados -->
+  <a href="3 CUIDADO DE PRENDA.pdf" 
+     download="Cuidados_Lavado_Chechena.pdf" 
+     class="guia-card" 
+     style="text-decoration:none;">
+    <div class="icon">🧼</div>
+    <h3>Cuidados y Lavado</h3>
+    <p>Para que la impresión dure más de 70 lavadas sin deteriorarse.</p>
+    <span class="link">Descargar PDF ↓</span>
+  </a>
+
+
+
+</div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODAL ==================== -->
+<div id="modal-academia" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#0f0f0f; border:1px solid #222; width:100%; max-width:620px; border-radius:12px; overflow:hidden; box-shadow:0 25px 50px -12px rgb(0 0 0 / 0.8);">
+    <div style="padding:20px 28px; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center;">
+      <h3 id="modal-titulo" style="font-family:'Oswald',sans-serif; font-size:21px; color:#fff; margin:0; text-transform:uppercase;"></h3>
+      <button onclick="cerrarGuia()" style="background:none; border:none; font-size:30px; color:#666; cursor:pointer;">×</button>
+    </div>
+    <div id="modal-cuerpo" style="padding:32px; overflow-y:auto; max-height:70vh; color:#ddd; line-height:1.8; font-size:15.2px;"></div>
+  </div>
+</div>
+
+<style>
+.guia-card {
+  background:#0f0f0f;
+  border:1px solid #1f1f1f;
+  border-radius:12px;
+  padding:34px 28px;
+  cursor:pointer;
+  transition:all 0.4s ease;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.guia-card:hover {
+  border-color:#b7a500;
+  transform:translateY(-12px) scale(1.04);
+  box-shadow:0 0 35px rgba(0, 212, 255, 0.2);
+}
+
+.guia-card .icon {
+  width:70px; height:70px;
+  background:#1a1a1a;
+  border:1px solid #333;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  transition:all 0.4s;
+}
+
+.guia-card:hover .icon {
+  background:#00d4ff;
+  color:#000;
+  transform:scale(1.15) rotate(15deg);
+}
+
+.guia-card h3 { font-family:'Oswald',sans-serif; font-size:18px; font-weight:700; text-transform:uppercase; color:#fff; margin:0; }
+.guia-card p { color:#999; line-height:1.65; margin:0; flex-grow:1; }
+.guia-card .link { color:#00ffa2; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+</style>
+
+<script>
+// ===== FUNCIONES DEL MODAL =====
+function abrirGuia(tipo) {
+  const modal = document.getElementById('modal-academia');
+  const titulo = document.getElementById('modal-titulo');
+  const cuerpo = document.getElementById('modal-cuerpo');
+
+  modal.style.display = 'flex';
+
+  if (tipo === 'temps') {
+    titulo.textContent = 'Tabla de Temperaturas DTF';
+    cuerpo.innerHTML = `
+      <strong>Recomendaciones según tela:</strong><br><br>
+      <strong>Algodón 100%:</strong> 160-165°C → 12-15 segundos<br>
+      <strong>Poliéster:</strong> 145-150°C → 10-12 segundos<br>
+      <strong>Mezclas:</strong> 155°C → 13 segundos<br><br>
+      <small style="color:#00d4ff;">• Presión media-alta<br>
+      • Siempre prueba primero con tu prensa</small>
+    `;
+  } 
+  else if (tipo === 'lavado') {
+    titulo.textContent = 'Cuidados y Lavado';
+    cuerpo.innerHTML = `
+      <p>Para máxima durabilidad (70+ lavadas):</p>
+      <ul style="padding-left:20px;">
+        <li>Lavar siempre del revés</li>
+        <li>Agua fría (máx 30°C)</li>
+        <li>No usar suavizante</li>
+        <li>No planchar directamente sobre la impresión</li>
+        <li>Secar al aire o baja temperatura</li>
+      </ul>
+    `;
+  } 
+  else if (tipo === 'semitonos') {
+    titulo.textContent = 'Semitonos y Tacto Suave';
+    cuerpo.innerHTML = `
+      <p>Los semitonos ayudan a reducir la cantidad de tinta y logran un tacto mucho más suave.</p>
+      <p><strong>Recomendado:</strong> 8% a 12% de semitono en áreas grandes.</p>
+      <p>Ideal para camisetas negras y oscuras.</p>
+    `;
+  }
+}
+
+function cerrarGuia() {
+  document.getElementById('modal-academia').style.display = 'none';
+}
+
+// Cerrar con tecla Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Escape") cerrarGuia();
+});
+</script>
+
+
+<!-- PACK GRATIS DE LA SEMANA -->
+<section id="regalo-semana" style="max-width:1200px; margin:0 auto; padding:60px 40px 80px; border-top:1px solid #2c2c2c;">
+
+  <!-- HEADER -->
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:32px;">
+
+    </div>
+    <div>
+      <h2 style="font-family:'Oswald',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin:0 0 4px 0;">
+        DISEÑOS GRATIS <span style="color:#FF9F43;">ENTRA AL GRUPO DE WHATSAPP</span>
+      </h2>
+      <p style="font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin:0;">
+        ¿Quieres más diseños listos para imprimir? Arriba tienes los megapacks disponibles.
+      </p>
+    </div>
+  </div>
+
+  <!-- CARD PRINCIPAL -->
+  <div style="display:flex; flex-direction:row; background:#0a0a0a; border:1px solid #2c2c2c; border-radius:16px; overflow:hidden; transition:border-color .3s;"
+       onmouseover="this.style.borderColor='#FF9F43'" onmouseout="this.style.borderColor='#2c2c2c'">
+
+    <!-- IMAGEN -->
+    <div class="regalo-img-col" style="width:380px; min-width:380px; overflow:hidden; border-right:1px solid #222;">
+      <img src="DI.png" alt="Pack Semanal"
+           style="width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s;"
+           onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+    </div>
+
+    <!-- CONTENIDO -->
+    <div style="padding:40px; display:flex; flex-direction:column; justify-content:center; flex:1;">
+
+      <span style="display:inline-block; background:rgba(255,159,67,0.1); color:#FF9F43; font-family:'Oswald',sans-serif; font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; padding:6px 14px; border-radius:20px; border:1px solid rgba(255,159,67,0.2); margin-bottom:20px;">
+        <i class="fa-solid fa-clock" style="margin-right:4px;"></i>GRATUITOS 
+      </span>
+
+      <h3 style="font-family:'Oswald',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:700; text-transform:uppercase; color:#fff; margin:0 0 12px 0;">
+        DISEÑOS GRATIS
+      </h3>
+
+      <p style="font-size:13px; color:#888; line-height:1.7; margin:0 0 32px 0; max-width:520px;">
+        @CHECHENA_SHIRTS
+      </p>
+
+      <div>
+        <a href="https://drive.google.com/drive/folders/1O9bNvXTL0pi7syMcrXAFovzG4q73wC5w?usp=sharing"
+           target="_blank"
+           style="display:inline-flex; align-items:center; gap:10px; background:#FF9F43; color:#000; font-family:'Oswald',sans-serif; font-weight:700; font-size:13px; letter-spacing:.15em; text-transform:uppercase; padding:14px 32px; border-radius:10px; text-decoration:none; transition:all .2s; box-shadow:0 4px 15px rgba(255,159,67,0.2);"
+           onmouseover="this.style.background='#ff8c00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(255,159,67,0.4)'"
+           onmouseout="this.style.background='#FF9F43';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(255,159,67,0.2)'">
+          <i class="fa-brands fa-google-drive" style="font-size:18px;"></i>
+          PACK DISEÑOS GRATIS
+        </a>
+        <p style="font-size:10px; color:#444; margin-top:14px; font-family:'Oswald',sans-serif; letter-spacing:.05em;">
+          <i class="fa-solid fa-circle-info" style="color:#FF9F43; margin-right:4px;"></i>
+          Todos los diseños están listos para imprimir. Esta es una muestra de lo que ofrecemos.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESPONSIVE MÓVIL -->
+  <style>
+    @media (max-width: 768px) {
+      #regalo-semana > div:last-child { flex-direction: column !important; }
+      .regalo-img-col {
+        width: 100% !important;
+        min-width: unset !important;
+        height: 220px;
+        border-right: none !important;
+        border-bottom: 1px solid #222;
+      }
+    }
+  </style>
+
+</section>
+
+<!-- TIKTOK VIDEOS -->
+<section id="tiktok-videos">
+  <div class="sec-head">
+    <h2>SÍGUENOS EN TIKTOK</h2>
+    <p>Mira nuestros diseños en acción</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;max-width:1100px;margin:0 auto;padding:0 clamp(16px,5vw,48px) 48px;">
+
+    <blockquote class="tiktok-embed"
+      cite="https://www.tiktok.com/@chechena_shirts/video/7599722002890427668"
+      data-video-id="7599722002890427668"
+      style="max-width:100%;min-width:0;border:1px solid #1f1f1f;background:#111;">
+      <section>
+        <a target="_blank" title="@chechena_shirts" href="https://www.tiktok.com/@chechena_shirts?refer=embed">@chechena_shirts</a>
+        DISEÑOS para dtf
+        <a title="diseñosurbanos" target="_blank" href="https://www.tiktok.com/tag/dise%C3%B1osurbanos?refer=embed">#diseñosurbanos</a>
+        <a title="megapackdediseños" target="_blank" href="https://www.tiktok.com/tag/megapackdedise%C3%B1os?refer=embed">#megapackdediseños</a>
+      </section>
+    </blockquote>
+
+    <blockquote class="tiktok-embed"
+      cite="https://www.tiktok.com/@chechena_shirts/video/7597229567505452344"
+      data-video-id="7597229567505452344"
+      style="max-width:100%;min-width:0;border:1px solid #1f1f1f;background:#111;">
+      <section>
+        <a target="_blank" title="@chechena_shirts" href="https://www.tiktok.com/@chechena_shirts?refer=embed">@chechena_shirts</a>
+        EFECTO BORDADO · DTF TEXTIL · PAQUETE DE DISEÑOS
+        <a title="DTF" target="_blank" href="https://www.tiktok.com/tag/DTF?refer=embed">#DTF</a>
+        <a title="efectobordado" target="_blank" href="https://www.tiktok.com/tag/efectobordado?refer=embed">#efectobordado</a>
+      </section>
+    </blockquote>
+
+    <blockquote class="tiktok-embed"
+      cite="https://www.tiktok.com/@chechena_shirts/photo/7594941900004609298"
+      data-video-id="7594941900004609298"
+      style="max-width:100%;min-width:0;border:1px solid #1f1f1f;background:#111;">
+      <section>
+        <a target="_blank" title="@chechena_shirts" href="https://www.tiktok.com/@chechena_shirts?refer=embed">@chechena_shirts</a>
+      </section>
+    </blockquote>
+
+
+  </div>
+
+  <div style="text-align:center;padding-bottom:40px;">
+    <a href="https://www.tiktok.com/@chechena_shirts" target="_blank"
+      style="display:inline-block;background:#1a1a1a;border:1px solid #333;color:#f5f5f5;font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:13px 32px;text-decoration:none;transition:border-color .2s;">
+      Ver más en TikTok →
+    </a>
+  </div>
+</section>
+<script async src="https://www.tiktok.com/embed.js"></script>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN: PREGUNTAS FRECUENTES                         -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="preguntas-frecuentes" style="background:#0a0a0a; padding:70px 20px; border-top:1px solid #2c2c2c;">
+  <div style="max-width:900px; margin:0 auto;">
+
+    <div style="text-align:center; margin-bottom:48px;">
+      <span style="display:inline-block; background:#1a1a1a; border:1px solid #333; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#888; padding:5px 16px; margin-bottom:16px;">Soporte</span>
+      <h2 style="font-family:'Oswald',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#fff; margin-bottom:8px;">PREGUNTAS <span style="color:#ff6b00;">FRECUENTES</span></h2>
+      <p style="font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888;">Todo lo que necesitas saber sobre nuestros paquetes y descargas</p>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:4px;" id="faq-lista">
+
+      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+          <span>¿En qué formato vienen los diseños?</span><span style="font-size:18px; transition:transform .3s;">+</span>
+        </button>
+        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
+          <p style="font-size:13px; color:#888; line-height:1.7;">Todos los diseños vienen en <strong style="color:#fff;">PNG con fondo transparente</strong> a 300 DPI, listos para mandar directo al RIP o a cualquier programa de diseño. También incluimos versiones optimizadas con semitonos para camisetas oscuras.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+          <span>¿Cómo descargo mis diseños después de pagar?</span><span style="font-size:18px; transition:transform .3s;">+</span>
+        </button>
+        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
+          <p style="font-size:13px; color:#888; line-height:1.7;">Recibes un <strong style="color:#fff;">enlace de descarga inmediata</strong> directamente en tu correo al momento de pagar. El archivo ZIP se descarga sin necesidad de crear una cuenta. Si tienes problemas, escríbenos por WhatsApp y te ayudamos al instante.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+          <span>¿Puedo usar los diseños comercialmente?</span><span style="font-size:18px; transition:transform .3s;">+</span>
+        </button>
+        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
+          <p style="font-size:13px; color:#888; line-height:1.7;">Sí. Al comprar cualquier megapack obtienes <strong style="color:#fff;">licencia comercial</strong> para estampar y vender prendas con esos diseños. No puedes revender los archivos digitales originales ni incluirlos en otro pack de diseños.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+          <span>¿Cada cuánto agregan diseños nuevos?</span><span style="font-size:18px; transition:transform .3s;">+</span>
+        </button>
+        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
+          <p style="font-size:13px; color:#888; line-height:1.7;">Subimos <strong style="color:#fff;">diseños nuevos cada semana</strong>. Si ya compraste un megapack, únete a nuestro grupo de WhatsApp para enterarte cuando salen los nuevos packs y acceder a ofertas exclusivas para clientes.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+          <span>¿Qué métodos de pago aceptan?</span><span style="font-size:18px; transition:transform .3s;">+</span>
+        </button>
+        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
+          <p style="font-size:13px; color:#888; line-height:1.7;">Aceptamos <strong style="color:#fff;">tarjeta de crédito/débito, PayPal y transferencia bancaria</strong>. Todos los pagos son 100% seguros. Si prefieres otro método de pago, contáctanos por WhatsApp y coordinamos.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+          <span>¿Los diseños sirven para sublimación también?</span><span style="font-size:18px; transition:transform .3s;">+</span>
+        </button>
+        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
+          <p style="font-size:13px; color:#888; line-height:1.7;">La mayoría sí. Los diseños sin fondo son ideales para DTF. Para sublimación recomendamos usar los diseños con fondo completo o agregarles un fondo de color en Photoshop antes de imprimir. Nuestros archivos a 300 DPI garantizan calidad profesional en ambas técnicas.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center; margin-top:40px;">
+      <p style="font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:#555; margin-bottom:16px;">¿No encontraste tu respuesta?</p>
+      <a href="https://wa.me/529212337934" target="_blank" style="display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#fff; font-family:'Oswald',sans-serif; font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; padding:13px 28px; text-decoration:none; border-radius:3px; transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">💬 PREGÚNTANOS POR WHATSAPP</a>
+    </div>
+
+  </div>
+</section>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* COMUNIDAD SECTION */
+.comunidad-section {
+  background: #080808;
+  border-top: 1px solid #2c2c2c;
+  padding: clamp(48px, 8vw, 80px) clamp(16px, 5vw, 48px);
+}
+.comunidad-header {
+  text-align: center;
+  margin-bottom: clamp(32px, 5vw, 52px);
+}
+.comunidad-header .sec-tag {
+  display: inline-block;
+  background: rgba(37,211,102,.12);
+  border: 1px solid rgba(37,211,102,.3);
+  color: #25D366;
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+.comunidad-header h2 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.comunidad-header p {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #666;
+}
+.comunidad-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 3vw, 28px);
+  max-width: 860px;
+  margin: 0 auto;
+}
+.com-card {
+  border-radius: 14px;
+  padding: clamp(24px, 4vw, 36px) clamp(20px, 3vw, 30px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.com-card:hover {
+  transform: translateY(-6px);
+}
+.com-card.whatsapp-card {
+  background: #0d1f14;
+  border: 1px solid #25D366;
+}
+.com-card.whatsapp-card:hover {
+  box-shadow: 0 14px 40px rgba(37,211,102,.2);
+}
+.com-card.telegram-card {
+  background: #0d1829;
+  border: 1px solid #2AABEE;
+}
+.com-card.telegram-card:hover {
+  box-shadow: 0 14px 40px rgba(42,171,238,.2);
+}
+.com-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  align-self: flex-start;
+}
+.whatsapp-card .com-card-badge {
+  background: rgba(37,211,102,.15);
+  color: #25D366;
+}
+.telegram-card .com-card-badge {
+  background: rgba(42,171,238,.15);
+  color: #2AABEE;
+}
+.com-card-icon {
+  font-size: clamp(28px, 5vw, 38px);
+  line-height: 1;
+}
+.com-card h3 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.2;
+  margin: 0;
+}
+.com-card p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #999;
+  line-height: 1.65;
+  margin: 0;
+  flex: 1;
+}
+.com-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all .25s ease;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+.whatsapp-card .com-card-btn {
+  background: #25D366;
+  color: #000;
+}
+.whatsapp-card .com-card-btn:hover {
+  background: #1ebe58;
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(37,211,102,.4);
+}
+.telegram-card .com-card-btn {
+  background: #2AABEE;
+  color: #000;
+}
+.telegram-card .com-card-btn:hover {
+  background: #1a9ad6;
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(42,171,238,.4);
+}
+@media (max-width: 600px) {
+  .comunidad-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECCIÓN: CONTACTO                                 -->
+<!-- ══════════════════════════════════════════════════ -->
+<section class="contacto" id="contacto">
+  <div class="container">
+
+    <h2>CONTACTO</h2>
+    <p class="sub">¿Tienes dudas? Escríbenos y te respondemos rápido</p>
+    <div class="linea"></div>
+    <p class="titulo-redes">SÍGUENOS & CONECTA</p>
+
+    <div class="bottom-grid">
+
+      <!-- Formulario / WhatsApp directo -->
+      <div class="grupo-box" style="border-color:#333;">
+        <span class="badge" style="background:rgba(255,107,0,.15);color:#ff6b00;">SOPORTE DIRECTO</span>
+        <h3 style="color:#fff;">ESCRÍBENOS<br>POR WHATSAPP</h3>
+        <p>Resolvemos tus dudas sobre pedidos, descargas o diseños. Respuesta rápida garantizada.</p>
+        <a href="https://wa.me/529212337934" target="_blank" class="btn-grupo" style="background:#25D366;">
+          💬 CHATEAR AHORA
+        </a>
+      </div>
+
+      <div class="redes">
+        <p class="redes-title">REDES SOCIALES</p>
+
+        <a href="https://wa.me/529212337934" class="red-btn whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        </a>
+
+        <a href="https://www.instagram.com/chechena_shirts" class="red-btn instagram">
+          <i class="fa-brands fa-instagram"></i> Instagram
+        </a>
+
+        <a href="https://www.facebook.com/share/1GyQAhvMFY/" class="red-btn facebook">
+          <i class="fa-brands fa-facebook-f"></i> Facebook
+        </a>
+
+        <a href="https://www.tiktok.com/@chechena_shirts" class="red-btn tiktok">
+          <i class="fa-brands fa-tiktok"></i> TikTok
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <span class="footer-logo">Chechena Shirts</span>
+      <p class="footer-desc">Diseños digitales para DTF y Sublimación. Descarga inmediata, calidad profesional, actualizaciones semanales.</p>
+    </div>
+    <div class="f-col">
+      <h4>Tienda</h4>
+      <ul>
+        <li><a href="#">HOME</a></li>
+        <li><a href="#megapacks">MEGAPACKS</a></li>
+        <li><a href="#tiktok-videos">TIKTOKS</a></li>
+        <li><a href="#contacto">CONTACTO</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Ayuda</h4>
+      <ul>
+        <li><a href="#contacto">Preguntas Frecuentes</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a href="#contacto">Cómo descargar</a></li>
+        <li><a href="#contacto">Afiliados</a></li>
+      </ul>
+    </div>
+  <div class="footer-bottom">
+    <p>© 2025 Chechena Shirts. Todos los derechos reservados.</p>
+</footer>
+
+<!-- CARRITO -->
+<div class="backdrop" id="backdrop" onclick="toggleCart()"></div>
+<div class="cart-side" id="cart-side">
+  <div class="cs-head">
+    <h3>Tu Carrito</h3>
+    <button class="cs-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cs-body" id="cs-body"><div class="cs-empty">Tu carrito está vacío</div></div>
+  <div class="cs-foot">
+    <div class="cs-total"><span>Total</span><strong id="cs-total">$0 MXN</strong></div>
+    <button class="cs-checkout">Proceder al Pago</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── DATA ─── */
+const MXN_USD = 17.5;
+let cur = 'MXN';
+const catalog = [
+  {id:1, name:'Pack Anime Vol.1 — 200 Diseños',  cat:'Anime',    mxn:149,  old:299,  icon:'🦸', badge:'oferta'},
+  {id:2, name:'Colección Urbana Streetwear',      cat:'Urbano',   mxn:199,  old:399,  icon:'💀', badge:'oferta'},
+  {id:3, name:'+50,000 Diseños Para DTF',         cat:'Bundle',   mxn:999,  old:1999, icon:'🔥', badge:'oferta'},
+  {id:4, name:'Artist Name — Paquete Artista',    cat:'Branding', mxn:179,  old:null, icon:'🎨', badge:'nuevo'},
+  {id:5, name:'Acceso Premium Anual',             cat:'Membresía',mxn:3999, old:7999, icon:'⭐', badge:'oferta'},
+  {id:6, name:'Pack Rock & Metal Clásico',        cat:'Rock',     mxn:129,  old:null, icon:'🎸', badge:null},
+  {id:7, name:'Corridos & Regional Mexicano',     cat:'Regional', mxn:159,  old:259,  icon:'🌮', badge:'oferta'},
+  {id:8, name:'Pack Gaming — Videojuegos',        cat:'Gaming',   mxn:189,  old:299,  icon:'🎮', badge:'oferta'},
+];
+
+function fmt(mxn){ return cur==='USD' ? `USD $${Math.round(mxn/MXN_USD)}` : `$${mxn.toLocaleString()} MXN`; }
+function setCurrency(v){ cur=v; renderProducts(); renderCart(); }
+
+/* ─── PRODUCTS ─── */
+const obs = new IntersectionObserver(ee=>ee.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}}),{threshold:.08});
+function renderProducts(){
+  const g = document.getElementById('pgrid');
+  g.innerHTML = catalog.map(p=>{
+    const bdg = p.badge==='oferta'?`<div class="badge-oferta">Oferta</div>`:p.badge==='nuevo'?`<div class="badge-nuevo">Nuevo</div>`:'';
+    const old = p.old?`<span class="p-price-old">${fmt(p.old)}</span>`:'';
+    return `<div class="p-card" style="opacity:0;transform:translateY(20px);transition:opacity .4s ease,transform .4s ease;">
+      ${bdg}
+      <div class="p-thumb">${p.icon}<div class="p-overlay"><button class="p-add-btn" onclick="addCart('${p.name}',${p.mxn},${Math.round(p.mxn/MXN_USD)})">+ Agregar</button></div></div>
+      <div class="p-info">
+        <div class="p-name">${p.name}</div>
+        <div class="p-prices">
+          <span class="p-price">${fmt(p.mxn)}</span>
+          ${cur==='MXN'?`<span class="p-price-usd">≈ USD $${Math.round(p.mxn/MXN_USD)}</span>`:''}
+          ${old}
+        </div>
+        <button class="p-btn" onclick="addCart('${p.name}',${p.mxn},${Math.round(p.mxn/MXN_USD)})">Agregar al carrito</button>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.p-card').forEach(el=>obs.observe(el));
+}
+
+/* ─── CART ─── */
+let cart=[];
+function addCart(name,mxn,usd){ cart.push({name,mxn,usd,id:Date.now()+Math.random()}); renderCart(); toast('✓ Agregado al carrito'); }
+function rmCart(id){ cart=cart.filter(i=>i.id!==id); renderCart(); }
+function renderCart(){
+  document.getElementById('cart-count').textContent=cart.length;
+  const b=document.getElementById('cs-body');
+  b.innerHTML=cart.length?cart.map(i=>`<div class="cs-line"><div class="cs-icon">🎨</div><div class="cs-info"><div class="cs-iname">${i.name}</div><div class="cs-iprice">${cur==='USD'?`USD $${i.usd}`:`$${i.mxn.toLocaleString()} MXN`}</div></div><button class="cs-rm" onclick="rmCart(${i.id})">✕</button></div>`).join(''):'<div class="cs-empty">Tu carrito está vacío</div>';
+  const s=cart.reduce((a,b)=>a+(cur==='USD'?b.usd:b.mxn),0);
+  document.getElementById('cs-total').textContent=cur==='USD'?`USD $${s}`:`$${s.toLocaleString()} MXN`;
+}
+function toggleCart(){ document.getElementById('cart-side').classList.toggle('open'); document.getElementById('backdrop').classList.toggle('open'); }
+
+/* ─── HERO SLIDER ─── */
+let sl=0;
+function goSlide(n){ sl=n; document.getElementById('slides-track').style.transform=`translateX(-${n*100}%)`; document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===n)); }
+setInterval(()=>goSlide((sl+1)%2),5000);
+
+/* ─── SEARCH ─── */
+function toggleSearch(){ const r=document.getElementById('search-row'); r.classList.toggle('open'); if(r.classList.contains('open')) document.getElementById('search-inp').focus(); }
+function doSearch(){ const q=document.getElementById('search-inp').value.trim(); if(q) toast(`Buscando: ${q}`); }
+
+/* ─── MOBILE MENU ─── */
+function toggleMob(){ document.getElementById('mob-nav').classList.toggle('open'); }
+function closeMob(){ document.getElementById('mob-nav').classList.remove('open'); }
+
+/* ─── TOAST ─── */
+let _tt;
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2600); }
+
+/* ─── CONTACT ─── */
+function sendMsg(){ const e=document.getElementById('cemail').value; if(e&&e.includes('@')){ toast('✓ Mensaje enviado, gracias!'); } else { toast('⚠ Ingresa un email válido'); } }
+
+/* ─── SCROLL UTIL ─── */
+function scroll2(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+/* ─── INIT ─── */
+renderProducts();
+document.querySelectorAll('.m-card,.cat-card').forEach((el,i)=>{ el.style.opacity='0'; el.style.transform='translateY(20px)'; el.style.transition=`opacity .4s ${i*.06}s ease,transform .4s ${i*.06}s ease`; obs.observe(el); });
+</script>
+
+<script>
+/* SCROLL ANIMATIONS */
+(function(){
+  var rules = [
+    { sel: '.sec-head',            cls: 'anim-fadeup' },
+    { sel: '.mpack-card',          cls: 'anim-scalein' },
+    { sel: '.megapacks-header',    cls: 'anim-fadeup' },
+    { sel: '.faq-item',            cls: 'anim-fadeup' },
+    { sel: '.grupo-box',           cls: 'anim-left' },
+    { sel: '.redes',               cls: 'anim-right' },
+    { sel: '.com-card',            cls: 'anim-fadeup' },
+    { sel: '.comunidad-header',    cls: 'anim-fadeup' },
+    { sel: '.promo-band',          cls: 'anim-fadeup' },
+    { sel: '.contacto h2',         cls: 'anim-fadeup' },
+    { sel: '.contacto .sub',       cls: 'anim-fadeup' },
+  ];
+  rules.forEach(function(r){
+    document.querySelectorAll(r.sel).forEach(function(el,i){
+      el.classList.add(r.cls);
+      if(i<5) el.classList.add('anim-d'+(i+1));
+    });
+  });
+  var animObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('anim-visible'); animObs.unobserve(e.target); }
+    });
+  },{threshold:0.10});
+  document.querySelectorAll('.anim-fadeup,.anim-fadein,.anim-scalein,.anim-left,.anim-right')
+    .forEach(function(el){ animObs.observe(el); });
+})();
+</script>
+
+<script>
+/* ─── PROMPTS: COPIAR ─── */
+function copiarP(id, btn) {
+  const txt = document.getElementById(id).innerText.trim();
+  navigator.clipboard.writeText(txt).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ ¡Copiado!';
+    btn.style.background = '#16a34a';
+    btn.style.color = '#fff';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
+  }).catch(() => { alert('Selecciona el texto manualmente.'); });
+}
+
+/* ─── ACADEMIA: MODAL ─── */
+const guiasData = {
+  temps: {
+    titulo: '🌡️ Tabla de Temperaturas DTF',
+    cuerpo: `<p><strong style="color:#fff;">Algodón 100%</strong><br>Temperatura: 160–165 °C &nbsp;|&nbsp; Tiempo: 15–20 seg &nbsp;|&nbsp; Presión: Media/Alta<br>Retiro del film: frío o caliente según tu tipo de film.</p>
+    <p style="margin-top:12px;"><strong style="color:#fff;">Poliéster 100%</strong><br>Temperatura: 150–155 °C &nbsp;|&nbsp; Tiempo: 10-12 seg &nbsp;|&nbsp; Presión: Media<br>(Temperatura baja para evitar marcas de plancha)</p>
+    <p style="margin-top:12px;"><strong style="color:#fff;">Mezclas 50/50</strong><br>Temperatura: 150 °C &nbsp;|&nbsp; Tiempo: 12 seg</p>
+    <p style="margin-top:16px; font-size:12px; color:#555; border-top:1px solid #222; padding-top:12px;">💡 <em>Tip Pro: siempre haz una segunda planchada de 5 segundos cubriendo el diseño con papel teflón para fijar la textura.</em></p>`
+  },
+  cmyk: {
+    titulo: '🎨 CMYK vs RGB',
+    cuerpo: `<p>Uno de los errores más comunes es diseñar en <strong style="color:#fff;">RGB</strong> y esperar que la impresora imprima esos colores en la camiseta.</p>
+    <p style="margin-top:12px;"><strong style="color:#fff;">RGB</strong> = colores luz (pantallas). Si diseñas en RGB la máquina intentará adivinar el color, resultando en tonos apagados y opacos.</p>
+    <p style="margin-top:12px;"><strong style="color:#fff;">CMYK</strong> = colores pigmento (impresoras). Cyan, Magenta, Amarillo y Negro.</p>
+    <p style="margin-top:16px;"><strong style="color:#fff;">Regla de Oro:</strong> configura tu mesa de trabajo en Illustrator o Photoshop siempre en CMYK antes de empezar. El RIP de tu impresora hará la conversión exacta sin sorpresas.</p>`
+  },
+  lavado: {
+    titulo: '👕 Cuidados y Lavado DTF',
+    cuerpo: `<ul style="padding-left:16px; display:flex; flex-direction:column; gap:10px;">
+    <li>🚫 <strong style="color:#fff;">No lavar antes de 24 horas:</strong> la tinta necesita curar completamente.</li>
+    <li>👕 <strong style="color:#fff;">Lavar al revés:</strong> dale vuelta a la camiseta para que el diseño no roce.</li>
+    <li>❄️ <strong style="color:#fff;">Agua fría o templada:</strong> máximo 30 °C. El agua caliente ablanda la poliamida.</li>
+    <li>☀️ <strong style="color:#fff;">Secar a la sombra:</strong> evita secadoras automáticas, el calor extremo cuartea el diseño.</li>
+    <li>♨️ <strong style="color:#fff;">Planchado:</strong> nunca planchar directamente sobre el diseño.</li>
+    </ul>
+    <p style="margin-top:16px; font-size:12px; color:#555; border-top:1px solid #222; padding-top:12px;">💡 Puedes imprimir estas instrucciones y entregarlas a tus clientes.</p>`
+  },
+  semitonos: {
+    titulo: '🔵 Qué son los Semitonos',
+    cuerpo: `<p>Los semitonos son pequeños <strong style="color:#fff;">puntos de tinta</strong> que simulan áreas de menos opacidad. En DTF se usan para:</p>
+    <ul style="padding-left:16px; margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+      <li>✅ Lograr un <strong style="color:#fff;">tacto más suave</strong> en camisetas oscuras</li>
+      <li>✅ <strong style="color:#fff;">Ahorrar tinta blanca</strong> hasta un 40%</li>
+      <li>✅ Evitar que el estampado se sienta como un "parche" rígido</li>
+      <li>✅ Lograr degradados y sombras que se ven naturales al planchar</li>
+    </ul>
+    <p style="margin-top:14px;"><strong style="color:#fff;">¿Cuándo usarlos?</strong> En cualquier diseño que vaya sobre tela oscura. Para telas claras no son necesarios.</p>`
+  }
+};
+
+function abrirGuia(id) {
+  const g = guiasData[id]; if (!g) return;
+  document.getElementById('modal-academia-titulo').innerHTML = g.titulo;
+  document.getElementById('modal-academia-cuerpo').innerHTML = g.cuerpo;
+  const m = document.getElementById('modal-academia');
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function cerrarGuia() {
+  document.getElementById('modal-academia').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('modal-academia').addEventListener('click', function(e) {
+  if (e.target === this) cerrarGuia();
+});
+
+/* ─── FAQ: ACORDEÓN ─── */
+function toggleFaq(btn) {
+  const resp = btn.nextElementSibling;
+  const icon = btn.querySelector('span:last-child');
+  const abierto = resp.style.display === 'block';
+  // Cerrar todos
+  document.querySelectorAll('.faq-resp').forEach(r => r.style.display = 'none');
+  document.querySelectorAll('.faq-item button span:last-child').forEach(i => { i.textContent = '+'; i.style.transform = 'rotate(0deg)'; });
+  if (!abierto) {
+    resp.style.display = 'block';
+    icon.textContent = '−';
+    icon.style.transform = 'rotate(180deg)';
+  }
+}
+</script>
+</body>
+<script src="script.js"></script>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chechena Shirts – Galería de Diseños</title>
+  <style>
+    :root {
+      --bg: #ffffff; --card: #ffffff; --text: #1a1a1a;
+      --border: #eeeeee; --btn: #000; --btn-text: #fff;
+      --filter-bg: #f5f5f5; --filter-active: #000; --filter-active-text: #fff;
+      --skeleton: #f0f0f0; --check: #f0f0f0; --accent: #e63946;
+    }
+    body.dark {
+      --bg: #0a0a0a; --card: #161616; --text: #f5f5f5;
+      --border: #222; --btn: #fff; --btn-text: #000;
+      --filter-bg: #1f1f1f; --filter-active: #fff; --filter-active-text: #000;
+      --skeleton: #222; --check: #1a1a1a;
+    }
+    body.modal-open { overflow: hidden; position: fixed; width: 100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      transition: background .3s, color .3s;
+    }
+    /* HEADER */
+    .site-header {
+      background: var(--btn); color: var(--btn-text);
+      padding: 0 30px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 2px 12px rgba(0,0,0,.3);
+    }
+    .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; }
+    .logo span { color: var(--accent); }
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+    .theme-btn {
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+      color: var(--btn-text); padding: 8px 16px; border-radius: 50px;
+      cursor: pointer; font-size: .85rem; font-weight: 600;
+    }
+    body.dark .theme-btn { background: rgba(0,0,0,.3); color: #fff; }
+
+    /* HERO */
+    .hero {
+      text-align: center; padding: 50px 20px 30px;
+      background: linear-gradient(135deg, var(--bg) 0%, var(--filter-bg) 100%);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900;
+      letter-spacing: -2px; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p { opacity: .6; font-size: 1rem; }
+
+    /* FILTERS */
+    .filters-wrap {
+      position: sticky; top: 64px; z-index: 100;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .filters {
+      display: flex; gap: 10px; overflow-x: auto;
+      padding: 4px 20px; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      background: var(--filter-bg); border: 1px solid transparent;
+      padding: 9px 20px; border-radius: 50px; font-weight: 700;
+      cursor: pointer; white-space: nowrap; color: var(--text);
+      font-size: .85rem; flex-shrink: 0; transition: .25s;
+    }
+    .filter-btn.active {
+      background: var(--filter-active); color: var(--filter-active-text);
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+
+    /* GALLERY */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px; padding: 30px 30px 80px;
+    }
+    @media(max-width:600px){
+      .gallery { grid-template-columns: repeat(2,1fr); gap: 12px; padding: 15px 12px 60px; }
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden;
+      transition: transform .35s cubic-bezier(.175,.885,.32,1.275), box-shadow .35s;
+    }
+    .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,.1); }
+    .img-wrap {
+      aspect-ratio: 1/1; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background-image:
+        linear-gradient(45deg, var(--check) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--check) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--check) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--check) 75%);
+      background-size: 22px 22px;
+    }
+    .skel {
+      position: absolute; inset: 0; background: var(--skeleton); z-index: 5;
+    }
+    .skel::after {
+      content: ''; position: absolute; inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+      animation: shimmer 1.8s infinite;
+    }
+    @keyframes shimmer { 100%{ transform: translateX(100%); } }
+    .card img {
+      width: 82%; height: 82%; object-fit: contain; z-index: 10;
+      opacity: 0; transition: opacity .5s;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.2));
+    }
+    .card img.loaded { opacity: 1; }
+    .info { padding: 18px 18px 20px; text-align: center; }
+    .tag { font-size: .65rem; text-transform: uppercase; font-weight: 800; opacity: .4; letter-spacing: 1.5px; }
+    .title { font-size: 1rem; margin: 6px 0 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dl-btn {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--btn); color: var(--btn-text);
+      border: none; padding: 13px; border-radius: 12px;
+      font-size: .8rem; font-weight: 800; gap: 8px; cursor: pointer;
+      width: 100%; transition: opacity .2s;
+    }
+    .dl-btn:hover { opacity: .8; }
+
+    /* SENTINEL */
+    #sentinel { height: 120px; display: flex; align-items: center; justify-content: center; opacity: .5; font-weight: 700; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.85);
+      backdrop-filter: blur(10px); display: none;
+      align-items: center; justify-content: center;
+      z-index: 99999; padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: var(--card); color: var(--text);
+      max-width: 480px; width: 100%; border-radius: 28px;
+      padding: 36px 32px; text-align: center; position: relative;
+      box-shadow: 0 30px 60px rgba(0,0,0,.5);
+      animation: popIn .3s cubic-bezier(.34,1.56,.64,1);
+      max-height: 90vh; overflow-y: auto;
+    }
+    @keyframes popIn { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--filter-bg); border: none; width: 32px; height: 32px;
+      border-radius: 50%; cursor: pointer; color: var(--text); font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-emoji { font-size: 3rem; margin-bottom: 12px; }
+    .modal-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; }
+    .modal-sub { opacity: .65; line-height: 1.5; margin-bottom: 24px; }
+    .promo-box {
+      background: linear-gradient(135deg,#f6d365,#fda085);
+      padding: 20px; border-radius: 16px; margin-bottom: 22px; color: #000;
+    }
+    .promo-box h4 { font-weight: 900; font-size: 1.1rem; margin-bottom: 6px; }
+    .promo-box p { font-size: .9rem; font-weight: 600; }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+    .btn-primary {
+      background: #000; color: #fff; padding: 16px;
+      border-radius: 14px; text-decoration: none; font-weight: 900;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: transform .2s;
+    }
+    body.dark .btn-primary { background: #fff; color: #000; }
+    .btn-primary:hover { transform: scale(1.02); }
+    .btn-secondary {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border); padding: 13px; border-radius: 14px;
+      text-decoration: none; font-weight: 600; font-size: .85rem; opacity: .6;
+      transition: opacity .2s, background .2s;
+    }
+    .btn-secondary:hover { opacity: 1; background: var(--filter-bg); }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 30px 20px;
+      border-top: 1px solid var(--border);
+      font-size: .85rem; opacity: .5;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">CHECHENA<span>.</span>SHIRTS</div>
+  <div class="header-actions">
+    <button class="theme-btn" onclick="toggleTheme()">🌙 Oscuro</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Galería de <span>Diseños</span></h1>
+  <p>Descarga diseños premium para DTF, bordado y más</p>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-wrap">
+  <div class="filters" id="filters"></div>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery" id="gallery"></div>
+<div id="sentinel"><span>Cargando más diseños...</span></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-emoji">🎉</div>
+    <div class="modal-title">¡Excelente Elección!</div>
+    <p class="modal-sub">Tu diseño gratuito está listo. Pero antes...</p>
+    <div class="promo-box">
+      <h4>🚀 ¿Quieres más diseños?</h4>
+      <p>Accede a miles de diseños exclusivos en MEGAPACK CHECHENA CON MAS DE +40,000 DISEÑOS Y MEGAPACK OJITO CON MAS DE +50,000 DISEÑOS.</p>
+    </div>
+    <div class="modal-actions">
+      <a href="#" class="btn-primary" id="modal-premium">
+        ⭐ VER PAQUETE DE DISEÑOS
+      </a>
+      <a href="#" id="modal-free" target="_blank" class="btn-secondary" onclick="closeModal()">
+        Descargar solo este diseño gratis
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Chechena Shirts · Todos los derechos reservados</p>
+</footer>
+
+<script>
+  // ─── CONFIG ───────────────────────────────────────────────
+  const API_URL = "https://script.google.com/macros/s/AKfycbyHlwFU8Jcy-i0qCmD8nRZQKPnpo41qtn1aLtEmh2mdBwpF6tqYP27KD_QxknLQ1e4oiQ/exec";
+  const PREMIUM_URL = "https://tienda-chechena-shirts.netlify.app/"; // Cambia esto a tu URL de colección premium
+  const CACHE_KEY = "chechena_v1";
+  const BATCH = 24;
+
+  let all = [], filtered = [], rendered = 0, loading = false;
+
+  // ─── THEME ────────────────────────────────────────────────
+  function toggleTheme() {
+    const isDark = document.body.classList.toggle('dark');
+    const btn = document.querySelector('.theme-btn');
+    btn.textContent = isDark ? '☀️ Claro' : '🌙 Oscuro';
+    localStorage.setItem('cs-theme', isDark ? 'dark' : 'light');
+  }
+  if (localStorage.getItem('cs-theme') === 'dark') {
+    document.body.classList.add('dark');
+    document.querySelector('.theme-btn').textContent = '☀️ Claro';
+  }
+
+  // ─── MODAL ────────────────────────────────────────────────
+  document.getElementById('modal-premium').href = PREMIUM_URL;
+
+  function openModal(url) {
+    document.getElementById('modal-free').href = url;
+    document.getElementById('modal').classList.add('active');
+    document.body.classList.add('modal-open');
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.classList.remove('modal-open');
+  }
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+
+  // ─── DATA ─────────────────────────────────────────────────
+  async function init() {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const { ts, data } = JSON.parse(cached);
+      if (Date.now() - ts < 1800000) { // 30 min cache
+        all = data; setup(); refresh(); return;
+      }
+    }
+    await refresh();
+  }
+
+  async function refresh() {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      if (data?.length) {
+        all = data;
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+        if (!rendered) setup();
+      }
+    } catch(e) {
+      document.getElementById('sentinel').innerHTML = '<span>Error al cargar. Recarga la página.</span>';
+    }
+  }
+
+  function setup() {
+    buildFilters();
+    applyFilter('Todos');
+    observe();
+  }
+
+  // ─── FILTERS ──────────────────────────────────────────────
+  function buildFilters() {
+    const cats = ['Todos', ...new Set(all.map(d => d.category).filter(Boolean))];
+    document.getElementById('filters').innerHTML = cats.map(c =>
+      `<button class="filter-btn${c==='Todos'?' active':''}" onclick="applyFilter('${c}',this)">${c}</button>`
+    ).join('');
+  }
+
+  function applyFilter(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    (btn || document.querySelector('.filter-btn')).classList.add('active');
+    filtered = cat === 'Todos' ? all : all.filter(d => d.category === cat);
+    document.getElementById('gallery').innerHTML = '';
+    rendered = 0;
+    renderBatch(BATCH);
+  }
+
+  // ─── RENDER ───────────────────────────────────────────────
+  function renderBatch(n) {
+    if (loading || rendered >= filtered.length) {
+      if (rendered >= filtered.length)
+        document.getElementById('sentinel').innerHTML = '<span>✓ Todos los diseños cargados</span>';
+      return;
+    }
+    loading = true;
+    const frag = document.createDocumentFragment();
+    filtered.slice(rendered, rendered + n).forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const name = item.name.split('.')[0].replace(/_/g, ' ');
+      const thumb = item.preview.replace(/=s\d+/, '=s480');
+      card.innerHTML = `
+        <div class="img-wrap">
+          <div class="skel"></div>
+          <img src="${thumb}" alt="${name}"
+            onload="this.classList.add('loaded');this.previousElementSibling.remove()">
+        </div>
+        <div class="info">
+          <div class="tag">${item.category || 'DISEÑO'}</div>
+          <h3 class="title" title="${name}">${name}</h3>
+          <button class="dl-btn" onclick="openModal('${item.download}')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            OBTENER DISEÑO
+          </button>
+        </div>`;
+      frag.appendChild(card);
+    });
+    requestAnimationFrame(() => {
+      document.getElementById('gallery').appendChild(frag);
+      rendered += Math.min(n, filtered.length - rendered + n);
+      if (rendered > filtered.length) rendered = filtered.length;
+      loading = false;
+      if (document.documentElement.scrollHeight <= window.innerHeight && rendered < filtered.length)
+        renderBatch(BATCH);
+    });
+  }
+
+  // ─── INFINITE SCROLL ──────────────────────────────────────
+  function observe() {
+    new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !loading) renderBatch(BATCH);
+    }, { rootMargin: '600px' }).observe(document.getElementById('sentinel'));
+  }
+
+  init();
+</script>
+</body>
+</html>

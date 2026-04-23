@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup 3D de Prendas - LimitedMX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+
+        :root {
+            --bg-primary: #f7fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: #e5e7eb;
+            --accent-primary: #0ea5e9;
+            --accent-hover: #0284c7;
+            --shadow-color: rgba(2, 8, 23, .06);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .lmx-header {
+            padding: 28px 16px;
+            text-align: left;
+            width: min(100%, 1400px);
+            margin: 0 auto;
+        }
+        .lmx-header h1 { font-size: clamp(22px, 4vw, 36px); line-height: 1.15; margin: 0 0 8px 0; }
+        .lmx-header p { font-size: 1rem; color: var(--text-secondary); max-width: 820px; }
+
+        .lmx-main-content {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 18px;
+            flex-grow: 1;
+            padding: 0 16px 28px 16px;
+            width: min(100%, 1400px);
+            margin: 0 auto;
+        }
+
+        #lmx-canvas-container {
+            position: relative;
+            min-height: 500px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 24px var(--shadow-color);
+            background-color: #fff;
+            background-image:
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        canvas { display: block; width: 100%; height: 100%; outline: none; cursor: grab; }
+        canvas.decal-hover { cursor: pointer; }
+        canvas:active { cursor: grabbing; }
+
+        #lmx-loading-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255,255,255,0.8);
+            backdrop-filter: blur(4px);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.3s ease;
+        }
+        .lmx-spinner {
+            border: 4px solid rgba(0,0,0,0.1);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 50%;
+            width: 40px; height: 40px;
+            animation: lmx-spin 1s linear infinite;
+        }
+        @keyframes lmx-spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+
+        .lmx-controls-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 24px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .lmx-tabs { display: flex; border-bottom: 1px solid var(--border-color); flex-shrink: 0; flex-wrap: wrap; }
+        .lmx-tab-button {
+            flex: 1; min-width: 60px; padding: 12px 4px;
+            background: none; border: none; border-bottom: 2px solid transparent;
+            color: var(--text-secondary); cursor: pointer; font-weight: 600; font-size: 13px;
+            transition: all 0.2s ease;
+        }
+        .lmx-tab-button:hover { color: var(--text-primary); }
+        .lmx-tab-button.lmx-active { color: var(--accent-primary); border-bottom-color: var(--accent-primary); }
+        .lmx-tab-content { display: none; padding: 20px; overflow-y: auto; }
+        .lmx-tab-content.lmx-active { display: block; }
+
+        .lmx-control-group { margin-bottom: 1.75rem; }
+        .lmx-control-group:last-child { margin-bottom: 0; }
+        .lmx-control-group h3 { font-size: 16px; margin: 0 0 12px 0; color: var(--text-primary); }
+        label, .lmx-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; color: #334155; }
+        input[type="text"], input[type="range"], select {
+            width: 100%; padding: 10px; border: 1px solid var(--border-color);
+            border-radius: 8px; background-color: #f8fafc; font-size: 14px;
+        }
+        input[type="range"] { padding: 4px; cursor: pointer; }
+        input[type="color"] {
+            width: 100%; height: 44px; border: 1px solid var(--border-color);
+            border-radius: 8px; cursor: pointer; padding: 4px;
+        }
+
+        .lmx-color-palette {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)) !important;
+            gap: 8px !important;
+        }
+        .lmx-color-swatch {
+            width: 100% !important; padding-bottom: 100% !important; border-radius: 50% !important;
+            border: 2px solid var(--border-color) !important; cursor: pointer !important;
+            transition: transform 0.2s ease !important; box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+        }
+        .lmx-color-swatch:hover { transform: scale(1.1) !important; }
+
+        .lmx-checkbox-group { display: flex; align-items: center; gap: 8px; }
+
+        .lmx-btn {
+            display: inline-block; width: 100%; padding: 12px 16px;
+            font-size: 14px; font-weight: 600; text-align: center;
+            border: 1px solid transparent; border-radius: 8px; cursor: pointer;
+            transition: all 0.2s ease; background-color: var(--accent-primary); color: white; margin-top: 8px;
+        }
+        .lmx-btn:hover { background-color: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(2,8,23,.1); }
+        .lmx-btn-secondary { background-color: #f1f5f9; color: var(--text-primary); border-color: var(--border-color); }
+        .lmx-btn-secondary:hover { background-color: #e2e8f0; }
+        .lmx-btn.lmx-active { background-color: var(--text-primary); color: white; border-color: var(--text-primary); }
+        .lmx-btn-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 8px; }
+
+        #lmx-design-dropzone {
+            border: 2px dashed var(--border-color); border-radius: 12px; padding: 2rem;
+            text-align: center; background-color: var(--bg-primary); cursor: pointer;
+            margin-bottom: 1rem; transition: all 0.2s ease;
+        }
+        #lmx-design-dropzone.lmx-dragover { border-color: var(--accent-primary); background-color: #e0f2fe; }
+        #lmx-design-dropzone p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        .lmx-decal-type-info {
+            font-size: 12px; color: var(--text-secondary); margin-top: 8px;
+            padding: 8px; background-color: #f8fafc; border-radius: 6px;
+        }
+
+        @media (max-width: 1000px) {
+            .lmx-main-content { display: flex; flex-direction: column; }
+            .lmx-controls-panel { order: -1; }
+            #lmx-canvas-container { height: 60vh; min-height: 400px; }
+        }
+        @media (max-width: 768px) {
+            .lmx-header { padding: 20px 8px; }
+            .lmx-main-content { padding: 0 8px 20px 8px; }
+            #lmx-canvas-container, .lmx-controls-panel { border-radius: 12px; }
+            .lmx-btn-group { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lmx-loading-overlay">
+        <div class="lmx-spinner"></div>
+        <p style="margin-top: 1rem;">Cargando escena 3D...</p>
+    </div>
+
+    <header class="lmx-header">
+        <h1>Mockup 3D</h1>
+        <p>Visualiza tu diseño en una prenda real. Elige modelo, ajusta el color y crea tu estilo.</p>
+    </header>
+
+    <main class="lmx-main-content">
+        <div id="lmx-canvas-container"></div>
+
+        <aside class="lmx-controls-panel">
+            <div class="lmx-tabs">
+                <button class="lmx-tab-button lmx-active" data-tab="model">Modelo</button>
+                <button class="lmx-tab-button" data-tab="color">Color</button>
+                <button class="lmx-tab-button" data-tab="design">Diseño</button>
+                <button class="lmx-tab-button" data-tab="scene">Escena</button>
+                <button class="lmx-tab-button" data-tab="export">Exportar</button>
+            </div>
+
+            <div id="lmx-tab-model" class="lmx-tab-content lmx-active">
+                <div class="lmx-control-group">
+                    <h3>Tipo de Prenda</h3>
+                    <div class="lmx-btn-group" id="lmx-model-switcher">
+                        <button class="lmx-btn lmx-btn-secondary lmx-active" data-model="oversize">Oversize</button>
+                        <button class="lmx-btn lmx-btn-secondary" data-model="regular">Regular</button>
+                        <button class="lmx-btn lmx-btn-secondary" data-model="sudadera">Sudadera</button>
+                        <button class="lmx-btn lmx-btn-secondary" data-model="polo">Polo</button>
+                        <button class="lmx-btn lmx-btn-secondary" data-model="manga_larga">M. Larga</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="lmx-tab-color" class="lmx-tab-content">
+                <div class="lmx-control-group">
+                    <h3>Color de la Prenda</h3>
+                    <label for="lmx-tshirt-color-picker">Selector de color</label>
+                    <input type="color" id="lmx-tshirt-color-picker" value="#f0e9e0">
+                </div>
+                <div class="lmx-control-group">
+                    <label class="lmx-label">Paleta Rápida</label>
+                    <div id="lmx-color-palette" class="lmx-color-palette"></div>
+                </div>
+            </div>
+
+            <div id="lmx-tab-design" class="lmx-tab-content">
+                <div class="lmx-control-group">
+                    <h3>Cargar Diseño</h3>
+                    <div id="lmx-design-dropzone">
+                        <p>Arrastra y suelta o haz clic para subir</p>
+                    </div>
+                    <input type="file" id="lmx-design-upload" hidden accept="image/png, image/svg+xml">
+                </div>
+
+                <div id="lmx-design-controls" style="display: none;">
+                    <div class="lmx-control-group">
+                        <h3>Tipo de Aplicación</h3>
+                        <select id="lmx-decal-type">
+                            <option value="planar">Planar (Plano)</option>
+                            <option value="offset">Offset (Flotante)</option>
+                            <option value="conform" selected>Conform (Sigue curvas)</option>
+                            <option value="vinyl">Vinil (Sin deformación)</option>
+                        </select>
+                        <div class="lmx-decal-type-info" id="lmx-decal-info">
+                            <strong>Conform:</strong> El diseño sigue las curvas naturales de la prenda. Ideal para estampados DTF flexibles.
+                        </div>
+                    </div>
+
+                    <div class="lmx-control-group">
+                        <h3>Ajustes del Diseño</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 1rem;"><b>Mover:</b> Clic y arrastrar sobre el diseño.<br><b>Escalar:</b> Mantén SHIFT, clic y arrastra verticalmente.</p>
+                        <label for="lmx-design-scale">Escala</label>
+                        <input type="range" id="lmx-design-scale" min="0.1" max="2" step="0.01" value="0.5">
+                        <label for="lmx-design-rotation" style="margin-top: 1rem;">Rotación</label>
+                        <input type="range" id="lmx-design-rotation" min="-180" max="180" step="1" value="0">
+                        <button id="lmx-design-reset" class="lmx-btn lmx-btn-secondary">Centrar y Resetear</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="lmx-tab-scene" class="lmx-tab-content">
+                <div class="lmx-control-group">
+                    <h3>Vistas de Cámara</h3>
+                    <div class="lmx-btn-group">
+                        <button class="lmx-btn lmx-btn-secondary" id="lmx-view-front">Frontal</button>
+                        <button class="lmx-btn lmx-btn-secondary" id="lmx-view-back">Trasera</button>
+                        <button class="lmx-btn lmx-btn-secondary" id="lmx-view-side">Perfil</button>
+                        <button class="lmx-btn lmx-btn-secondary" id="lmx-view-detail">Detalle</button>
+                    </div>
+                </div>
+                <div class="lmx-control-group">
+                    <h3>Iluminación</h3>
+                    <label for="lmx-light-intensity">Intensidad General</label>
+                    <input type="range" id="lmx-light-intensity" min="0" max="3" step="0.1" value="1">
+                </div>
+                <div class="lmx-control-group">
+                    <h3>Acabados de Tela</h3>
+                    <label for="lmx-fabric-roughness">Rugosidad</label>
+                    <input type="range" id="lmx-fabric-roughness" min="0" max="1" step="0.01" value="0.85">
+                    <label for="lmx-fabric-metalness" style="margin-top: 1rem;">Metalicidad</label>
+                    <input type="range" id="lmx-fabric-metalness" min="0" max="0.1" step="0.001" value="0.02">
+                    <label for="lmx-texture-scale" style="margin-top: 1rem;">Escala de Textura</label>
+                    <input type="range" id="lmx-texture-scale" min="0.5" max="4" step="0.1" value="2">
+                    <label for="lmx-color-saturation" style="margin-top: 1rem;">Saturación de Color</label>
+                    <input type="range" id="lmx-color-saturation" min="0" max="2" step="0.01" value="1">
+                </div>
+            </div>
+
+            <div id="lmx-tab-export" class="lmx-tab-content">
+                <div class="lmx-control-group">
+                    <h3>Opciones de Exportación</h3>
+                    <label for="lmx-export-format">Formato</label>
+                    <select id="lmx-export-format">
+                        <option value="png">PNG (Fondo Transparente)</option>
+                        <option value="jpeg">JPG (Color de Fondo)</option>
+                    </select>
+                    <div id="lmx-jpg-bg-options" style="display: none; margin-top: 1rem;">
+                        <label for="lmx-jpg-bg-color">Color de fondo para JPG</label>
+                        <select id="lmx-jpg-bg-color">
+                            <option value="#FFFFFF">Blanco</option>
+                            <option value="#000000">Negro</option>
+                            <option value="#CCCCCC">Gris</option>
+                        </select>
+                    </div>
+                    <label for="lmx-export-resolution" style="margin-top: 1rem;">Resolución</label>
+                    <select id="lmx-export-resolution">
+                        <option value="1">1x (3000px)</option>
+                        <option value="2">2x (6000px)</option>
+                        <option value="3">3x (9000px)</option>
+                    </select>
+                </div>
+                <div class="lmx-control-group">
+                    <h3>Marca de Agua</h3>
+                    <div class="lmx-checkbox-group">
+                        <input type="checkbox" id="lmx-watermark-enabled">
+                        <label for="lmx-watermark-enabled">Añadir marca de agua</label>
+                    </div>
+                    <input type="text" id="lmx-watermark-text" placeholder="Ej: CHECHENA_SHIRTS" value="CHECHENA_SHIRTS" style="margin-top: 0.5rem;">
+                </div>
+                <button id="lmx-export-btn" class="lmx-btn">Exportar Imagen</button>
+                <p id="lmx-export-status" style="margin-top: 1rem; text-align: center; color: var(--text-secondary);"></p>
+            </div>
+        </aside>
+    </main>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+        import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+        import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
+
+        const MODELS = {
+            oversize: { url: 'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/tshirt_obj.obj?v=1758357142', scale: 0.1, decal_y_offset: 1 },
+            regular: { url: 'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Playera_regular.obj?v=1758361934', scale: 0.1, decal_y_offset: 1 },
+            sudadera: { url: 'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Sudadera.obj?v=1758361144', scale: 0.1, decal_y_offset: 1.5 },
+            polo: { url: 'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo.obj?v=1758361145', scale: 0.01, decal_y_offset: 15.5 },
+            manga_larga: { url: 'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Playera_Manga_Larga.obj?v=1758361148', scale: 0.1, decal_y_offset: 1 }
+        };
+
+        const FABRIC_MATERIALS = {
+            oversize: { roughness: 1, metalness: 0.01, textureScale: 1.5 },
+            regular: { roughness: 0.8, metalness: 0.02, textureScale: 2.0 },
+            sudadera: { roughness: 0.95, metalness: 0.005, textureScale: 1.2 },
+            polo: { roughness: 0.75, metalness: 0.03, textureScale: 2.5 },
+            manga_larga: { roughness: 0.85, metalness: 0.015, textureScale: 1.8 }
+        };
+
+        const DECAL_TYPES_INFO = {
+            planar: { title: 'Planar', description: 'El diseño permanece completamente plano. Ideal para logos simples y texto.' },
+            offset: { title: 'Offset', description: 'El diseño flota ligeramente sobre la superficie. Simula aplicaciones gruesas como bordado.' },
+            conform: { title: 'Conform', description: 'El diseño sigue las curvas naturales de la prenda. Ideal para estampados DTF flexibles.' },
+            vinyl: { title: 'Vinil', description: 'Diseño rígido que no se deforma. Simula aplicaciones de vinil o transfer.' }
+        };
+
+        const CONFIG = {
+            HDRI_URL: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_03_1k.hdr',
+            PREDEFINED_COLORS: [
+                { name: 'Blanco Hueso', hex: '#F0E9E0' }, { name: 'Negro', hex: '#1C1C1C' },
+                { name: 'Gris Jaspeado', hex: '#B2B2B2' }, { name: 'Crema', hex: '#F5F5DC' },
+                { name: 'Rojo', hex: '#B71C1C' }, { name: 'Azul Marino', hex: '#1A237E' },
+                { name: 'Verde Botella', hex: '#1B5E20' }, { name: 'Lila', hex: '#E1BEE7' },
+                { name: 'Café', hex: '#3E2723' }, { name: 'Arena', hex: '#D2B48C' }
+            ],
+            DEFAULT_DECAL_URL: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNDAiPjxzdHlsZT4udHtmaWxsOiMxYzFjMWM7Zm9udC1mYW1pbHk6QXJpYWwtQmxhY2ssQXJpYWw7Zm9udC1zaXplOjI0cHg7fTwvc3R5bGU+PHRleHQgY2xhc3M9InQiIHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MaW1pdGVkTVg8L3RleHQ+PC9zdmc+`,
+            EXPORT_BASE_SIZE: 3000
+        };
+
+        let scene, camera, renderer, controls, model, decal;
+        let tshirtMaterial, decalMaterial;
+        let fabricTexture, normalTexture;
+        let isDraggingDecal = false, isScalingDecal = false;
+        const decalPosition = new THREE.Vector3();
+        const decalHelper = new THREE.Object3D();
+        let lastMouseY = 0;
+        let currentModelKey = 'oversize';
+        let currentDecalType = 'conform';
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        const container = document.getElementById('lmx-canvas-container');
+        const loadingOverlay = document.getElementById('lmx-loading-overlay');
+        const exportStatus = document.getElementById('lmx-export-status');
+
+        function createFabricTexture() {
+            const fabricCanvas = document.createElement('canvas');
+            fabricCanvas.width = 512; fabricCanvas.height = 512;
+            const ctx = fabricCanvas.getContext('2d');
+            ctx.fillStyle = '#f0e9e0';
+            ctx.fillRect(0, 0, 512, 512);
+            for (let i = 0; i < 8000; i++) {
+                const x = Math.random() * 512, y = Math.random() * 512;
+                const opacity = Math.random() * 0.3 + 0.1, size = Math.random() * 2 + 0.5;
+                ctx.globalAlpha = opacity;
+                ctx.fillStyle = Math.random() > 0.5 ? '#ffffff' : '#e0e0e0';
+                ctx.fillRect(x, y, size, size);
+            }
+            ctx.globalAlpha = 0.1; ctx.strokeStyle = '#d0d0d0'; ctx.lineWidth = 0.5;
+            for (let i = 0; i < 200; i++) {
+                ctx.beginPath();
+                const x = Math.random() * 512, y = Math.random() * 512;
+                const length = Math.random() * 20 + 5, angle = Math.random() * Math.PI * 2;
+                ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length); ctx.stroke();
+            }
+            fabricTexture = new THREE.CanvasTexture(fabricCanvas);
+            fabricTexture.wrapS = fabricTexture.wrapT = THREE.RepeatWrapping;
+            fabricTexture.repeat.set(2, 2);
+            return fabricTexture;
+        }
+
+        function createNormalTexture() {
+            const normalCanvas = document.createElement('canvas');
+            normalCanvas.width = 256; normalCanvas.height = 256;
+            const normalCtx = normalCanvas.getContext('2d');
+            const imageData = normalCtx.createImageData(256, 256);
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                const noise = Math.random();
+                imageData.data[i] = 127 + (noise - 0.5) * 20;
+                imageData.data[i + 1] = 127 + (noise - 0.5) * 20;
+                imageData.data[i + 2] = 255; imageData.data[i + 3] = 255;
+            }
+            normalCtx.putImageData(imageData, 0, 0);
+            normalTexture = new THREE.CanvasTexture(normalCanvas);
+            normalTexture.wrapS = normalTexture.wrapT = THREE.RepeatWrapping;
+            normalTexture.repeat.set(4, 4);
+            return normalTexture;
+        }
+
+        function createRealisticFabricMaterial(modelKey, baseColor = 0xf0e9e0) {
+            const fabricConfig = FABRIC_MATERIALS[modelKey];
+            if (!fabricTexture) createFabricTexture();
+            if (!normalTexture) createNormalTexture();
+            const material = new THREE.MeshStandardMaterial({
+                map: fabricTexture, normalMap: normalTexture,
+                normalScale: new THREE.Vector2(0.5, 0.5),
+                color: baseColor, metalness: fabricConfig.metalness,
+                roughness: fabricConfig.roughness, side: THREE.FrontSide
+            });
+            material.map.repeat.set(fabricConfig.textureScale, fabricConfig.textureScale);
+            material.normalMap.repeat.set(fabricConfig.textureScale * 2, fabricConfig.textureScale * 2);
+            return material;
+        }
+
+        function updateFabricFinish() {
+            if (!tshirtMaterial) return;
+            const roughness = parseFloat(document.getElementById('lmx-fabric-roughness').value);
+            const metalness = parseFloat(document.getElementById('lmx-fabric-metalness').value);
+            const textureScale = parseFloat(document.getElementById('lmx-texture-scale').value);
+            const saturation = parseFloat(document.getElementById('lmx-color-saturation').value);
+            tshirtMaterial.roughness = roughness; tshirtMaterial.metalness = metalness;
+            if (fabricTexture) fabricTexture.repeat.set(textureScale, textureScale);
+            if (normalTexture) normalTexture.repeat.set(textureScale * 2, textureScale * 2);
+            const currentColor = tshirtMaterial.color.clone();
+            const hsl = { h: 0, s: 0, l: 0 };
+            currentColor.getHSL(hsl);
+            hsl.s = Math.min(1, hsl.s * saturation);
+            tshirtMaterial.color.setHSL(hsl.h, hsl.s, hsl.l);
+            tshirtMaterial.needsUpdate = true;
+        }
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(30, container.clientWidth / container.clientHeight, 0.1, 100);
+            camera.position.set(0, 0, 15);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1;
+            container.appendChild(renderer.domElement);
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; controls.minDistance = 5; controls.maxDistance = 30;
+            controls.target.set(0, 0, 0);
+            setupLights(); loadAssets(); setupUIEventListeners();
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function setupLights() {
+            scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+            const keyLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            keyLight.position.set(-3, 4, 3); keyLight.castShadow = true;
+            keyLight.shadow.mapSize.set(2048, 2048);
+            scene.add(keyLight);
+            const fillLight = new THREE.DirectionalLight(0xfff8e1, 0.4);
+            fillLight.position.set(3, 2, 2); scene.add(fillLight);
+            const rimLight = new THREE.DirectionalLight(0xe3f2fd, 0.3);
+            rimLight.position.set(0, 2, -4); scene.add(rimLight);
+        }
+
+        async function loadAssets() {
+            loadingOverlay.style.display = 'flex'; loadingOverlay.style.opacity = '1';
+            const manager = new THREE.LoadingManager();
+            manager.onLoad = () => {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => loadingOverlay.style.display = 'none', 300);
+            };
+            if (!scene.environment) {
+                new RGBELoader(manager).load(CONFIG.HDRI_URL, (texture) => {
+                    texture.mapping = THREE.EquirectangularReflectionMapping;
+                    scene.environment = texture; scene.background = null;
+                });
+            }
+            loadModel(currentModelKey, manager);
+            if (!decalMaterial) loadDecal(CONFIG.DEFAULT_DECAL_URL);
+        }
+
+        function loadModel(modelKey, manager) {
+            currentModelKey = modelKey;
+            if (model) {
+                scene.remove(model);
+                model.traverse(child => { if (child.isMesh) child.geometry.dispose(); });
+            }
+            const modelConfig = MODELS[modelKey];
+            new OBJLoader(manager).load(modelConfig.url, (object) => {
+                model = object; model.scale.setScalar(modelConfig.scale);
+                const box = new THREE.Box3().setFromObject(model);
+                const center = box.getCenter(new THREE.Vector3());
+                model.position.sub(center);
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true; child.receiveShadow = true;
+                        child.material = createRealisticFabricMaterial(modelKey);
+                        tshirtMaterial = child.material;
+                        document.getElementById('lmx-fabric-roughness').value = tshirtMaterial.roughness;
+                        document.getElementById('lmx-fabric-metalness').value = tshirtMaterial.metalness;
+                    }
+                });
+                scene.add(model);
+                resetDecal();
+            }, undefined, (error) => {
+                console.error(`Error al cargar el modelo ${modelKey}:`, error);
+                loadingOverlay.innerHTML = `<p style="color:red;padding:2rem;">Error al cargar modelo.</p>`;
+            });
+        }
+
+        function updateDecal() {
+            if (!model || !decalMaterial || !decalMaterial.map) return;
+            const scale = parseFloat(document.getElementById('lmx-design-scale').value);
+            const rotation = THREE.MathUtils.degToRad(document.getElementById('lmx-design-rotation').value);
+            if (decal) { scene.remove(decal); if (decal.geometry) decal.geometry.dispose(); }
+            switch (currentDecalType) {
+                case 'planar': createPlanarDecal(scale, rotation); break;
+                case 'offset': createOffsetDecal(scale, rotation); break;
+                case 'conform': createConformDecal(scale, rotation); break;
+                case 'vinyl': createVinylDecal(scale, rotation); break;
+                default: createConformDecal(scale, rotation);
+            }
+        }
+
+        function createPlanarDecal(scale, rotation) {
+            const geometry = new THREE.PlaneGeometry(5 * scale, 5 * scale);
+            const material = decalMaterial.clone();
+            material.map.center.set(0.5, 0.5); material.map.rotation = rotation;
+            decal = new THREE.Mesh(geometry, material);
+            decal.position.copy(decalPosition); decal.position.z += 0.001;
+            decal.lookAt(camera.position); scene.add(decal);
+        }
+
+        function createOffsetDecal(scale, rotation) {
+            const geometry = new THREE.PlaneGeometry(5 * scale, 5 * scale);
+            const material = decalMaterial.clone();
+            material.map.center.set(0.5, 0.5); material.map.rotation = rotation;
+            material.transparent = true; material.opacity = 0.95;
+            decal = new THREE.Mesh(geometry, material);
+            decal.position.copy(decalPosition);
+            const surfaceNormal = getSurfaceNormal(decalPosition);
+            decal.position.add(surfaceNormal.multiplyScalar(0.05));
+            decal.lookAt(decal.position.clone().add(surfaceNormal));
+            scene.add(decal);
+        }
+
+        function createConformDecal(scale, rotation) {
+            const targetMesh = model.getObjectByProperty('isMesh', true);
+            if (!targetMesh) return;
+            decalMaterial.map.center.set(0.5, 0.5); decalMaterial.map.rotation = rotation;
+            const size = new THREE.Vector3(5 * scale, 5 * scale, 2);
+            const decalGeometry = new DecalGeometry(targetMesh, decalPosition, decalHelper.rotation, size);
+            decal = new THREE.Mesh(decalGeometry, decalMaterial);
+            scene.add(decal);
+        }
+
+        function createVinylDecal(scale, rotation) {
+            const geometry = new THREE.PlaneGeometry(5 * scale, 5 * scale);
+            const material = decalMaterial.clone();
+            material.map.center.set(0.5, 0.5); material.map.rotation = rotation;
+            decal = new THREE.Mesh(geometry, material);
+            decal.position.copy(decalPosition);
+            const surfaceNormal = getSurfaceNormal(decalPosition);
+            decal.position.add(surfaceNormal.multiplyScalar(0.002));
+            decal.lookAt(decal.position.clone().add(surfaceNormal));
+            scene.add(decal);
+        }
+
+        function getSurfaceNormal(position) {
+            const direction = new THREE.Vector3(0, 0, -1);
+            raycaster.set(position.clone().add(new THREE.Vector3(0, 0, 5)), direction);
+            const intersects = raycaster.intersectObject(model, true);
+            if (intersects.length > 0) {
+                const normal = intersects[0].face.normal.clone();
+                normal.transformDirection(model.matrixWorld);
+                return normal;
+            }
+            return new THREE.Vector3(0, 0, 1);
+        }
+
+        function loadDecal(url) {
+            new THREE.TextureLoader().load(url, (texture) => {
+                if (!decalMaterial) {
+                    decalMaterial = new THREE.MeshPhongMaterial({
+                        specular: 0x444444, shininess: 30, transparent: true,
+                        depthTest: true, depthWrite: false, polygonOffset: true,
+                        polygonOffsetFactor: -40, side: THREE.FrontSide
+                    });
+                }
+                decalMaterial.map = texture; decalMaterial.needsUpdate = true;
+                resetDecal();
+                document.getElementById('lmx-design-controls').style.display = 'block';
+            });
+        }
+
+        function resetDecal() {
+            document.getElementById('lmx-design-scale').value = 0.5;
+            document.getElementById('lmx-design-rotation').value = 0;
+            if (!model) return;
+            const config = MODELS[currentModelKey];
+            const rayOrigin = new THREE.Vector3(0, config.decal_y_offset, 20);
+            const rayDirection = new THREE.Vector3(0, 0, -1);
+            raycaster.set(rayOrigin, rayDirection);
+            const intersects = raycaster.intersectObject(model, true);
+            if (intersects.length > 0) {
+                const p = intersects[0].point;
+                decalPosition.copy(p); decalHelper.position.copy(p);
+                const n = intersects[0].face.normal.clone();
+                n.transformDirection(model.matrixWorld);
+                decalHelper.lookAt(p.clone().add(n));
+            } else {
+                decalPosition.set(0, config.decal_y_offset, 5);
+                decalHelper.rotation.set(0, 0, 0);
+            }
+            updateDecal();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        function setupUIEventListeners() {
+            document.querySelectorAll('.lmx-tab-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.lmx-tab-button, .lmx-tab-content').forEach(el => el.classList.remove('lmx-active'));
+                    e.target.classList.add('lmx-active');
+                    document.getElementById(`lmx-tab-${e.target.dataset.tab}`).classList.add('lmx-active');
+                });
+            });
+
+            document.getElementById('lmx-model-switcher').addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const modelKey = e.target.dataset.model;
+                    if (modelKey !== currentModelKey) {
+                        document.querySelectorAll('#lmx-model-switcher button').forEach(btn => btn.classList.remove('lmx-active'));
+                        e.target.classList.add('lmx-active');
+                        loadModel(modelKey, new THREE.LoadingManager());
+                    }
+                }
+            });
+
+            const decalTypeSelector = document.getElementById('lmx-decal-type');
+            const decalInfo = document.getElementById('lmx-decal-info');
+            decalTypeSelector.addEventListener('change', (e) => {
+                currentDecalType = e.target.value;
+                const info = DECAL_TYPES_INFO[currentDecalType];
+                decalInfo.innerHTML = `<strong>${info.title}:</strong> ${info.description}`;
+                updateDecal();
+            });
+
+            const colorPicker = document.getElementById('lmx-tshirt-color-picker');
+            colorPicker.addEventListener('input', (e) => setTshirtColor(e.target.value));
+            const paletteContainer = document.getElementById('lmx-color-palette');
+            CONFIG.PREDEFINED_COLORS.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.className = 'lmx-color-swatch';
+                swatch.style.backgroundColor = color.hex;
+                swatch.title = color.name;
+                swatch.addEventListener('click', () => { colorPicker.value = color.hex; setTshirtColor(color.hex); });
+                paletteContainer.appendChild(swatch);
+            });
+            setTshirtColor(CONFIG.PREDEFINED_COLORS[0].hex);
+
+            const dropzone = document.getElementById('lmx-design-dropzone');
+            const fileInput = document.getElementById('lmx-design-upload');
+            dropzone.addEventListener('click', () => fileInput.click());
+            dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('lmx-dragover'); });
+            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('lmx-dragover'));
+            dropzone.addEventListener('drop', (e) => { e.preventDefault(); dropzone.classList.remove('lmx-dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+            fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleFile(e.target.files[0]); });
+
+            const scaleSlider = document.getElementById('lmx-design-scale');
+            scaleSlider.addEventListener('input', updateDecal);
+            document.getElementById('lmx-design-rotation').addEventListener('input', updateDecal);
+            document.getElementById('lmx-design-reset').addEventListener('click', resetDecal);
+
+            document.getElementById('lmx-view-front').addEventListener('click', () => moveCamera(0, 0, 15, 1));
+            document.getElementById('lmx-view-back').addEventListener('click', () => moveCamera(0, 0, -15, 1));
+            document.getElementById('lmx-view-side').addEventListener('click', () => moveCamera(15, 0, 0, 1));
+            document.getElementById('lmx-view-detail').addEventListener('click', () => moveCamera(0, 0, 8, 1));
+
+            document.getElementById('lmx-light-intensity').addEventListener('input', (e) => {
+                scene.traverse(obj => { if (obj.isLight) obj.intensity = parseFloat(e.target.value) * (obj.isAmbientLight ? 0.3 : 0.8); });
+            });
+
+            document.getElementById('lmx-fabric-roughness').addEventListener('input', updateFabricFinish);
+            document.getElementById('lmx-fabric-metalness').addEventListener('input', updateFabricFinish);
+            document.getElementById('lmx-texture-scale').addEventListener('input', updateFabricFinish);
+            document.getElementById('lmx-color-saturation').addEventListener('input', updateFabricFinish);
+
+            document.getElementById('lmx-export-format').addEventListener('change', (e) => {
+                document.getElementById('lmx-jpg-bg-options').style.display = e.target.value === 'jpeg' ? 'block' : 'none';
+            });
+            document.getElementById('lmx-export-btn').addEventListener('click', exportImage);
+
+            function checkDecalIntersection(e) {
+                if (!model || !decal) return { intersected: false };
+                const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObject(model, true);
+                if (intersects.length > 0) {
+                    const p = intersects[0].point;
+                    const decalRadius = (parseFloat(scaleSlider.value) * 5) / 2.5;
+                    if (p.distanceTo(decalPosition) < decalRadius) return { intersected: true, point: p, normal: intersects[0].face.normal };
+                }
+                renderer.domElement.classList.remove('decal-hover');
+                return { intersected: false };
+            }
+
+            renderer.domElement.addEventListener('pointerdown', (e) => {
+                const intersection = checkDecalIntersection(e);
+                if (intersection.intersected) {
+                    if (e.shiftKey) { isScalingDecal = true; lastMouseY = e.clientY; }
+                    else { isDraggingDecal = true; }
+                    controls.enabled = false;
+                }
+            });
+
+            renderer.domElement.addEventListener('pointerup', () => {
+                isDraggingDecal = false; isScalingDecal = false; controls.enabled = true;
+            });
+
+            renderer.domElement.addEventListener('pointermove', (e) => {
+                if (isDraggingDecal) {
+                    const rect = renderer.domElement.getBoundingClientRect();
+                    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                    raycaster.setFromCamera(mouse, camera);
+                    const intersects = raycaster.intersectObject(model, true);
+                    if (intersects.length > 0) {
+                        const p = intersects[0].point;
+                        decalPosition.copy(p); decalHelper.position.copy(p);
+                        const n = intersects[0].face.normal.clone();
+                        n.transformDirection(model.matrixWorld); n.add(p);
+                        decalHelper.lookAt(n); updateDecal();
+                    }
+                } else if (isScalingDecal) {
+                    const deltaY = e.clientY - lastMouseY;
+                    let newScale = parseFloat(scaleSlider.value) - deltaY * 0.005;
+                    newScale = Math.max(0.1, Math.min(2, newScale));
+                    scaleSlider.value = newScale; lastMouseY = e.clientY; updateDecal();
+                } else {
+                    if (checkDecalIntersection(e).intersected) renderer.domElement.classList.add('decal-hover');
+                    else renderer.domElement.classList.remove('decal-hover');
+                }
+            });
+        }
+
+        function setTshirtColor(hex) {
+            if (tshirtMaterial) {
+                tshirtMaterial.color.set(hex);
+                if (fabricTexture) tshirtMaterial.map = fabricTexture;
+                if (normalTexture) tshirtMaterial.normalMap = normalTexture;
+            }
+        }
+
+        function handleFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => loadDecal(e.target.result);
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function moveCamera(x, y, z, duration = 1) {
+            const targetPos = new THREE.Vector3(x, y, z);
+            const startPos = camera.position.clone();
+            let time = 0;
+            function animCam() {
+                time += 1/60;
+                const t = Math.min(time / duration, 1);
+                camera.position.lerpVectors(startPos, targetPos, 0.5 - 0.5 * Math.cos(t * Math.PI));
+                if (t < 1) requestAnimationFrame(animCam);
+            }
+            animCam();
+        }
+
+        async function exportImage() {
+            const exportBtn = document.getElementById('lmx-export-btn');
+            exportBtn.disabled = true;
+            exportStatus.textContent = 'Renderizando en alta resolución...';
+            try {
+                const multiplier = parseInt(document.getElementById('lmx-export-resolution').value);
+                const format = document.getElementById('lmx-export-format').value;
+                const width = CONFIG.EXPORT_BASE_SIZE * multiplier, height = width;
+                const tempRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+                tempRenderer.setSize(width, height);
+                tempRenderer.shadowMap.enabled = true; tempRenderer.shadowMap.type = renderer.shadowMap.type;
+                tempRenderer.toneMapping = renderer.toneMapping; tempRenderer.toneMappingExposure = renderer.toneMappingExposure;
+                const tempCamera = camera.clone();
+                tempCamera.aspect = width / height; tempCamera.updateProjectionMatrix();
+                tempRenderer.render(scene, tempCamera);
+                const canvas2d = document.createElement('canvas');
+                canvas2d.width = width; canvas2d.height = height;
+                const ctx = canvas2d.getContext('2d');
+                if (format === 'jpeg') { ctx.fillStyle = document.getElementById('lmx-jpg-bg-color').value; ctx.fillRect(0, 0, width, height); }
+                ctx.drawImage(tempRenderer.domElement, 0, 0);
+                if (document.getElementById('lmx-watermark-enabled').checked) {
+                    const text = document.getElementById('lmx-watermark-text').value;
+                    ctx.font = `bold ${width * 0.045}px Inter`;
+                    ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+                    ctx.fillText(text, width - (width * 0.015), height - (height * 0.015));
+                }
+                const mimeType = `image/${format}`;
+                const dataUrl = canvas2d.toDataURL(mimeType, 1.0);
+                if (format === 'png') {
+                    const pngWithDpi = await setDpi(dataUrl, 300);
+                    downloadImage(pngWithDpi, generateFilename(format));
+                } else { downloadImage(dataUrl, generateFilename(format)); }
+                exportStatus.textContent = '¡Exportación completada!';
+            } catch (error) {
+                console.error('Error durante la exportación:', error);
+                exportStatus.textContent = 'Error al exportar. Revisa la consola.';
+            } finally {
+                exportBtn.disabled = false;
+                setTimeout(() => { exportStatus.textContent = ''; }, 3000);
+            }
+        }
+
+        function generateFilename(extension) {
+            const date = new Date();
+            const ts = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}_${date.getHours().toString().padStart(2,'0')}-${date.getMinutes().toString().padStart(2,'0')}`;
+            const color = document.getElementById('lmx-tshirt-color-picker').value.replace('#','');
+            return `Mockup_${currentModelKey}_${currentDecalType}_${color}_${ts}.${extension}`;
+        }
+
+        function downloadImage(dataUrl, filename) {
+            const link = document.createElement('a'); link.href = dataUrl; link.download = filename; link.click();
+        }
+
+        async function setDpi(dataUrl, dpi) {
+            const dpm = Math.round(dpi / 0.0254);
+            const blob = await (await fetch(dataUrl)).blob();
+            const buffer = await blob.arrayBuffer();
+            const data = new Uint8Array(buffer);
+            let ihdrOffset = -1;
+            for (let i = 0; i < data.length - 7; i++) {
+                if (data[i] === 73 && data[i+1] === 72 && data[i+2] === 68 && data[i+3] === 82) { ihdrOffset = i - 4; break; }
+            }
+            if (ihdrOffset === -1) return dataUrl;
+            const ihdrLength = new DataView(data.buffer).getUint32(ihdrOffset, false);
+            const insertOffset = ihdrOffset + 8 + ihdrLength + 4;
+            const physChunk = new Uint8Array(21);
+            const view = new DataView(physChunk.buffer);
+            view.setUint32(0, 9, false); physChunk.set([112, 72, 89, 115], 4);
+            view.setUint32(8, dpm, false); view.setUint32(12, dpm, false); physChunk[16] = 1;
+            const crc = crc32(physChunk.subarray(4, 17)); view.setUint32(17, crc, false);
+            const newData = new Uint8Array(data.length + physChunk.length);
+            newData.set(data.subarray(0, insertOffset), 0); newData.set(physChunk, insertOffset);
+            newData.set(data.subarray(insertOffset), insertOffset + physChunk.length);
+            return URL.createObjectURL(new Blob([newData], { type: 'image/png' }));
+        }
+
+        const crc32 = (() => {
+            const table = new Uint32Array(256);
+            for (let i = 0; i < 256; i++) {
+                let c = i;
+                for (let j = 0; j < 8; j++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+                table[i] = c;
+            }
+            return (bytes) => { let crc = -1; for (let i = 0; i < bytes.length; i++) crc = (crc >>> 8) ^ table[(crc ^ bytes[i]) & 0xFF]; return (crc ^ -1) >>> 0; };
+        })();
+
+        if ('WebGLRenderingContext' in window) init();
+        else { container.innerHTML = `<p style="color:red;text-align:center;padding:2rem;">Error: WebGL no es compatible.</p>`; loadingOverlay.style.display = 'none'; }
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chechena Shirts AI Upscaler</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+margin:0;
+padding:0;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+header{
+padding:20px;
+font-size:28px;
+font-weight:bold;
+}
+
+#drop{
+border:2px dashed #555;
+padding:40px;
+width:80%;
+max-width:500px;
+text-align:center;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+button{
+padding:10px 20px;
+margin:5px;
+cursor:pointer;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:10px;
+width:90%;
+}
+
+.card{
+background:#111;
+padding:10px;
+border-radius:10px;
+}
+
+img{
+width:100%;
+border-radius:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>CHECHENA SHIRTS AI UPSCALER</header>
+
+<div id="drop">Arrastra imágenes o haz click</div>
+<input type="file" id="file" multiple accept="image/*" style="display:none">
+
+<div>
+<button onclick="setScale(2)">2X</button>
+<button onclick="setScale(4)">4X</button>
+<button onclick="start()">INICIAR</button>
+<button onclick="downloadZip()">DESCARGAR ZIP</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+
+const TOKEN="r8_JeMXt3GolBS0fHbJTDZMnSFUH3SkyL00wTjnG"
+
+let scale=2
+let queue=[]
+let results=[]
+
+function setScale(s){
+scale=s
+alert("Escala seleccionada: "+s+"X")
+}
+
+const drop=document.getElementById("drop")
+const fileInput=document.getElementById("file")
+const grid=document.getElementById("grid")
+
+drop.onclick=()=>fileInput.click()
+
+drop.addEventListener("dragover",e=>{
+e.preventDefault()
+})
+
+drop.addEventListener("drop",e=>{
+e.preventDefault()
+handleFiles(e.dataTransfer.files)
+})
+
+fileInput.onchange=e=>{
+handleFiles(e.target.files)
+}
+
+function handleFiles(files){
+
+for(let f of files){
+
+const id=Math.random()
+
+const url=URL.createObjectURL(f)
+
+const div=document.createElement("div")
+div.className="card"
+div.id="card"+id
+
+div.innerHTML=`
+<img src="${url}">
+<p>${f.name}</p>
+<p id="status${id}">Esperando</p>
+<button id="dl${id}" style="display:none">Descargar</button>
+`
+
+grid.appendChild(div)
+
+queue.push({
+id,
+file:f,
+name:f.name
+})
+
+}
+
+}
+
+function toBase64(file){
+return new Promise((res,rej)=>{
+const reader=new FileReader()
+reader.onload=()=>res(reader.result)
+reader.onerror=rej
+reader.readAsDataURL(file)
+})
+}
+
+async function start(){
+
+for(let item of queue){
+
+const status=document.getElementById("status"+item.id)
+
+status.innerText="Subiendo..."
+
+try{
+
+const base64=await toBase64(item.file)
+
+const create=await fetch("https://api.replicate.com/v1/predictions",{
+method:"POST",
+headers:{
+Authorization:"Token "+TOKEN,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+version:"42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
+input:{
+image:base64,
+scale:scale,
+face_enhance:false
+}
+})
+})
+
+const pred=await create.json()
+
+let finished=false
+
+while(!finished){
+
+await new Promise(r=>setTimeout(r,2000))
+
+const check=await fetch("https://api.replicate.com/v1/predictions/"+pred.id,{
+headers:{
+Authorization:"Token "+TOKEN
+}
+})
+
+const data=await check.json()
+
+if(data.status=="succeeded"){
+
+finished=true
+
+status.innerText="Descargando..."
+
+const img=await fetch(data.output)
+
+const blob=await img.blob()
+
+const url=URL.createObjectURL(blob)
+
+document.querySelector("#card"+item.id+" img").src=url
+
+const dl=document.getElementById("dl"+item.id)
+dl.style.display="block"
+
+dl.onclick=()=>{
+const a=document.createElement("a")
+a.href=url
+a.download="chechena_"+scale+"x_"+item.name+".png"
+a.click()
+}
+
+results.push({
+name:item.name,
+blob
+})
+
+status.innerText="Listo"
+
+}
+
+if(data.status=="failed"){
+finished=true
+status.innerText="Error"
+}
+
+}
+
+}catch(e){
+
+status.innerText="Error API"
+
+}
+
+}
+
+}
+
+async function downloadZip(){
+
+if(results.length==0){
+alert("No hay imágenes")
+return
+}
+
+const zip=new JSZip()
+
+results.forEach(r=>{
+zip.file("chechena_"+scale+"x_"+r.name+".png",r.blob)
+})
+
+const content=await zip.generateAsync({type:"blob"})
+
+const a=document.createElement("a")
+a.href=URL.createObjectURL(content)
+a.download="Chechena_Pack.zip"
+a.click()
+
+}
+
+</script>
+
+</body>
+</html>
+```

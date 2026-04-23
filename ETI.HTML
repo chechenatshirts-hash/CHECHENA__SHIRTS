@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHECHENA SHIRTS — Label Studio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+:root{
+  --bg:#0a0a0a;
+  --panel:#141414;
+  --text:#fff;
+  --accent:#ff2e2e;
+}
+
+[data-theme="light"]{
+  --bg:#f5f5f5;
+  --panel:#fff;
+  --text:#111;
+}
+
+body{
+  margin:0;
+  font-family:'Montserrat';
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 25px;
+  border-bottom:1px solid #222;
+}
+
+.logo{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-weight:900;
+}
+
+.logo img{width:40px;}
+
+.container{
+  display:grid;
+  grid-template-columns:350px 1fr;
+  gap:20px;
+  padding:20px;
+}
+
+@media(max-width:900px){
+  .container{grid-template-columns:1fr;}
+}
+
+.card{
+  background:var(--panel);
+  padding:20px;
+  border-radius:12px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border:none;
+  border-radius:6px;
+}
+
+button{
+  background:var(--accent);
+  border:none;
+  padding:10px;
+  color:#fff;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.preview{
+  background:#ddd;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+  border-radius:12px;
+}
+
+#label{
+  width:300px;
+  background:#fff;
+  color:#000;
+  padding:20px;
+  text-align:center;
+  border-radius:10px;
+}
+
+.brand{
+  font-family:'Bebas Neue';
+  font-size:32px;
+}
+
+.size{
+  font-size:40px;
+  font-weight:900;
+}
+
+.footer{
+  font-size:12px;
+  margin-top:10px;
+}
+
+#qr{
+  margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="logo.png">
+    CHECHENA SHIRTS
+  </div>
+  <button onclick="toggleTheme()">Modo</button>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h3>Generador</h3>
+
+<input id="brand" value="CHECHENA SHIRTS">
+<input id="size" placeholder="Talla">
+<input id="info" value="HECHO EN COATZACOALCOS">
+<input id="qrText" placeholder="Link QR">
+
+<button onclick="generate()">Generar</button>
+<button onclick="download()">Descargar PNG</button>
+</div>
+
+<div class="preview">
+  <div id="label">
+    <div class="brand" id="pBrand">CHECHENA SHIRTS</div>
+    <div class="size" id="pSize">M</div>
+    <div id="qr"></div>
+    <div class="footer" id="pInfo">HECHO EN COATZACOALCOS</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+let qr;
+
+function generate(){
+  document.getElementById("pBrand").innerText = brand.value;
+  document.getElementById("pSize").innerText = size.value;
+  document.getElementById("pInfo").innerText = info.value;
+
+  document.getElementById("qr").innerHTML="";
+  if(qrText.value){
+    qr = new QRCode(document.getElementById("qr"), {
+      text: qrText.value,
+      width:80,
+      height:80
+    });
+  }
+}
+
+function download(){
+  html2canvas(document.getElementById("label")).then(canvas=>{
+    let link=document.createElement("a");
+    link.download="etiqueta.png";
+    link.href=canvas.toDataURL();
+    link.click();
+  });
+}
+
+function toggleTheme(){
+  let html=document.documentElement;
+  html.setAttribute("data-theme",
+    html.getAttribute("data-theme")==="dark"?"light":"dark");
+}
+</script>
+
+</body>
+</html>

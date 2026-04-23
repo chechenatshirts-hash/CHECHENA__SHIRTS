@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chechena Shirts | Calculadora DTF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --neon-blue: #00eaff;
+      --neon-purple: #7a5cff;
+      --bg-dark: #06070a;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #0b1a2a, #05060a 60%);
+      color: #ffffff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Fondo animado */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(0,234,255,0.08), rgba(122,92,255,0.08), rgba(0,234,255,0.08));
+      animation: fondoMove 12s ease-in-out infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes fondoMove {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(40deg); }
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    header h1 {
+      font-size: 40px;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #00eaff, #7a5cff, #00eaff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rgbText 6s linear infinite;
+    }
+
+    @keyframes rgbText {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    header p {
+      color: #9fb3c8;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .box {
+      background: rgba(10,15,25,0.85);
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(0,234,255,0.25);
+      box-shadow:
+        0 0 25px rgba(0,234,255,0.15),
+        inset 0 0 15px rgba(122,92,255,0.15);
+      animation: floatBox 5s ease-in-out infinite;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .box:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow:
+        0 0 40px rgba(0,234,255,0.35),
+        inset 0 0 25px rgba(122,92,255,0.25);
+    }
+
+    @keyframes floatBox {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+      100% { transform: translateY(0px); }
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--neon-blue);
+      margin-bottom: 12px;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #a8c7d9;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,234,255,0.25);
+      background: rgba(5,10,20,0.9);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,234,255,0.5);
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, #00eaff, #7a5cff);
+      border: none;
+      border-radius: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 1px;
+      color: #020409;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 25px rgba(0,234,255,0.6);
+    }
+
+    .design {
+      border: 1px dashed rgba(0,234,255,0.6);
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 16px;
+      animation: pulseBorder 3s infinite;
+    }
+
+    @keyframes pulseBorder {
+      0% { box-shadow: 0 0 10px rgba(0,234,255,0.2); }
+      50% { box-shadow: 0 0 20px rgba(122,92,255,0.4); }
+      100% { box-shadow: 0 0 10px rgba(0,234,255,0.2); }
+    }
+
+    .remove {
+      background: linear-gradient(135deg, #ff3b3b, #ff0066);
+      color: white;
+    }
+
+    .result {
+      background: linear-gradient(180deg, rgba(15,20,35,0.9), rgba(5,8,15,0.95));
+    }
+
+    .precio-final {
+      margin-top: 18px;
+      font-size: 28px;
+      background: linear-gradient(90deg, #00eaff, #7a5cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    footer {
+      margin-top: 45px;
+      text-align: center;
+      opacity: 0.75;
+    }
+
+    footer img {
+      max-width: 120px;
+      margin-top: 12px;
+      filter: drop-shadow(0 0 15px rgba(0,234,255,0.5));
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>CHECHENA SHIRTS</h1>
+  <p>Calcula el precio perfecto para tus playeras personalizadas</p>
+</header>
+<footer>
+  <img src="logo.png" alt="Logo Chechena Shirts">
+</footer>
+<div class="box">
+  <h2>Moneda</h2>
+  <select id="moneda" onchange="calcular()">
+    <option value="MXN">Pesos Mexicanos (MXN)</option>
+    <option value="USD">Dólares (USD)</option>
+  </select>
+</div>
+
+<div class="box">
+  <h2>Costos del Pliego DTF</h2>
+  <label>Precio del pliego DTF</label>
+  <input type="number" id="precioPliego" value="200" oninput="calcular()">
+
+  <label>Mano de obra DTF</label>
+  <input type="number" id="manoObra" value="20" oninput="calcular()">
+
+  <label>Ancho del pliego (cm)</label>
+  <input type="number" id="anchoPliego" value="58" oninput="calcular()">
+
+  <label>Alto del pliego (cm)</label>
+  <input type="number" id="altoPliego" value="100" oninput="calcular()">
+</div>
+
+<div class="box">
+  <h2>Diseños en la playera</h2>
+  <div id="contenedorDisenos"></div>
+  <button onclick="agregarDiseno()">Agregar otro diseño</button>
+</div>
+
+<div class="box">
+  <h2>Otros costos</h2>
+  <label>Costo de la playera</label>
+  <input type="number" id="playera" value="50" oninput="calcular()">
+
+  <label>Otros materiales</label>
+  <input type="number" id="materiales" value="0" oninput="calcular()">
+
+  <label>Transporte / Envío</label>
+  <input type="number" id="transporte" value="0" oninput="calcular()">
+
+  <label>Otros gastos (luz, empaque)</label>
+  <input type="number" id="otrosGastos" value="0" oninput="calcular()">
+</div>
+
+<div class="box">
+  <h2>Ganancia</h2>
+  <label>Margen de ganancia (%)</label>
+  <input type="number" id="margen" value="30" oninput="calcular()">
+</div>
+
+<div class="box result">
+  <h2>Resultado</h2>
+  <div id="resultado"></div>
+</div>
+
+<footer>
+  <p>CHECHENA SHIRTS © 2026</p>
+  <img src="logo.png" alt="Logo Chechena Shirts">
+</footer>
+
+<script>
+  let disenos = [];
+
+  function agregarDiseno() {
+    const index = disenos.length;
+    disenos.push({ ancho: 0, alto: 0 });
+
+    const div = document.createElement("div");
+    div.className = "design";
+    div.innerHTML = `
+      <label>Ancho del diseño (cm)</label>
+      <input type="number" oninput="disenos[${index}].ancho = this.value; calcular()">
+
+      <label>Alto del diseño (cm)</label>
+      <input type="number" oninput="disenos[${index}].alto = this.value; calcular()">
+
+      <button class="remove" onclick="eliminarDiseno(${index}, this)">Eliminar diseño</button>
+    `;
+
+    document.getElementById("contenedorDisenos").appendChild(div);
+  }
+
+  function eliminarDiseno(index, boton) {
+    disenos[index] = { ancho: 0, alto: 0 };
+    boton.parentElement.remove();
+    calcular();
+  }
+
+  function calcular() {
+    const moneda = document.getElementById("moneda").value;
+    const simbolo = moneda === "MXN" ? "$" : "$";
+
+    const precioPliego = +document.getElementById("precioPliego").value;
+    const manoObra = +document.getElementById("manoObra").value;
+    const anchoPliego = +document.getElementById("anchoPliego").value;
+    const altoPliego = +document.getElementById("altoPliego").value;
+
+    const playera = +document.getElementById("playera").value;
+    const materiales = +document.getElementById("materiales").value;
+    const transporte = +document.getElementById("transporte").value;
+    const otrosGastos = +document.getElementById("otrosGastos").value;
+
+    const margen = +document.getElementById("margen").value;
+
+    const areaPliego = anchoPliego * altoPliego;
+    let areaTotal = 0;
+
+    disenos.forEach(d => {
+      areaTotal += d.ancho * d.alto;
+    });
+
+    const costoDTF = areaPliego > 0 ? (areaTotal / areaPliego) * precioPliego : 0;
+    const costoTotal = costoDTF + manoObra + playera + materiales + transporte + otrosGastos;
+    const ganancia = costoTotal * (margen / 100);
+    const precioVenta = costoTotal + ganancia;
+
+    document.getElementById("resultado").innerHTML = `
+      Área total de diseños: <b>${areaTotal.toFixed(2)} cm²</b><br>
+      Costo DTF: <b>${simbolo}${costoDTF.toFixed(2)}</b><br>
+      Costo total: <b>${simbolo}${costoTotal.toFixed(2)}</b><br>
+      Ganancia: <b>${simbolo}${ganancia.toFixed(2)}</b> (${margen}%)<br>
+      <div class="precio-final">Precio de venta sugerido: ${simbolo}${precioVenta.toFixed(2)}</div>
+    `;
+  }
+
+  agregarDiseno();
+</script>
+
+</body>
+</html>

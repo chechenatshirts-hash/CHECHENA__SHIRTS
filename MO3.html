@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promo Maker</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Export Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ========== RESET & ROOT ========== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: #0a0a0a;
+            font-family: 'Montserrat', sans-serif;
+            color: #f0ece4;
+        }
+
+        /* ========== SCROLLBAR ========== */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+        /* ========== LAYOUT ========== */
+        #app {
+            display: flex;
+            height: 100vh;
+            max-height: 100dvh;
+        }
+
+        /* ========== SIDEBAR ========== */
+        #sidebar {
+            width: 340px;
+            flex-shrink: 0;
+            background: #111;
+            border-right: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 50;
+        }
+
+        /* Sidebar Header */
+        #sidebar-header {
+            padding: 20px 24px 18px;
+            border-bottom: 1px solid #222;
+            background: #0a0a0a;
+        }
+        .brand-logo-sidebar {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            letter-spacing: 0.12em;
+            color: #fff;
+            line-height: 1;
+        }
+        .brand-logo-sidebar span { color: #e63030; }
+        .brand-subtitle {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #555;
+            margin-top: 3px;
+        }
+
+        /* Sidebar Scroll Area */
+        #sidebar-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed #333;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #0d0d0d;
+            display: block;
+        }
+        .upload-zone:hover { border-color: #e63030; background: #1a0a0a; }
+        .upload-zone svg { color: #444; margin: 0 auto 8px; display: block; }
+        .upload-zone:hover svg { color: #e63030; }
+        .upload-zone-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #555;
+        }
+        .upload-zone:hover .upload-zone-label { color: #e63030; }
+
+        /* Panel Card */
+        .panel-card {
+            background: #161616;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .panel-title {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .panel-title svg { color: #444; }
+
+        /* Inputs */
+        .field-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #444;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #f0ece4;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus { border-color: #e63030; }
+
+        /* Sliders */
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .slider-row:last-child { margin-bottom: 0; }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .slider-name {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #444;
+        }
+        .slider-val {
+            font-size: 10px;
+            font-weight: 700;
+            color: #e63030;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.05em;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #e63030;
+            height: 3px;
+            cursor: pointer;
+        }
+
+        /* Toggle Buttons */
+        .toggle-group { display: flex; gap: 6px; }
+        .toggle-btn {
+            flex: 1;
+            padding: 7px 8px;
+            border-radius: 7px;
+            border: 1px solid #2a2a2a;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #0d0d0d;
+            color: #444;
+        }
+        .toggle-btn.active { background: #e63030; border-color: #e63030; color: #fff; }
+        .toggle-btn:not(.active):hover { border-color: #444; color: #888; }
+
+        /* Grayscale btn */
+        .grayscale-btn {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #e63030;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #e63030;
+            color: #fff;
+        }
+        .grayscale-btn.off {
+            background: #0d0d0d;
+            border-color: #2a2a2a;
+            color: #444;
+        }
+
+        /* Sidebar Footer */
+        #sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #222;
+            background: #0a0a0a;
+        }
+        .export-btn {
+            width: 100%;
+            padding: 14px;
+            background: #e63030;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 16px;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .export-btn:hover:not(:disabled) { background: #cc2020; transform: translateY(-1px); }
+        .export-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        /* ========== PREVIEW AREA ========== */
+        #preview-area {
+            flex: 1;
+            background: #0d0d0d;
+            overflow-y: auto;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Empty State */
+        #empty-state {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            text-align: center;
+        }
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px dashed #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a2a2a;
+        }
+        .empty-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 0.1em;
+            color: #2a2a2a;
+        }
+        .empty-sub {
+            font-size: 11px;
+            color: #222;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        /* Grid */
+        #preview-grid {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        /* Card */
+        .card-wrapper {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #1e1e1e;
+            background: #111;
+            cursor: default;
+        }
+        .card-wrapper:hover .card-actions { opacity: 1; }
+
+        .card-canvas-host {
+            position: absolute;
+            top: 0; left: 0;
+            width: 1080px;
+            height: 1080px;
+            transform-origin: top left;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .card-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 100;
+        }
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            background: rgba(0,0,0,0.85);
+            border: 1px solid #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #ccc;
+            transition: all 0.15s;
+        }
+        .action-btn:hover { background: #e63030; border-color: #e63030; color: #fff; }
+
+        .card-num {
+            position: absolute;
+            bottom: 12px;
+            left: 14px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: rgba(255,255,255,0.15);
+            letter-spacing: 0.05em;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* ========== CANVAS CONTENT ========== */
+        .canvas-bg-img {
+            position: absolute;
+            pointer-events: none;
+            transform-origin: center;
+            mix-blend-mode: lighten;
+        }
+        .canvas-text-block {
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            z-index: 30;
+            pointer-events: none;
+        }
+        .canvas-line1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 90px;
+            color: #fff;
+            line-height: 0.9;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.9);
+        }
+        .canvas-label-wrap {
+            display: inline-block;
+            background: #e63030;
+            padding: 5px 16px;
+            margin-top: 6px;
+            margin-left: 6px;
+        }
+        .canvas-line2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: #fff;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .canvas-brand {
+            position: absolute;
+            top: 55px;
+            right: 55px;
+            z-index: 100;
+            pointer-events: none;
+            text-align: right;
+        }
+        .canvas-brand-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+        }
+        .canvas-brand-logo {
+            height: 55px;
+            width: auto;
+            max-width: 230px;
+            object-fit: contain;
+        }
+
+        /* ========== SHIRT SELECTOR ========== */
+        .shirt-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .shirt-thumb {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #2a2a2a;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #0d0d0d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .shirt-thumb:hover { border-color: #555; }
+        .shirt-thumb.selected { border-color: #e63030; }
+        .shirt-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+        .shirt-thumb-none {
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #444;
+            text-align: center;
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            #app { flex-direction: column; overflow: auto; }
+            #sidebar { width: 100%; height: auto; max-height: 55vh; }
+            #preview-area { height: 45vh; flex: none; min-height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside id="sidebar">
+
+        <!-- Header -->
+        <div id="sidebar-header">
+            <div class="brand-logo-sidebar">PROMO <span>MAKER</span></div>
+            <div class="brand-subtitle">Social Media Creator &nbsp;/&nbsp; V1.0</div>
+        </div>
+
+        <!-- Body -->
+        <div id="sidebar-body" class="custom-scroll">
+
+            <!-- Upload Designs -->
+            <label class="upload-zone" for="upload-designs">
+                <svg data-lucide="upload-cloud" width="28" height="28"></svg>
+                <div class="upload-zone-label">Subir Diseños (PNG / JPG)</div>
+                <input id="upload-designs" type="file" accept="image/png,image/jpeg" multiple style="display:none;" />
+            </label>
+
+            <!-- Text Panel -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <svg data-lucide="type" width="12" height="12"></svg> Textos Principales
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label class="field-label" for="textLine1">Línea 1 (Grande)</label>
+                    <input id="textLine1" type="text" value="DISEÑOS">
+                </div>
+                <div>
+                    <label class="field-label" for="textLine2">Línea 2 (Etiqueta Roja)</label>
+                    <input id="textLine2" type="text" value="EXCLUSIVOS">
+                </div>
+            </div>
+
+            <!-- Brand Panel -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <svg data-lucide="tag" width="12" height="12"></svg> Tu Marca
+                </div>
+                <div class="toggle-group" style="margin-bottom:12px;">
+                    <button class="toggle-btn active" id="btnBrandText" type="button">Texto</button>
+                    <button class="toggle-btn" id="btnBrandLogo" type="button">Logo</button>
+                </div>
+                <div id="brandTextWrap">
+                    <input id="brandText" type="text" placeholder="EJ. MI MARCA">
+                </div>
+                <div id="brandLogoWrap" style="display:none;">
+                    <label class="upload-zone" for="upload-logo" style="padding:10px 16px;">
+                        <span class="upload-zone-label" id="logoLabel">Subir Logo (PNG)</span>
+                        <input id="upload-logo" type="file" accept="image/png,image/jpeg" style="display:none;" />
+                    </label>
+                </div>
+            </div>
+
+            <!-- Shirt Selector Panel -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <svg data-lucide="shirt" width="12" height="12"></svg> Seleccionar Playera
+                </div>
+                <div class="shirt-selector-grid" id="shirtSelectorGrid">
+                    <!-- JS fills this -->
+                </div>
+            </div>
+
+            <!-- Shirt Position -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <svg data-lucide="move" width="12" height="12"></svg> Posición Diseño en Playera
+                </div>
+                <div class="slider-row">
+                    <div class="slider-header">
+                        <span class="slider-name">Escala</span>
+                        <span class="slider-val" id="v-shirtScale">45%</span>
+                    </div>
+                    <input type="range" id="shirtScale" min="10" max="80" value="45">
+                </div>
+                <div class="slider-row">
+                    <div class="slider-header">
+                        <span class="slider-name">Posición Y (Altura)</span>
+                        <span class="slider-val" id="v-shirtY">40%</span>
+                    </div>
+                    <input type="range" id="shirtY" min="10" max="80" value="40">
+                </div>
+                <div class="slider-row">
+                    <div class="slider-header">
+                        <span class="slider-name">Posición X (Centro)</span>
+                        <span class="slider-val" id="v-shirtX">50%</span>
+                    </div>
+                    <input type="range" id="shirtX" min="20" max="80" value="50">
+                </div>
+            </div>
+
+            <!-- Background Art -->
+            <div class="panel-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                    <div class="panel-title" style="margin-bottom:0;">
+                        <svg data-lucide="layers" width="12" height="12"></svg> Arte de Fondo
+                    </div>
+                    <button id="btnGrayscale" class="grayscale-btn" type="button">B&N ON</button>
+                </div>
+                <div class="slider-row">
+                    <div class="slider-header">
+                        <span class="slider-name">Opacidad</span>
+                        <span class="slider-val" id="v-bgOpacity">25%</span>
+                    </div>
+                    <input type="range" id="bgOpacity" min="0" max="100" value="25">
+                </div>
+                <div class="slider-row">
+                    <div class="slider-header">
+                        <span class="slider-name">Escala</span>
+                        <span class="slider-val" id="v-bgScale">150%</span>
+                    </div>
+                    <input type="range" id="bgScale" min="50" max="300" value="150">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div class="slider-row" style="margin-bottom:0;">
+                        <div class="slider-header">
+                            <span class="slider-name">Eje X</span>
+                        </div>
+                        <input type="range" id="bgX" min="-50" max="150" value="10">
+                    </div>
+                    <div class="slider-row" style="margin-bottom:0;">
+                        <div class="slider-header">
+                            <span class="slider-name">Eje Y</span>
+                        </div>
+                        <input type="range" id="bgY" min="-50" max="150" value="50">
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end sidebar-body -->
+
+        <!-- Footer Export -->
+        <div id="sidebar-footer">
+            <button class="export-btn" id="btnZip" disabled type="button">
+                <svg data-lucide="archive" width="18" height="18"></svg>
+                <span id="btnZipText">EXPORTAR ZIP</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===== PREVIEW ===== -->
+    <main id="preview-area" class="custom-scroll">
+        <!-- Empty State -->
+        <div id="empty-state">
+            <div class="empty-icon">
+                <svg data-lucide="image" width="32" height="32"></svg>
+            </div>
+            <div class="empty-title">Sin Diseños</div>
+            <div class="empty-sub">Sube tus imágenes PNG/JPG desde el panel izquierdo</div>
+        </div>
+        <!-- Grid (filled by JS) -->
+        <div id="preview-grid" style="display:none;"></div>
+    </main>
+
+</div><!-- end #app -->
+
+<script>
+// ============================================================
+//  CONFIGURACIÓN DE PLAYERAS
+// ============================================================
+const SHIRT_IMAGES = [
+    { label: "Negra", url: "./O1.png" },
+    { label: "Blanca", url: "./O2.png" }
+];
+
+const DUMMY_SRC = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+// ============================================================
+//  ESTADO
+// ============================================================
+const state = {
+    designs: [],
+    line1: "DISEÑOS",
+    line2: "EXCLUSIVOS",
+    brandType: "text",
+    brandText: "",
+    brandLogoUrl: null,
+    shirtScale: 70,
+    shirtX: 50,
+    shirtY: 50,
+    bgScale: 150,
+    bgX: 10,
+    bgY: 50,
+    bgOpacity: 25,
+    bgGrayscale: true,
+    isExporting: false,
+    selectedShirtIndex: SHIRT_IMAGES.length > 0 ? 0 : -1,
+    shirtBase64Cache: {}
+};
+
+// ============================================================
+//  FIX 1: PRELOAD SHIRT — usa fetch+blob para evitar CORS
+//  con archivos locales y asegura que el cache se llene
+// ============================================================
+function preloadShirtByIndex(idx) {
+    if (idx < 0 || !SHIRT_IMAGES[idx] || state.shirtBase64Cache[idx]) return;
+    const url = SHIRT_IMAGES[idx].url;
+    if (!url) return;
+
+    // Método 1: fetch como blob (funciona mejor con archivos locales servidos por un servidor)
+    fetch(url)
+        .then(r => r.blob())
+        .then(blob => new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.onload = () => res(reader.result);
+            reader.onerror = rej;
+            reader.readAsDataURL(blob);
+        }))
+        .then(dataUrl => {
+            state.shirtBase64Cache[idx] = dataUrl;
+            // Re-render si esta playera es la activa
+            if (state.selectedShirtIndex === idx) render();
+        })
+        .catch(() => {
+            // Fallback: intentar con Image + canvas
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = () => {
+                try {
+                    const c = document.createElement("canvas");
+                    c.width = img.naturalWidth || 800;
+                    c.height = img.naturalHeight || 800;
+                    c.getContext("2d").drawImage(img, 0, 0);
+                    state.shirtBase64Cache[idx] = c.toDataURL("image/png");
+                    if (state.selectedShirtIndex === idx) render();
+                } catch(e) {
+                    // Si el canvas también falla por CORS, marcamos con la URL original
+                    // para que al menos se muestre en preview
+                    state.shirtBase64Cache[idx] = url;
+                    if (state.selectedShirtIndex === idx) render();
+                }
+            };
+            img.onerror = () => {
+                console.warn("No se pudo cargar la playera:", url);
+            };
+            img.src = url;
+        });
+}
+
+function preloadAllShirts() {
+    SHIRT_IMAGES.forEach((_, i) => preloadShirtByIndex(i));
+}
+
+// ============================================================
+//  FIX 2: getActiveShirtSrc — eliminado el dead code y 
+//  lógica corregida: si no hay cache aún, devuelve URL directa
+//  para que el preview funcione inmediatamente
+// ============================================================
+function getActiveShirtSrc() {
+    const idx = state.selectedShirtIndex;
+    if (idx < 0 || !SHIRT_IMAGES[idx]) return null;
+    // Usar cache base64 si está disponible (mejor para exportar),
+    // de lo contrario usar la URL directa para mostrar en pantalla
+    return state.shirtBase64Cache[idx] || SHIRT_IMAGES[idx].url || null;
+}
+
+// ============================================================
+//  SHIRT SELECTOR UI
+// ============================================================
+function buildShirtSelector() {
+    const grid = document.getElementById("shirtSelectorGrid");
+    if (!grid) return;
+
+    if (SHIRT_IMAGES.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column:1/-1;text-align:center;padding:12px 0;">
+                <p style="font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#333;">
+                    Agrega tus playeras en<br>el array SHIRT_IMAGES
+                </p>
+            </div>`;
+        return;
+    }
+
+    let html = `
+        <div class="shirt-thumb ${state.selectedShirtIndex === -1 ? 'selected' : ''}"
+             onclick="selectShirt(-1)"
+             title="Sin playera">
+            <div class="shirt-thumb-none">Sin<br>playera</div>
+        </div>`;
+
+    SHIRT_IMAGES.forEach((shirt, i) => {
+        html += `
+            <div class="shirt-thumb ${state.selectedShirtIndex === i ? 'selected' : ''}"
+                 onclick="selectShirt(${i})"
+                 title="${shirt.label || 'Playera ' + (i+1)}">
+                <img src="${shirt.url}" alt="${shirt.label || ''}" loading="lazy">
+            </div>`;
+    });
+
+    grid.innerHTML = html;
+}
+
+window.selectShirt = function(idx) {
+    state.selectedShirtIndex = idx;
+    buildShirtSelector();
+    if (idx >= 0 && SHIRT_IMAGES[idx] && !state.shirtBase64Cache[idx]) {
+        preloadShirtByIndex(idx);
+    }
+    render();
+};
+
+// ============================================================
+//  CSS VARIABLES
+// ============================================================
+function setCSSVars(node) {
+    const t = node || document.documentElement;
+    t.style.setProperty("--shirt-scale", state.shirtScale + "%");
+    t.style.setProperty("--shirt-x",     state.shirtX + "%");
+    t.style.setProperty("--shirt-y",     state.shirtY + "%");
+    t.style.setProperty("--bg-scale",    state.bgScale + "%");
+    t.style.setProperty("--bg-x",        state.bgX + "%");
+    t.style.setProperty("--bg-y",        state.bgY + "%");
+    t.style.setProperty("--bg-opacity",  state.bgOpacity / 100);
+    t.style.setProperty("--bg-filter",   state.bgGrayscale ? "grayscale(100%)" : "none");
+}
+
+// ============================================================
+//  FIX 3: buildCanvas — la playera y el diseño encima de ella
+//  ahora usan crossorigin="anonymous" SOLO cuando es URL 
+//  externa; para base64 y URLs locales no se necesita
+// ============================================================
+function buildCanvas(designUrl) {
+    const safe     = designUrl || DUMMY_SRC;
+    const safeLogo = state.brandLogoUrl || DUMMY_SRC;
+    const shirtSrc = getActiveShirtSrc();
+
+    // crossorigin solo para URLs externas (http/https no data:)
+    const needsCross = (src) => src && src.startsWith("http") && !src.startsWith("data:");
+    const shirtCross = needsCross(shirtSrc) ? 'crossorigin="anonymous"' : "";
+    const designCross = needsCross(safe) ? 'crossorigin="anonymous"' : "";
+
+    const bgHTML = designUrl ? `
+        <img class="canvas-bg-img" src="${safe}" alt="" ${designCross}
+             style="width:var(--bg-scale);height:auto;
+                    left:var(--bg-x);top:var(--bg-y);
+                    transform:translate(-50%,-50%);
+                    opacity:var(--bg-opacity);
+                    filter:var(--bg-filter);">
+    ` : "";
+
+    const shirtHTML = shirtSrc ? `
+        <div style="position:absolute;left:var(--shirt-x);top:var(--shirt-y);
+                    width:var(--shirt-scale);transform:translate(-50%,-50%);z-index:20;pointer-events:none;">
+            <img src="${shirtSrc}" ${shirtCross}
+                 style="width:100%;height:auto;filter:drop-shadow(0 0 50px rgba(0,0,0,0.9));display:block;">
+        </div>
+    ` : "";
+
+    const onShirtDesign = designUrl ? `
+        <div style="position:absolute;
+                    left:var(--shirt-x);top:var(--shirt-y);
+                    width:calc(var(--shirt-scale) * 0.52);
+                    transform:translate(-50%,-50%);
+                    z-index:28;pointer-events:none;">
+            <img src="${safe}" ${designCross} style="width:100%;height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.6));display:block;">
+        </div>
+    ` : "";
+
+    const line1Show = state.line1 ? "block" : "none";
+    const line2Show = state.line2 ? "inline-block" : "none";
+    const brandShow = (state.brandType === "text" && state.brandText) ? "block" : "none";
+    const logoShow  = (state.brandType === "logo" && state.brandLogoUrl) ? "block" : "none";
+
+    return `
+        <div style="position:absolute;inset:0;background:#111;z-index:0;"></div>
+
+        ${bgHTML}
+
+        ${shirtHTML}
+
+        ${onShirtDesign}
+
+        <div class="canvas-text-block">
+            <div class="canvas-line1" style="display:${line1Show};">${state.line1}</div>
+            <div class="canvas-label-wrap" style="display:${line2Show};">
+                <div class="canvas-line2">${state.line2}</div>
+            </div>
+        </div>
+
+        <div class="canvas-brand">
+            <div class="canvas-brand-text" style="display:${brandShow};">${state.brandText}</div>
+            <img class="canvas-brand-logo" src="${safeLogo}" style="display:${logoShow};" alt="logo">
+        </div>
+    `;
+}
+
+// ============================================================
+//  RENDER UI
+// ============================================================
+function render() {
+    const grid   = document.getElementById("preview-grid");
+    const empty  = document.getElementById("empty-state");
+    const zipBtn = document.getElementById("btnZip");
+
+    setCSSVars();
+
+    if (state.designs.length === 0) {
+        grid.style.display  = "none";
+        empty.style.display = "flex";
+        zipBtn.disabled = true;
+        lucide.createIcons();
+        return;
+    }
+
+    empty.style.display = "none";
+    grid.style.display  = "grid";
+    zipBtn.disabled = state.isExporting;
+
+    let html = "";
+    state.designs.forEach((d, i) => {
+        const num = String(i + 1).padStart(2, "0");
+        html += `
+            <div class="card-wrapper" id="card-${i}">
+                <div class="card-canvas-host" id="host-${i}">
+                    ${buildCanvas(d.url)}
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" title="Descargar" onclick="exportSingle(${i})">
+                        <svg data-lucide="download" width="14" height="14"></svg>
+                    </button>
+                    <button class="action-btn" title="Eliminar" onclick="removeDesign(${i})">
+                        <svg data-lucide="trash-2" width="14" height="14"></svg>
+                    </button>
+                </div>
+                <div class="card-num">${num}</div>
+            </div>`;
+    });
+
+    grid.innerHTML = html;
+    lucide.createIcons();
+    scaleCards();
+}
+
+// ============================================================
+//  SCALE CARDS
+// ============================================================
+function scaleCards() {
+    document.querySelectorAll(".card-wrapper").forEach(card => {
+        const host = card.querySelector(".card-canvas-host");
+        if (host) host.style.transform = `scale(${card.clientWidth / 1080})`;
+    });
+}
+window.addEventListener("resize", scaleCards);
+
+// ============================================================
+//  FILE UPLOAD
+// ============================================================
+async function loadFiles(files) {
+    if (!files.length) return;
+    const results = await Promise.all(Array.from(files).map(f => new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => res({ id: Math.random().toString(36).slice(2), url: e.target.result, name: f.name });
+        r.readAsDataURL(f);
+    })));
+    state.designs = [...state.designs, ...results];
+    render();
+}
+
+window.removeDesign = function(i) {
+    state.designs.splice(i, 1);
+    render();
+};
+
+// ============================================================
+//  EXPORT
+// ============================================================
+function setExporting(flag, msg) {
+    state.isExporting = flag;
+    const btn  = document.getElementById("btnZip");
+    const span = document.getElementById("btnZipText");
+    if (flag) {
+        btn.disabled = true;
+        span.textContent = msg || "PROCESANDO...";
+    } else {
+        btn.disabled = state.designs.length === 0;
+        span.textContent = "EXPORTAR ZIP";
+    }
+}
+
+async function captureNode(idx) {
+    const design = state.designs[idx];
+    if (!design) throw new Error("Diseño no encontrado");
+
+    const tmp = document.createElement("div");
+    tmp.style.cssText = "width:1080px;height:1080px;position:fixed;top:0;left:0;z-index:-9999;overflow:hidden;pointer-events:none;";
+    setCSSVars(tmp);
+    tmp.innerHTML = buildCanvas(design.url);
+    document.body.appendChild(tmp);
+
+    // Esperar imágenes
+    await Promise.all(
+        Array.from(tmp.querySelectorAll("img")).map(img =>
+            img.complete ? Promise.resolve() :
+            new Promise(r => { img.onload = r; img.onerror = r; })
+        )
+    );
+    await document.fonts.ready;
+    await new Promise(r => setTimeout(r, 120));
+
+    try {
+        const dataUrl = await window.htmlToImage.toJpeg(tmp, {
+            quality: 0.88,
+            pixelRatio: 1.5,
+            backgroundColor: "#111111"
+        });
+        const arr = dataUrl.split(","), mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8 = new Uint8Array(n);
+        while (n--) u8[n] = bstr.charCodeAt(n);
+        return new Blob([u8], { type: mime });
+    } finally {
+        if (tmp.parentNode) tmp.parentNode.removeChild(tmp);
+    }
+}
+
+window.exportSingle = async function(idx) {
+    setExporting(true, "GENERANDO...");
+    try {
+        const blob = await captureNode(idx);
+        const link = document.createElement("a");
+        link.download = `promo-${state.line1.replace(/\s+/g,"-")}-${idx+1}.jpg`;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    } catch(e) {
+        alert("Error al exportar: " + (e.message || e));
+    } finally {
+        setExporting(false);
+    }
+};
+
+async function exportZip() {
+    if (!state.designs.length || !window.JSZip) return;
+    setExporting(true, "PREPARANDO...");
+    try {
+        const zip = new window.JSZip();
+        for (let i = 0; i < state.designs.length; i++) {
+            setExporting(true, `PROCESANDO ${i+1}/${state.designs.length}...`);
+            const blob = await captureNode(i);
+            zip.file(`promo-${state.line1.replace(/\s+/g,"-")}-${i+1}.jpg`, blob);
+            await new Promise(r => setTimeout(r, 50));
+        }
+        setExporting(true, "COMPRIMIENDO...");
+        const content = await zip.generateAsync({ type: "blob" });
+        const link = document.createElement("a");
+        link.download = `promo-${state.line1.replace(/\s+/g,"-")}-Pack.zip`;
+        link.href = URL.createObjectURL(content);
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    } catch(e) {
+        alert("Error al exportar ZIP: " + (e.message || e));
+    } finally {
+        setExporting(false);
+    }
+}
+
+// ============================================================
+//  LISTENERS
+// ============================================================
+function updateBrandDOM() {
+    const showText = state.brandType === "text" && state.brandText;
+    const showLogo = state.brandType === "logo" && state.brandLogoUrl;
+    document.querySelectorAll(".canvas-brand-text").forEach(n => {
+        n.textContent = state.brandText;
+        n.style.display = showText ? "block" : "none";
+    });
+    document.querySelectorAll(".canvas-brand-logo").forEach(n => {
+        n.src = state.brandLogoUrl || DUMMY_SRC;
+        n.style.display = showLogo ? "block" : "none";
+    });
+}
+
+function attachListeners() {
+    document.getElementById("upload-designs").addEventListener("change", e => {
+        loadFiles(e.target.files);
+        e.target.value = "";
+    });
+
+    document.getElementById("textLine1").addEventListener("input", e => {
+        state.line1 = e.target.value;
+        document.querySelectorAll(".canvas-line1").forEach(n => {
+            n.textContent = state.line1;
+            n.style.display = state.line1 ? "block" : "none";
+        });
+    });
+    document.getElementById("textLine2").addEventListener("input", e => {
+        state.line2 = e.target.value;
+        document.querySelectorAll(".canvas-label-wrap").forEach(n => {
+            n.style.display = state.line2 ? "inline-block" : "none";
+            const inner = n.querySelector(".canvas-line2");
+            if (inner) inner.textContent = state.line2;
+        });
+    });
+
+    document.getElementById("btnBrandText").addEventListener("click", () => {
+        state.brandType = "text";
+        document.getElementById("btnBrandText").classList.add("active");
+        document.getElementById("btnBrandLogo").classList.remove("active");
+        document.getElementById("brandTextWrap").style.display = "block";
+        document.getElementById("brandLogoWrap").style.display = "none";
+        updateBrandDOM();
+    });
+    document.getElementById("btnBrandLogo").addEventListener("click", () => {
+        state.brandType = "logo";
+        document.getElementById("btnBrandLogo").classList.add("active");
+        document.getElementById("btnBrandText").classList.remove("active");
+        document.getElementById("brandTextWrap").style.display = "none";
+        document.getElementById("brandLogoWrap").style.display = "block";
+        updateBrandDOM();
+    });
+
+    document.getElementById("brandText").addEventListener("input", e => {
+        state.brandText = e.target.value;
+        updateBrandDOM();
+    });
+
+    document.getElementById("upload-logo").addEventListener("change", e => {
+        const f = e.target.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = ev => {
+            state.brandLogoUrl = ev.target.result;
+            document.getElementById("logoLabel").textContent = "Logo Cargado ✓";
+            updateBrandDOM();
+        };
+        r.readAsDataURL(f);
+    });
+
+    const sliders = [
+        { id: "shirtScale", key: "shirtScale", valId: "v-shirtScale" },
+        { id: "shirtY",     key: "shirtY",     valId: "v-shirtY"     },
+        { id: "shirtX",     key: "shirtX",     valId: "v-shirtX"     },
+        { id: "bgOpacity",  key: "bgOpacity",  valId: "v-bgOpacity"  },
+        { id: "bgScale",    key: "bgScale",    valId: "v-bgScale"    },
+    ];
+    sliders.forEach(s => {
+        document.getElementById(s.id).addEventListener("input", e => {
+            state[s.key] = +e.target.value;
+            document.getElementById(s.valId).textContent = e.target.value + "%";
+            setCSSVars();
+        });
+    });
+
+    document.getElementById("bgX").addEventListener("input", e => { state.bgX = +e.target.value; setCSSVars(); });
+    document.getElementById("bgY").addEventListener("input", e => { state.bgY = +e.target.value; setCSSVars(); });
+
+    document.getElementById("btnGrayscale").addEventListener("click", () => {
+        state.bgGrayscale = !state.bgGrayscale;
+        const btn = document.getElementById("btnGrayscale");
+        if (state.bgGrayscale) {
+            btn.classList.remove("off");
+            btn.textContent = "B&N ON";
+        } else {
+            btn.classList.add("off");
+            btn.textContent = "B&N OFF";
+        }
+        setCSSVars();
+    });
+
+    document.getElementById("btnZip").addEventListener("click", exportZip);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+document.addEventListener("DOMContentLoaded", () => {
+    lucide.createIcons();
+    buildShirtSelector();
+    preloadAllShirts();
+    attachListeners();
+    setCSSVars();
+    render();
+    setTimeout(scaleCards, 200);
+});
+</script>
+
+</body>
+</html>

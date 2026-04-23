@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MEJORADOR IA — Chechena Shirts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #080808;
+      --ink2:     #111111;
+      --ink3:     #1a1a1a;
+      --surface:  #0e0e0e;
+      --border:   #262626;
+      --border2:  #333333;
+      --white:    #f0f0f0;
+      --muted:    #666666;
+      --accent:   #FF4D00;
+      --accent2:  #FF8C00;
+      --green:    #22c55e;
+      --font-head: 'Bebas Neue', sans-serif;
+      --font-cond: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--ink); color: var(--white); font-family: var(--font-body); overflow-x: hidden; min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--font-cond); }
+    img { display: block; max-width: 100%; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .6;
+    }
+
+    /* TICKER */
+    .ticker { background: var(--accent); overflow: hidden; white-space: nowrap; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .ticker-inner { display: inline-flex; animation: marquee 30s linear infinite; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-cond); font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #000; padding: 0 40px; }
+    .ticker-dot { width: 5px; height: 5px; background: #000; border-radius: 50%; }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* NAVBAR */
+    .nav { position: sticky; top: 0; z-index: 500; background: rgba(8,8,8,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 clamp(16px, 5vw, 48px); display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-logo { font-family: var(--font-head); font-size: clamp(1.3rem, 3vw, 1.7rem); letter-spacing: .06em; color: var(--white); }
+    .nav-logo span { color: var(--accent); }
+    .nav-badge { background: var(--accent); color: #000; font-family: var(--font-cond); font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; padding: 4px 12px; }
+    .nav-back { display: flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .nav-back:hover { color: var(--white); }
+
+    /* HERO */
+    .hero { position: relative; padding: clamp(48px, 8vw, 96px) clamp(16px, 5vw, 48px) clamp(32px, 5vw, 64px); text-align: center; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,77,0,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,77,0,.04) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
+    .hero-label { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); background: var(--ink2); font-family: var(--font-cond); font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); padding: 6px 16px; margin-bottom: 20px; animation: fadeUp .6s ease both; }
+    .pulse { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulseAnim 1.4s infinite; }
+    @keyframes pulseAnim { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.7); } }
+    .hero h1 { font-family: var(--font-head); font-size: clamp(3rem, 10vw, 7rem); line-height: .92; letter-spacing: .02em; text-transform: uppercase; color: var(--white); margin-bottom: 16px; animation: fadeUp .6s .1s ease both; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-family: var(--font-cond); font-size: clamp(13px, 2.5vw, 16px); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); max-width: 540px; margin: 0 auto 32px; line-height: 1.6; animation: fadeUp .6s .2s ease both; }
+    .hero-stats { display: flex; align-items: center; justify-content: center; gap: clamp(20px, 5vw, 56px); flex-wrap: wrap; animation: fadeUp .6s .3s ease both; }
+    .stat-item { text-align: center; }
+    .stat-num { font-family: var(--font-head); font-size: clamp(1.6rem, 4vw, 2.4rem); color: var(--white); letter-spacing: .04em; }
+    .stat-label { font-family: var(--font-cond); font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+    .stat-sep { width: 1px; height: 36px; background: var(--border2); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* TOOL WRAP */
+    .tool-wrap { max-width: 900px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px) clamp(48px, 6vw, 80px); }
+    .tool-card { background: var(--ink2); border: 1px solid var(--border); position: relative; overflow: hidden; }
+    .tool-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2), transparent); }
+
+    /* TABS */
+    .tool-tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+    .tab-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px 20px; background: none; border: none; color: var(--muted); font-family: var(--font-cond); font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; transition: all .25s ease; position: relative; }
+    .tab-btn::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform .25s ease; }
+    .tab-btn.active { color: var(--white); background: rgba(255,77,0,.06); }
+    .tab-btn.active::after { transform: scaleX(1); }
+    .tab-btn:hover:not(.active) { color: #aaa; background: rgba(255,255,255,.03); }
+    .tab-icon { font-size: 20px; }
+
+    /* STATUS BAR */
+    .status-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 10px 20px; background: #0d0d0d; border-bottom: 1px solid #262626; }
+    .mode-hint { font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #666; }
+    .ai-status { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    .ai-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+
+    /* MOTOR CONFIG */
+    .engine-section { padding: 20px 28px; border-bottom: 1px solid var(--border); background: rgba(255,77,0,.02); }
+    .engine-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+    .engine-group { flex: 1; min-width: 160px; }
+    .section-label { font-family: var(--font-cond); font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .engine-select { width: 100%; background: var(--ink3); border: 1px solid var(--border2); color: var(--white); font-family: var(--font-cond); font-size: 13px; font-weight: 600; letter-spacing: .08em; padding: 9px 12px; appearance: none; -webkit-appearance: none; cursor: pointer; }
+    .engine-select:focus { outline: none; border-color: var(--accent); }
+    .engine-select option { background: var(--ink2); color: var(--white); }
+
+    /* BACKEND PILLS */
+    .backend-pills { display: flex; gap: 6px; }
+    .backend-pill { flex: 1; padding: 9px 8px; background: var(--ink3); border: 1px solid var(--border2); color: var(--muted); font-family: var(--font-cond); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; text-align: center; cursor: pointer; transition: all .2s; }
+    .backend-pill.active { background: var(--accent); border-color: var(--accent); color: #000; }
+    .backend-pill.active.gpu { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+    .backend-pill:hover:not(.active) { border-color: #555; color: #aaa; }
+    .backend-pill.disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ESCALA */
+    .scale-section { padding: 24px 28px 20px; border-bottom: 1px solid var(--border); }
+    .scale-options { display: flex; gap: 10px; flex-wrap: wrap; }
+    .scale-btn { flex: 1; min-width: 80px; padding: 12px 8px; background: var(--ink3); border: 1px solid var(--border2); color: var(--muted); font-family: var(--font-cond); font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; text-align: center; transition: all .2s ease; position: relative; overflow: hidden; }
+    .scale-btn .scale-tag { display: block; font-size: 9px; font-weight: 600; letter-spacing: .15em; color: var(--muted); margin-top: 3px; }
+    .scale-btn:hover { border-color: var(--accent); color: var(--white); }
+    .scale-btn.active { background: var(--accent); border-color: var(--accent); color: #000; }
+    .scale-btn.active .scale-tag { color: rgba(0,0,0,.6); }
+
+    /* UPLOAD */
+    .upload-section { padding: 28px; border-bottom: 1px solid var(--border); }
+    .drop-zone { border: 2px dashed var(--border2); padding: clamp(32px, 6vw, 60px) 20px; text-align: center; cursor: pointer; transition: all .3s ease; position: relative; background: var(--ink); }
+    .drop-zone.drag-over { border-color: var(--accent); background: rgba(255,77,0,.05); }
+    .drop-zone:hover { border-color: #444; background: rgba(255,255,255,.02); }
+    .drop-icon { font-size: 48px; margin-bottom: 14px; display: block; transition: transform .3s ease; }
+    .drop-zone:hover .drop-icon { transform: translateY(-4px); }
+    .drop-title { font-family: var(--font-cond); font-size: clamp(16px, 3vw, 20px); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--white); margin-bottom: 8px; }
+    .drop-sub { font-family: var(--font-cond); font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .drop-formats { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .fmt-tag { background: var(--ink3); border: 1px solid var(--border); font-family: var(--font-cond); font-size: 10px; font-weight: 700; letter-spacing: .15em; color: var(--muted); padding: 3px 10px; }
+    #file-input { display: none; }
+    .btn-upload { display: inline-flex; align-items: center; gap: 8px; background: var(--ink3); border: 1px solid var(--border2); color: var(--white); font-family: var(--font-cond); font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding: 12px 24px; transition: all .2s; margin-top: 18px; }
+    .btn-upload:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* FILE QUEUE */
+    .file-queue { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .file-row { display: flex; align-items: center; gap: 12px; background: var(--ink3); border: 1px solid var(--border); padding: 10px 14px; animation: fadeUp .3s ease both; }
+    .file-thumb { width: 42px; height: 42px; background: var(--ink); border: 1px solid var(--border); object-fit: cover; flex-shrink: 0; }
+    .file-info { flex: 1; min-width: 0; }
+    .file-name { font-family: var(--font-cond); font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-size { font-family: var(--font-cond); font-size: 11px; color: var(--muted); letter-spacing: .06em; }
+    .file-progress-wrap { width: 100%; height: 3px; background: var(--border); margin-top: 4px; display: none; }
+    .file-progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width .3s ease; }
+    .file-status { font-family: var(--font-cond); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+    .file-status.done { color: var(--green); }
+    .file-status.processing { color: var(--accent2); }
+    .file-status.error { color: #ef4444; }
+    .file-rm { background: none; border: none; color: var(--muted); font-size: 16px; line-height: 1; padding: 4px; transition: color .2s; flex-shrink: 0; }
+    .file-rm:hover { color: var(--white); }
+
+    /* ACTION */
+    .action-section { padding: 24px 28px; }
+    .progress-wrap { display: none; margin-bottom: 20px; }
+    .progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .progress-label { font-family: var(--font-cond); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+    .progress-pct { font-family: var(--font-head); font-size: 1.2rem; color: var(--white); letter-spacing: .04em; }
+    .progress-bar-bg { background: var(--ink3); border: 1px solid var(--border); height: 8px; position: relative; overflow: hidden; }
+    .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .4s ease; position: relative; }
+    .progress-bar-fill::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 40px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.4)); animation: shimmer 1s linear infinite; }
+    @keyframes shimmer { from { opacity: 0; } 50% { opacity: 1; } to { opacity: 0; } }
+    .progress-info { font-family: var(--font-cond); font-size: 11px; color: var(--muted); letter-spacing: .08em; margin-top: 6px; min-height: 14px; }
+
+    /* MODEL LOADING BANNER */
+    .model-banner { display: none; background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.3); padding: 12px 16px; margin-bottom: 16px; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #a78bfa; display: flex; align-items: center; gap: 10px; }
+    .model-banner.show { display: flex; }
+    .model-spinner { width: 14px; height: 14px; border: 2px solid rgba(167,139,250,.3); border-top-color: #a78bfa; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* BUTTONS */
+    .action-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-primary { flex: 1; min-width: 180px; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); border: none; color: #000; font-family: var(--font-cond); font-size: 15px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; padding: 16px 24px; transition: all .25s ease; position: relative; overflow: hidden; }
+    .btn-primary::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.15); transform: translateX(-100%) skewX(-20deg); transition: transform .4s ease; }
+    .btn-primary:hover::before { transform: translateX(200%) skewX(-20deg); }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,77,0,.35); }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-primary:disabled::before { display: none; }
+    .btn-secondary { display: flex; align-items: center; justify-content: center; gap: 8px; background: transparent; border: 1px solid var(--border2); color: var(--white); font-family: var(--font-cond); font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 16px 24px; transition: all .2s; }
+    .btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,.05); }
+    .btn-secondary:disabled { opacity: .3; cursor: not-allowed; }
+
+    /* RESULTS */
+    .results-section { display: none; border-top: 1px solid var(--border); padding: 28px; animation: fadeUp .4s ease both; }
+    .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .results-title { font-family: var(--font-head); font-size: 1.6rem; letter-spacing: .06em; color: var(--white); text-transform: uppercase; }
+    .results-count { background: var(--green); color: #000; font-family: var(--font-cond); font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: 4px 12px; }
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-bottom: 20px; }
+    .result-item { background: var(--ink3); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: border-color .2s; animation: fadeUp .4s ease both; }
+    .result-item:hover { border-color: var(--accent); }
+    .result-img-wrap { aspect-ratio: 1/1; overflow: hidden; background: var(--ink); position: relative; }
+    .result-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+    .result-item:hover .result-img-wrap img { transform: scale(1.06); }
+    .result-overlay { position: absolute; inset: 0; background: rgba(255,77,0,.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; font-size: 24px; }
+    .result-item:hover .result-overlay { opacity: 1; }
+    .result-info { padding: 8px 10px; }
+    .result-name { font-family: var(--font-cond); font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .result-badge { font-family: var(--font-cond); font-size: 10px; color: var(--green); font-weight: 600; letter-spacing: .1em; }
+    .btn-download-all { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--ink3); border: 1px solid var(--border2); color: var(--white); font-family: var(--font-cond); font-size: 15px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding: 16px; transition: all .25s; }
+    .btn-download-all:hover { background: var(--accent); border-color: var(--accent); color: #000; }
+
+    /* INFO */
+    .info-section { max-width: 900px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px) clamp(48px, 6vw, 80px); }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; border: 1px solid var(--border); }
+    .info-card { background: var(--ink2); padding: 28px 22px; transition: background .2s; }
+    .info-card:hover { background: var(--ink3); }
+    .info-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+    .info-title { font-family: var(--font-cond); font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--white); margin-bottom: 8px; }
+    .info-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* COMPARE */
+    .compare-section { max-width: 900px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px) clamp(48px, 6vw, 80px); }
+    .sec-head { text-align: center; margin-bottom: 32px; }
+    .sec-tag { display: inline-block; background: var(--ink3); border: 1px solid var(--border); font-family: var(--font-cond); font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); padding: 5px 14px; margin-bottom: 12px; }
+    .sec-title { font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: .04em; text-transform: uppercase; color: var(--white); }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .compare-col { background: var(--ink2); border: 1px solid var(--border); overflow: hidden; }
+    .compare-head { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: var(--font-cond); font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .compare-head.before { color: var(--muted); }
+    .compare-head.after { color: var(--green); }
+    .compare-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .before .compare-dot { background: var(--muted); }
+    .after .compare-dot { background: var(--green); }
+    .compare-img { aspect-ratio: 4/3; background: var(--ink3); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .compare-img.before-img { filter: blur(.8px) contrast(.85) saturate(.8); }
+    .compare-img.after-img { filter: contrast(1.08) saturate(1.1); }
+    .compare-img canvas { width: 100%; height: 100%; position: absolute; inset: 0; }
+
+    /* FAQ */
+    .faq-section { max-width: 900px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px) clamp(48px, 6vw, 80px); }
+    .faq-list { display: flex; flex-direction: column; gap: 2px; }
+    .faq-item { border: 1px solid var(--border); overflow: hidden; background: var(--ink2); }
+    .faq-q { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; background: none; border: none; color: var(--white); font-family: var(--font-cond); font-size: 15px; font-weight: 700; letter-spacing: .06em; text-align: left; transition: background .2s; gap: 12px; }
+    .faq-q:hover { background: var(--ink3); }
+    .faq-icon { font-family: var(--font-head); font-size: 1.4rem; color: var(--accent); flex-shrink: 0; transition: transform .3s ease; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { display: none; padding: 0 22px 18px; font-size: 13px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); animation: fadeUp .25s ease both; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* CTA */
+    .cta-section { max-width: 900px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px) clamp(64px, 8vw, 100px); }
+    .cta-box { background: var(--accent); padding: clamp(32px, 5vw, 56px) clamp(24px, 5vw, 48px); text-align: center; position: relative; overflow: hidden; }
+    .cta-box::before { content: 'CHECHENA'; position: absolute; font-family: var(--font-head); font-size: clamp(4rem, 14vw, 10rem); color: rgba(0,0,0,.08); top: 50%; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: none; letter-spacing: .04em; }
+    .cta-title { font-family: var(--font-head); font-size: clamp(1.8rem, 5vw, 3.2rem); letter-spacing: .04em; text-transform: uppercase; color: #000; margin-bottom: 12px; position: relative; }
+    .cta-sub { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(0,0,0,.65); margin-bottom: 28px; position: relative; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; background: #000; color: var(--white); font-family: var(--font-cond); font-size: 15px; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; padding: 16px 36px; text-decoration: none; transition: all .25s; position: relative; }
+    .cta-btn:hover { background: var(--ink3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+
+    /* FOOTER */
+    footer { background: var(--ink2); border-top: 1px solid var(--border); padding: clamp(28px, 4vw, 44px) clamp(16px, 5vw, 48px); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: var(--font-head); font-size: 1.4rem; letter-spacing: .06em; color: var(--white); }
+    .footer-logo span { color: var(--accent); }
+    .footer-copy { font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-family: var(--font-cond); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--white); color: var(--ink); font-family: var(--font-cond); font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 12px 20px; z-index: 9000; transform: translateY(80px); opacity: 0; transition: all .35s cubic-bezier(.34,1.56,.64,1); display: flex; align-items: center; gap: 8px; max-width: calc(100vw - 40px); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { background: #ef4444; color: #fff; }
+    .toast.success { background: var(--green); color: #000; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 600px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .action-btns { flex-direction: column; }
+      .btn-primary { min-width: unset; }
+      .results-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+      .hero-stats { gap: 16px; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+      .scale-options { gap: 6px; }
+      .scale-btn { min-width: 68px; }
+      .engine-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker" role="marquee">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-dot"></span> Mejorador IA para DTF — Real-ESRGAN en tu navegador</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Soporta PNG, JPG, WebP, BMP</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Escala 2X · 4X con IA real — sin subir tus imágenes</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Motor: Real-ESRGAN + Real-CUGAN via TensorFlow.js</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Chechena Shirts — Diseños DTF Profesionales</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Mejorador IA para DTF — Real-ESRGAN en tu navegador</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Soporta PNG, JPG, WebP, BMP</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Escala 2X · 4X con IA real — sin subir tus imágenes</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Motor: Real-ESRGAN + Real-CUGAN via TensorFlow.js</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Chechena Shirts — Diseños DTF Profesionales</span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Volver
+  </a>
+  <div class="nav-logo">CHECHENA<span>.</span>IA</div>
+  <span class="nav-badge">Beta</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label"><span class="pulse"></span> Motor Real-ESRGAN — 100% en tu Navegador</div>
+  <h1>Mejorador<br><em>de Imágenes</em></h1>
+  <p class="hero-sub">Sube tus diseños y auméntalos con IA real.<br>Real-ESRGAN + Real-CUGAN directo en tu navegador.</p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">4X</div><div class="stat-label">Escala Máx.</div></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><div class="stat-num">IA</div><div class="stat-label">Real-ESRGAN</div></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Gratis</div></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Uploads</div></div>
+  </div>
+</section>
+
+<!-- HERRAMIENTA -->
+<div class="tool-wrap">
+  <div class="tool-card reveal">
+
+    <!-- TABS -->
+    <div class="tool-tabs" role="tablist">
+      <button class="tab-btn active" id="tab-anime" onclick="setMode('anime')" role="tab" aria-selected="true">
+        <span class="tab-icon">✦</span> Anime / Logos / DTF
+      </button>
+      <button class="tab-btn" id="tab-photo" onclick="setMode('photo')" role="tab" aria-selected="false">
+        <span class="tab-icon">🖼</span> Fotos / Caras
+      </button>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <span class="mode-hint" id="mode-hint">Modo: Real-CUGAN — Ideal para logos, anime, diseños DTF y vectores.</span>
+      <span class="ai-status" id="ai-status">
+        <span class="ai-dot" id="ai-dot" style="background:#22c55e;animation:pulseAnim 1.4s infinite;"></span>
+        <span id="ai-text" style="color:#22c55e;">IA Lista</span>
+      </span>
+    </div>
+
+    <!-- MOTOR CONFIG -->
+    <div class="engine-section">
+      <div class="engine-row">
+
+        <div class="engine-group">
+          <p class="section-label">Modelo IA</p>
+          <select class="engine-select" id="model-select" onchange="onModelChange()">
+            <optgroup label="Real-CUGAN (Rápido ✦ Recomendado)">
+              <option value="realcugan|2|conservative" data-factor="2">Real-CUGAN 2x — Conservative</option>
+              <option value="realcugan|2|no-denoise" data-factor="2">Real-CUGAN 2x — Sin denoise</option>
+              <option value="realcugan|2|denoise3x" data-factor="2">Real-CUGAN 2x — Denoise fuerte</option>
+              <option value="realcugan|4|conservative" data-factor="4" selected>Real-CUGAN 4x — Conservative ★</option>
+              <option value="realcugan|4|no-denoise" data-factor="4">Real-CUGAN 4x — Sin denoise</option>
+            </optgroup>
+            <optgroup label="Real-ESRGAN (Alta calidad)">
+              <option value="realesrgan|4|anime_fast" data-factor="4">ESRGAN Anime Fast 4x</option>
+              <option value="realesrgan|4|anime_plus" data-factor="4">ESRGAN Anime Plus 4x</option>
+              <option value="realesrgan|4|general_fast" data-factor="4">ESRGAN General Fast 4x</option>
+              <option value="realesrgan|4|general_plus" data-factor="4">ESRGAN General Plus 4x (34 MB)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="engine-group">
+          <p class="section-label">Tamaño de Tile</p>
+          <select class="engine-select" id="tile-select">
+            <option value="32">32px — Dispositivos lentos</option>
+            <option value="64" selected>64px — Recomendado</option>
+            <option value="128">128px — Más rápido (si aguanta)</option>
+          </select>
+        </div>
+
+        <div class="engine-group">
+          <p class="section-label">Aceleración GPU</p>
+          <div class="backend-pills">
+            <button class="backend-pill active gpu" id="pill-webgpu" onclick="setBackend('webgpu', this)">WebGPU</button>
+            <button class="backend-pill" id="pill-webgl" onclick="setBackend('webgl', this)">WebGL</button>
+          </div>
+          <p style="font-family:var(--font-cond);font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:6px;" id="backend-note">Detectando GPU...</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="upload-section">
+      <div class="drop-zone" id="drop-zone"
+           onclick="document.getElementById('file-input').click()"
+           ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
+           role="button" tabindex="0" aria-label="Zona de carga"
+           onkeydown="if(event.key==='Enter')this.click()">
+        <span class="drop-icon">⬆</span>
+        <p class="drop-title">Arrastra tus imágenes aquí</p>
+        <p class="drop-sub">O haz clic para seleccionar archivos</p>
+        <div class="drop-formats">
+          <span class="fmt-tag">PNG</span><span class="fmt-tag">JPG</span><span class="fmt-tag">WEBP</span><span class="fmt-tag">BMP</span>
+        </div>
+        <button class="btn-upload" onclick="event.stopPropagation(); document.getElementById('file-input').click()">+ Cargar Archivos</button>
+      </div>
+      <input type="file" id="file-input" multiple accept="image/*" onchange="handleFiles(this.files)"/>
+      <div class="file-queue" id="file-queue"></div>
+    </div>
+
+    <!-- PROGRESO Y BOTONES -->
+    <div class="action-section">
+
+      <div class="model-banner" id="model-banner">
+        <div class="model-spinner"></div>
+        <span id="model-banner-text">Descargando modelo IA por primera vez...</span>
+      </div>
+
+      <div class="progress-wrap" id="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-label" id="progress-label">Procesando...</span>
+          <span class="progress-pct" id="progress-pct">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div class="progress-info" id="progress-info"></div>
+      </div>
+
+      <div class="action-btns">
+        <button class="btn-primary" id="btn-start" onclick="startProcessing()" disabled>⚡ Iniciar Mejora IA</button>
+        <button class="btn-secondary" id="btn-clear" onclick="clearAll()" disabled>✕ Limpiar</button>
+      </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="results-section" id="results-section">
+      <div class="results-header">
+        <span class="results-title">✓ Listo</span>
+        <span class="results-count" id="results-count">0 archivos</span>
+      </div>
+      <div class="results-grid" id="results-grid"></div>
+      <button class="btn-download-all" onclick="downloadAll()">⬇ Descargar Todo (.ZIP)</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- INFO -->
+<section class="info-section">
+  <div class="info-grid reveal">
+    <div class="info-card"><span class="info-icon">🔬</span><p class="info-title">Real-CUGAN / ESRGAN</p><p class="info-desc">Motor de IA de última generación para upscaling de imágenes. Los mismos modelos que usan profesionales del anime y la fotografía.</p></div>
+    <div class="info-card"><span class="info-icon">🔒</span><p class="info-title">100% Privado</p><p class="info-desc">Todo corre en TensorFlow.js en tu propio navegador. Ningún pixel sale de tu dispositivo. Sin servidores, sin cuentas.</p></div>
+    <div class="info-card"><span class="info-icon">⚡</span><p class="info-title">WebGPU / WebGL</p><p class="info-desc">Acelera con tu GPU usando WebGPU (Chrome) o WebGL. Los modelos se cachean en IndexedDB: la primera descarga es la única.</p></div>
+    <div class="info-card"><span class="info-icon">📦</span><p class="info-title">Descarga en ZIP</p><p class="info-desc">Todos los archivos mejorados en un ZIP listo para mandar al RIP o imprimir de inmediato.</p></div>
+  </div>
+</section>
+
+<!-- COMPARADOR -->
+<section class="compare-section reveal">
+  <div class="sec-head"><div class="sec-tag">Resultados reales</div><h2 class="sec-title">Antes vs Después</h2></div>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <div class="compare-head before"><span class="compare-dot"></span> Original — Baja Resolución</div>
+      <div class="compare-img before-img"><canvas id="canvas-before" width="400" height="300"></canvas></div>
+    </div>
+    <div class="compare-col">
+      <div class="compare-head after"><span class="compare-dot"></span> Mejorado — 4X con IA Real</div>
+      <div class="compare-img after-img"><canvas id="canvas-after" width="400" height="300"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="sec-head reveal"><div class="sec-tag">Dudas frecuentes</div><h2 class="sec-title">Preguntas</h2></div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">¿Es completamente gratis?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Sí, 100% gratis. No necesitas crear cuenta ni pagar nada. Los modelos de IA se descargan una sola vez desde GitHub y se guardan en tu navegador.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">¿Mis imágenes se suben a la nube?<span class="faq-icon">+</span></button>
+      <div class="faq-a">No. Todo el procesamiento ocurre en tu navegador con TensorFlow.js. Ningún archivo se envía a servidores externos. Solo los modelos de IA se descargan de GitHub la primera vez.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">¿Qué modelo debo elegir para DTF?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Para diseños con líneas, logos y texto: usa Real-CUGAN 4x Conservative. Para fotos de personas o rostros: Real-ESRGAN General Plus 4x. Real-CUGAN es 5-10x más rápido que ESRGAN con resultados similares.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">¿Por qué tarda la primera vez?<span class="faq-icon">+</span></button>
+      <div class="faq-a">La primera vez descarga el modelo de IA (entre 1.3 MB y 34 MB según el modelo elegido). Después se guarda en tu navegador y no vuelve a descargarse.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">¿Qué es WebGPU vs WebGL?<span class="faq-icon">+</span></button>
+      <div class="faq-a">WebGPU es la tecnología más nueva para usar la GPU desde el navegador, y es 2-3x más rápida que WebGL. Funciona en Chrome 113+. Si WebGPU no está disponible, la herramienta automáticamente usa WebGL.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <div class="cta-box">
+    <h2 class="cta-title">¿Quieres más diseños<br>listos para imprimir?</h2>
+    <p class="cta-sub">+50,000 diseños DTF • Actualización semanal • Un solo pago</p>
+    <a href="pack-chechena.html" class="cta-btn">Ver Megapack →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CHECHENA<span>.</span>SHIRTS</div>
+  <p class="footer-copy">© 2026 Chechena Shirts — Todos los derechos reservados</p>
+  <nav class="footer-links">
+    <a href="index.html">Tienda</a>
+    <a href="index.html#contacto">Contacto</a>
+    <a href="https://chat.whatsapp.com/E7sagZb9fAn7ekZk1p5INI" target="_blank">Comunidad</a>
+  </nav>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- JSZip -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<!-- ════════════════════════════════════════════
+     WEB WORKER INLINE — REAL-ESRGAN / REAL-CUGAN
+     Usa TensorFlow.js con modelos desde GitHub
+════════════════════════════════════════════ -->
+<script id="worker-code" type="text/worker-source">
+// ─── TensorFlow.js con backend WebGL + WebGPU ───
+importScripts("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js");
+try {
+  importScripts("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu@4.22.0/dist/tf-backend-webgpu.min.js");
+} catch(e) {
+  // WebGPU no disponible — usará WebGL
+}
+
+const MODEL_BASE = "https://raw.githubusercontent.com/linmingren/openmodels/main/models";
+
+let currentModel = null;
+let currentModelKey = null;
+
+// ── Clase de imagen (datos RGBA planos) ──
+class Img {
+  constructor(width, height, data = new Uint8Array(width * height * 4)) {
+    this.width = width;
+    this.height = height;
+    this.data = data;
+  }
+
+  getImageCrop(destX, destY, src, x1, y1, x2, y2) {
+    const w = x2 - x1;
+    for (let j = 0; j < y2 - y1; j++) {
+      const di = (destY + j) * this.width * 4 + destX * 4;
+      const si = (y1 + j) * src.width * 4 + x1 * 4;
+      this.data.set(src.data.subarray(si, si + w * 4), di);
+    }
+  }
+
+  padToSize(size) {
+    if (this.width === size && this.height === size) return this;
+    const padded = new Img(size, size);
+    // fill with edge pixels
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const sx = Math.min(x, this.width - 1);
+        const sy = Math.min(y, this.height - 1);
+        const si = (sy * this.width + sx) * 4;
+        const di = (y * size + x) * 4;
+        padded.data[di]   = this.data[si];
+        padded.data[di+1] = this.data[si+1];
+        padded.data[di+2] = this.data[si+2];
+        padded.data[di+3] = this.data[si+3];
+      }
+    }
+    return padded;
+  }
+}
+
+// ── Imagen → tensor TFJS ──
+function img2tensor(image) {
+  const imgData = new ImageData(new Uint8ClampedArray(image.data), image.width, image.height);
+  return tf.browser.fromPixels(imgData).div(255.0).toFloat().expandDims(0);
+}
+
+// ── Tensor → Img ──
+async function tensor2img(tensor) {
+  const shape = tensor.shape; // [1, H, W, 3]
+  const h = shape[1], w = shape[2];
+  const clipped = tf.tidy(() =>
+    tensor.reshape([h, w, 3]).mul(255).clipByValue(0, 255).cast("int32")
+  );
+  const pixels = await tf.browser.toPixels(clipped);
+  tf.dispose(clipped);
+  return new Img(w, h, new Uint8Array(pixels));
+}
+
+// ── Upscale un tile con el modelo ──
+async function upscaleTile(tile, model) {
+  const tensor = img2tensor(tile);
+  let result;
+  try {
+    result = model.predict(tensor);
+  } finally {
+    tf.dispose(tensor);
+  }
+  const out = await tensor2img(result);
+  tf.dispose(result);
+  return out;
+}
+
+// ── Procesar imagen completa con tiles ──
+async function processWithTiles(inputImg, model, factor, tileSize, minLap) {
+  const { width, height } = inputImg;
+  const outW = width * factor;
+  const outH = height * factor;
+  const output = new Img(outW, outH);
+
+  // Calcular número de tiles en X e Y
+  let numX = 1;
+  if (width > tileSize) {
+    while ((tileSize * numX - width) / Math.max(numX - 1, 1) < minLap) numX++;
+  }
+  let numY = 1;
+  if (height > tileSize) {
+    while ((tileSize * numY - height) / Math.max(numY - 1, 1) < minLap) numY++;
+  }
+
+  const totalTiles = numX * numY;
+  let tilesDone = 0;
+
+  for (let i = 0; i < numX; i++) {
+    for (let j = 0; j < numY; j++) {
+      // Coordenadas del tile en la imagen original
+      const x1 = Math.round(i * (width - tileSize) / Math.max(numX - 1, 1));
+      const y1 = Math.round(j * (height - tileSize) / Math.max(numY - 1, 1));
+      const x2 = Math.min(x1 + tileSize, width);
+      const y2 = Math.min(y1 + tileSize, height);
+
+      // Extraer tile
+      const tileW = x2 - x1;
+      const tileH = y2 - y1;
+      const tile = new Img(tileW, tileH);
+      tile.getImageCrop(0, 0, inputImg, x1, y1, x2, y2);
+
+      // Pad al tileSize exacto si es necesario
+      const paddedTile = tile.padToSize(tileSize);
+
+      // Procesar con el modelo
+      const upscaledPadded = await upscaleTile(paddedTile, model);
+
+      // Recortar al tamaño real del tile (sin padding) × factor
+      const outTile = new Img(tileW * factor, tileH * factor);
+      outTile.getImageCrop(0, 0, upscaledPadded, 0, 0, tileW * factor, tileH * factor);
+
+      // Pegar en la imagen de salida
+      const destX = x1 * factor;
+      const destY = y1 * factor;
+      output.getImageCrop(destX, destY, outTile, 0, 0, tileW * factor, tileH * factor);
+
+      tilesDone++;
+      const pct = Math.round(20 + (tilesDone / totalTiles) * 75);
+      self.postMessage({ type: 'progress', progress: pct, info: `Tile ${tilesDone}/${totalTiles}` });
+    }
+  }
+
+  return output;
+}
+
+// ── Mensaje principal ──
+self.addEventListener("message", async (e) => {
+  const { data } = e;
+  try {
+    // 1. Configurar backend
+    const backend = data.backend || 'webgl';
+    try {
+      await tf.setBackend(backend);
+      await tf.ready();
+    } catch(err) {
+      await tf.setBackend('webgl');
+      await tf.ready();
+    }
+    self.postMessage({ type: 'progress', progress: 5, info: `Backend: ${tf.getBackend()}` });
+
+    // 2. Construir URL del modelo
+    let modelUrl;
+    const modelKey = `${data.model_type}-${data.model || ''}-${data.factor}x-${data.denoise || ''}-${data.tile_size}`;
+
+    if (data.model_type === 'realesrgan') {
+      modelUrl = `${MODEL_BASE}/realesrgan/${data.model}-${data.tile_size}/model.json`;
+    } else {
+      modelUrl = `${MODEL_BASE}/realcugan/${data.factor}x-${data.denoise}-${data.tile_size}/model.json`;
+    }
+
+    // 3. Cargar o reusar modelo (con cache IndexedDB)
+    const cacheKey = `indexeddb://chechena-${modelKey}`;
+    if (currentModelKey !== modelKey) {
+      if (currentModel) { currentModel.dispose(); currentModel = null; }
+
+      self.postMessage({ type: 'model_loading', text: 'Verificando caché...' });
+
+      try {
+        currentModel = await tf.loadGraphModel(cacheKey);
+        self.postMessage({ type: 'progress', progress: 15, info: 'Modelo cargado desde caché ⚡' });
+      } catch(_) {
+        self.postMessage({ type: 'model_loading', text: 'Descargando modelo IA...' });
+        self.postMessage({ type: 'progress', progress: 8, info: 'Descargando modelo...' });
+        try {
+          currentModel = await tf.loadGraphModel(modelUrl);
+          await currentModel.save(cacheKey);
+          self.postMessage({ type: 'progress', progress: 15, info: 'Modelo descargado y guardado ✓' });
+        } catch(fetchErr) {
+          // Si GitHub falla, intentar sin guardar en cache
+          currentModel = await tf.loadGraphModel(modelUrl);
+          self.postMessage({ type: 'progress', progress: 15, info: 'Modelo listo' });
+        }
+      }
+      currentModelKey = modelKey;
+    } else {
+      self.postMessage({ type: 'progress', progress: 15, info: 'Modelo en memoria ⚡' });
+    }
+
+    self.postMessage({ type: 'model_ready' });
+
+    // 4. Reconstruir imagen desde buffer
+    const inputData = new Uint8Array(data.input);
+    const inputImg = new Img(data.width, data.height, inputData);
+
+    self.postMessage({ type: 'progress', progress: 18, info: 'Iniciando procesamiento...' });
+
+    // 5. Procesar
+    const result = await processWithTiles(
+      inputImg, currentModel,
+      data.factor, parseInt(data.tile_size), data.min_lap || 12
+    );
+
+    self.postMessage({ type: 'progress', progress: 97, info: 'Finalizando...' });
+
+    // 6. Enviar resultado
+    self.postMessage({
+      type: 'done',
+      output: result.data.buffer,
+      width: result.width,
+      height: result.height
+    }, [result.data.buffer]);
+
+  } catch(err) {
+    self.postMessage({ type: 'error', message: err.message });
+  }
+});
+</script>
+
+<!-- ════════════════════════════════════════════
+     JAVASCRIPT PRINCIPAL
+════════════════════════════════════════════ -->
+<script>
+/* ── ESTADO GLOBAL ── */
+let currentMode   = 'anime';
+let currentBackend = 'webgpu';
+let fileList      = [];
+let resultList    = [];
+let processing    = false;
+let aiWorker      = null;
+
+const MODEL_HINTS = {
+  anime: 'Modo: Real-CUGAN — Ideal para logos, anime, diseños DTF y vectores.',
+  photo: 'Modo: Real-ESRGAN General — Ideal para fotos, retratos y caras reales.'
+};
+
+/* ── Crear Web Worker desde el código inline ── */
+function createWorker() {
+  const code = document.getElementById('worker-code').textContent;
+  const blob = new Blob([code], { type: 'application/javascript' });
+  return new Worker(URL.createObjectURL(blob));
+}
+
+/* ── Detectar backend disponible ── */
+(async function detectBackend() {
+  const note = document.getElementById('backend-note');
+  try {
+    if (navigator.gpu) {
+      const adapter = await navigator.gpu.requestAdapter();
+      if (adapter) {
+        note.textContent = '✓ WebGPU disponible — máxima velocidad';
+        note.style.color = '#a78bfa';
+        return;
+      }
+    }
+  } catch(e) {}
+  // Fallback a WebGL
+  currentBackend = 'webgl';
+  document.getElementById('pill-webgpu').classList.remove('active', 'gpu');
+  document.getElementById('pill-webgpu').classList.add('disabled');
+  document.getElementById('pill-webgl').classList.add('active');
+  note.textContent = 'WebGPU no disponible — usando WebGL';
+  note.style.color = '#FF8C00';
+})();
+
+/* ── TABS ── */
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('tab-anime').classList.toggle('active', mode === 'anime');
+  document.getElementById('tab-photo').classList.toggle('active', mode === 'photo');
+  document.getElementById('tab-anime').setAttribute('aria-selected', mode === 'anime');
+  document.getElementById('tab-photo').setAttribute('aria-selected', mode === 'photo');
+  document.getElementById('mode-hint').textContent = MODEL_HINTS[mode];
+
+  // Sugerir modelo según modo
+  const sel = document.getElementById('model-select');
+  if (mode === 'photo') {
+    // Seleccionar ESRGAN General Fast por defecto en modo foto
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value.includes('general_fast')) { sel.selectedIndex = i; break; }
+    }
+  } else {
+    // Volver a Real-CUGAN 4x conservative
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === 'realcugan|4|conservative') { sel.selectedIndex = i; break; }
+    }
+  }
+}
+
+/* ── BACKEND ── */
+function setBackend(backend, btn) {
+  const gpuDisabled = document.getElementById('pill-webgpu').classList.contains('disabled');
+  if (backend === 'webgpu' && gpuDisabled) return;
+  currentBackend = backend;
+  document.querySelectorAll('.backend-pill').forEach(b => b.classList.remove('active', 'gpu'));
+  btn.classList.add('active');
+  if (backend === 'webgpu') btn.classList.add('gpu');
+}
+
+function onModelChange() {}
+
+/* ── DRAG & DROP ── */
+function handleDragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
+function handleDragLeave() { document.getElementById('drop-zone').classList.remove('drag-over'); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('drop-zone').classList.remove('drag-over'); handleFiles(e.dataTransfer.files); }
+
+/* ── ARCHIVOS ── */
+function handleFiles(files) {
+  const valid = ['image/png','image/jpeg','image/webp','image/bmp','image/gif'];
+  let added = 0;
+  Array.from(files).forEach(file => {
+    if (!valid.includes(file.type)) { showToast('⚠ ' + file.name + ' no es válido', 'error'); return; }
+    const id = Date.now() + Math.random();
+    const url = URL.createObjectURL(file);
+    fileList.push({ file, url, id, name: file.name, size: file.size });
+    renderFileRow({ file, url, id, name: file.name, size: file.size });
+    added++;
+  });
+  if (added > 0) { updateBtns(); showToast('✓ ' + added + ' archivo' + (added > 1 ? 's' : '') + ' cargado' + (added > 1 ? 's' : ''), 'success'); }
+}
+
+function renderFileRow(item) {
+  const row = document.createElement('div');
+  row.className = 'file-row';
+  row.id = 'row-' + item.id;
+  row.innerHTML = `
+    <img class="file-thumb" src="${item.url}" alt="${item.name}" loading="lazy"/>
+    <div class="file-info">
+      <div class="file-name">${item.name}</div>
+      <div class="file-size">${formatSize(item.size)}</div>
+      <div class="file-progress-wrap" id="fp-wrap-${item.id}">
+        <div class="file-progress-bar" id="fp-bar-${item.id}"></div>
+      </div>
+    </div>
+    <span class="file-status" id="status-${item.id}">Listo</span>
+    <button class="file-rm" onclick="removeFile(${item.id})" title="Quitar">✕</button>
+  `;
+  document.getElementById('file-queue').appendChild(row);
+}
+
+function removeFile(id) {
+  const idx = fileList.findIndex(f => f.id === id);
+  if (idx > -1) { URL.revokeObjectURL(fileList[idx].url); fileList.splice(idx, 1); }
+  const row = document.getElementById('row-' + id);
+  if (row) row.remove();
+  updateBtns();
+}
+
+function clearAll() {
+  if (aiWorker) { aiWorker.terminate(); aiWorker = null; }
+  fileList.forEach(f => URL.revokeObjectURL(f.url));
+  fileList = []; resultList = [];
+  document.getElementById('file-queue').innerHTML = '';
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('results-grid').innerHTML = '';
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('model-banner').classList.remove('show');
+  setProgress(0);
+  updateBtns();
+  setAiStatus('ready');
+}
+
+function updateBtns() {
+  const has = fileList.length > 0;
+  document.getElementById('btn-start').disabled = !has || processing;
+  document.getElementById('btn-clear').disabled = !has;
+}
+
+function formatSize(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
+/* ── PROGRESO ── */
+function setProgress(pct, info) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = Math.round(pct) + '%';
+  if (info !== undefined) document.getElementById('progress-info').textContent = info || '';
+}
+
+function setFileProgress(id, pct) {
+  const wrap = document.getElementById('fp-wrap-' + id);
+  const bar  = document.getElementById('fp-bar-' + id);
+  if (wrap) wrap.style.display = 'block';
+  if (bar) bar.style.width = pct + '%';
+}
+
+/* ── AI STATUS ── */
+function setAiStatus(state) {
+  const states = {
+    ready:      { color: '#22c55e', text: 'IA Lista', anim: true },
+    loading:    { color: '#a78bfa', text: 'Cargando modelo...', anim: true },
+    processing: { color: '#FF8C00', text: 'Procesando...', anim: true },
+    error:      { color: '#ef4444', text: 'Error', anim: false },
+  };
+  const s = states[state] || states.ready;
+  const dot  = document.getElementById('ai-dot');
+  const text = document.getElementById('ai-text');
+  dot.style.background = s.color;
+  dot.style.animation = s.anim ? 'pulseAnim 1.4s infinite' : 'none';
+  text.style.color = s.color;
+  text.textContent = s.text;
+}
+
+/* ── PARSEAR CONFIGURACIÓN DEL SELECT ── */
+function getModelConfig() {
+  const val = document.getElementById('model-select').value;
+  const parts = val.split('|');
+  const tileSize = parseInt(document.getElementById('tile-select').value);
+
+  if (parts[0] === 'realcugan') {
+    return { model_type: 'realcugan', factor: parseInt(parts[1]), denoise: parts[2], tile_size: tileSize };
+  } else {
+    return { model_type: 'realesrgan', model: parts[2], factor: parseInt(parts[1]), denoise: 'none', tile_size: tileSize };
+  }
+}
+
+/* ── PROCESAR UNA IMAGEN CON WORKER ── */
+function processOneImage(item, config) {
+  return new Promise((resolve, reject) => {
+    const worker = createWorker();
+
+    worker.onmessage = (e) => {
+      const msg = e.data;
+
+      if (msg.type === 'model_loading') {
+        const banner = document.getElementById('model-banner');
+        banner.classList.add('show');
+        document.getElementById('model-banner-text').textContent = msg.text;
+        setAiStatus('loading');
+      }
+      if (msg.type === 'model_ready') {
+        document.getElementById('model-banner').classList.remove('show');
+        setAiStatus('processing');
+      }
+      if (msg.type === 'progress') {
+        setFileProgress(item.id, msg.progress);
+        if (msg.info) document.getElementById('progress-info').textContent = msg.info;
+      }
+      if (msg.type === 'done') {
+        worker.terminate();
+        // Reconstruir canvas
+        const outCanvas = document.createElement('canvas');
+        outCanvas.width  = msg.width;
+        outCanvas.height = msg.height;
+        const ctx = outCanvas.getContext('2d');
+        const imgData = ctx.createImageData(msg.width, msg.height);
+        imgData.data.set(new Uint8Array(msg.output));
+        ctx.putImageData(imgData, 0, 0);
+        outCanvas.toBlob(blob => resolve(blob), 'image/png');
+      }
+      if (msg.type === 'error') {
+        worker.terminate();
+        reject(new Error(msg.message));
+      }
+    };
+
+    worker.onerror = (e) => { worker.terminate(); reject(new Error(e.message)); };
+
+    // Leer imagen → ImageData → buffer
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width; canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const pixels = ctx.getImageData(0, 0, img.width, img.height);
+      const buffer = new Uint8Array(pixels.data).buffer;
+
+      worker.postMessage({
+        input:      buffer,
+        width:      img.width,
+        height:     img.height,
+        factor:     config.factor,
+        denoise:    config.denoise,
+        tile_size:  config.tile_size,
+        min_lap:    12,
+        model_type: config.model_type,
+        model:      config.model || '',
+        backend:    currentBackend,
+      }, [buffer]);
+    };
+    img.onerror = () => reject(new Error('No se pudo cargar la imagen'));
+    img.src = item.url;
+  });
+}
+
+/* ── INICIO DEL PROCESAMIENTO ── */
+async function startProcessing() {
+  if (fileList.length === 0 || processing) return;
+  processing = true;
+  resultList = [];
+
+  const config = getModelConfig();
+
+  document.getElementById('progress-wrap').style.display = 'block';
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('btn-start').disabled = true;
+  document.getElementById('btn-clear').disabled = true;
+  setProgress(0, '');
+  setAiStatus('processing');
+
+  fileList.forEach(f => {
+    const el = document.getElementById('status-' + f.id);
+    if (el) { el.textContent = 'En cola...'; el.className = 'file-status'; }
+  });
+
+  const total = fileList.length;
+
+  for (let i = 0; i < total; i++) {
+    const item = fileList[i];
+    document.getElementById('progress-label').textContent = `Mejorando ${i + 1} de ${total}…`;
+    const statusEl = document.getElementById('status-' + item.id);
+    if (statusEl) { statusEl.textContent = 'Procesando...'; statusEl.className = 'file-status processing'; }
+
+    try {
+      const blob = await processOneImage(item, config);
+      const suffix = config.model_type === 'realcugan'
+        ? `_cugan${config.factor}x`
+        : `_esrgan${config.factor}x`;
+      const outName = item.name.replace(/\.[^/.]+$/, '') + suffix + '_IA.png';
+      const url = URL.createObjectURL(blob);
+      resultList.push({ name: outName, url, blob });
+
+      if (statusEl) { statusEl.textContent = '✓ Listo'; statusEl.className = 'file-status done'; }
+    } catch(err) {
+      console.error('Error:', err);
+      if (statusEl) { statusEl.textContent = '⚠ Error'; statusEl.className = 'file-status error'; }
+      showToast('⚠ Error en ' + item.name + ': ' + err.message, 'error');
+    }
+
+    setProgress(Math.round(((i + 1) / total) * 100));
+  }
+
+  processing = false;
+  document.getElementById('model-banner').classList.remove('show');
+  setAiStatus('ready');
+  updateBtns();
+  document.getElementById('btn-clear').disabled = false;
+
+  if (resultList.length > 0) {
+    showResults();
+    showToast('✓ ' + resultList.length + ' imagen' + (resultList.length !== 1 ? 'es' : '') + ' mejorada' + (resultList.length !== 1 ? 's' : '') + ' con IA', 'success');
+  }
+}
+
+/* ── RESULTADOS ── */
+function showResults() {
+  const grid = document.getElementById('results-grid');
+  grid.innerHTML = '';
+  const config = getModelConfig();
+
+  resultList.forEach((r, i) => {
+    const item = document.createElement('div');
+    item.className = 'result-item';
+    item.style.animationDelay = (i * 0.05) + 's';
+    item.innerHTML = `
+      <div class="result-img-wrap">
+        <img src="${r.url}" alt="${r.name}" loading="lazy"/>
+        <div class="result-overlay">⬇</div>
+      </div>
+      <div class="result-info">
+        <div class="result-name">${r.name}</div>
+        <div class="result-badge">✓ ${config.factor}X IA Real</div>
+      </div>
+    `;
+    item.onclick = () => downloadOne(r);
+    grid.appendChild(item);
+  });
+
+  document.getElementById('results-count').textContent = resultList.length + ' archivo' + (resultList.length !== 1 ? 's' : '');
+  document.getElementById('results-section').style.display = 'block';
+  document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ── DESCARGA ── */
+function downloadOne(r) {
+  const a = document.createElement('a');
+  a.href = r.url; a.download = r.name; a.click();
+}
+
+async function downloadAll() {
+  if (resultList.length === 0) return;
+  if (resultList.length === 1) { downloadOne(resultList[0]); return; }
+
+  showToast('📦 Generando ZIP…', '');
+  try {
+    const zip = new JSZip();
+    for (const r of resultList) zip.file(r.name, r.blob);
+    const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'chechena_mejoradas_IA.zip'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    showToast('✓ ZIP descargado — ' + resultList.length + ' archivos', 'success');
+  } catch(e) {
+    for (let i = 0; i < resultList.length; i++) {
+      await new Promise(r => setTimeout(r, 400));
+      downloadOne(resultList[i]);
+    }
+  }
+}
+
+/* ── FAQ ── */
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+  if (!open) item.classList.add('open');
+}
+
+/* ── TOAST ── */
+let _tt;
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type;
+  void t.offsetWidth; t.classList.add('show');
+  clearTimeout(_tt); _tt = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── CANVAS DEMO ── */
+(function drawDemo() {
+  function draw(id, quality) {
+    const c = document.getElementById(id); if (!c) return;
+    const ctx = c.getContext('2d'); const w = c.width, h = c.height;
+    ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
+    const cx = w/2, cy = h/2;
+    ctx.beginPath(); ctx.arc(cx, cy, 90, 0, Math.PI*2);
+    ctx.strokeStyle = quality > .5 ? '#FF4D00' : '#883300';
+    ctx.lineWidth = quality > .5 ? 2 : 4; ctx.stroke();
+    ctx.font = `${quality > .5 ? 700 : 400} ${quality > .5 ? 44 : 42}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = quality > .5 ? '#f0f0f0' : '#aaa';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if (quality < .5) ctx.filter = 'blur(1.5px)';
+    ctx.fillText('DTF', cx, cy - 10);
+    ctx.font = `${quality > .5 ? 600 : 400} ${quality > .5 ? 18 : 17}px 'Barlow Condensed',sans-serif`;
+    ctx.fillText('CHECHENA SHIRTS', cx, cy + 24); ctx.filter = 'none';
+    for (let i = 0; i < 8; i++) {
+      const a = (i/8)*Math.PI*2;
+      ctx.beginPath(); ctx.moveTo(cx+Math.cos(a)*95, cy+Math.sin(a)*95); ctx.lineTo(cx+Math.cos(a)*110, cy+Math.sin(a)*110);
+      ctx.strokeStyle = quality > .5 ? '#FF8C00' : '#664400'; ctx.lineWidth = 2;
+      if (quality < .5) ctx.filter = 'blur(.8px)'; ctx.stroke(); ctx.filter = 'none';
+    }
+    if (quality < .5) {
+      ctx.fillStyle = 'rgba(255,255,255,.04)';
+      for (let j = 0; j < 300; j++) ctx.fillRect(Math.random()*w, Math.random()*h, Math.random()*3+1, Math.random()*3+1);
+    }
+  }
+  draw('canvas-before', 0.3); draw('canvas-after', 1.0);
+})();
+
+/* ── SCROLL REVEAL ── */
+(function() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mockup Studio – Automático</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almendra+Display&family=Audiowide&family=Bangers&family=Bebas+Neue&family=Black+Ops+One&family=Bruno+Ace&family=Butcherman&family=Caesar+Dressing&family=Chakra+Petch:wght@400;700&family=Creepster&family=Diplomata&family=Eater&family=Ewert&family=Faster+One&family=Flavors&family=FrederickatheGreat&family=Frijole&family=Germania+One&family=Grenze+Gotisch:wght@400;700&family=Griffy&family=Henny+Penny&family=Inter:wght@300;400;600&family=Jolly+Lodger&family=Kanit:wght@400;900&family=Kirang+Haerang&family=Kranky&family=MedievalSharp&family=Megrim&family=Metal&family=Metal+Mania&family=Miniver&family=Monoton&family=Montserrat&family=Mystery+Quest&family=New+Rocker&family=Nosifer&family=Orbitron&family=Oswald&family=Permanent+Marker&family=Piedra&family=Pirata+One&family=Plaster&family=Poppins&family=Raleway&family=Risque&family=Roboto&family=Rock+Salt&family=Rubik+Mono+One&family=Rye&family=Saira+Stencil+One&family=Sancreek&family=Seaweed+Script&family=Shojumaru&family=Sirin+Stencil&family=Snowburst+One&family=Special+Elite&family=Stalemate&family=Stardos+Stencil&family=Syne:wght@400;800&family=Texturina:opsz,wght@12..72,400;12..72,900&family=Trade+Winds&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia&family=Vast+Shadow&family=Wallpoet&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.3.0/fontfaceobserver.standalone.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background: #fff; }
+
+    :root { --h-height: 90vh; --c-dark: #121212; --c-border: #e0e0e0; --f-ui: 'Inter', sans-serif; }
+    #am-studio { display: flex; height: var(--h-height); border: 1px solid var(--c-border); background: #fff; font-family: var(--f-ui); overflow: hidden; color: #333; }
+    .am-sidebar { width: 360px; height: 100%; overflow-y: auto; background: #fff; border-right: 1px solid var(--c-border); display: flex; flex-direction: column; flex-shrink: 0; z-index: 20; }
+    .am-header { padding: 20px; border-bottom: 1px solid var(--c-border); display: flex; align-items: center; justify-content: space-between; background: #fff; }
+    .am-logo { font-family: 'Oswald', sans-serif; font-size: 20px; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }
+    .am-badge { background: #000; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 600;}
+    
+    .am-mobile-header { display: none; }
+
+    #am-progress-container { width: 100%; height: 24px; background: #e5e7eb; margin-top: 12px; border-radius: 6px; overflow: hidden; display: none; position: relative; border: 1px solid #ccc; }
+    #am-progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); transition: width 0.1s; }
+    #am-progress-text { position: absolute; width: 100%; top:0; left:0; text-align: center; font-size: 11px; line-height: 24px; color: #fff; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+    
+    details.am-section { border-bottom: 1px solid var(--c-border); }
+    summary.am-summary { padding: 16px 20px; cursor: pointer; list-style: none; font-weight: 600; font-size: 14px; color: #111; display: flex; justify-content: space-between; align-items: center; }
+    summary.am-summary::-webkit-details-marker { display: none; }
+    .am-content { padding: 0 20px 24px 20px; }
+    
+    .am-label { font-size: 12px; color: #555; margin-bottom: 6px; display: block; font-weight: 500; }
+    .am-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .am-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    /* Grid para 3 botones de exportación */
+    .am-grid-export { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+    
+    .am-btn-opt { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; color: #444; transition: 0.15s; }
+    .am-btn-opt.active { background: var(--c-dark); color: #fff; border-color: var(--c-dark); }
+    
+    .am-select, .am-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; background-color: #fff; margin-bottom: 8px; }
+    .am-color-picker { width: 36px; height: 36px; border: none; background: none; cursor: pointer; padding: 0; border-radius: 50%; box-shadow: 0 0 0 1px #ddd; flex-shrink: 0;}
+    
+    input[type=range] { width: 100%; accent-color: var(--c-dark); cursor: pointer; }
+    .am-actions-sticky { padding: 20px; border-top: 1px solid var(--c-border); background: #fff; margin-top: auto; }
+    .am-btn-big { width: 100%; padding: 14px; border-radius: 8px; border: none; font-weight: 600; font-size: 14px; letter-spacing: 0.5px; cursor: pointer; display: flex; justify-content: center; gap: 8px; transition: transform 0.1s; color: #fff; margin-bottom: 10px; }
+    .btn-dark { background: var(--c-dark); }
+    .btn-blue { background: #2563eb; }
+    .btn-green { background: #16a34a; }
+    
+    .am-workspace { flex: 1; background: #f0f0f0; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#ccc 1px, transparent 1px); background-size: 24px 24px; position: relative; }
+    .canvas-shadow { box-shadow: 0 20px 50px -10px rgba(0,0,0,0.15); background: white; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+
+    @media (max-width: 1100px) { 
+      #am-studio { flex-direction: column; height: auto; overflow: visible; display: flex; } 
+      .am-sidebar .am-header { display: none; }
+      .am-mobile-header { display: flex; order: 1; border-bottom: 1px solid var(--c-border); }
+      .am-workspace { order: 2; height: 50vh; min-height: 400px; flex: none; width: 100%; border-bottom: 1px solid var(--c-border); } 
+      .am-sidebar { order: 3; width: 100%; height: auto; border-right: none; overflow: visible; display: block; }
+      .am-section { order: 3; width: 100%; background: #fff; }
+      .am-actions-sticky { order: 4; width: 100%; position: relative; border-top: 1px solid var(--c-border); }
+      .am-input, .am-select { font-size: 16px !important; } 
+      #am-export-video { display: none !important; }
+      .am-grid-export { grid-template-columns: 1fr 1fr; }
+      #am-export-video { display: none !important; }
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:20px;
+      margin-top:20px;
+    }
+    .brand img{ height:60px; }
+    .brand h2{ font-size:40px; font-family:"Old English Text MT", serif; }
+    #header{ text-align:center; margin-top:20px; }
+    #header h1{ font-size:32px; margin-bottom:10px; }
+    #header p{ color:#bbb; }
+  </style>
+</head>
+<body>
+<div class="brand">
+  <img src="logo.png" alt="Chechena Shirts">
+  <h2>Chechena Shirts</h2>
+</div>
+  <div id="am-studio">
+    <div class="am-header am-mobile-header">
+      <h1 class="am-logo">Mockup Studio</h1>
+      <span class="am-badge">V111 STABLE</span>
+    </div>
+
+    <div class="am-sidebar">
+      <div class="am-header">
+        <h1 class="am-logo">Mockup Studio</h1>
+        <span class="am-badge">CHECHENA SHIRTS</span>
+      </div>
+
+      <details class="am-section" open>
+        <summary class="am-summary">Vista &amp; Formato</summary>
+        <div class="am-content">
+          <span class="am-label">Perspectiva</span>
+          <div class="am-grid-2">
+            <button class="am-btn-opt active" data-side="front">Frente</button>
+            <button class="am-btn-opt" data-side="back">Espalda</button>
+          </div>
+          <span class="am-label">Resolución</span>
+          <div class="am-grid-3">
+            <button class="am-btn-opt active" data-ratio="1:1">Post 1:1</button>
+            <button class="am-btn-opt" data-ratio="4:5">Instagram post 4:5</button>
+            <button class="am-btn-opt" data-ratio="9:16">Historia 9:16</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="am-section">
+        <summary class="am-summary">Prenda Base</summary>
+        <div class="am-content">
+          <select id="am-product-select" class="am-select scroll-enabled"></select>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <input type="color" id="am-shirt-color" class="am-color-picker" value="#ffffff">
+            <span class="am-label">Color Textil</span>
+          </div>
+        </div>
+      </details>
+
+      <details class="am-section">
+        <summary class="am-summary">Fondo &amp; Ambiente</summary>
+        <div class="am-content">
+          <button class="am-btn-big btn-dark" style="background:#fff; border:1px dashed #ccc; color:#555; margin-bottom:15px;" onclick="document.getElementById('am-bg-upload').click()">+ Subir Imagen Fondo</button>
+          <input type="file" id="am-bg-upload" hidden accept="image/*">
+          <div style="margin: 15px 0;">
+            <div style="display:flex; justify-content:space-between;"><span class="am-label">Desenfoque</span><span class="am-label" id="blur-val">0%</span></div>
+            <input type="range" id="am-bg-blur" min="0" max="100" value="0">
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input type="color" id="am-bg-color" class="am-color-picker" value="#ffffff">
+            <span class="am-label" style="flex:1">Fondo Sólido</span>
+            <button id="am-reset-bg" class="am-btn-opt">Limpiar</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="am-section">
+        <summary class="am-summary">Textos, Logo &amp; Stickers</summary>
+        <div class="am-content">
+          <div class="am-control-group">
+            <span class="am-label">LOGO DE MARCA</span>
+            <button class="am-btn-opt" style="width:100%; margin-bottom:8px;" onclick="document.getElementById('am-logo-upload').click()">+ Subir Logo</button>
+            <input type="file" id="am-logo-upload" hidden accept="image/*">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                <input type="checkbox" id="am-logo-invert" style="width:16px; height:16px;">
+                <label for="am-logo-invert" style="font-size:12px;">Invertir Color</label>
+            </div>
+          </div>
+          
+          <span class="am-label">Subtítulo Superior</span>
+          <select id="am-font-sub" class="am-select scroll-enabled"></select>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="am-subtitle" class="am-input" placeholder="Nueva Colección...">
+            <input type="color" id="am-color-sub" class="am-color-picker" value="#000000">
+          </div>
+
+          <span class="am-label">Título Principal</span>
+          <select id="am-font-top" class="am-select scroll-enabled"></select>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="am-text-top" class="am-input" placeholder="TÍTULO GRANDE...">
+            <input type="color" id="am-color-top" class="am-color-picker" value="#000000">
+          </div>
+
+          <span class="am-label">Redes Sociales</span>
+          <select id="am-font-bot" class="am-select scroll-enabled"></select>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="am-text-bottom" class="am-input" placeholder="@tu-marca...">
+            <input type="color" id="am-color-bottom" class="am-color-picker" value="#000000">
+          </div>
+
+          <span class="am-label" style="margin-top:10px;">Sticker Ambiente</span>
+          <select id="am-sticker-select" class="am-select scroll-enabled"><option value="">(Ninguno)</option></select>
+        </div>
+      </details>
+
+      <div class="am-actions-sticky">
+        <button class="am-btn-big btn-dark" id="btn-master" onclick="document.getElementById('am-master-upload').click()">1. CARGAR MAESTRO</button>
+        <input type="file" id="am-master-upload" hidden accept="image/*">
+        <button class="am-btn-big btn-dark" id="btn-batch" style="opacity:0.5;" disabled onclick="document.getElementById('am-batch-upload').click()">2. SELECCIONAR LOTE...</button>
+        <input type="file" id="am-batch-upload" hidden multiple accept="image/*">
+        <div id="am-progress-container"><div id="am-progress-bar"></div><div id="am-progress-text">0%</div></div>
+
+        <!-- ✅ TRES BOTONES DE EXPORTACIÓN -->
+        <div class="am-grid-export">
+          <button id="am-export-single" class="am-btn-big btn-green" disabled title="Descarga el mockup actual con el diseño maestro">📥 PNG</button>
+          <button id="am-export-zip" class="am-btn-big btn-blue" disabled>📦 ZIP</button>
+          <button id="am-export-video" class="am-btn-big btn-blue" style="background:#dc2626;" disabled>🎬 VIDEO</button>
+        </div>
+        <div style="font-size:11px; color:#888; text-align:center; margin-top:6px; line-height:1.5;">
+          <strong style="color:#16a34a;">PNG</strong> = Mockup actual &nbsp;|&nbsp; <strong style="color:#2563eb;">ZIP</strong> = Lote completo &nbsp;|&nbsp; <strong style="color:#dc2626;">VIDEO</strong> = Animación
+        </div>
+      </div>
+    </div>
+
+    <div class="am-workspace" id="ws-container">
+      <div id="cv-wrapper" class="canvas-shadow"><canvas id="canvas" width="1080" height="1080"></canvas></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const PRODUCT_DB = [
+        { id: 'over_1', name: 'OVER 1', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/1_Over_FRENTE.png?v=1768275788', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/1_Over_ESPALDA.png?v=1768275788' },
+        { id: 'over_2', name: 'OVER 2', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_2_frente.png?v=1768366829', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_2_espalda.png?v=1768366829' },
+        { id: 'over_3', name: 'OVER 3', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_3_frente.png?v=1768366913', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/over_3_espalda.png?v=1768366913' },
+        { id: 'boxy_1', name: 'BOXY 1', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_1_frente.png?v=1768367004', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_1_espalda.png?v=1768367003' },
+        { id: 'boxy_2', name: 'BOXY 2', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_2_frente.png?v=1768367037', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_2_espalda.png?v=1768367037' },
+        { id: 'boxy_3', name: 'BOXY 3', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_3_frente.png?v=1768367067', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/boxy_3_espalda.png?v=1768367068' },
+        { id: 'reg_1', name: 'REG 1', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_1_frente.png?v=1768367110', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_1_espalda.png?v=1768367110' },
+        { id: 'reg_2', name: 'REG 2', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_2_frente.png?v=1768367137', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/regular_2_espalda.png?v=1768367137' },
+        { id: 'reg_3', name: 'REG 3', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/REGULAR_3_FRENTE.png?v=1768367172', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/REGULAR_3_ESPALDA.png?v=1768367172' },
+        { id: 'sud_1', name: 'SUD 1', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_1_frente.png?v=1768367202', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_1_espalda.png?v=1768367203' },
+        { id: 'sud_2', name: 'SUD 2', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_2_frente.png?v=1768367240', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_2_espalda.png?v=1768367240' },
+        { id: 'sud_3', name: 'SUD 3', front: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_3_frente.png?v=1768367276', back: 'https://cdn.shopify.com/s/files/1/0941/6920/3057/files/sudadera_3_espalda.png?v=1768367276' }
+      ];
+      const STICKER_DB = ['https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_2.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_4.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/GLOBO.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_374.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_3.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_395.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PUAS.png?v=1768531496','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_299.png?v=1768531497','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_129.png?v=1768531497','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_210.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_188.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_298.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_297.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_207.png?v=1768531498','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_115.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_393.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_116.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_243.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_146.png?v=1768531499','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_378.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_208.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_226.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_162.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_127.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_135.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_360.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_102.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_361.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_163.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_214.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_1.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_216.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_150.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_364.png?v=1768531504','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_253.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_93.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_346.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_59.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_405.png?v=1768531503','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_267.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_232.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_404.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_87.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_178.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_95.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_151.png?v=1768531502','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_88.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_152.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_220.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_187.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/PARENTAL_ADVISORY_5.png?v=1768531500','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_377.png?v=1768531501','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_123.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_137.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_159.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_130.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_124.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_126.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_213.png?v=1768531505','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_268.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_255.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_260.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_86.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_37.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_94.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_258.png?v=1768531506','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_43.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_73.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_175.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_252.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_111.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_29.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_176.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_18.png?v=1768531507','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_106.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_72.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Olograma_27.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_242.png?v=1768531508','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_147.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_105.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_239.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_238.png?v=1768531509','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_70.png?v=1768531510','https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Sticker_149.png?v=1768531510'];
+      
+      const FONT_DB = ['Inter','Bebas Neue','Oswald','Montserrat','Roboto','UnifrakturMaguntia','Pirata One','New Rocker','Creepster','Butcherman','Nosifer','Metal Mania','Sancreek','Rye','Diplomata','Ewert','Flavors','Frijole','Jolly Lodger','Kranky','Orbitron','Audiowide','Syne','Bruno Ace','Chakra Petch','Wallpoet','Megrim','Plaster','Permanent Marker','Rock Salt','Rubik Mono One','Bungee Shade','Black Ops One','Special Elite','Saira Stencil One','Sirin Stencil','Stardos Stencil','Shojumaru','FrederickatheGreat','Germania One','Caesar Dressing','Grenze Gotisch','Texturina','Almendra Display','Eater','Griffy','Henny Penny','Kirang Haerang','Metal','Miniver','Mystery Quest','Risque','Seaweed Script','Snowburst One','Stalemate','Trade Winds','UnifrakturCook','Vast Shadow'].sort();
+
+      const canvas = new fabric.Canvas('canvas', { backgroundColor: '#ffffff', preserveObjectStacking: true, selection: false });
+      let state = { side: 'front', ratio: '1:1', product: PRODUCT_DB[0].id, shirtColor: '#ffffff', bgColor: '#ffffff', bgBlur: 0, textSub: '', textTop: '', textBot: '', textColorSub: '#000', textColorTop: '#000', textColorBot: '#000', fontSub: 'Inter', fontTop: 'Bebas Neue', fontBot: 'Inter', sticker: '', master: null, batchFiles: [], logo: { url: null, invert: false, transform: null }, isBusy: false };
+      let layers = { bgImage: null, logo: null, sticker: null, textSub: null, textTop: null, textBot: null, shirt: null, master: null };
+      let currentRequestId = 0;
+
+      const ui = { selProd: document.getElementById('am-product-select'), selStick: document.getElementById('am-sticker-select'), selFontSub: document.getElementById('am-font-sub'), selFontTop: document.getElementById('am-font-top'), selFontBot: document.getElementById('am-font-bot'), inShirtCol: document.getElementById('am-shirt-color'), inBgCol: document.getElementById('am-bg-color'), inBlur: document.getElementById('am-bg-blur'), lblBlur: document.getElementById('blur-val'), inTxtSub: document.getElementById('am-subtitle'), inColSub: document.getElementById('am-color-sub'), inTxtTop: document.getElementById('am-text-top'), inColTop: document.getElementById('am-color-top'), inTxtBot: document.getElementById('am-text-bottom'), inColBot: document.getElementById('am-color-bottom'), inLogoInvert: document.getElementById('am-logo-invert'), btnSide: document.querySelectorAll('[data-side]'), btnRatio: document.querySelectorAll('[data-ratio]'), btnResetBg: document.getElementById('am-reset-bg'), progressCont: document.getElementById('am-progress-container'), progressBar: document.getElementById('am-progress-bar'), progressText: document.getElementById('am-progress-text') };
+
+      PRODUCT_DB.forEach(p => ui.selProd.add(new Option(p.name, p.id)));
+      STICKER_DB.forEach((u, i) => ui.selStick.add(new Option(`Sticker ${i+1}`, u)));
+      
+      FONT_DB.forEach(f => {
+        [ui.selFontSub, ui.selFontTop, ui.selFontBot].forEach(s => s.add(new Option(f, f)));
+      });
+
+      document.querySelectorAll('.scroll-enabled').forEach(sel => {
+        sel.addEventListener('wheel', e => {
+          e.preventDefault(); if (e.target.disabled) return;
+          if (e.deltaY > 0 && sel.selectedIndex < sel.options.length - 1) sel.selectedIndex++;
+          else if (e.deltaY < 0 && sel.selectedIndex > 0) sel.selectedIndex--;
+          sel.dispatchEvent(new Event('change'));
+        });
+      });
+
+      function loadImg(url) { return new Promise(r => fabric.Image.fromURL(url, i => r(i), {crossOrigin:'anonymous'})); }
+      function readFile(f) { return new Promise(r => {const fr=new FileReader(); fr.onload=e=>r(e.target.result); fr.readAsDataURL(f);}); }
+      
+      async function downscaleImage(dataUrl, maxDim = 1200) {
+        return new Promise(res => {
+          const img = new Image();
+          img.onload = () => {
+            let w = img.width, h = img.height;
+            if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; }
+            else if (h > maxDim) { w *= maxDim / h; h = maxDim; }
+            const cvs = document.createElement('canvas'); cvs.width = w; cvs.height = h;
+            cvs.getContext('2d').drawImage(img, 0, 0, w, h);
+            res(cvs.toDataURL('image/png'));
+          };
+          img.src = dataUrl;
+        });
+      }
+
+      async function urlToBase64(url) {
+        return new Promise((resolve) => {
+            const img = new Image(); img.crossOrigin = 'Anonymous'; img.src = url;
+            img.onload = () => {
+                const cvs = document.createElement('canvas'); cvs.width = img.width; cvs.height = img.height;
+                cvs.getContext('2d').drawImage(img, 0, 0); resolve(cvs.toDataURL('image/png'));
+            };
+            img.onerror = () => resolve(url);
+        });
+      }
+
+      function saveMasterState() { if (state.master && layers.master && state.master.config && state.master.config[state.side]) { const m = layers.master; state.master.config[state.side].cx = m.left; state.master.config[state.side].cy = m.top; state.master.config[state.side].angle = m.angle; state.master.config[state.side].sx = m.scaleX; state.master.config[state.side].sy = m.scaleY; } }
+      function fitCanvas() { const wrap = document.getElementById('ws-container'); const sc = Math.min((wrap.clientWidth-40)/canvas.width, (wrap.clientHeight-40)/canvas.height); document.getElementById('cv-wrapper').style.transform = `scale(${sc})`; }
+
+      async function updateScene(fullReload = false) {
+          const reqId = ++currentRequestId;
+          canvas.setBackgroundColor(state.bgColor, () => canvas.renderAll());
+          if (layers.bgImage) {
+              const bg = layers.bgImage;
+              const scale = Math.max(canvas.width / bg.origW, canvas.height / bg.origH);
+              const blurVal = (state.bgBlur / 100) * 15;
+              bg.filters = blurVal > 0 ? [new fabric.Image.filters.Blur({ blur: blurVal / scale })] : [];
+              bg.applyFilters();
+              bg.set({ scaleX: scale, scaleY: scale, left: canvas.width/2, top: canvas.height/2, originX: 'center', originY: 'center', selectable: false, evented: false });
+              canvas.sendToBack(bg);
+          }
+          if(state.logo.url && !layers.logo) {
+             const logo = await loadImg(state.logo.url);
+             if(reqId !== currentRequestId) return;
+             logo.scaleToWidth(canvas.width * 0.15); logo.set({ left: canvas.width * 0.95, top: canvas.height * 0.95, originX:'right', originY:'bottom' }); layers.logo = logo; canvas.add(logo);
+          }
+          if(layers.logo) {
+             layers.logo.filters = state.logo.invert ? [new fabric.Image.filters.Invert()] : []; layers.logo.applyFilters();
+             layers.logo.set({ left: canvas.width * 0.95, top: canvas.height * 0.95 }); canvas.sendToBack(layers.logo); if(layers.bgImage) layers.logo.moveTo(1);
+          }
+          await updateTextObj('sub', state.textSub, state.textColorSub, state.fontSub, 0.04, 'top', 0.03);
+          await updateTextObj('top', state.textTop, state.textColorTop, state.fontTop, 0.07, 'top', 0.07);
+          await updateTextObj('bot', state.textBot, state.textColorBot, state.fontBot, 0.94, 'bottom', 0.035);
+          if(layers.sticker) { layers.sticker.set({ left: canvas.width * 0.05, top: canvas.height * 0.95 }); layers.sticker.moveTo(2); }
+          if(fullReload) {
+             if(layers.shirt) canvas.remove(layers.shirt);
+             const p = PRODUCT_DB.find(x => x.id === state.product); layers.shirt = await loadImg(state.side==='front'? p.front : p.back); canvas.add(layers.shirt);
+          }
+          if(layers.shirt) {
+             layers.shirt.filters = state.shirtColor !== '#ffffff' ? [new fabric.Image.filters.BlendColor({color: state.shirtColor, mode:'multiply'})] : []; layers.shirt.applyFilters();
+             const sc = Math.min((canvas.width*0.9)/layers.shirt.width, (canvas.height*0.9)/layers.shirt.height);
+             layers.shirt.set({ scaleX:sc, scaleY:sc, left:canvas.width/2, top:canvas.height/2, originX:'center', originY:'center', selectable:false, evented:false }); 
+             layers.shirt.moveTo(3);
+          }
+          if(state.master && state.master.config && state.master.config[state.side]) {
+              const cfg = state.master.config[state.side];
+              if(!layers.master || layers.master.side !== state.side) {
+                  if(layers.master) canvas.remove(layers.master);
+                  const mImg = await loadImg(cfg.src); if(reqId !== currentRequestId) return;
+                  layers.master = mImg; layers.master.side = state.side; canvas.add(layers.master);
+              }
+              const isMob = window.innerWidth < 1100;
+              layers.master.set({ 
+                  left: cfg.cx, top: cfg.cy, angle: cfg.angle, scaleX: cfg.sx, scaleY: cfg.sy, originX:'center', originY:'center',
+                  cornerSize: isMob ? 38 : 13,
+                  transparentCorners: false,
+                  cornerColor: '#2563eb',
+                  cornerStrokeColor: '#ffffff',
+                  borderScaleFactor: isMob ? 2.5 : 1
+              });
+              canvas.setActiveObject(layers.master);
+              layers.master.bringToFront();
+          }
+          ['textSub', 'textTop', 'textBot'].forEach(k => { if(layers[k]) layers[k].bringToFront(); });
+          canvas.requestRenderAll();
+      }
+
+      async function updateTextObj(key, txt, col, fnt, y, oY, sz) {
+          const k = key==='top'?'textTop':(key==='bot'?'textBot':'textSub');
+          if(txt) {
+              if(!layers[k]) { layers[k] = new fabric.Text('',{textAlign:'center', selectable:false, evented:false}); canvas.add(layers[k]); }
+              await new FontFaceObserver(fnt).load().catch(()=>{});
+              layers[k].set({ text:txt, fill:col, fontFamily:fnt, fontSize:canvas.width*sz, left:canvas.width/2, top:canvas.height*y, originX:'center', originY:oY });
+          } else if(layers[k]) { canvas.remove(layers[k]); layers[k] = null; }
+      }
+
+      ui.btnSide.forEach(b => b.addEventListener('click', e => { saveMasterState(); state.side = e.target.dataset.side; ui.btnSide.forEach(btn => btn.classList.toggle('active', btn === e.target)); updateScene(true); }));
+      ui.btnRatio.forEach(b => b.addEventListener('click', e => { 
+          saveMasterState(); ui.btnRatio.forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); 
+          const map = {'1:1':1080, '4:5':1350, '9:16':1920}; canvas.setDimensions({width:1080, height:map[e.target.dataset.ratio]}); fitCanvas(); updateScene(false); 
+      }));
+      
+      document.getElementById('am-bg-upload').addEventListener('change', async e => {
+          if(!e.target.files[0]) return;
+          const url = await readFile(e.target.files[0]);
+          const optimized = await downscaleImage(url, 1600);
+          const img = new Image(); img.onload = async () => {
+              if(layers.bgImage) canvas.remove(layers.bgImage);
+              const buffer = 400; const cvs = document.createElement('canvas'); 
+              cvs.width = img.width + buffer; cvs.height = img.height + buffer;
+              cvs.getContext('2d').drawImage(img, buffer/2, buffer/2);
+              layers.bgImage = await loadImg(cvs.toDataURL()); 
+              layers.bgImage.origW = img.width; layers.bgImage.origH = img.height;
+              updateScene(false);
+          }; img.src = optimized; e.target.value = '';
+      });
+
+      ui.btnResetBg.addEventListener('click', () => {
+          if(layers.bgImage) { canvas.remove(layers.bgImage); layers.bgImage = null; }
+          state.bgColor = '#ffffff'; state.bgBlur = 0; ui.inBgCol.value = '#ffffff'; ui.inBlur.value = 0; ui.lblBlur.textContent = '0%';
+          updateScene(false);
+      });
+
+      ui.selStick.addEventListener('change', async e => {
+          if(layers.sticker) canvas.remove(layers.sticker);
+          if(!e.target.value) { state.sticker = ''; return; }
+          const targetUrl = e.target.value; state.sticker = targetUrl;
+          const sImg = await loadImg(targetUrl);
+          if(ui.selStick.value === targetUrl) {
+              layers.sticker = sImg; layers.sticker.scaleToWidth(canvas.width * 0.2);
+              layers.sticker.set({ left: canvas.width * 0.05, top: canvas.height * 0.95, originX: 'left', originY: 'bottom', selectable: false, evented: false });
+              canvas.add(layers.sticker); updateScene(false);
+          }
+      });
+
+      document.getElementById('am-master-upload').addEventListener('change', async e => {
+          if(!e.target.files[0]) return;
+          const url = await readFile(e.target.files[0]);
+          const optimized = await downscaleImage(url, 1200);
+          if(layers.master) { canvas.remove(layers.master); layers.master = null; }
+          state.master = { config:{front:null, back:null} };
+          const t = await loadImg(optimized);
+          state.master.config[state.side] = { src:optimized, cx:canvas.width/2, cy:canvas.height/2, angle:0, sx:(canvas.width*0.35)/t.width, sy:(canvas.width*0.35)/t.width, realW:t.width };
+          await updateScene(false);
+          document.getElementById('btn-batch').disabled = false; document.getElementById('btn-batch').style.opacity = 1;
+          // Habilitar botón PNG cuando hay maestro cargado
+          document.getElementById('am-export-single').disabled = false;
+          e.target.value = '';
+      });
+
+      document.getElementById('am-batch-upload').addEventListener('change', async function(e) {
+          ui.progressCont.style.display = 'block';
+          const files = Array.from(this.files);
+          state.batchFiles = [];
+          for(let i=0; i<files.length; i++) {
+              ui.progressBar.style.width = ((i+1)/files.length*100) + '%';
+              ui.progressText.textContent = `Optimizando diseños ${i+1}/${files.length}`;
+              const url = await readFile(files[i]);
+              const optimizedUrl = await downscaleImage(url, 1200);
+              state.batchFiles.push({ url: optimizedUrl, name: files[i].name });
+          }
+          const btn = document.getElementById('btn-batch');
+          btn.innerHTML = `✅ ${state.batchFiles.length} DISEÑOS LISTOS`; btn.style.background = '#22c55e'; btn.style.color = 'white';
+          document.getElementById('am-export-zip').disabled = false; document.getElementById('am-export-video').disabled = false;
+          ui.progressCont.style.display = 'none';
+      });
+
+      // ============================================================
+      // 📥 DESCARGA INDIVIDUAL - Mockup actual con diseño maestro
+      // ============================================================
+      document.getElementById('am-export-single').addEventListener('click', async () => {
+          saveMasterState();
+          if (!state.master || !state.master.config[state.side]) {
+              alert('Primero carga un diseño maestro.'); return;
+          }
+
+          const btn = document.getElementById('am-export-single');
+          btn.disabled = true; btn.textContent = '⏳...';
+          ui.progressCont.style.display = 'block';
+          ui.progressBar.style.width = '0%';
+          ui.progressText.textContent = 'Generando PNG...';
+
+          // Canvas temporal de alta resolución
+          const tempC = document.createElement('canvas');
+          tempC.width = canvas.width; tempC.height = canvas.height;
+          const g = new fabric.Canvas(tempC, { selection: false });
+
+          g.setBackgroundColor(state.bgColor, null);
+          ui.progressBar.style.width = '15%';
+
+          // Fondo imagen
+          if (layers.bgImage) {
+              const b64 = await urlToBase64(layers.bgImage.getSrc());
+              const bg = await loadImg(b64);
+              const scFactor = Math.max(g.width / layers.bgImage.origW, g.height / layers.bgImage.origH);
+              bg.set({ scaleX: scFactor, scaleY: scFactor, left: g.width/2, top: g.height/2, originX: 'center', originY: 'center' });
+              if (state.bgBlur > 0) { bg.filters = [new fabric.Image.filters.Blur({ blur: (state.bgBlur/100)*15/scFactor })]; bg.applyFilters(); }
+              g.add(bg);
+          }
+          ui.progressBar.style.width = '30%';
+
+          // Logo
+          if (layers.logo) {
+              const l = await loadImg(state.logo.url);
+              l.set({ left: g.width*0.95, top: g.height*0.95, scaleX: layers.logo.scaleX, scaleY: layers.logo.scaleY, angle: layers.logo.angle, originX: 'right', originY: 'bottom' });
+              if (state.logo.invert) { l.filters = [new fabric.Image.filters.Invert()]; l.applyFilters(); }
+              g.add(l);
+          }
+          ui.progressBar.style.width = '45%';
+
+          // Sticker
+          if (layers.sticker) {
+              const s = await loadImg(layers.sticker.getSrc());
+              s.set({ left: g.width*0.05, top: g.height*0.95, scaleX: layers.sticker.scaleX, scaleY: layers.sticker.scaleY, originX: 'left', originY: 'bottom' });
+              g.add(s);
+          }
+
+          // Textos
+          [layers.textSub, layers.textTop, layers.textBot].forEach(t => {
+              if (t) g.add(new fabric.Text(t.text, { left: t.left, top: t.top, fill: t.fill, fontFamily: t.fontFamily, fontSize: t.fontSize, originX: t.originX, originY: t.originY }));
+          });
+          ui.progressBar.style.width = '60%';
+
+          // Prenda base
+          const prod = PRODUCT_DB.find(p => p.id === state.product);
+          const sImg = await loadImg(state.side === 'front' ? prod.front : prod.back);
+          if (state.shirtColor !== '#ffffff') { sImg.filters = [new fabric.Image.filters.BlendColor({ color: state.shirtColor, mode: 'multiply' })]; sImg.applyFilters(); }
+          const sc = Math.min((g.width*0.9)/sImg.width, (g.height*0.9)/sImg.height);
+          sImg.set({ scaleX: sc, scaleY: sc, left: g.width/2, top: g.height/2, originX: 'center', originY: 'center' });
+          g.add(sImg);
+          ui.progressBar.style.width = '80%';
+
+          // Diseño Maestro
+          const cfg = state.master.config[state.side];
+          const dImg = await loadImg(cfg.src);
+          const dsc = (cfg.realW * cfg.sx) / dImg.width;
+          dImg.set({ scaleX: dsc, scaleY: dsc, left: cfg.cx, top: cfg.cy, angle: cfg.angle, originX: 'center', originY: 'center' });
+          g.add(dImg);
+          ui.progressBar.style.width = '95%';
+
+          g.renderAll();
+
+          // Descarga
+          tempC.toBlob(blob => {
+              const prodName = PRODUCT_DB.find(p => p.id === state.product)?.name || 'mockup';
+              saveAs(blob, `Mockup_${prodName}_${state.side}.png`);
+              btn.disabled = false; btn.textContent = '📥 PNG';
+              ui.progressCont.style.display = 'none';
+              g.dispose();
+          }, 'image/png');
+      });
+
+      // ============================================================
+      // ZIP batch
+      // ============================================================
+      document.getElementById('am-export-zip').addEventListener('click', async () => {
+          saveMasterState(); const zip = new JSZip(); ui.progressCont.style.display = 'block';
+          const playlist = [];
+          if(state.master && state.master.config[state.side]) playlist.push({ url: state.master.config[state.side].src, name: 'Master' });
+          for(let f of state.batchFiles) playlist.push({ url: f.url, name: f.name });
+          const tempC = document.createElement('canvas'); tempC.width=canvas.width; tempC.height=canvas.height;
+          const g = new fabric.Canvas(tempC, { selection: false });
+          for(let i=0; i<playlist.length; i++) {
+              ui.progressBar.style.width = ((i+1)/playlist.length*100) + '%'; ui.progressText.textContent = `ZIP: Generando ${i+1}/${playlist.length}`;
+              g.setBackgroundColor(state.bgColor, null);
+              if(layers.bgImage) {
+                  const bg = await loadImg(layers.bgImage.getSrc()); const scFactor = Math.max(g.width/layers.bgImage.origW, g.height/layers.bgImage.origH);
+                  bg.set({scaleX:scFactor, scaleY:scFactor, left:g.width/2, top:g.height/2, originX:'center', originY:'center'});
+                  if(state.bgBlur > 0) { bg.filters=[new fabric.Image.filters.Blur({blur:(state.bgBlur/100)*15/scFactor})]; bg.applyFilters(); }
+                  g.add(bg);
+              }
+              if(layers.logo) {
+                  const l = await loadImg(state.logo.url);
+                  l.set({left:g.width*0.95, top:g.height*0.95, scaleX:layers.logo.scaleX, scaleY:layers.logo.scaleY, angle:layers.logo.angle, originX:'right', originY:'bottom'});
+                  if(state.logo.invert) l.filters=[new fabric.Image.filters.Invert()]; l.applyFilters(); g.add(l);
+              }
+              if(layers.sticker) {
+                  const s = await loadImg(layers.sticker.getSrc());
+                  s.set({left:g.width*0.05, top:g.height*0.95, scaleX:layers.sticker.scaleX, scaleY:layers.sticker.scaleY, originX:'left', originY:'bottom'}); g.add(s);
+              }
+              [layers.textSub, layers.textTop, layers.textBot].forEach(t => { if(t) g.add(new fabric.Text(t.text, {left:t.left, top:t.top, fill:t.fill, fontFamily:t.fontFamily, fontSize:t.fontSize, originX:t.originX, originY:t.originY})); });
+              const prod = PRODUCT_DB.find(p=>p.id===state.product); const sImg = await loadImg(state.side==='front'?prod.front:prod.back);
+              if(state.shirtColor!=='#ffffff') { sImg.filters=[new fabric.Image.filters.BlendColor({color:state.shirtColor, mode:'multiply'})]; sImg.applyFilters(); }
+              const sc = Math.min((g.width*0.9)/sImg.width, (g.height*0.9)/sImg.height);
+              sImg.set({scaleX:sc, scaleY:sc, left:g.width/2, top:g.height/2, originX:'center', originY:'center'});
+              const dImg = await loadImg(playlist[i].url); const cfg = state.master.config[state.side];
+              const dsc = (cfg.realW * cfg.sx) / dImg.width; const dOffX = cfg.cx - (1080/2); const dOffY = cfg.cy - (canvas.height/2);
+              dImg.set({scaleX:dsc, scaleY:dsc, left:g.width/2 + dOffX, top:g.height/2 + dOffY, angle:cfg.angle, originX:'center', originY:'center'});
+              g.add(sImg); g.add(dImg); g.renderAll();
+              const blob = await new Promise(r => tempC.toBlob(r, 'image/png')); zip.file(`${playlist[i].name}.png`, blob); g.clear();
+          }
+          saveAs(await zip.generateAsync({type:"blob"}), "Batch_Mockups.zip"); ui.progressCont.style.display = 'none';
+      });
+
+      document.getElementById('am-export-video').addEventListener('click', async () => {
+          saveMasterState(); const btn = document.getElementById('am-export-video'); btn.disabled = true;
+          ui.progressCont.style.display = 'block';
+          const playlist = []; if(state.master && state.master.config[state.side]) playlist.push({ url: state.master.config[state.side].src });
+          for(let f of state.batchFiles) playlist.push({ url: f.url });
+          const c = document.createElement('canvas'); c.width=canvas.width; c.height=canvas.height;
+          c.style.position='fixed'; c.style.left='-9999px'; c.style.top='0'; document.body.appendChild(c);
+          const g = new fabric.Canvas(c, { preserveObjectStacking: true, renderOnAddRemove: false });
+          const stream = c.captureStream(60);
+          const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 8000000 });
+          const chunks = []; recorder.ondataavailable = e => chunks.push(e.data); recorder.start();
+          const FPS = 60;
+          const startX = -1200; const endX = g.width/2; const exitX = g.width + 1200;
+
+          let vBg = null, vLogo = null, vStick = null, vTexts = [];
+          if(layers.bgImage) { 
+              const b64 = await urlToBase64(layers.bgImage.getSrc()); vBg = await loadImg(b64); 
+              const scF = Math.max(g.width/layers.bgImage.origW, g.height/layers.bgImage.origH); 
+              vBg.set({scaleX: scF, scaleY: scF, left:g.width/2, top:g.height/2, originX:'center', originY:'center', selectable: false}); 
+              if(state.bgBlur > 0) { vBg.filters = [new fabric.Image.filters.Blur({ blur: (state.bgBlur/100)*15/scF })]; vBg.applyFilters(); } 
+          }
+          if(layers.logo) { const b64 = await urlToBase64(state.logo.url); vLogo = await loadImg(b64); vLogo.set({left:g.width*0.95, top:g.height*0.95, scaleX:layers.logo.scaleX, scaleY:layers.logo.scaleY, angle:layers.logo.angle, originX:'right', originY:'bottom', selectable: false}); if(state.logo.invert) vLogo.filters=[new fabric.Image.filters.Invert()]; vLogo.applyFilters(); }
+          if(layers.sticker) { const b64 = await urlToBase64(layers.sticker.getSrc()); vStick = await loadImg(b64); vStick.set({left:g.width*0.05, top:g.height*0.95, scaleX:layers.sticker.scaleX, scaleY:layers.sticker.scaleY, originX:'left', originY:'bottom', selectable: false}); }
+          [layers.textSub, layers.textTop, layers.textBot].forEach(t => { if(t) vTexts.push(new fabric.Text(t.text, {left:t.left, top:t.top, fill:t.fill, fontFamily:t.fontFamily, fontSize:t.fontSize, originX:t.originX, originY:t.originY, selectable: false})); });
+          const prod = PRODUCT_DB.find(p=>p.id===state.product);
+          const shirtUrl = state.side==='front'?prod.front:prod.back;
+          const shirtBase64 = await urlToBase64(shirtUrl); const baseShirtImg = await loadImg(shirtBase64);
+          if(state.shirtColor!=='#ffffff') { baseShirtImg.filters=[new fabric.Image.filters.BlendColor({color:state.shirtColor, mode:'multiply'})]; baseShirtImg.applyFilters(); }
+
+          for(let i=0; i<playlist.length; i++) {
+              ui.progressBar.style.width = ((i+1)/playlist.length*100) + '%'; ui.progressText.textContent = `Generando ${i+1}/${playlist.length}`;
+              const d = await loadImg(playlist[i].url); const cfg = state.master.config[state.side];
+              const dsc = (cfg.realW * cfg.sx) / d.width; const dOffX = cfg.cx - (1080/2); const dOffY = cfg.cy - (canvas.height/2);
+              const s = fabric.util.object.clone(baseShirtImg); const sc = Math.min((g.width*0.9)/s.width, (g.height*0.9)/s.height);
+              s.set({scaleX:sc, scaleY:sc, top:g.height/2, originX:'center', originY:'center'});
+              d.set({scaleX:dsc, scaleY:dsc, top:g.height/2 + dOffY, angle:cfg.angle, originX:'center', originY:'center'});
+              const renderFrame = (curX) => {
+                  g.clear(); g.setBackgroundColor(state.bgColor, null);
+                  if(vBg) g.add(vBg); if(vLogo) g.add(vLogo); if(vStick) g.add(vStick);
+                  vTexts.forEach(t => g.add(t));
+                  s.left = curX; d.left = curX + dOffX; g.add(s); g.add(d); g.renderAll();
+              };
+              for(let f=0; f<=1*FPS; f++){ const t=f/(1*FPS); const curX=startX+(endX-startX)*(1-Math.pow(1-t,3)); renderFrame(curX); await new Promise(r=>setTimeout(r,14)); }
+              for(let f=0; f<2*FPS; f++){ renderFrame(endX); await new Promise(r=>setTimeout(r,14)); }
+              for(let f=0; f<=1*FPS; f++){ const t=f/(1*FPS); const curX=endX+(exitX-endX)*(t*t); renderFrame(curX); await new Promise(r=>setTimeout(r,14)); }
+              d.dispose(); s.dispose();
+          }
+          recorder.stop();
+          recorder.onstop = () => { saveAs(new Blob(chunks, {type:'video/mp4'}), 'Mockup_Video.mp4'); btn.disabled = false; document.body.removeChild(c); ui.progressCont.style.display = 'none'; };
+      });
+
+      ui.inShirtCol.addEventListener('input', e => { state.shirtColor = e.target.value; updateScene(false); });
+      ui.inBgCol.addEventListener('input', e => { state.bgColor = e.target.value; updateScene(false); });
+      ui.inBlur.addEventListener('input', e => { state.bgBlur = parseInt(e.target.value); ui.lblBlur.textContent = state.bgBlur + '%'; updateScene(false); });
+      ui.inTxtSub.addEventListener('input', e => { state.textSub=e.target.value; updateScene(false); });
+      ui.inTxtTop.addEventListener('input', e => { state.textTop=e.target.value; updateScene(false); });
+      ui.inTxtBot.addEventListener('input', e => { state.textBot=e.target.value; updateScene(false); });
+      ui.inColSub.addEventListener('input', e => { state.textColorSub=e.target.value; updateScene(false); });
+      ui.inColTop.addEventListener('input', e => { state.textColorTop=e.target.value; updateScene(false); });
+      ui.inColBot.addEventListener('input', e => { state.textColorBot=e.target.value; updateScene(false); });
+      ui.selFontSub.addEventListener('change', e => { state.fontSub = e.target.value; updateScene(false); });
+      ui.selFontTop.addEventListener('change', e => { state.fontTop = e.target.value; updateScene(false); });
+      ui.selFontBot.addEventListener('change', e => { state.fontBot = e.target.value; updateScene(false); });
+      ui.inLogoInvert.addEventListener('change', e => { state.logo.invert=e.target.checked; updateScene(false); });
+      document.getElementById('am-logo-upload').addEventListener('change', async e => { if(e.target.files[0]) { state.logo.url=await readFile(e.target.files[0]); updateScene(false); } e.target.value=''; });
+      ui.selProd.addEventListener('change', e => { state.product=e.target.value; updateScene(true); });
+      window.addEventListener('resize', fitCanvas); updateScene(true); setTimeout(fitCanvas, 100);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suite de Herramientas – Chechena Shirts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gold: #f8b500;
+      --gold-light: #fceabb;
+      --gray-dark: #0a0a0a;
+      --gray-mid: #111111;
+      --gray-border: #222222;
+      --gray-text: #999999;
+      --gray-muted: #666666;
+      --green: #10b981;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --orange: #f97316;
+      --pink: #ec4899;
+      --teal: #14b8a6;
+      --red: #ef4444;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      scrollbar-width: none;
+    }
+    body::-webkit-scrollbar { display: none; }
+
+    /* ===== TOP BANNER ===== */
+    .top-banner {
+      background: var(--black);
+      border-bottom: 1px solid #222;
+      overflow: hidden;
+      padding: 9px 0;
+    }
+    .banner-track {
+      display: flex;
+      width: max-content;
+      animation: scroll-banner 22s linear infinite;
+      white-space: nowrap;
+    }
+    .banner-track span {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.5px;
+      margin-right: 40px;
+    }
+    @keyframes scroll-banner {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: #0a0a0a;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 16px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+    nav { display: flex; gap: 24px; align-items: center; }
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+    nav a:hover, nav a.active { color: var(--white); }
+    .cart-btn {
+      background: var(--white);
+      color: var(--black);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== MAIN HUB SECTION ===== */
+    .tools-hub-section {
+      background-color: var(--black);
+      padding: 60px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .tools-hub-section::before {
+      content: '';
+      position: absolute;
+      top: -150px;
+      left: -10%;
+      width: 50%;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .tools-hub-container {
+      max-width: 1800px;
+      width: 95%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== HEADER WRAPPER ===== */
+    .tools-hub-header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      gap: 30px;
+    }
+
+    .tools-hub-header {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .bookmark-tip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: #aaa;
+      border: 1px solid rgba(255,255,255,0.1);
+      width: fit-content;
+    }
+    .bookmark-tip svg { width: 14px; height: 14px; fill: var(--gold); }
+    .bookmark-tip kbd {
+      background: #222;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #fff;
+      border: 1px solid #444;
+    }
+
+    .tools-hub-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      letter-spacing: 2px;
+      margin: 0;
+      line-height: 1;
+      background: linear-gradient(135deg, #ffffff 0%, #777777 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tools-hub-header p {
+      color: #a3a3a3;
+      font-size: clamp(1rem, 1.5vw, 1.1rem);
+      max-width: 800px;
+      margin: 0;
+      line-height: 1.6;
+      border-left: 3px solid #555;
+      padding-left: 15px;
+    }
+
+    .tools-hub-header-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .premium-active-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.1);
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .premium-active-msg svg { width: 18px; height: 18px; fill: var(--gold); }
+
+    /* ===== SEARCH ===== */
+    .hub-search-container {
+      margin-bottom: 50px;
+    }
+    .hub-search-wrapper {
+      position: relative;
+      max-width: 600px;
+    }
+    .hub-search-input {
+      width: 100%;
+      background-color: #0f0f0f;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 16px 20px 16px 50px;
+      color: var(--white);
+      font-size: 1.05rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .hub-search-input::placeholder { color: #666; }
+    .hub-search-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 15px rgba(248,181,0,0.15);
+      background-color: #151515;
+    }
+    .hub-search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #666;
+      stroke-width: 2;
+      pointer-events: none;
+      transition: stroke 0.3s;
+    }
+    .hub-search-input:focus ~ .hub-search-icon { stroke: var(--gold); }
+
+    /* ===== NO RESULTS ===== */
+    .no-results-msg {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 10px;
+      border: 1px dashed #222;
+    }
+
+    /* ===== CATEGORY ===== */
+    .hub-category {
+      margin-bottom: 50px;
+      transition: opacity 0.3s;
+    }
+    .category-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .category-title span { color: #555; font-size: 1.3rem; }
+
+    /* ===== GRID ===== */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 18px;
+    }
+
+    /* ===== CARD ===== */
+    .hub-card {
+      background-color: #0a0a0a;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 18px 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .hub-card:hover {
+      transform: translateY(-4px);
+      border-color: #444;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+      background-color: #111;
+    }
+
+    /* Ribbon */
+    .ribbon-wrapper {
+      position: absolute;
+      top: 0; right: 0;
+      width: 85px; height: 85px;
+      overflow: hidden;
+      border-radius: 0 10px 0 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .ribbon {
+      font-size: 0.6rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 20px;
+      transform: rotate(45deg);
+      width: 120px;
+      display: block;
+      position: absolute;
+      top: 15px; right: -30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      letter-spacing: 1px;
+    }
+    .ribbon-premium {
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      color: #000;
+    }
+    .ribbon-gratis {
+      background: #2a2a2a;
+      color: #999;
+      border-top: 1px solid #3d3d3d;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    /* Card header */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding-right: 15px;
+    }
+    .icon-box {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .icon-box svg {
+      width: 20px; height: 20px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .bg-studio   { background: linear-gradient(135deg, #8b5cf6, #6366f1); }
+    .bg-dtf      { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .bg-seri     { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .bg-estilos  { background: linear-gradient(135deg, #ec4899, #e11d48); }
+    .bg-ai       { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+    .bg-utils    { background: linear-gradient(135deg, #71717a, #52525b); }
+    .bg-mockups  { background: linear-gradient(135deg, #10b981, #059669); }
+
+    .title-box { display: flex; flex-direction: column; }
+    .hub-card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      line-height: 1.2;
+    }
+
+    .badge-nuevo {
+      background: rgba(16,185,129,0.15);
+      color: #34d399;
+      border: 1px solid rgba(16,185,129,0.3);
+      font-size: 0.55rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 8px;
+      text-transform: uppercase;
+    }
+    .badge-actualizado {
+      background: rgba(59,130,246,0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59,130,246,0.3);
+      font-size: 0.55rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 8px;
+      text-transform: uppercase;
+    }
+
+    .hub-card-subtitle {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 3px;
+    }
+    .hub-card-desc {
+      font-size: 0.8rem;
+      color: #999;
+      line-height: 1.4;
+      margin-bottom: 15px;
+      flex-grow: 1;
+    }
+
+    /* Star */
+    .star-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      color: #444;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .star-btn:hover { transform: scale(1.15); color: #888; }
+    .star-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; transition: all 0.3s; }
+    .star-btn.active { color: var(--gold); }
+    .star-btn.active svg { fill: var(--gold); stroke: var(--gold); }
+
+    /* Actions */
+    .hub-actions { display: flex; flex-direction: column; gap: 8px; }
+    .hub-btn-primary {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--white);
+      color: var(--black);
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      transition: all 0.3s;
+    }
+    .hub-btn-primary:hover { background: #e0e0e0; }
+    .hub-btn-secondary {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      text-align: center;
+      background: #1a1a1a;
+      color: #ccc;
+      padding: 8px;
+      border: 1px solid #333;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.75rem;
+      transition: all 0.3s;
+    }
+    .hub-btn-secondary:hover { border-color: #666; color: #fff; background: #222; }
+    .hub-btn-secondary svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+    /* Favorites */
+    #favorites-category { display: none; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1a1a1a;
+      padding: 30px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--gold); }
+    footer small { color: #555; font-size: 0.8rem; }
+    .footer-socials { display: flex; gap: 14px; }
+    .footer-socials a { color: #666; transition: color 0.2s; text-decoration: none; font-size: 1.2rem; }
+    .footer-socials a:hover { color: var(--white); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .tools-hub-header-wrapper { flex-direction: column; align-items: flex-start; }
+      .tools-hub-header-actions { align-items: flex-start; }
+      nav { display: none; }
+    }
+    @media (max-width: 768px) {
+      .tools-hub-container { width: 100%; padding: 0 15px; }
+      .hub-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        gap: 15px;
+        padding-bottom: 20px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .hub-grid::-webkit-scrollbar { display: none; }
+      .hub-card { min-width: 85vw; max-width: 320px; flex: 0 0 auto; scroll-snap-align: start; }
+    }
+  </style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+
+  <!-- CALCULADORA -->
+  <symbol id="icon-calculator" viewBox="0 0 24 24">
+    <rect x="4" y="2" width="16" height="20" rx="2"/>
+    <rect x="7" y="6" width="10" height="2"/>
+    <rect x="7" y="10" width="2" height="2"/>
+    <rect x="11" y="10" width="2" height="2"/>
+    <rect x="15" y="10" width="2" height="2"/>
+    <rect x="7" y="14" width="2" height="2"/>
+    <rect x="11" y="14" width="2" height="2"/>
+    <rect x="15" y="14" width="2" height="2"/>
+  </symbol>
+
+  <!-- QR -->
+  <symbol id="icon-qr" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="6" height="6"/>
+    <rect x="15" y="3" width="6" height="6"/>
+    <rect x="3" y="15" width="6" height="6"/>
+    <rect x="16" y="16" width="2" height="2"/>
+    <rect x="12" y="12" width="2" height="2"/>
+    <rect x="18" y="12" width="2" height="2"/>
+    <rect x="12" y="18" width="2" height="2"/>
+  </symbol>
+
+  <!-- PLAYERA -->
+  <symbol id="icon-shirt" viewBox="0 0 24 24">
+    <path d="M8 3l4 2 4-2 4 4-3 2v10H7V9L4 7l4-4z"/>
+  </symbol>
+
+  <!-- IA / MAGIA -->
+  <symbol id="icon-magic" viewBox="0 0 24 24">
+    <path d="M3 21l3-3m0 0l12-12 3 3-12 12-3-3z"/>
+    <path d="M14 4l1-2 1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>
+  </symbol>
+
+  <!-- IMAGEN / DISEÑO -->
+  <symbol id="icon-image" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="14" rx="2"/>
+    <circle cx="8" cy="10" r="2"/>
+    <path d="M21 15l-5-5-6 6-3-3-4 4"/>
+  </symbol>
+
+  <!-- HERRAMIENTAS -->
+  <symbol id="icon-tool" viewBox="0 0 24 24">
+    <path d="M14 7l3-3 3 3-3 3-3-3zM2 22l10-10 2 2L4 24H2v-2z"/>
+  </symbol>
+
+</svg>
+<!-- SVG DEFS -->
+<svg style="display:none">
+  <symbol id="icon-diamond" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></symbol>
+  <symbol id="icon-printer" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></symbol>
+  <symbol id="icon-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></symbol>
+  <symbol id="icon-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></symbol>
+  <symbol id="icon-wand" viewBox="0 0 24 24"><path d="m15 4-2 2"/><path d="M17 11h.01"/><path d="M21 7h.01"/><path d="M2 22 22 2"/><path d="m3 8 2-2"/><path d="m9 4-2 2"/></symbol>
+  <symbol id="icon-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="icon-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></symbol>
+  <symbol id="icon-book" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></symbol>
+  <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+</svg>
+
+<!-- TOP BANNER -->
+<div class="top-banner">
+  <div class="banner-track">
+    <span>🎁 MEGAPACK CHECHENA →(+40,000 DISEÑOS) —</span>
+    <span>🎁 MEGAPACK OJITO →  (+50,000 DISEÑOS) —</span>
+    <span>🎁 MEGAPACK CHECHENA →(+40,000 DISEÑOS) —</span>
+    <span>🎁 MEGAPACK OJITO →  (+50,000 DISEÑOS) —</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <nav>
+<a href="index.html" class="nav-link">INICIO</a>
+<a href="PROM.html" class="nav-link">PROMTS IA</a>
+<a href="CL.html" class="nav-link">CLINICA</a>
+<a href="BOR.html" class="nav-link">GALLERY</a>
+  </nav>
+</header>
+
+<!-- MAIN TOOLS HUB -->
+<div class="tools-hub-section">
+  <div class="tools-hub-container">
+
+    <!-- HEADER -->
+    <div class="tools-hub-header-wrapper">
+      <div class="tools-hub-header">
+
+        <h2>SUITE DE HERRAMIENTAS CHECHENA SHIRTS</h2>
+        <p>Explora una colección completa de herramientas diseñadas para potenciar tus diseños. Desde inteligencia artificial hasta utilidades de preprensa, todo está pensado para llevar tus impresiones DTF y sublimacion a otro nivel.</p>
+      </div>
+              <div class="bookmark-tip">
+          <svg viewBox="0 0 24 24"><use href="#icon-star"></use></svg>
+          Guarda esta página presionando <kbd>Ctrl + D</kbd> (o <kbd>⌘ + D</kbd>)
+        </div>
+      <div class="tools-hub-header-actions">
+        <div class="premium-active-msg">
+          <svg viewBox="0 0 24 24"><use href="#icon-star"></use></svg>
+          HERRAMIENTAS GRATIS
+        </div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="hub-search-container">
+      <div class="hub-search-wrapper">
+        <input type="text" id="hubSearchInput" class="hub-search-input" placeholder="Buscar herramienta (ej. SEMITONO, MOCKUP, etc.)..." autocomplete="off">
+        <svg class="hub-search-icon"><use href="#icon-search"></use></svg>
+      </div>
+    </div>
+
+    <div id="no-results-message" class="no-results-msg">No se encontraron herramientas que coincidan con tu búsqueda.</div>
+
+    <!-- FAVORITOS (dinámico) -->
+    <div class="hub-category" id="favorites-category">
+      <h3 class="category-title"><span style="color:#f8b500;">★</span> MIS FAVORITOS</h3>
+      <div class="hub-grid" id="favorites-grid"></div>
+    </div>
+
+    <!-- ===== CATEGORÍA 01: STUDIOS ===== -->
+    <div class="hub-category">
+      <h3 class="category-title"><span>01.</span> STUDIOS PRO</h3>
+      <div class="hub-grid">
+
+
+<div class="hub-card" data-tool-id="semitonos-studio">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+
+  <div class="card-header">
+    <div class="icon-box bg-studio">
+      <svg><use href="#icon-diamond"></use></svg>
+    </div>
+
+    <div class="title-box">
+      <h3 class="hub-card-title">Semitonos Studio</h3>
+      <span class="hub-card-subtitle">Halftone Generator</span>
+    </div>
+
+    <button class="star-btn" aria-label="Favorito">
+      <svg><use href="#icon-star"></use></svg>
+    </button>
+  </div>
+
+  <p class="hub-card-desc">
+    Genera semitonos con calidad profesional y control total sobre cada detalle.
+  </p>
+
+  <div class="hub-actions">
+    <a href="halftone_master_REAL.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+  </div>
+</div>
+
+        <div class="hub-card" data-tool-id="pedreria-pro">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-studio"><svg><use href="#icon-diamond"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Pedrería PRO</h3>
+              <span class="hub-card-subtitle">Rhinestone Studio</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc">Convierte imágenes en plantillas precisas para rhinestones y pedrería.</p>
+          <div class="hub-actions">
+    <a href="D.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+        </div>
+
+        <div class="hub-card" data-tool-id="mejorador-chechena">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-studio"><svg><use href="#icon-diamond"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">MEJORAR CALIDAD</h3>
+              <span class="hub-card-subtitle">CHECHENIA</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc">MEJORA LA CALIDAD DE TUS IMAGENES</p>
+          <div class="hub-actions">
+    <a href="mejorador-chechena.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <!-- ===== CATEGORÍA 04: ESTILOS ===== -->
+    <div class="hub-category">
+      <h3 class="category-title"><span>04.</span> ESTILOS Y PLANTILLAS</h3>
+      <div class="hub-grid">
+
+
+        <div class="hub-card" data-tool-id="estilo-collage">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-estilos"><svg><use href="#icon-palette"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Estilo Collage</h3>
+              <span class="hub-card-subtitle">Photo Layout</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <div class="hub-actions">
+    <a href="chechena-collage.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+          </div>
+
+
+
+
+
+        <div class="hub-card" data-tool-id="marco-desgastado">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-estilos"><svg><use href="#icon-palette"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Marco Desgastado</h3>
+              <span class="hub-card-subtitle">Vintage Borders</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <div class="hub-actions">
+    <a href="MARCO.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+          </div>
+
+      </div>
+    </div>
+
+    <!-- ===== CATEGORÍA 05: IA ===== -->
+    <div class="hub-category">
+      <h3 class="category-title"><span>05.</span> INTELIGENCIA ARTIFICIAL</h3>
+      <div class="hub-grid">
+
+
+        <div class="hub-card" data-tool-id="remover-fondo">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-ai"><svg><use href="#icon-wand"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Remover Fondo</h3>
+              <span class="hub-card-subtitle">AI Background Removal</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc">Borra fondos complejos de fotografías automáticamente en un clic.</p>
+          <div class="hub-actions">
+    <a href="REMO.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- ===== CATEGORÍA 06: UTILIDADES ===== -->
+    <div class="hub-category">
+      <h3 class="category-title"><span>06.</span> CONVERSORES Y UTILIDADES</h3>
+      <div class="hub-grid">
+
+
+        <div class="hub-card" data-tool-id="generador-qr">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-utils"><svg><use href="#icon-tool"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Generador QR <span class="badge-nuevo">Nuevo</span></h3>
+              <span class="hub-card-subtitle">QR Code Creator</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc">
+  Convierte cualquier enlace en un QR listo para imprimir y vender. Más branding, más impacto, más ventas.
+</p>
+          <div class="hub-actions">
+    <a href="qrs.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+
+      </div>
+      <div class="hub-card" data-tool-id="cotizador-playera">
+  <div class="ribbon-wrapper">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+  </div>
+
+  <div class="card-header">
+    <div class="icon-box bg-utils">
+<svg><use href="#icon-calculator"></use></svg>
+    </div>
+
+    <div class="title-box">
+      <h3 class="hub-card-title">Cotizador Playera <span class="badge-nuevo">Nuevo</span></h3>
+      <span class="hub-card-subtitle">T-Shirt Cost Calculator</span>
+    </div>
+
+    <button class="star-btn" aria-label="Favorito">
+      <svg><use href="#icon-star"></use></svg>
+    </button>
+  </div>
+
+  <p class="hub-card-desc">
+    Calcula el precio final de tus playeras estampadas considerando materiales, impresión y ganancia.
+  </p>
+
+  <div class="hub-actions">
+    <a href="cotizador.html" class="hub-btn-primary">Abrir Herramienta</a>
+    <a href="guia-cotizador.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+  </div>
+</div>
+    </div>
+
+    <!-- ===== CATEGORÍA 07: NEGOCIO ===== -->
+    <div class="hub-category">
+      <h3 class="category-title"><span>07.</span>MOCKUPS</h3>
+      <div class="hub-grid">
+
+
+
+        <div class="hub-card" data-tool-id="mockups-3d">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Mockups 3D</h3>
+              <span class="hub-card-subtitle">3D Visualizer</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc">Visualiza tu impresión en modelos de playeras tridimensionales.</p>
+          <div class="hub-actions">
+    <a href="MOCKUP 3D.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+        </div>
+
+        <div class="hub-card" data-tool-id="mockups-3d">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Mockups automaticos</h3>
+              <span class="hub-card-subtitle">AUTOMATICOS</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc">Visualiza tu impresión en modelos de playeras tridimensionales.</p>
+          <div class="hub-actions">
+    <a href="mockup-studio1.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+        </div>
+
+
+                <div class="hub-card" data-tool-id="mockups-3d">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Mockups</h3>
+              <span class="hub-card-subtitle">STUDIO</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc"> Genera múltiples diseños en segundos. Solo sube tus archivos y obtén resultados listos para producción de forma automática.</p>
+          <div class="hub-actions">
+    <a href="mockup-studio.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+        </div>
+
+                        <div class="hub-card" data-tool-id="mockups-3d">
+          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
+          <div class="card-header">
+            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
+            <div class="title-box">
+              <h3 class="hub-card-title">Mockups</h3>
+              <span class="hub-card-subtitle">DISEÑO CON FONDO</span>
+            </div>
+            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          </div>
+          <p class="hub-card-desc">Crea material promocional e imágenes publicitarias impactantes para tus redes sociales y tienda.</p>
+          <div class="hub-actions">
+    <a href="promo-maker.html" class="hub-btn-primary">Abrir Studio</a>
+    <a href="guia-semitonos.html" class="hub-btn-secondary">
+      <svg><use href="#icon-book"></use></svg> Guía de Uso
+    </a>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    // ===== FAVORITOS =====
+    const storageKey = 'chechena_favorites';
+    let favorites = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const favCat = document.getElementById('favorites-category');
+    const favGrid = document.getElementById('favorites-grid');
+    const allCards = document.querySelectorAll('.hub-card[data-tool-id]');
+
+    function saveFavorites() {
+      localStorage.setItem(storageKey, JSON.stringify(favorites));
+      renderFavorites();
+      updateStarsUI();
+    }
+
+    function toggleFavorite(toolId) {
+      favorites = favorites.includes(toolId)
+        ? favorites.filter(id => id !== toolId)
+        : [...favorites, toolId];
+      saveFavorites();
+    }
+
+    function updateStarsUI() {
+      document.querySelectorAll('.star-btn').forEach(btn => {
+        const card = btn.closest('.hub-card');
+        if (!card) return;
+        const id = card.getAttribute('data-tool-id');
+        btn.classList.toggle('active', favorites.includes(id));
+      });
+    }
+
+    function renderFavorites() {
+      const searchVal = document.getElementById('hubSearchInput').value.trim();
+      if (searchVal.length > 0) return;
+      favGrid.innerHTML = '';
+      if (favorites.length === 0) { favCat.style.display = 'none'; return; }
+      favCat.style.display = 'block';
+      favorites.forEach(toolId => {
+        let original = null;
+        document.querySelectorAll(`.hub-card[data-tool-id="${toolId}"]`).forEach(c => {
+          if (!c.closest('#favorites-grid')) original = c;
+        });
+        if (!original) return;
+        const clone = original.cloneNode(true);
+        clone.style.display = 'flex';
+        clone.querySelector('.star-btn').addEventListener('click', () => toggleFavorite(toolId));
+        favGrid.appendChild(clone);
+      });
+    }
+
+    allCards.forEach(card => {
+      if (card.closest('#favorites-grid')) return;
+      const id = card.getAttribute('data-tool-id');
+      card.querySelector('.star-btn').addEventListener('click', () => toggleFavorite(id));
+    });
+
+    updateStarsUI();
+    renderFavorites();
+
+    // ===== BUSCADOR =====
+    document.getElementById('hubSearchInput').addEventListener('input', function () {
+      const q = this.value.toLowerCase().trim();
+      let visible = 0;
+
+      document.querySelectorAll('.hub-category:not(#favorites-category)').forEach(cat => {
+        let catVisible = 0;
+        cat.querySelectorAll('.hub-card').forEach(card => {
+          const title = card.querySelector('.hub-card-title').textContent.toLowerCase();
+          const desc = card.querySelector('.hub-card-desc').textContent.toLowerCase();
+          const match = title.includes(q) || desc.includes(q);
+          card.style.display = match ? 'flex' : 'none';
+          if (match) { catVisible++; visible++; }
+        });
+        cat.style.display = catVisible === 0 ? 'none' : 'block';
+      });
+
+      favCat.style.display = q.length > 0 ? 'none' : (favorites.length > 0 ? 'block' : 'none');
+      document.getElementById('no-results-message').style.display = (visible === 0 && q.length > 0) ? 'block' : 'none';
+    });
+
+  });
+</script>
+
+</body>
+</html>

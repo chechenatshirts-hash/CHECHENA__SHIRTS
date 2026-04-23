@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herramientas – Chechena Shirts</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Oswald:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --off-white: #f7f7f5;
+      --light: #f0f0ec;
+      --border: #d8d8d2;
+      --mid: #e5e5e0;
+      --text: #111;
+      --muted: #888;
+      --gold: #c9961a;
+      --gold-l: #f0c84a;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--off-white); color: var(--text); font-family: 'Barlow', sans-serif; font-size: 15px; overflow-x: hidden; }
+
+    /* TOP BAR */
+    .top-bar { background: var(--black); padding: 7px 0; overflow: hidden; }
+    .bar-track { display: flex; width: max-content; animation: bar 26s linear infinite; white-space: nowrap; }
+    .bar-track span { font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 500; color: #fff; letter-spacing: 1.5px; text-transform: uppercase; margin-right: 60px; }
+    .bar-track span em { color: var(--gold-l); font-style: normal; }
+    @keyframes bar { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* HEADER */
+    header { background: var(--black); position: sticky; top: 0; z-index: 200; }
+    .h-top { display: flex; align-items: center; justify-content: space-between; padding: 14px 50px; border-bottom: 1px solid #1e1e1e; }
+    .h-left { display: flex; align-items: center; }
+    .ico-btn { background: none; border: none; cursor: pointer; color: #aaa; padding: 4px; display: flex; transition: color .2s; }
+    .ico-btn:hover { color: #fff; }
+    .ico-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .logo { font-family: 'UnifrakturMaguntia', cursive; font-size: 2rem; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 12px; }
+    .logo-badge { width: 38px; height: 38px; border: 2px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+    .h-right { display: flex; align-items: center; gap: 18px; }
+    .currency { background: #1a1a1a; border: 1px solid #333; color: #bbb; padding: 6px 10px; font-family: 'Barlow', sans-serif; font-size: 13px; border-radius: 3px; cursor: pointer; }
+    .cart-lnk { color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; position: relative; }
+    .cart-lnk svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .cart-badge { background: var(--gold); color: #000; font-size: 10px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    nav { display: flex; justify-content: center; padding: 0 40px; }
+    nav a { font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #999; text-decoration: none; padding: 14px 20px; transition: all .2s; border-bottom: 3px solid transparent; display: flex; align-items: center; gap: 5px; }
+    nav a:hover { color: #fff; }
+    nav a.active { background: #151515; color: #fff; border-bottom-color: var(--gold); }
+    nav a svg { width: 11px; height: 11px; fill: currentColor; }
+
+    /* PAGE HERO */
+    .page-hero { background: var(--black); padding: 48px 60px 44px; position: relative; overflow: hidden; }
+    .page-hero::after { content: 'HERRAMIENTAS'; font-family: 'Oswald', sans-serif; font-size: 13vw; font-weight: 900; color: rgba(255,255,255,0.025); position: absolute; right: -10px; bottom: -20px; line-height: 1; letter-spacing: -4px; pointer-events: none; user-select: none; }
+    .hero-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+    .breadcrumb { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-l); margin-bottom: 14px; }
+    .breadcrumb span { color: #444; }
+    .page-hero h1 { font-family: 'Oswald', sans-serif; font-size: clamp(2.2rem, 5vw, 4.2rem); font-weight: 700; color: #fff; letter-spacing: -1px; line-height: 1.05; margin-bottom: 14px; }
+    .page-hero p { font-size: .95rem; color: #777; max-width: 600px; line-height: 1.65; border-left: 3px solid #2a2a2a; padding-left: 16px; }
+    .hero-stats { display: flex; gap: 40px; margin-top: 28px; }
+    .hero-stat strong { font-family: 'Oswald', sans-serif; font-size: 1.9rem; font-weight: 700; color: #fff; display: block; line-height: 1; }
+    .hero-stat small { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-top: 3px; display: block; }
+
+    /* MAIN */
+    .main { background: var(--off-white); min-height: 100vh; }
+    .wrap { max-width: 1580px; width: 96%; margin: 0 auto; padding: 46px 0 80px; }
+
+    /* SEARCH */
+    .search-row { display: flex; align-items: center; gap: 16px; margin-bottom: 44px; padding-bottom: 26px; border-bottom: 2px solid var(--mid); }
+    .search-box { position: relative; flex: 1; max-width: 500px; }
+    .search-input { width: 100%; background: var(--white); border: 2px solid var(--border); padding: 13px 18px 13px 46px; font-family: 'Barlow', sans-serif; font-size: .9rem; color: var(--text); outline: none; transition: all .2s; }
+    .search-input:focus { border-color: var(--black); box-shadow: 4px 4px 0 var(--black); }
+    .search-input::placeholder { color: #bbb; }
+    .s-ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 17px; height: 17px; fill: none; stroke: #bbb; stroke-width: 2; pointer-events: none; }
+    .search-label { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+
+    /* NO RESULTS */
+    .no-results { display: none; text-align: center; padding: 50px 20px; background: var(--white); border: 2px dashed var(--border); }
+    .no-results p { color: var(--muted); font-size: 1rem; }
+
+    /* CATEGORY */
+    #favorites-category { display: none; }
+    .hub-cat { margin-bottom: 56px; }
+    .cat-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2.5px solid var(--black); }
+    .cat-num { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 400; }
+    .cat-name { font-family: 'Oswald', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--black); }
+    .cat-total { margin-left: auto; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+    /* GRID */
+    .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(238px, 1fr)); gap: 14px; }
+
+    /* CARD */
+    .hub-card { background: var(--white); border: 1.5px solid var(--border); padding: 18px; display: flex; flex-direction: column; position: relative; overflow: hidden; transition: all .22s ease; }
+    .hub-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--black); transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
+    .hub-card:hover { border-color: var(--black); box-shadow: 5px 5px 0 var(--black); transform: translate(-2px,-2px); }
+    .hub-card:hover::after { transform: scaleX(1); }
+
+    /* RIBBON */
+    .rib-wrap { position: absolute; top: 0; right: 0; width: 78px; height: 78px; overflow: hidden; z-index: 5; pointer-events: none; }
+    .rib { font-family: 'Oswald', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); width: 110px; display: block; position: absolute; top: 13px; right: -26px; }
+    .rib-prem { background: var(--black); color: var(--gold-l); }
+    .rib-free { background: var(--mid); color: #777; }
+
+    /* CARD TOP */
+    .card-top { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 9px; padding-right: 18px; }
+    .icon-pill { width: 34px; height: 34px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .icon-pill svg { width: 17px; height: 17px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ip-s { background: #4f46e5; } .ip-d { background: #2563eb; } .ip-r { background: #ea580c; }
+    .ip-e { background: #db2777; } .ip-a { background: #0d9488; } .ip-u { background: #52525b; } .ip-m { background: #16a34a; }
+
+    .t-group { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .card-title { font-family: 'Oswald', sans-serif; font-size: .95rem; font-weight: 600; letter-spacing: .5px; color: var(--black); display: flex; flex-wrap: wrap; align-items: center; gap: 5px; line-height: 1.2; }
+    .card-sub { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+    .bdg { font-size: 8px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 2px 5px; }
+    .bdg-n { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .bdg-u { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+
+    /* STAR */
+    .star-btn { background: none; border: none; cursor: pointer; padding: 2px; color: #ccc; margin-left: auto; flex-shrink: 0; transition: all .2s; }
+    .star-btn:hover { color: var(--gold); transform: scale(1.2); }
+    .star-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .star-btn.active { color: var(--gold); }
+    .star-btn.active svg { fill: var(--gold); stroke: var(--gold); }
+
+    .card-desc { font-size: .78rem; color: var(--muted); line-height: 1.5; flex-grow: 1; margin-bottom: 14px; }
+    .card-acts { display: flex; flex-direction: column; gap: 7px; }
+    .btn-p { display: block; width: 100%; text-align: center; background: var(--black); color: var(--white); padding: 10px; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--black); transition: all .2s; }
+    .btn-p:hover { background: var(--white); color: var(--black); }
+    .btn-s { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; background: transparent; color: #888; padding: 8px; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--border); transition: all .2s; }
+    .btn-s:hover { border-color: #999; color: var(--black); }
+    .btn-s svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+    /* FOOTER */
+    footer { background: var(--black); padding: 28px 50px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; border-top: 3px solid var(--gold); }
+    .f-logo { font-family: 'UnifrakturMaguntia', cursive; font-size: 1.7rem; color: #fff; }
+    .f-links { display: flex; gap: 20px; }
+    .f-links a { color: #555; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; transition: color .2s; }
+    .f-links a:hover { color: #fff; }
+    footer small { color: #444; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) { .h-top { padding: 12px 20px; } nav { padding: 0 8px; } nav a { padding: 12px 10px; font-size: 11px; } .page-hero { padding: 34px 20px; } footer { padding: 24px 20px; } }
+    @media (max-width: 700px) { .wrap { width: 100%; padding: 28px 14px 60px; } .hub-grid { display: flex; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 14px; -webkit-overflow-scrolling: touch; scrollbar-width: none; } .hub-grid::-webkit-scrollbar { display: none; } .hub-card { min-width: 80vw; max-width: 290px; flex: 0 0 auto; scroll-snap-align: start; } .search-row { flex-direction: column; align-items: flex-start; } }
+  </style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="si-diamond" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></symbol>
+  <symbol id="si-print" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></symbol>
+  <symbol id="si-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></symbol>
+  <symbol id="si-pal" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></symbol>
+  <symbol id="si-wand" viewBox="0 0 24 24"><path d="m15 4-2 2"/><path d="M17 11h.01"/><path d="M21 7h.01"/><path d="M2 22 22 2"/><path d="m3 8 2-2"/><path d="m9 4-2 2"/></symbol>
+  <symbol id="si-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="si-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></symbol>
+  <symbol id="si-book" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></symbol>
+  <symbol id="si-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+  <symbol id="si-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="si-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+  <symbol id="si-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+</svg>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="bar-track">
+    <span>🎁 MEMBRESÍA ANUAL → RECIBE <em>GRATIS</em> EL PAQUETE ESTILO BORDADO (+400 DISEÑOS)</span>
+    <span>✦ ENVÍO DIGITAL INMEDIATO VÍA GOOGLE DRIVE &nbsp;&nbsp;</span>
+    <span>🎁 MEMBRESÍA ANUAL → RECIBE <em>GRATIS</em> EL PAQUETE ESTILO BORDADO (+400 DISEÑOS)</span>
+    <span>✦ ENVÍO DIGITAL INMEDIATO VÍA GOOGLE DRIVE &nbsp;&nbsp;</span>
+    <span>🎁 MEMBRESÍA ANUAL → RECIBE <em>GRATIS</em> EL PAQUETE ESTILO BORDADO (+400 DISEÑOS)</span>
+    <span>✦ ENVÍO DIGITAL INMEDIATO VÍA GOOGLE DRIVE &nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="h-top">
+    <div class="h-left">
+      <button class="ico-btn" aria-label="Buscar"><svg><use href="#si-search"></use></svg></button>
+    </div>
+    <a href="#" class="logo">
+      <div class="logo-badge">CS</div>
+      Chechena Shirts
+    </a>
+    <div class="h-right">
+      <select class="currency"><option>MXN $</option><option>USD $</option></select>
+      <a href="#" class="cart-lnk"><svg><use href="#si-cart"></use></svg><div class="cart-badge">0</div></a>
+    </div>
+  </div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Megapacks</a>
+    <a href="#">TikToks</a>
+    <a href="#" class="active">Herramientas <svg><use href="#si-chev"></use></svg></a>
+    <a href="#">Recursos <svg><use href="#si-chev"></use></svg></a>
+    <a href="#">Contacto</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><span>Home</span> / <span>›</span> Herramientas</div>
+    <h1>Suite de Herramientas</h1>
+    <p>El ecosistema creativo definitivo. Herramientas impulsadas por IA, utilidades de preprensa y generadores para llevar tus impresiones DTF y serigrafía al siguiente nivel.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>40+</strong><small>Herramientas</small></div>
+      <div class="hero-stat"><strong>7</strong><small>Categorías</small></div>
+      <div class="hero-stat"><strong>24/7</strong><small>Disponible</small></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="wrap">
+
+    <!-- SEARCH -->
+    <div class="search-row">
+      <div class="search-box">
+        <input type="text" id="hubSearch" class="search-input" placeholder="Buscar herramienta..." autocomplete="off">
+        <svg class="s-ico"><use href="#si-search"></use></svg>
+      </div>
+      <span class="search-label">Todas las categorías</span>
+    </div>
+    <div id="no-results" class="no-results"><p>No se encontraron herramientas que coincidan.</p></div>
+
+    <!-- FAVORITOS -->
+    <div class="hub-cat" id="favorites-category">
+      <div class="cat-head">
+        <span class="cat-num" style="color:#c9961a;">★</span>
+        <span class="cat-name">Mis Favoritos</span>
+        <span class="cat-total" id="fav-count">0 guardados</span>
+      </div>
+      <div class="hub-grid" id="favorites-grid"></div>
+    </div>
+
+    <!-- CAT 01 -->
+    <div class="hub-cat">
+      <div class="cat-head"><span class="cat-num">01</span><span class="cat-name">Studios Pro</span><span class="cat-total">7 herramientas</span></div>
+      <div class="hub-grid">
+        <div class="hub-card" data-id="semitonos-master">
+          <div class="rib-wrap"><span class="rib rib-prem">Premium</span></div>
+          <div class="card-top"><div class="icon-pill ip-s"><svg><use href="#si-diamond"></use></svg></div><div class="t-group"><span class="card-title">Semitonos Master <span class="bdg bdg-n">Nuevo</span></span><span class="card-sub">All-in-One Halftones</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div>
+          <p class="card-desc">La suite definitiva para generar semitonos optimizados para DTF, Serigrafía CMYK y tramados clásicos en un solo lugar.</p>
+          <div class="card-acts"><a href="#" class="btn-p">Abrir Studio</a></div>
+        </div>
+        <div class="hub-card" data-id="pedreria-pro">
+          <div class="rib-wrap"><span class="rib rib-prem">Premium</span></div>
+          <div class="card-top"><div class="icon-pill ip-s"><svg><use href="#si-diamond"></use></svg></div><div class="t-group"><span class="card-title">Pedrería PRO</span><span class="card-sub">Rhinestone Studio</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div>
+          <p class="card-desc">Convierte imágenes en plantillas precisas para rhinestones y pedrería.</p>
+          <div class="card-acts"><a href="#" class="btn-p">Abrir Studio</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div>
+        </div>
+        <div class="hub-card" data-id="semitonos-studio">
+          <div class="rib-wrap"><span class="rib rib-prem">Premium</span></div>
+          <div class="card-top"><div class="icon-pill ip-s"><svg><use href="#si-diamond"></use></svg></div><div class="t-group"><span class="card-title">Semitonos Studio</span><span class="card-sub">Halftone Generator</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div>
+          <p class="card-desc">Generación profesional de semitonos con control absoluto.</p>
+          <div class="card-acts"><a href="#" class="btn-p">Abrir Studio</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div>
+        </div>
+        <div class="hub-card" data-id="mezzotinta-studio">
+          <div class="rib-wrap"><span class="rib rib-prem">Premium</span></div>
+          <div class="card-top"><div class="icon-pill ip-s"><svg><use href="#si-diamond"></use></svg></div><div class="t-group"><span class="card-title">Mezzotinta Studio</span><span class="card-sub">Mezzotint Effect AI</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div>
+          <p class="card-desc">Aplica efectos de mezzotinta y grabado clásico a tus fotografías.</p>
+          <div class="card-acts"><a href="#" class="btn-p">Abrir Studio</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div>
+        </div>
+        <div class="hub-card" data-id="texture-studio">
+          <div class="rib-wrap"><span class="rib rib-free">Gratis</span></div>
+          <div class="card-top"><div class="icon-pill ip-s"><svg><use href="#si-diamond"></use></svg></div><div class="t-group"><span class="card-title">Texture Studio</span><span class="card-sub">Texture Generator</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div>
+          <p class="card-desc">Aplica texturas desgastadas, vintage y de patrones a tus diseños.</p>
+          <div class="card-acts"><a href="#" class="btn-p">Abrir Studio</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div>
+        </div>
+        <div class="hub-card" data-id="generador-textos">
+          <div class="rib-wrap"><span class="rib rib-free">Gratis</span></div>
+          <div class="card-top"><div class="icon-pill ip-s"><svg><use href="#si-diamond"></use></svg></div><div class="t-group"><span class="card-title">Generador Textos</span><span class="card-sub">Typography Studio</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div>
+          <p class="card-desc">Crea tipografías impactantes con efectos urbanos y texturas.</p>
+          <div class="card-acts"><a href="#" class="btn-p">Abrir Studio</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div>
+        </div>
+        <div class="hub-card" data-id="sticker-studio">
+          <div class="rib-wrap"><span class="rib rib-free">Gratis</span></div>
+          <div class="card-top"><div class="icon-pill ip-s"><svg><use href="#si-diamond"></use></svg></div><div class="t-group"><span class="card-title">Sticker Studio</span><span class="card-sub">Sticker Generator</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div>
+          <p class="card-desc">Crea contornos perfectos y efectos de pegatina alrededor de tus diseños listos para cortar.</p>
+          <div class="card-acts"><a href="#" class="btn-p">Abrir Studio</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAT 02 -->
+    <div class="hub-cat">
+      <div class="cat-head"><span class="cat-num">02</span><span class="cat-name">Impresión DTF</span><span class="cat-total">8 herramientas</span></div>
+      <div class="hub-grid">
+        <div class="hub-card" data-id="auditor-grosor"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Auditor de Grosor <span class="bdg bdg-n">Nuevo</span></span><span class="card-sub">Thickness Checker</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Verifica automáticamente que el grosor de tus líneas y detalles sea el adecuado para imprimir en DTF.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="arma-metro"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Arma tu metro</span><span class="card-sub">Acomodo DTF</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Organiza y acomoda tus diseños eficientemente en tu lienzo.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="analizador-dtf"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Analizador DTF</span><span class="card-sub">Quality Check</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Revisa resolución y transparencia de tus archivos para imprimir.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="recolorizador"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Recolorizador DTF</span><span class="card-sub">Color Management</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Cambia los colores de tu diseño en un clic antes de mandarlo a imprimir.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="delineador"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Delineador</span><span class="card-sub">Stroke & Bleed</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Agrega contornos y sangrías a tus imágenes para destacar tu diseño.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="semitransparencias"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Semitransparencias</span><span class="card-sub">Opacity Fixer</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Prepara tus áreas semi-transparentes para que se impriman sin manchas.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="calculadora-dtf"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Calculadora DTF</span><span class="card-sub">Pricing Tool</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Estima rápidamente el costo de tus impresiones en base a dimensiones.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="verificador-archivos"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-d"><svg><use href="#si-print"></use></svg></div><div class="t-group"><span class="card-title">Verificador Archivos</span><span class="card-sub">Final Check</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Última revisión técnica para garantizar que tu rollo DTF salga impecable.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+      </div>
+    </div>
+
+    <!-- CAT 03 -->
+    <div class="hub-cat">
+      <div class="cat-head"><span class="cat-num">03</span><span class="cat-name">Serigrafía Textil</span><span class="cat-total">3 herramientas</span></div>
+      <div class="hub-grid">
+        <div class="hub-card" data-id="separacion-colores"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-r"><svg><use href="#si-layers"></use></svg></div><div class="t-group"><span class="card-title">Separación Colores</span><span class="card-sub">Color Separation</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Separa tus diseños en canales listos para revelar en mallas.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="mallas-serigrafia"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-r"><svg><use href="#si-layers"></use></svg></div><div class="t-group"><span class="card-title">Mallas Serigrafía</span><span class="card-sub">Mesh Calculator</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Calcula y elige la malla adecuada dependiendo del detalle de tu diseño.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="mezclador-colores"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-r"><svg><use href="#si-layers"></use></svg></div><div class="t-group"><span class="card-title">Mezclador Colores</span><span class="card-sub">Ink Mixer</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Simula la mezcla de tintas para obtener el color exacto que necesitas.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+      </div>
+    </div>
+
+    <!-- CAT 04 -->
+    <div class="hub-cat">
+      <div class="cat-head"><span class="cat-num">04</span><span class="cat-name">Estilos y Plantillas</span><span class="cat-total">11 herramientas</span></div>
+      <div class="hub-grid">
+        <div class="hub-card" data-id="estilo-chrome"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Estilo Chrome</span><span class="card-sub">Y2K Effect</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Transforma tus logos con un efecto cromado metálico estilo Y2K.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="estilo-collage"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Estilo Collage</span><span class="card-sub">Photo Layout</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Crea composiciones tipo collage urbano para tus playeras bootleg.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="estilo-grunge"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Estilo Grunge</span><span class="card-sub">Distressed Look</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Añade rasguños y un aspecto desgastado y rebelde a cualquier diseño.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="estilo-mosaico"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Estilo Mosaico</span><span class="card-sub">Pixel Art Effect</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Convierte tus imágenes en arte pixelado o mosaicos para un look retro.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="estilo-neon"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Estilo Neón</span><span class="card-sub">Glow Effect</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Haz que tus trazos y textos brillen como un letrero de neón.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="estilo-puff"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Estilo Puff</span><span class="card-sub">3D Puff Print</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Simula el efecto de tinta inflable 3D para presentar tus diseños.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="marco-desgastado"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Marco Desgastado</span><span class="card-sub">Vintage Borders</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Aplica marcos irregulares y desgastados a los bordes de tus fotografías.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="only-you"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Only You</span><span class="card-sub">Bootleg Template</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Plantilla generadora estilo Bootleg Vintage para crear diseños rápidos.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="album-artistas"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Álbum Artistas</span><span class="card-sub">Music Template</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Diseños con estética de portadas de álbum o merch de artistas.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="flyer-creator"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Flyer Creator</span><span class="card-sub">Promo Template</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Crea material promocional rápido para anunciar tus prendas o marca.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="promo-maker"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-e"><svg><use href="#si-pal"></use></svg></div><div class="t-group"><span class="card-title">Promo Maker <span class="bdg bdg-n">Nuevo</span></span><span class="card-sub">Promo Generator</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Crea imágenes publicitarias impactantes para tus redes y tienda.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+      </div>
+    </div>
+
+    <!-- CAT 05 -->
+    <div class="hub-cat">
+      <div class="cat-head"><span class="cat-num">05</span><span class="cat-name">Inteligencia Artificial</span><span class="cat-total">4 herramientas</span></div>
+      <div class="hub-grid">
+        <div class="hub-card" data-id="mejorador-ia"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-a"><svg><use href="#si-wand"></use></svg></div><div class="t-group"><span class="card-title">Mejorador Imágenes</span><span class="card-sub">AI Upscaler</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Aumenta la resolución y recupera detalles usando Inteligencia Artificial.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="remover-fondo"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-a"><svg><use href="#si-wand"></use></svg></div><div class="t-group"><span class="card-title">Remover Fondo</span><span class="card-sub">AI Background Removal</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Borra fondos complejos de fotografías automáticamente en un clic.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="mejorar-colores"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-a"><svg><use href="#si-wand"></use></svg></div><div class="t-group"><span class="card-title">Mejorar Colores</span><span class="card-sub">Color Enhancement</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Revitaliza imágenes apagadas ajustando vibrancia y contraste.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="mejorador-clasico"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-a"><svg><use href="#si-wand"></use></svg></div><div class="t-group"><span class="card-title">Mejorador Clásico</span><span class="card-sub">Legacy Upscaler</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Versión anterior de nuestro mejorador AI para ilustraciones.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+      </div>
+    </div>
+
+    <!-- CAT 06 -->
+    <div class="hub-cat">
+      <div class="cat-head"><span class="cat-num">06</span><span class="cat-name">Conversores y Utilidades</span><span class="cat-total">10 herramientas</span></div>
+      <div class="hub-grid">
+        <div class="hub-card" data-id="rgb-cmyk"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">RGB a CMYK <span class="bdg bdg-n">Nuevo</span></span><span class="card-sub">Color Converter</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Convierte tus imágenes del espacio RGB a CMYK optimizado para impresión profesional.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="vectorizador"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">Vectorizador</span><span class="card-sub">Image to Vector</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Transforma imágenes en vectores SVG/PDF escalables al infinito.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="tamano-imagen"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">Tamaño de Imagen</span><span class="card-sub">Resize & DPI</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Redimensiona, ajusta DPI y adapta el tamaño de tus archivos fácilmente.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="pdf-png"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">PDF a PNG</span><span class="card-sub">Format Converter</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Convierte vectores PDF en imágenes PNG con fondo transparente.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="png-jpg"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">PNG a JPG</span><span class="card-sub">Format Converter</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Convierte imágenes PNG a formato JPG optimizado con fondo sólido.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="svg-png"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">SVG a PNG</span><span class="card-sub">Format Converter</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Renderiza gráficos vectoriales SVG en archivos PNG rasterizados.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="recortador-inteligente"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">Recortador Int. <span class="bdg bdg-n">Nuevo</span></span><span class="card-sub">Smart Cropper</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Detecta y recorta tus imágenes automáticamente alrededor de tu diseño principal.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="recortador"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">Recortador</span><span class="card-sub">Image Cropper</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Ajusta, encuadra y recorta tus imágenes a las dimensiones exactas.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="reducir-bordes"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">Reducir Bordes</span><span class="card-sub">Trim Transparency</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Elimina el espacio transparente alrededor de tus diseños PNG.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="generador-qr"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-u"><svg><use href="#si-tool"></use></svg></div><div class="t-group"><span class="card-title">Generador QR <span class="bdg bdg-n">Nuevo</span></span><span class="card-sub">QR Code Creator</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Crea códigos QR personalizados de alta calidad para tus prendas, etiquetas o marketing.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+      </div>
+    </div>
+
+    <!-- CAT 07 -->
+    <div class="hub-cat">
+      <div class="cat-head"><span class="cat-num">07</span><span class="cat-name">Negocio y Mockups</span><span class="cat-total">5 herramientas</span></div>
+      <div class="hub-grid">
+        <div class="hub-card" data-id="mockups-semi"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-m"><svg><use href="#si-shirt"></use></svg></div><div class="t-group"><span class="card-title">Mockups Semi. <span class="bdg bdg-u">Update</span></span><span class="card-sub">Apparel Previews</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Monta tus diseños en prendas reales para presentar a tus clientes.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="mockups-3d"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-m"><svg><use href="#si-shirt"></use></svg></div><div class="t-group"><span class="card-title">Mockups 3D</span><span class="card-sub">3D Visualizer</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Visualiza tu impresión en modelos de playeras tridimensionales.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+        <div class="hub-card" data-id="catalogo-playeras"><div class="rib-wrap"><span class="rib rib-prem">Premium</span></div><div class="card-top"><div class="icon-pill ip-m"><svg><use href="#si-shirt"></use></svg></div><div class="t-group"><span class="card-title">Catálogo Playeras</span><span class="card-sub">Blanks Collection</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Colección completa de blanks premium para tus proyectos.</p><div class="card-acts"><a href="#" class="btn-p">Ver Catálogo</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="cotizador"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-m"><svg><use href="#si-shirt"></use></svg></div><div class="t-group"><span class="card-title">Cotizador</span><span class="card-sub">Cost Calculator</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Calcula rápida y precisamente los costos para tus pedidos textiles.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a><a href="#" class="btn-s"><svg><use href="#si-book"></use></svg>Guía de Uso</a></div></div>
+        <div class="hub-card" data-id="etiquetas"><div class="rib-wrap"><span class="rib rib-free">Gratis</span></div><div class="card-top"><div class="icon-pill ip-m"><svg><use href="#si-shirt"></use></svg></div><div class="t-group"><span class="card-title">Etiquetas</span><span class="card-sub">Neck Tags</span></div><button class="star-btn"><svg><use href="#si-star"></use></svg></button></div><p class="card-desc">Crea etiquetas personalizadas con talla y tu marca para el cuello.</p><div class="card-acts"><a href="#" class="btn-p">Abrir Herramienta</a></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Chechena Shirts</div>
+  <div class="f-links"><a href="#">Home</a><a href="#">Megapacks</a><a href="#">Herramientas</a><a href="#">Contacto</a></div>
+  <small>© 2026 Chechena Shirts</small>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const KEY = 'chechena_favs';
+    let favs = JSON.parse(localStorage.getItem(KEY)) || [];
+    const favCat  = document.getElementById('favorites-category');
+    const favGrid = document.getElementById('favorites-grid');
+    const favCount = document.getElementById('fav-count');
+
+    const save = () => { localStorage.setItem(KEY, JSON.stringify(favs)); render(); updateUI(); };
+    const toggle = id => { favs = favs.includes(id) ? favs.filter(f=>f!==id) : [...favs, id]; save(); };
+
+    const updateUI = () => {
+      document.querySelectorAll('.star-btn').forEach(btn => {
+        const id = btn.closest('.hub-card')?.getAttribute('data-id');
+        if (id) btn.classList.toggle('active', favs.includes(id));
+      });
+    };
+
+    const render = () => {
+      if (document.getElementById('hubSearch').value.trim()) return;
+      favGrid.innerHTML = '';
+      if (!favs.length) { favCat.style.display = 'none'; return; }
+      favCat.style.display = 'block';
+      favCount.textContent = `${favs.length} guardado${favs.length!==1?'s':''}`;
+      favs.forEach(id => {
+        let orig = null;
+        document.querySelectorAll(`.hub-card[data-id="${id}"]`).forEach(c => { if(!c.closest('#favorites-grid')) orig = c; });
+        if(!orig) return;
+        const cl = orig.cloneNode(true);
+        cl.style.display = 'flex';
+        cl.querySelector('.star-btn').addEventListener('click', () => toggle(id));
+        favGrid.appendChild(cl);
+      });
+    };
+
+    document.querySelectorAll('.hub-card[data-id]').forEach(card => {
+      if(card.closest('#favorites-grid')) return;
+      const id = card.getAttribute('data-id');
+      card.querySelector('.star-btn').addEventListener('click', () => toggle(id));
+    });
+    updateUI(); render();
+
+    document.getElementById('hubSearch').addEventListener('input', function(){
+      const q = this.value.toLowerCase().trim();
+      let total = 0;
+      document.querySelectorAll('.hub-cat:not(#favorites-category)').forEach(cat => {
+        let n = 0;
+        cat.querySelectorAll('.hub-card').forEach(card => {
+          const t = card.querySelector('.card-title').textContent.toLowerCase();
+          const d = card.querySelector('.card-desc').textContent.toLowerCase();
+          const ok = t.includes(q) || d.includes(q);
+          card.style.display = ok ? 'flex' : 'none';
+          if(ok){ n++; total++; }
+        });
+        cat.style.display = n===0 ? 'none' : 'block';
+      });
+      favCat.style.display = q ? 'none' : (favs.length ? 'block' : 'none');
+      document.getElementById('no-results').style.display = (!total && q) ? 'block' : 'none';
+    });
+  });
+</script>
+</body>
+</html>

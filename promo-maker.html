@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promo Maker — Chechena Shirts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; overflow: hidden; background: #f1f5f9; }
+
+        :root {
+            --c-bg: #f1f5f9;
+            --c-white: #ffffff;
+            --c-black: #0f0f0f;
+            --c-gray-100: #f8fafc;
+            --c-gray-200: #e2e8f0;
+            --c-gray-300: #cbd5e1;
+            --c-gray-500: #64748b;
+            --c-gray-700: #334155;
+            --c-accent: #0f0f0f;
+            --shirt-scale: 45%;
+            --shirt-x: 50%;
+            --shirt-y: 40%;
+            --bg-scale: 150%;
+            --bg-x: 10%;
+            --bg-y: 50%;
+            --bg-opacity: 0.25;
+            --bg-filter: grayscale(100%);
+        }
+
+        #app { display: flex; height: 100vh; font-family: 'Barlow Condensed', sans-serif; background: var(--c-bg); }
+
+        /* SIDEBAR */
+        #sidebar {
+            width: 360px;
+            flex-shrink: 0;
+            background: var(--c-white);
+            border-right: 1px solid var(--c-gray-200);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+        #sidebar-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--c-gray-200);
+            background: var(--c-white);
+            flex-shrink: 0;
+        }
+        .brand-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-logo-mark {
+            width: 36px; height: 36px;
+            background: var(--c-black);
+            color: #fff;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 16px;
+            letter-spacing: -1px;
+            flex-shrink: 0;
+        }
+        .brand-name { font-family: 'Archivo Black', sans-serif; font-size: 15px; color: var(--c-black); letter-spacing: -0.3px; }
+        .brand-sub { font-size: 11px; color: var(--c-gray-500); font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
+        .ver-badge { font-size: 9px; background: var(--c-gray-200); color: var(--c-gray-500); padding: 2px 6px; border-radius: 4px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-left: auto; }
+
+        #sidebar-scroll { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+        #sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        #sidebar-scroll::-webkit-scrollbar-thumb { background: var(--c-gray-300); border-radius: 4px; }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--c-gray-300);
+            border-radius: 14px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--c-gray-100);
+        }
+        .upload-zone:hover { border-color: var(--c-black); background: #f8f9fa; }
+        .upload-zone .icon-wrap { width: 40px; height: 40px; background: var(--c-gray-200); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+        .upload-zone span.main { display: block; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-gray-700); }
+        .upload-zone span.sub { display: block; font-size: 11px; color: var(--c-gray-500); margin-top: 2px; }
+
+        /* Card Sections */
+        .control-card {
+            background: var(--c-gray-100);
+            border: 1px solid var(--c-gray-200);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+        .control-card-title {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--c-gray-500);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .control-card-title svg { width: 12px; height: 12px; }
+
+        /* Inputs */
+        .field-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-gray-500); display: block; margin-bottom: 5px; }
+        .text-input {
+            width: 100%;
+            background: var(--c-white);
+            border: 1px solid var(--c-gray-300);
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Barlow Condensed', sans-serif;
+            color: var(--c-black);
+            outline: none;
+            transition: border 0.15s;
+        }
+        .text-input:focus { border-color: var(--c-black); }
+
+        /* Range */
+        .range-row { display: flex; flex-direction: column; gap: 6px; }
+        .range-label-row { display: flex; justify-content: space-between; align-items: center; }
+        .range-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-gray-500); display: flex; align-items: center; gap: 4px; }
+        .range-label svg { width: 10px; height: 10px; }
+        .range-val { font-size: 11px; font-weight: 800; color: var(--c-black); font-family: 'Archivo Black', sans-serif; }
+        input[type="range"] { width: 100%; accent-color: var(--c-black); height: 4px; }
+
+        /* Toggle Buttons */
+        .toggle-group { display: flex; gap: 6px; }
+        .toggle-btn {
+            flex: 1;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 7px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--c-gray-300);
+            cursor: pointer;
+            transition: all 0.15s;
+            background: transparent;
+            color: var(--c-gray-500);
+            font-family: 'Barlow Condensed', sans-serif;
+        }
+        .toggle-btn.active { background: var(--c-black); color: #fff; border-color: var(--c-black); }
+
+        /* Logo upload */
+        .logo-upload-label {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 40px;
+            border: 2px dashed var(--c-gray-300);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--c-gray-500);
+            background: var(--c-white);
+            transition: all 0.15s;
+        }
+        .logo-upload-label:hover { border-color: var(--c-black); color: var(--c-black); }
+
+        /* BW Toggle button */
+        .bw-btn {
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--c-black);
+            background: var(--c-black);
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Barlow Condensed', sans-serif;
+        }
+        .bw-btn.off { background: transparent; color: var(--c-gray-500); border-color: var(--c-gray-300); }
+
+        /* Footer */
+        #sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--c-gray-200); background: var(--c-white); flex-shrink: 0; }
+        .export-btn {
+            width: 100%;
+            padding: 13px;
+            background: var(--c-black);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.15s, opacity 0.15s;
+        }
+        .export-btn:hover:not(:disabled) { background: #222; }
+        .export-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .export-btn svg { width: 15px; height: 15px; }
+
+        /* PREVIEW AREA */
+        #preview-area {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            background: #e2e8f0;
+            position: relative;
+        }
+        #preview-area::-webkit-scrollbar { width: 5px; }
+        #preview-area::-webkit-scrollbar-thumb { background: var(--c-gray-300); border-radius: 4px; }
+
+        .empty-state {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .empty-box {
+            background: var(--c-white);
+            border: 1px solid var(--c-gray-200);
+            border-radius: 20px;
+            padding: 40px 50px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+        }
+        .empty-box svg { width: 48px; height: 48px; color: var(--c-gray-300); margin-bottom: 12px; }
+        .empty-box .t1 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-gray-700); }
+        .empty-box .t2 { font-size: 12px; color: var(--c-gray-500); margin-top: 4px; font-weight: 500; }
+
+        /* Grid */
+        #cards-grid { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; min-height: 100%; }
+
+        /* Canvas Card */
+        .card-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #111;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+            border: 1px solid #333;
+        }
+        .canvas-inner {
+            position: absolute;
+            top: 0; left: 0;
+            width: 1080px;
+            height: 1080px;
+            transform-origin: top left;
+            pointer-events: none;
+        }
+        .card-actions {
+            position: absolute;
+            top: 8px; right: 8px;
+            display: flex; gap: 5px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 50;
+        }
+        .card-wrap:hover .card-actions { opacity: 1; }
+        .card-action-btn {
+            width: 32px; height: 32px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #111;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: background 0.15s, color 0.15s;
+        }
+        .card-action-btn:hover.dl { background: #2563eb; color: white; }
+        .card-action-btn:hover.rm { background: #ef4444; color: white; }
+        .card-action-btn svg { width: 14px; height: 14px; }
+        .card-num {
+            position: absolute;
+            bottom: 10px; left: 12px;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 28px;
+            color: rgba(255,255,255,0.25);
+            z-index: 50;
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        /* Canvas Layers */
+        .layer-bg-art {
+            position: absolute;
+            pointer-events: none;
+            transform-origin: center center;
+            width: var(--bg-scale);
+            height: auto;
+            left: var(--bg-x);
+            top: var(--bg-y);
+            transform: translate(-50%, -50%);
+            opacity: var(--bg-opacity);
+            filter: var(--bg-filter);
+            mix-blend-mode: lighten;
+        }
+        .layer-texts {
+            position: absolute;
+            top: 50px; left: 50px;
+            z-index: 30;
+            pointer-events: none;
+        }
+        .canvas-title {
+            color: white;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 82px;
+            line-height: 1;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            text-shadow: 0 6px 24px rgba(0,0,0,0.8);
+            display: block;
+        }
+        .canvas-subtitle-wrap {
+            display: inline-block;
+            background: white;
+            padding: 7px 16px 6px;
+            margin-top: -6px;
+            margin-left: 8px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+        }
+        .canvas-subtitle {
+            color: black;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            line-height: 1;
+            display: block;
+        }
+        .layer-shirt {
+            position: absolute;
+            pointer-events: none;
+            z-index: 20;
+        }
+        .layer-shirt-inner { width: 100%; height: auto; }
+        .layer-mockup-wrap {
+            position: absolute;
+            width: 1200px; height: 1200px;
+            right: -150px; top: 50px;
+            pointer-events: none;
+            z-index: 20;
+        }
+        .layer-mockup-wrap img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 50px rgba(0,0,0,0.8)); }
+        .layer-brand {
+            position: absolute;
+            top: 50px; right: 50px;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.9;
+            text-align: right;
+        }
+        .canvas-brand-text {
+            color: white;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 38px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+            line-height: 1;
+        }
+        .canvas-brand-logo { height: 60px; width: auto; max-width: 260px; object-fit: contain; }
+
+        /* Shirt Picker */
+        .shirt-thumb {
+            position: relative;
+            aspect-ratio: 1/1;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--c-gray-200);
+            cursor: pointer;
+            background: #fff;
+            transition: all 0.15s;
+        }
+        .shirt-thumb:hover { border-color: #888; }
+        .shirt-thumb.selected { border-color: var(--c-black); box-shadow: 0 0 0 2px var(--c-black); }
+        .shirt-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 4px; }
+        .shirt-thumb .shirt-remove {
+            position: absolute;
+            top: 3px; right: 3px;
+            width: 18px; height: 18px;
+            background: rgba(239,68,68,0.85);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 12px;
+            line-height: 1;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+        .shirt-thumb:hover .shirt-remove { display: flex; }
+        .shirt-thumb .shirt-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            font-size: 8px;
+            font-weight: 800;
+            text-align: center;
+            padding: 2px 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: none;
+        }
+        .shirt-thumb:hover .shirt-label { display: block; }
+        .shirt-thumb.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 16px; height: 16px;
+            background: var(--c-black);
+            color: #fff;
+            font-size: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+
+        @media (max-width: 900px) {
+            #app { flex-direction: column; }
+            #sidebar { width: 100%; height: auto; max-height: 50vh; border-right: none; border-bottom: 1px solid var(--c-gray-200); order: 2; }
+            #preview-area { order: 1; flex: none; height: 50vh; }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <div class="brand-badge">
+                <div class="brand-logo-mark">CS</div>
+                <div>
+                    <div class="brand-name">Chechena Shirts</div>
+                    <div class="brand-sub">Promo Maker</div>
+                </div>
+                <span class="ver-badge">Social</span>
+            </div>
+        </div>
+
+        <div id="sidebar-scroll">
+
+            <!-- Upload -->
+            <label for="upload-main" class="upload-zone">
+                <div class="icon-wrap">
+                    <i data-lucide="upload" style="width:18px;height:18px;color:#64748b;"></i>
+                </div>
+                <span class="main">Subir Diseños (PNG/JPG)</span>
+                <span class="sub">Puedes subir varios a la vez</span>
+                <input id="upload-main" type="file" style="display:none;" accept="image/png,image/jpeg" multiple />
+            </label>
+
+            <!-- Selector de Playera -->
+            <div class="control-card" id="shirt-picker-card">
+                <div class="control-card-title" style="justify-content:space-between;">
+                    <span style="display:flex;align-items:center;gap:6px;">
+                        <i data-lucide="shirt"></i> Modelo de Playera
+                    </span>
+                    <label for="upload-custom-shirt" style="cursor:pointer;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#64748b;background:#e2e8f0;padding:3px 8px;border-radius:5px;transition:all 0.15s;" onmouseover="this.style.background='#0f0f0f';this.style.color='#fff'" onmouseout="this.style.background='#e2e8f0';this.style.color='#64748b'">
+                        + Añadir
+                    </label>
+                    <input id="upload-custom-shirt" type="file" style="display:none;" accept="image/png,image/jpeg,image/webp" multiple />
+                </div>
+                <div id="shirt-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
+                <p id="shirt-hint" style="font-size:10px;color:#94a3b8;text-align:center;margin-top:8px;font-weight:600;">Haz clic en "+ Añadir" para cargar tus playeras desde<br><strong style="color:#64748b;">PAGINADEDISEÑOS</strong></p>
+            </div>
+            <!-- Enlace a descarga de playeras -->
+<div style="text-align:center;margin-top:10px;">
+  
+  <p style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:6px;">
+    ¿No tienes modelos de playera?
+  </p>
+
+  <a href="https://drive.google.com/drive/folders/1a7FARbTx_EOqnSutoUqNtivttZlaGzR6?usp=drive_link" target="_blank"
+     style="
+        display:inline-block;
+        font-size:10px;
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:0.1em;
+        color:#fff;
+        background:#0f0f0f;
+        padding:6px 12px;
+        border-radius:6px;
+        text-decoration:none;
+        transition:all 0.2s;
+     "
+     onmouseover="this.style.background='#2563eb'"
+     onmouseout="this.style.background='#0f0f0f'">
+     
+     📥 Descargar Playeras
+     
+  </a>
+
+  <p style="font-size:9px;color:#64748b;margin-top:6px;">
+    PNG sin fondo • Listas para usar
+  </p>
+
+</div>
+
+            <!-- Textos -->
+            <div class="control-card">
+                <div class="control-card-title">
+                    <i data-lucide="type"></i> Textos Principales
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div>
+                        <label class="field-label">Línea 1 (Gruesa)</label>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <input id="textLine1" type="text" value="VECTORES" class="text-input" style="flex:1;" />
+                            <div style="position:relative;flex-shrink:0;">
+                                <input id="colorLine1" type="color" value="#ffffff" title="Color Línea 1" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);" />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="field-label">Línea 2 (Subtítulo Etiqueta)</label>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <input id="textLine2" type="text" value="EDITABLES" class="text-input" style="flex:1;" />
+                            <div style="display:flex;gap:4px;flex-shrink:0;">
+                                <input id="colorLine2Text" type="color" value="#000000" title="Color texto" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);" />
+                                <input id="colorLine2Bg" type="color" value="#ffffff" title="Color fondo etiqueta" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);" />
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:4px;margin-top:4px;">
+                            <span style="font-size:9px;color:var(--c-gray-500);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;flex:1;text-align:right;padding-right:2px;">Texto</span>
+                            <span style="font-size:9px;color:var(--c-gray-500);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;width:36px;text-align:center;">Fondo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marca -->
+            <div class="control-card">
+                <div class="control-card-title">
+                    <i data-lucide="tag"></i> Tu Marca (Opcional)
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="toggle-group">
+                        <button id="btnBrandText" class="toggle-btn active">Texto</button>
+                        <button id="btnBrandLogo" class="toggle-btn">Logo</button>
+                    </div>
+                    <div id="brandTextContainer">
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <input id="brandText" type="text" placeholder="EJ. MI MARCA" class="text-input" style="flex:1;" />
+                            <input id="colorBrand" type="color" value="#ffffff" title="Color TextoLogo" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);flex-shrink:0;" />
+                        </div>
+                    </div>
+                    <div id="brandLogoContainer" style="display:none;">
+                        <label for="upload-logo" class="logo-upload-label" id="logoUploadLabel">
+                            <i data-lucide="image" style="width:14px;height:14px;margin-right:6px;"></i>
+                            Subir Logo (PNG)
+                        </label>
+                        <input id="upload-logo" type="file" style="display:none;" accept="image/png" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ajuste en Playera -->
+            <div class="control-card">
+                <div class="control-card-title">
+                    <i data-lucide="shirt"></i> Ajuste en Playera
+                </div>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="range-row">
+                        <div class="range-label-row">
+                            <span class="range-label"><i data-lucide="maximize-2"></i> Escala</span>
+                            <span class="range-val" id="val-shirtDesignScale">45%</span>
+                        </div>
+                        <input id="shirtDesignScale" type="range" min="10" max="150" value="45" />
+                    </div>
+                    <div class="range-row">
+                        <div class="range-label-row">
+                            <span class="range-label"><i data-lucide="move-vertical"></i> Posición Y</span>
+                            <span class="range-val" id="val-shirtDesignY">40%</span>
+                        </div>
+                        <input id="shirtDesignY" type="range" min="-20" max="120" value="40" />
+                    </div>
+                    <div class="range-row">
+                        <div class="range-label-row">
+                            <span class="range-label"><i data-lucide="move-horizontal"></i> Posición X</span>
+                            <span class="range-val" id="val-shirtDesignX">50%</span>
+                        </div>
+                        <input id="shirtDesignX" type="range" min="-20" max="120" value="50" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arte de Fondo -->
+            <div class="control-card">
+                <div class="control-card-title" style="justify-content:space-between;">
+                    <span style="display:flex;align-items:center;gap:6px;">
+                        <i data-lucide="layers"></i> Arte de Fondo
+                    </span>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <label style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--c-gray-500);">Fondo</label>
+                        <input id="colorCanvasBg" type="color" value="#111111" title="Color de fondo del canvas" style="width:28px;height:28px;padding:2px;border:1px solid var(--c-gray-300);border-radius:6px;cursor:pointer;background:var(--c-white);" />
+                        <button id="btnBgGrayscale" class="bw-btn">B&W ON</button>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="range-row">
+                        <div class="range-label-row">
+                            <span class="range-label"><i data-lucide="sliders-horizontal"></i> Opacidad</span>
+                            <span class="range-val" id="val-bgOpacity">25%</span>
+                        </div>
+                        <input id="bgOpacity" type="range" min="0" max="100" value="25" />
+                    </div>
+                    <div class="range-row">
+                        <div class="range-label-row">
+                            <span class="range-label"><i data-lucide="maximize"></i> Escala</span>
+                            <span class="range-val" id="val-bgDesignScale">150%</span>
+                        </div>
+                        <input id="bgDesignScale" type="range" min="50" max="300" value="150" />
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div class="range-row">
+                            <div class="range-label-row">
+                                <span class="range-label">Eje X</span>
+                            </div>
+                            <input id="bgDesignX" type="range" min="-50" max="150" value="10" />
+                        </div>
+                        <div class="range-row">
+                            <div class="range-label-row">
+                                <span class="range-label">Eje Y</span>
+                            </div>
+                            <input id="bgDesignY" type="range" min="-50" max="150" value="50" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="sidebar-footer">
+            <button id="btnExportZip" class="export-btn" disabled>
+                <i data-lucide="archive" id="zipIcon"></i>
+                <span id="btnExportZipText">Exportar Todos (ZIP)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div id="preview-area">
+        <div id="empty-state" class="empty-state">
+            <label for="upload-empty" style="cursor:pointer;">
+                <div class="empty-box">
+                    <i data-lucide="image" style="display:block;margin:0 auto 12px;"></i>
+                    <div class="t1">Área de Visualización</div>
+                    <div class="t2">Sube tus diseños a la izquierda o haz clic aquí.</div>
+                </div>
+                <input id="upload-empty" type="file" style="display:none;" accept="image/png,image/jpeg" multiple />
+            </label>
+        </div>
+        <div id="cards-grid" style="display:none;"></div>
+    </div>
+
+</div>
+
+<script>
+// Patch CSS rules for html-to-image
+try {
+    if (typeof CSSStyleSheet !== 'undefined') {
+        const sheet = CSSStyleSheet.prototype;
+        const originalRules = Object.getOwnPropertyDescriptor(sheet, 'cssRules');
+        if (originalRules && !sheet.__patchedCssRules) {
+            Object.defineProperty(sheet, 'cssRules', {
+                get() { try { return originalRules.get.call(this); } catch(e) { return []; } }
+            });
+            sheet.__patchedCssRules = true;
+        }
+    }
+} catch(e) {}
+
+const MOCKUP_URL = "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/2mkp_oversize.png?v=1769562951";
+const DUMMY_IMG = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+const state = {
+    designs: [],
+    textLine1: "VECTORES",
+    textLine2: "EDITABLES",
+    brandType: 'text',
+    brandText: '',
+    brandLogoUrl: null,
+    shirtDesignScale: 45,
+    shirtDesignX: 50,
+    shirtDesignY: 40,
+    bgDesignScale: 150,
+    bgDesignX: 10,
+    bgDesignY: 50,
+    bgOpacity: 25,
+    bgGrayscale: true,
+    isExporting: false,
+    mockupBase64: null,
+    // Colors
+    colorLine1: '#ffffff',
+    colorLine2Text: '#000000',
+    colorLine2Bg: '#ffffff',
+    colorBrand: '#ffffff',
+    colorCanvasBg: '#111111',
+    // Shirt picker
+    shirtMockups: [], // { id, url, name }
+    selectedShirtId: null
+};
+
+// Preload mockup
+function getActiveMockupUrl() {
+    if (state.selectedShirtId) {
+        const found = state.shirtMockups.find(s => s.id === state.selectedShirtId);
+        if (found) return found.url;
+    }
+    return state.mockupBase64 || MOCKUP_URL;
+}
+
+function preloadMockup() {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = () => {
+        const c = document.createElement('canvas');
+        c.width = img.width; c.height = img.height;
+        c.getContext('2d').drawImage(img, 0, 0);
+        state.mockupBase64 = c.toDataURL('image/png');
+        renderUI();
+    };
+    img.onerror = () => {};
+    img.src = MOCKUP_URL + "?cb=" + Date.now();
+}
+
+function setCSSVars(node) {
+    const el = node || document.documentElement;
+    el.style.setProperty('--shirt-scale', state.shirtDesignScale + '%');
+    el.style.setProperty('--shirt-x', state.shirtDesignX + '%');
+    el.style.setProperty('--shirt-y', state.shirtDesignY + '%');
+    el.style.setProperty('--bg-scale', state.bgDesignScale + '%');
+    el.style.setProperty('--bg-x', state.bgDesignX + '%');
+    el.style.setProperty('--bg-y', state.bgDesignY + '%');
+    el.style.setProperty('--bg-opacity', state.bgOpacity / 100);
+    el.style.setProperty('--bg-filter', state.bgGrayscale ? 'grayscale(100%)' : 'none');
+}
+
+function getCanvasHTML(designUrl) {
+    const safeUrl = designUrl || DUMMY_IMG;
+    const safeLogo = state.brandLogoUrl || DUMMY_IMG;
+
+    const bgHTML = designUrl ? `
+        <img src="${safeUrl}" class="layer-bg-art" alt="" />
+    ` : '';
+
+    const shirtHTML = designUrl ? `
+        <div class="layer-shirt" style="left:var(--shirt-x);top:var(--shirt-y);width:var(--shirt-scale);transform:translate(-50%,-50%);">
+            <img src="${safeUrl}" class="layer-shirt-inner" alt="" />
+        </div>
+    ` : '';
+
+    const text1Show = state.textLine1 ? 'block' : 'none';
+    const text2Show = state.textLine2 ? 'inline-block' : 'none';
+
+    const finalMockup = getActiveMockupUrl();
+    const crossAttr = finalMockup.startsWith('data:') ? '' : 'crossorigin="anonymous"';
+
+    const brandTextShow = (state.brandType === 'text' && state.brandText) ? 'block' : 'none';
+    const brandLogoShow = (state.brandType === 'logo' && state.brandLogoUrl) ? 'block' : 'none';
+
+    return `
+        <div style="position:absolute;inset:0;background:${state.colorCanvasBg};"></div>
+        ${bgHTML}
+        <div class="layer-texts">
+            <span class="canvas-title" style="display:${text1Show};color:${state.colorLine1};">${state.textLine1}</span>
+            <div class="canvas-subtitle-wrap" style="display:${text2Show};background:${state.colorLine2Bg};">
+                <span class="canvas-subtitle" style="color:${state.colorLine2Text};">${state.textLine2}</span>
+            </div>
+        </div>
+        <div class="layer-mockup-wrap">
+            <img src="${finalMockup}" ${crossAttr} alt="mockup" />
+            ${shirtHTML}
+        </div>
+        <div class="layer-brand">
+            <div class="canvas-brand-text dyn-brand-text" style="display:${brandTextShow};color:${state.colorBrand};">${state.brandText}</div>
+            <img class="canvas-brand-logo dyn-brand-logo" src="${safeLogo}" style="display:${brandLogoShow};" alt="logo" />
+        </div>
+    `;
+}
+
+function updateScales() {
+    document.querySelectorAll('.card-wrap').forEach(card => {
+        const inner = card.querySelector('.canvas-inner');
+        if (inner) {
+            const scale = card.clientWidth / 1080;
+            inner.style.transform = `scale(${scale})`;
+        }
+    });
+}
+
+function renderUI() {
+    setCSSVars();
+    const grid = document.getElementById('cards-grid');
+    const empty = document.getElementById('empty-state');
+    const exportBtn = document.getElementById('btnExportZip');
+
+    if (state.designs.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'flex';
+        exportBtn.disabled = true;
+        lucide.createIcons();
+        return;
+    }
+
+    empty.style.display = 'none';
+    grid.style.display = 'grid';
+    exportBtn.disabled = state.isExporting;
+
+    grid.innerHTML = state.designs.map((d, i) => `
+        <div class="card-wrap" id="card-${i}">
+            <div class="canvas-inner">${getCanvasHTML(d.url)}</div>
+            <div class="card-actions">
+                <button class="card-action-btn dl" onclick="exportSingle(${i})" title="Descargar">
+                    <i data-lucide="download"></i>
+                </button>
+                <button class="card-action-btn rm" onclick="removeDesign(${i})" title="Eliminar">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            </div>
+            <div class="card-num">${String(i+1).padStart(2,'0')}</div>
+        </div>
+    `).join('');
+
+    lucide.createIcons();
+    updateScales();
+    setTimeout(updateScales, 50);
+    setTimeout(updateScales, 300);
+}
+
+async function handleFileUpload(e) {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    const newDesigns = await Promise.all(files.map(f => new Promise(resolve => {
+        const r = new FileReader();
+        r.onload = ev => resolve({ id: Math.random().toString(36).slice(2), url: ev.target.result, name: f.name });
+        r.readAsDataURL(f);
+    })));
+    state.designs = [...state.designs, ...newDesigns];
+    e.target.value = '';
+    renderUI();
+}
+
+window.removeDesign = function(i) {
+    state.designs.splice(i, 1);
+    renderUI();
+};
+
+function setExportState(on, text = '') {
+    state.isExporting = on;
+    const btn = document.getElementById('btnExportZip');
+    const icon = document.getElementById('zipIcon');
+    const span = document.getElementById('btnExportZipText');
+    if (on) {
+        btn.disabled = true;
+        icon.style.opacity = '0';
+        span.textContent = text;
+    } else {
+        btn.disabled = state.designs.length === 0;
+        icon.style.opacity = '1';
+        span.textContent = 'Exportar Todos (ZIP)';
+    }
+}
+
+async function captureDesign(idx) {
+    const design = state.designs[idx];
+    const node = document.createElement('div');
+    node.style.cssText = `width:1080px;height:1080px;background:${state.colorCanvasBg};position:fixed;top:0;left:0;z-index:-9999;pointer-events:none;overflow:hidden;`;
+    setCSSVars(node);
+    node.innerHTML = getCanvasHTML(design.url);
+    document.body.appendChild(node);
+
+    await Promise.all(Array.from(node.querySelectorAll('img')).map(img =>
+        img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
+    ));
+    await document.fonts.ready;
+    await new Promise(r => setTimeout(r, 80));
+
+    try {
+        const dataUrl = await window.htmlToImage.toJpeg(node, {
+            quality: 0.88, pixelRatio: 1.5,
+            backgroundColor: state.colorCanvasBg,
+            style: { transform: 'scale(1)', transformOrigin: 'top left' }
+        });
+        const arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]); let n = bstr.length;
+        const u8 = new Uint8Array(n);
+        while (n--) u8[n] = bstr.charCodeAt(n);
+        return new Blob([u8], { type: mime });
+    } finally {
+        if (node.parentNode) node.parentNode.removeChild(node);
+    }
+}
+
+window.exportSingle = async function(idx) {
+    setExportState(true, 'Generando...');
+    try {
+        const blob = await captureDesign(idx);
+        const a = document.createElement('a');
+        a.download = `chechenashirts-${state.textLine1.replace(/\s+/g,'-')}-${idx+1}.jpg`;
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    } catch(e) {
+        alert('Error al exportar: ' + (e.message || e));
+    } finally {
+        setExportState(false);
+    }
+};
+
+document.getElementById('btnExportZip').addEventListener('click', async () => {
+    if (!state.designs.length || !window.JSZip) return;
+    setExportState(true, 'Preparando ZIP...');
+    try {
+        const zip = new window.JSZip();
+        for (let i = 0; i < state.designs.length; i++) {
+            setExportState(true, `Procesando ${i+1}/${state.designs.length}...`);
+            const blob = await captureDesign(i);
+            zip.file(`chechenashirts-${state.textLine1.replace(/\s+/g,'-')}-${i+1}.jpg`, blob);
+            await new Promise(r => setTimeout(r, 40));
+        }
+        setExportState(true, 'Comprimiendo...');
+        const content = await zip.generateAsync({ type: 'blob' });
+        const a = document.createElement('a');
+        a.download = `chechenashirts-${state.textLine1.replace(/\s+/g,'-')}-Pack.zip`;
+        a.href = URL.createObjectURL(content);
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    } catch(e) {
+        alert('Error al crear ZIP: ' + (e.message || e));
+    } finally {
+        setExportState(false);
+    }
+});
+
+// ── Shirt Picker ──────────────────────────────────────────────
+function renderShirtPicker() {
+    const grid = document.getElementById('shirt-grid');
+    const hint = document.getElementById('shirt-hint');
+    if (!grid) return;
+
+    if (state.shirtMockups.length === 0) {
+        grid.innerHTML = '';
+        if (hint) hint.style.display = 'block';
+        return;
+    }
+    if (hint) hint.style.display = 'none';
+
+    grid.innerHTML = state.shirtMockups.map(s => `
+        <div class="shirt-thumb ${state.selectedShirtId === s.id ? 'selected' : ''}" 
+             onclick="selectShirt('${s.id}')" title="${s.name}">
+            <img src="${s.url}" alt="${s.name}" />
+            <span class="shirt-label">${s.name}</span>
+            <button class="shirt-remove" onclick="event.stopPropagation();removeShirt('${s.id}')" title="Eliminar">×</button>
+        </div>
+    `).join('');
+}
+
+window.selectShirt = function(id) {
+    state.selectedShirtId = (state.selectedShirtId === id) ? null : id;
+    renderShirtPicker();
+    renderUI();
+};
+
+window.removeShirt = function(id) {
+    state.shirtMockups = state.shirtMockups.filter(s => s.id !== id);
+    if (state.selectedShirtId === id) state.selectedShirtId = null;
+    renderShirtPicker();
+    renderUI();
+};
+
+document.getElementById('upload-custom-shirt').addEventListener('change', async e => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    const newShirts = await Promise.all(files.map(f => new Promise(resolve => {
+        const r = new FileReader();
+        r.onload = ev => resolve({
+            id: Math.random().toString(36).slice(2),
+            url: ev.target.result,
+            name: f.name.replace(/\.[^.]+$/, '')
+        });
+        r.readAsDataURL(f);
+    })));
+    state.shirtMockups = [...state.shirtMockups, ...newShirts];
+    // Auto-select the first one if nothing is selected
+    if (!state.selectedShirtId && newShirts.length > 0) {
+        state.selectedShirtId = newShirts[0].id;
+    }
+    e.target.value = '';
+    renderShirtPicker();
+    renderUI();
+});
+// ─────────────────────────────────────────────────────────────
+
+// Color pickers
+document.getElementById('colorLine1').addEventListener('input', e => {
+    state.colorLine1 = e.target.value;
+    renderUI();
+});
+document.getElementById('colorLine2Text').addEventListener('input', e => {
+    state.colorLine2Text = e.target.value;
+    renderUI();
+});
+document.getElementById('colorLine2Bg').addEventListener('input', e => {
+    state.colorLine2Bg = e.target.value;
+    renderUI();
+});
+document.getElementById('colorBrand').addEventListener('input', e => {
+    state.colorBrand = e.target.value;
+    renderUI();
+});
+document.getElementById('colorCanvasBg').addEventListener('input', e => {
+    state.colorCanvasBg = e.target.value;
+    renderUI();
+});
+
+// Inputs
+document.getElementById('upload-main').addEventListener('change', handleFileUpload);
+document.getElementById('upload-empty').addEventListener('change', handleFileUpload);
+
+document.getElementById('textLine1').addEventListener('input', e => {
+    state.textLine1 = e.target.value;
+    document.querySelectorAll('.canvas-title').forEach(n => {
+        n.textContent = e.target.value;
+        n.style.display = e.target.value ? 'block' : 'none';
+    });
+});
+document.getElementById('textLine2').addEventListener('input', e => {
+    state.textLine2 = e.target.value;
+    document.querySelectorAll('.canvas-subtitle').forEach(n => n.textContent = e.target.value);
+    document.querySelectorAll('.canvas-subtitle-wrap').forEach(n => n.style.display = e.target.value ? 'inline-block' : 'none');
+});
+
+document.getElementById('brandText').addEventListener('input', e => {
+    state.brandText = e.target.value;
+    document.querySelectorAll('.dyn-brand-text').forEach(n => {
+        n.textContent = e.target.value;
+        n.style.display = (state.brandType === 'text' && e.target.value) ? 'block' : 'none';
+    });
+});
+
+document.getElementById('btnBrandText').addEventListener('click', () => {
+    state.brandType = 'text';
+    document.getElementById('btnBrandText').classList.add('active');
+    document.getElementById('btnBrandLogo').classList.remove('active');
+    document.getElementById('brandTextContainer').style.display = 'block';
+    document.getElementById('brandLogoContainer').style.display = 'none';
+    document.querySelectorAll('.dyn-brand-text').forEach(n => n.style.display = (state.brandText) ? 'block' : 'none');
+    document.querySelectorAll('.dyn-brand-logo').forEach(n => n.style.display = 'none');
+});
+
+document.getElementById('btnBrandLogo').addEventListener('click', () => {
+    state.brandType = 'logo';
+    document.getElementById('btnBrandLogo').classList.add('active');
+    document.getElementById('btnBrandText').classList.remove('active');
+    document.getElementById('brandTextContainer').style.display = 'none';
+    document.getElementById('brandLogoContainer').style.display = 'block';
+    document.querySelectorAll('.dyn-brand-text').forEach(n => n.style.display = 'none');
+    document.querySelectorAll('.dyn-brand-logo').forEach(n => n.style.display = (state.brandLogoUrl) ? 'block' : 'none');
+});
+
+document.getElementById('upload-logo').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+        state.brandLogoUrl = ev.target.result;
+        document.getElementById('logoUploadLabel').innerHTML = '<i data-lucide="check" style="width:14px;height:14px;margin-right:6px;"></i>Logo Cargado ✓';
+        lucide.createIcons();
+        document.querySelectorAll('.dyn-brand-logo').forEach(n => {
+            n.src = state.brandLogoUrl;
+            n.style.display = (state.brandType === 'logo') ? 'block' : 'none';
+        });
+    };
+    r.readAsDataURL(f);
+});
+
+// Ranges
+const rangeIds = ['shirtDesignScale','shirtDesignY','shirtDesignX','bgOpacity','bgDesignScale','bgDesignX','bgDesignY'];
+rangeIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', e => {
+        state[id] = parseFloat(e.target.value);
+        const valEl = document.getElementById('val-' + id);
+        if (valEl) valEl.textContent = e.target.value + '%';
+        setCSSVars();
+    });
+});
+
+document.getElementById('btnBgGrayscale').addEventListener('click', () => {
+    state.bgGrayscale = !state.bgGrayscale;
+    const btn = document.getElementById('btnBgGrayscale');
+    if (state.bgGrayscale) {
+        btn.textContent = 'B&W ON';
+        btn.classList.remove('off');
+    } else {
+        btn.textContent = 'B&W OFF';
+        btn.classList.add('off');
+    }
+    setCSSVars();
+});
+
+window.addEventListener('resize', updateScales);
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    preloadMockup();
+    setCSSVars();
+    renderShirtPicker();
+    renderUI();
+    setTimeout(updateScales, 200);
+});
+</script>
+</body>
+</html>

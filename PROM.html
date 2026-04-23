@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts DTF - Chechena Shirts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #f8fafc;
+    color: #0f172a;
+    font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+    line-height: 1.55;
+}
+
+#lmx-prompts {
+    width: 100%;
+    min-height: 100vh;
+}
+
+#lmx-prompts .lmx-inner {
+    width: min(100%, 1200px);
+    margin: auto;
+    padding: 28px clamp(12px, 3vw, 28px) 40px;
+}
+
+.brand-header {
+    text-align: center;
+    padding: 32px 0 8px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 28px;
+}
+
+.brand-header h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #0f172a;
+    text-transform: uppercase;
+}
+
+.brand-header h1 span {
+    color: #dc2626;
+}
+
+.brand-header p {
+    color: #64748b;
+    font-size: 15px;
+    margin-top: 6px;
+}
+
+#lmx-prompts h2 {
+    margin: 0 0 10px;
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 700;
+}
+
+#lmx-prompts p.sub {
+    color: #64748b;
+    margin-bottom: 22px;
+    font-size: 14px;
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    font-size: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #64748b;
+}
+
+.filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 8px 0;
+}
+
+.filter-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #64748b;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.filter-btn:hover {
+    border-color: #dc2626;
+    color: #dc2626;
+}
+
+.filter-btn.active {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+}
+
+.results-counter {
+    margin-bottom: 16px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.card {
+    grid-column: span 6;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(2, 8, 23, 0.06);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(2, 8, 23, 0.12);
+}
+
+@media (max-width: 768px) {
+    .card { grid-column: span 12; }
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: #0f172a;
+}
+
+.card-desc {
+    font-size: 13px;
+    color: #64748b;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: #f1f5f9;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #0f172a;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: inherit;
+}
+
+button.copy-btn {
+    align-self: flex-end;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #dc2626;
+    background: #dc2626;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: inherit;
+}
+
+button.copy-btn:hover { background: #b91c1c; border-color: #b91c1c; }
+
+.category-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    background: #fef2f2;
+    color: #dc2626;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.no-results {
+    grid-column: span 12;
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+}
+
+.no-results h3 { margin-bottom: 8px; color: #374151; }
+
+footer {
+    text-align: center;
+    padding: 24px;
+    color: #94a3b8;
+    font-size: 13px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 40px;
+}
+
+footer strong { color: #dc2626; }
+</style>
+</head>
+<body>
+
+<div class="brand-header">
+    <h1>Chechena <span>Shirts</span></h1>
+    <p>Recursos y herramientas para estampadores DTF</p>
+</div>
+
+<section id="lmx-prompts">
+    <div class="lmx-inner">
+        <h2>✨ Prompts creativos para DTF — Edición Avanzada</h2>
+        <p class="sub">Inspírate con estos <strong>120+ prompts especializados</strong> listos para usar en <b>Canva, ChatGPT, Midjourney u otras IA</b> y genera diseños únicos para tus playeras DTF.</p>
+
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-input" placeholder="Buscar prompts... (ej: anime, vintage, skull, cyberpunk)">
+        </div>
+
+        <div class="filters-container">
+            <button class="filter-btn active" data-category="todos">🔍 Todos</button>
+            <button class="filter-btn" data-category="streetwear">🏢 Streetwear</button>
+            <button class="filter-btn" data-category="anime">🎌 Anime</button>
+            <button class="filter-btn" data-category="vintage">📻 Vintage</button>
+            <button class="filter-btn" data-category="gotico">💀 Gótico</button>
+            <button class="filter-btn" data-category="motivacional">💪 Motivacional</button>
+            <button class="filter-btn" data-category="grunge">🎸 Grunge</button>
+            <button class="filter-btn" data-category="minimalista">⚫ Minimalista</button>
+            <button class="filter-btn" data-category="naturaleza">🌿 Naturaleza</button>
+            <button class="filter-btn" data-category="musica">🎵 Música</button>
+            <button class="filter-btn" data-category="abstracto">🎨 Abstracto</button>
+            <button class="filter-btn" data-category="deportivo">⚽ Deportivo</button>
+            <button class="filter-btn" data-category="mascotas">🐾 Mascotas</button>
+            <button class="filter-btn" data-category="cyberpunk">🤖 Cyberpunk</button>
+            <button class="filter-btn" data-category="tipografia">📝 Tipografía</button>
+        </div>
+
+        <div class="results-counter">Mostrando <span id="count">0</span> prompts</div>
+
+        <div class="grid" id="prompts-grid"></div>
+    </div>
+</section>
+
+
+<script>
+const PROMPTS = [
+    { category: "streetwear", title: "🐻 Oso Streetwear Boss", desc: "Oso dominante con actitud urbana y accesorios gold.", prompt: "Diseño de un oso de cuerpo completo en estilo streetwear, con una pose imponente y detalles modernos. El oso debe llevar accesorios urbanos como gafas de sol, cadenas de oro gruesas, gorra de lado y zapatillas Jordan. Su pelaje puede tener texturas estilizadas o patrones para darle un toque artístico. Incluir detalles de graffiti o elementos urbanos en el diseño, con colores vibrantes que contrasten fuertemente contra un fondo negro. Sin elementos extra alrededor, solo el oso de cuerpo completo y los detalles mencionados." },
+    { category: "streetwear", title: "🦁 León Grafitero", desc: "León con corona en estilo grafiti urbano vibrante.", prompt: "Ilustración de un león de cuerpo completo en streetwear urbano con corona dorada, cadenas gruesas, gafas de sol reflectantes y fondo de graffiti colorido. El león debe tener melena estilizada con texturas urbanas, ropa oversize tipo hoodie, y pose dominante. Incorporar detalles modernos como auriculares, sneakers premium y elementos de spray paint en colores neón sobre fondo negro." },
+    { category: "streetwear", title: "🦅 Águila Skater", desc: "Águila en skate con accesorios urbanos y fondo de ciudad.", prompt: "Diseño de un águila antropomorfa haciendo un truco en patineta, ropa deportiva oversize, gorra hacia atrás, mochila vintage y auriculares grandes. El águila debe tener alas extendidas en pose dinámica, plumas con detalles urbanos, y estar rodeada de grafismos de ciudad. Incorporar tipografía bold y colores street sobre fondo oscuro con luces de neón." },
+    { category: "streetwear", title: "👟 Sneaker Fusion", desc: "Zapatillas icónicas fusionadas con elementos abstractos.", prompt: "Ilustración de un par de sneakers flotando en el aire, fusionados con formas abstractas geométricas y salpicaduras de pintura estilo graffiti. Los sneakers deben tener detalles hiperrealistas, cordones dinámicos, y estar rodeados de elementos urbanos como códigos QR, iconos digitales y texturas de concreto. Usar paleta de colores saturados con acentos en neón." },
+    { category: "streetwear", title: "🧢 Skateboy Urbano", desc: "Chico con sudadera, chains y fondo de rayos urban.", prompt: "Ilustración de un joven skater en pose relajada, con sudadera con capucha oversize, cadenas de oro, gorra snapback, y patineta en la mano. Estilo de ilustración semi-realista con detalles urbanos, fondo de rayos geométricos, elementos de street art y tipografía grunge. Paleta de colores oscura con acentos vibrantes." },
+    { category: "streetwear", title: "🌆 Cityscape Silhouette", desc: "Silueta de ciudad con elementos streetwear superpuestos.", prompt: "Diseño que combine la silueta de una ciudad moderna al atardecer con elementos de streetwear flotando: zapatillas, gorras, cadenas y graffitis. La ciudad debe tener rascacielos estilizados, luces de neón y un cielo degradado. Los elementos streetwear deben estar integrados orgánicamente en la composición con efectos de transparencia." },
+    { category: "streetwear", title: "🔥 Fire Typography Urban", desc: "Letras en llamas con elementos urbanos integrados.", prompt: "Tipografía bold en llamas realistas con elementos urbanos integrados: cadenas que atraviesan las letras, spray paint dripping, y efectos de neón. Las llamas deben ser hiperrealistas con colores que van del rojo al azul eléctrico. Incorporar texturas de concreto y metal oxidado como elementos de fondo." },
+    { category: "streetwear", title: "🎯 Target Street Art", desc: "Diana de tiro con elementos de street art superpuestos.", prompt: "Diseño de una diana de tiro al blanco con capas de graffiti, stickers urbanos y elementos de street art superpuestos. La diana debe tener texturas desgastadas, colores vibrantes que contrasten, y elementos como códigos de barras, iconos urbanos y tipografía stencil alrededor." },
+    { category: "streetwear", title: "⚡ Thunder Skateboard", desc: "Patineta con rayos eléctricos y efectos urbanos.", prompt: "Ilustración de una patineta flotando con rayos eléctricos saliendo de las ruedas, efectos de electricidad azul y púrpura, fondo urbano oscuro con texturas de asfalto. La patineta debe tener gráficos personalizados, detalles metálicos y estar rodeada de partículas eléctricas brillantes." },
+    { category: "streetwear", title: "🏢 Urban Geometry", desc: "Formas geométricas con texturas urbanas y colores street.", prompt: "Composición de formas geométricas abstractas (triángulos, hexágonos, círculos) con texturas urbanas: concreto, metal oxidado, graffiti. Cada forma debe tener un color diferente pero dentro de una paleta urbana (grises, negros, acentos en neón). Incluir elementos como códigos QR y tipografía minimal." },
+    { category: "streetwear", title: "🎨 Spray Can Art", desc: "Latas de spray creando arte en tiempo real con colores vibrantes.", prompt: "Ilustración de latas de spray en el aire creando un mural colorido, con chorros de pintura formando formas abstractas y letras. Las latas deben estar flotando en pose dinámica, con etiquetas street style, y rodeadas de salpicaduras de colores neón sobre fondo negro urbano." },
+    { category: "streetwear", title: "🔗 Chain Reaction", desc: "Cadenas de oro entrelazadas formando patrones urbanos.", prompt: "Diseño de cadenas de oro de diferentes grosores entrelazándose para formar un patrón complejo, con algunos eslabones brillando con efectos de luz. Incluir elementos como candados vintage, dijes urbanos (dados, llaves, símbolos) y texturas metálicas realistas sobre fondo oscuro." },
+    { category: "streetwear", title: "🌈 Rainbow Drip", desc: "Efecto de pintura goteando en colores arcoíris urban style.", prompt: "Efecto de pintura multicolor goteando desde la parte superior, con colores vibrantes que se mezclan (neón rosa, azul eléctrico, verde lima, amarillo intenso). La pintura debe tener textura realista, reflejos metálicos y formar charcos en la parte inferior con salpicaduras dinámicas." },
+    { category: "streetwear", title: "🎧 DJ Urban Setup", desc: "Setup de DJ con tornamesas, auriculares y efectos de sonido.", prompt: "Composición de equipos de DJ: tornamesas vintage, mixer profesional, auriculares colgando, discos de vinilo flotando, y ondas de sonido visibles. Todo con estética urbana moderna, colores neón, efectos de luz y texturas metálicas. Incluir elementos como cables, botones brillantes y displays digitales." },
+    { category: "anime", title: "🎌 Samurai Moderno", desc: "Guerrero samurai con elementos futuristas y katana brillante.", prompt: "Ilustración en estilo anime de un samurai moderno con armadura que mezcla elementos tradicionales japoneses y tecnología futurista. Debe tener una katana con efectos de luz azul eléctrico, máscara oni modernizada, y estar en pose de combate dinámica. Fondo con kanji brillantes y efectos de partículas. Estilo de sombreado cel-shading con colores saturados." },
+    { category: "anime", title: "🌸 Sakura Warrior", desc: "Guerrera femenina rodeada de pétalos de cerezo flotantes.", prompt: "Personaje femenina anime en estilo warrior, con armadura ligera decorada con patrones de sakura, cabello largo fluyendo en el viento, rodeada de pétalos de cerezo rosa que brillan con luz suave. Pose elegante pero poderosa, con efectos mágicos rosados y fondo de luna llena. Estilo manga moderno con detalles delicados." },
+    { category: "anime", title: "⚡ Electric Ninja", desc: "Ninja con poderes eléctricos y efectos de rayos azules.", prompt: "Ninja anime en pose de ataque con rayos eléctricos azules saliendo de sus manos, traje negro con detalles en neón, máscara futurista y ojos brillantes. Debe estar saltando en el aire con efectos de electricidad rodeándolo, fondo de ciudad nocturna japonesa con luces neón. Estilo dinámico con muchos efectos de luz." },
+    { category: "anime", title: "🔥 Fire Dragon", desc: "Dragón de fuego en estilo anime con llamas realistas.", prompt: "Dragón de fuego en estilo anime japonés, con escamas detalladas, llamas realistas saliendo de su boca, ojos intensos y pose amenazante. El dragón debe tener una mezcla de colores rojos, naranjas y dorados, con efectos de partículas de fuego flotando alrededor. Fondo oscuro con destellos de fuego." },
+    { category: "anime", title: "🌟 Magical Girl", desc: "Chica mágica con vara brillante y efectos de estrellas.", prompt: "Personaje de magical girl en estilo anime clásico, con traje colorido decorado con estrellas, vara mágica brillante, twin tails con lazos grandes, y pose dinámica de transformación. Rodeada de efectos mágicos con estrellas, corazones y brillos. Colores pastel vibrantes con acentos dorados y efectos de luz suave." },
+    { category: "anime", title: "🤖 Mecha Pilot", desc: "Piloto de robot gigante con casco futurista y controles.", prompt: "Piloto anime en cabina de mecha, con casco futurista transparente, traje de piloto con luces LED, controles holográficos flotantes, y expresión concentrada. La cabina debe tener pantallas con datos, efectos de hologramas, y luces azules/verdes. Estilo sci-fi anime con detalles técnicos precisos." },
+    { category: "anime", title: "🐺 Wolf Spirit", desc: "Personaje con espíritu de lobo y aura mística azul.", prompt: "Personaje anime con conexión espiritual a lobos, orejas de lobo, cola fluida, ojos dorados brillantes, ropa tribal moderna, y una aura azul mística. Debe estar acompañado por espíritus de lobo translúcidos, en pose de invocación, con efectos de viento y partículas azules flotando." },
+    { category: "anime", title: "🌙 Moon Guardian", desc: "Guardian lunar con armadura plateada y símbolos lunares.", prompt: "Guardián lunar anime con armadura plateada elegante decorada con símbolos de luna y estrellas, capa que flota como si fuera líquida, bastón lunar brillante, y pose protectora. Fondo de cielo nocturno estrellado con luna llena grande, rayos de luz plateada, y efectos de magia lunar." },
+    { category: "anime", title: "⚔️ Dual Swords", desc: "Espadachín con dos katanas y técnica de corte rápido.", prompt: "Espadachín anime empuñando dos katanas en pose de técnica especial, con efectos de velocidad y cortes de viento visibles, ropa tradicional japonesa modernizada, y expresión de concentración intensa. Las espadas deben tener auras de colores diferentes (azul y roja), con efectos de slash marks en el aire." },
+    { category: "vintage", title: "📻 Retro Radio", desc: "Radio vintage con ondas musicales y estética de los 50s.", prompt: "Ilustración de una radio vintage de los años 50, con detalles art déco, ondas sonoras visibles saliendo del aparato, colores sepia y dorados, texturas desgastadas que sugieren nostalgia. Incluir elementos como notas musicales flotantes, patrones geométricos de la época, y efectos de luz cálida que resalten los controles y la antena." },
+    { category: "vintage", title: "🚗 Classic Car", desc: "Automóvil clásico americano con detalles cromados brillantes.", prompt: "Muscle car americano de los años 70, con pintura metalizada brillante, cromados relucientes, llamas decorativas en los laterales, y pose dinámica como si estuviera en movimiento. Fondo de highway con efecto de velocidad, colores saturados estilo poster vintage, y detalles hiperrealistas en las llantas y reflejos." },
+    { category: "vintage", title: "🌅 Synthwave Sunset", desc: "Atardecer synthwave con grid, palmeras y colores neón retro.", prompt: "Paisaje synthwave clásico con sol grande estilo retro-futurista, grid perspective en el suelo, palmeras en silueta, montañas geométricas, y colores neón (rosa magenta, azul cian, púrpura). Incluir efectos de brillo, scanlines sutiles, y estética de los 80s con elementos geométricos flotantes." },
+    { category: "vintage", title: "🎸 Rock Vintage", desc: "Guitarra eléctrica con amplificador y efectos de sonido vintage.", prompt: "Guitarra eléctrica vintage (estilo Stratocaster o Les Paul) conectada a un amplificador Marshall, con efectos de sonido visibles, cables enredados artísticamente, y pedales de efectos en el suelo. Iluminación dramática estilo concierto, colores cálidos, y texturas desgastadas que sugieran años de uso en el rock." },
+    { category: "vintage", title: "📷 Vintage Camera", desc: "Cámara de película clásica con lente y efectos fotográficos.", prompt: "Cámara de película vintage (estilo Leica o Nikon FM), con lente grande en primer plano, efectos de lens flare, rollos de película desenrollados artísticamente, y fotografías reveladas flotando alrededor. Colores sepia, iluminación suave de estudio, y texturas de cuero y metal envejecido." },
+    { category: "vintage", title: "🏍️ Vintage Motorcycle", desc: "Motocicleta clásica con detalles cromados y estilo rebelde.", prompt: "Motocicleta clásica americana (estilo Harley Davidson vintage), con tanque de combustible decorado con flames, asiento de cuero, cromados brillantes, y pose dinámica en carretera. Incluir elementos como casco vintage, chaqueta de cuero colgando, y fondo de route americana con señales retro." },
+    { category: "vintage", title: "🚀 Space Age Retro", desc: "Diseño retro-futurista de los 60s con naves espaciales y astronautas.", prompt: "Estética retro-futurista de los años 60, con nave espacial de diseño optimista, astronauta en traje plateado clásico, planetas coloridos estilo ilustración vintage, y tipografía space age. Colores vibrantes pero vintage, formas aerodinámicas, y elementos que reflejen la visión futurista de esa época." },
+    { category: "gotico", title: "💀 Skull Crown", desc: "Calavera real con corona ornamental y gemas brillantes.", prompt: "Calavera humana hiperrealista con una corona ornamental gótica, decorada con gemas rojas brillantes, detalles en oro envejecido, y patrones góticos grabados en el hueso. Fondo negro profundo, iluminación dramática que resalte las texturas del hueso y los reflejos de las gemas. Estilo dark fantasy con detalles muy precisos." },
+    { category: "gotico", title: "🌹 Gothic Rose", desc: "Rosa negra con espinas ensangrentadas y pétalos marchitos.", prompt: "Rosa gótica de pétalos negros con bordes rojos, espinas afiladas con gotas de sangre, hojas marchitas, y tallos retorcidos. La rosa debe tener texturas realistas pero dramáticas, con efectos de luz que resalten su belleza oscura. Fondo con texturas de piedra antigua y efectos de niebla sutil." },
+    { category: "gotico", title: "🦇 Gothic Bat", desc: "Murciélago con alas extendidas y detalles anatómicos precisos.", prompt: "Murciélago gótico con alas completamente extendidas, detalles anatómicos hiperrealistas, ojos rojos brillantes, colmillos visibles, y pose amenazante en vuelo. Las alas deben mostrar la textura de la membrana, venas visibles, y efectos de sombra dramática. Fondo de luna llena y nubes oscuras." },
+    { category: "gotico", title: "🗡️ Gothic Sword", desc: "Espada medieval con empuñadura ornamental y hoja grabada.", prompt: "Espada gótica medieval con empuñadura ornamental tallada, gemas incrustadas en el pomo, hoja con grabados rúnicos, y efectos de luz que hagan brillar el metal. La espada debe estar clavada en una piedra antigua con musgo, rodeada de niebla y con iluminación dramática estilo medieval." },
+    { category: "gotico", title: "🕷️ Gothic Spider", desc: "Araña negra con telaraña intrincada y gotas de rocío brillantes.", prompt: "Araña viuda negra en el centro de una telaraña gótica perfecta, con gotas de rocío que brillan como diamantes, hilos de seda que reflejan luz, y detalles anatómicos precisos de la araña. Fondo oscuro con efectos de luz filtrada, creando un ambiente misterioso pero hermoso." },
+    { category: "gotico", title: "🌙 Gothic Moon", desc: "Luna llena con fases lunares y símbolos místicos alrededor.", prompt: "Luna llena gótica con cráter detallado, rodeada de las diferentes fases lunares en círculo, símbolos astrológicos y rúnicos flotantes, y efectos de luz plateada. El diseño debe tener elementos de astrología medieval, con estrellas, constelaciones, y un aura mística que sugiera magia lunar." },
+    { category: "gotico", title: "🕯️ Candle Ritual", desc: "Velas góticas derritiéndose con llamas danzantes y cera escurriendo.", prompt: "Grupo de velas góticas de diferentes alturas, con llamas danzantes, cera derritiéndose artísticamente, candelabros de metal oxidado, y gotas de cera formando patrones. Iluminación dramática que resalte las llamas y las texturas de la cera, con sombras proyectadas que creen ambiente ritual." },
+    { category: "gotico", title: "🏴‍☠️ Pirate Skull", desc: "Calavera pirata con bandana, parche y sables cruzados.", prompt: "Calavera pirata con bandana roja anudada, parche en una cuenca del ojo, diente de oro, y dos sables cruzados detrás. Incluir elementos pirata como monedas de oro esparcidas, brújula antigua, mapa del tesoro parcialmente visible, y efectos que sugieran aventuras en alta mar." },
+    { category: "motivacional", title: "💪 Never Give Up", desc: "Tipografía bold con efectos de fuego y elementos de fuerza.", prompt: "Diseño tipográfico 'NEVER GIVE UP' en letras bold con efectos de fuego realista, rodeado de elementos que sugieran fuerza: pesas, puños en alto, rayos, y partículas de energía. La tipografía debe tener efectos 3D, texturas de metal y fuego, con colores intensos (rojos, naranjas, dorados) sobre fondo oscuro." },
+    { category: "motivacional", title: "🚀 Dream Big", desc: "Cohete espacial con tipografía inspiracional y estrellas.", prompt: "Cohete espacial despegando con trail de fuego colorido, rodeado de estrellas brillantes, planetas, y la frase 'DREAM BIG' en tipografía futurista. El cohete debe tener detalles técnicos realistas, efectos de propulsión, y estar en un espacio cósmico con nebulosas coloridas y efectos de luz celestial." },
+    { category: "motivacional", title: "⚡ Unstoppable", desc: "Rayo atravesando obstáculos con mensaje de determinación.", prompt: "Rayo eléctrico poderoso atravesando barreras y obstáculos, con la palabra 'UNSTOPPABLE' integrada en efectos eléctricos. Incluir elementos como muros rompiéndose, cadenas quebradas, y partículas de energía. Colores eléctricos (azul, blanco, púrpura) con efectos de luz intensa y movimiento dinámico." },
+    { category: "motivacional", title: "🏆 Champion Mindset", desc: "Trofeo dorado con efectos de victoria y rayos de gloria.", prompt: "Trofeo de campeón dorado con grabados elaborados, rayos de luz dorada saliendo desde atrás, confeti cayendo, y texto 'CHAMPION MINDSET' en tipografía elegante pero poderosa. Incluir elementos como medallas, laureles, y efectos de brillo que sugieran victoria y excelencia." },
+    { category: "motivacional", title: "🔥 Fuel Your Fire", desc: "Llamas intensas formando palabras con efectos de combustión.", prompt: "Llamas realistas formando las palabras 'FUEL YOUR FIRE', con efectos de combustión intensos, partículas brillantes flotando, y gradientes de color desde rojo hasta azul en las llamas más calientes. Las letras deben parecer forjadas en fuego vivo, con texturas incandescentes y efectos de calor visible." },
+    { category: "motivacional", title: "💎 Pressure Makes Diamonds", desc: "Diamante formándose bajo presión con efectos cristalinos.", prompt: "Diamante cristalino perfecto emergiendo de carbón bajo presión, con efectos de transformación visible, cristales formándose, y texto 'PRESSURE MAKES DIAMONDS' en tipografía elegante. Incluir efectos de refracción de luz, prismas, y partículas brillantes que sugieran el proceso de transformación." },
+    { category: "motivacional", title: "🌅 New Dawn", desc: "Amanecer épico con mensaje de nuevos comienzos.", prompt: "Amanecer épico con sol saliendo entre montañas, rayos de luz dorada cortando la niebla, y texto 'NEW DAWN, NEW OPPORTUNITIES' integrado en los rayos de sol. El paisaje debe transmitir esperanza y renovación, con colores cálidos del amanecer y efectos de luz inspiracional." },
+    { category: "grunge", title: "🎸 Grunge Guitar", desc: "Guitarra desgastada con efectos de distorsión y textura grunge.", prompt: "Guitarra eléctrica con texturas desgastadas, pintura descascarada, stickers viejos, cuerdas oxidadas, y efectos de distorsión visual. Incluir elementos como amplificadores vintage, cables enredados, púas tiradas, y salpicaduras de pintura. Colores apagados con acentos sucios, texturas ásperas y estética de garage band de los 90s." },
+    { category: "grunge", title: "💿 Vinyl Destroyed", desc: "Disco de vinilo roto con efectos de scratch y desgaste.", prompt: "Disco de vinilo con grietas visibles, rayones profundos, pedazos faltantes, etiqueta central desgastada, y efectos de envejecimiento extremo. El vinilo debe mostrar historia de uso intenso, con texturas realistas de desgaste, polvo acumulado, y reflejos que muestren los scratches. Fondo sucio con elementos de música grunge." },
+    { category: "grunge", title: "🧥 Torn Jacket", desc: "Chaqueta de jean desgarrada con parches y detalles punk.", prompt: "Chaqueta de mezclilla completamente desgastada, con agujeros, parches de bandas cosidos a mano, pins de seguridad, cadenas colgando, e hilos sueltos. La chaqueta debe mostrar años de uso, con decoloración realista, manchas, y textura gastada. Incluir elementos como parches de bandas grunge y pins vintage." },
+    { category: "grunge", title: "🔥 Burnt Paper", desc: "Papeles quemados con bordes chamuscados y texto parcialmente legible.", prompt: "Documentos y papeles con bordes quemados, texto parcialmente legible, ceniza esparcida, agujeros carbonizados, y efectos de combustión. Los papeles deben parecer rescatados de un incendio, con gradientes de quemado desde marrón hasta negro, texturas de papel frágil, y elementos como letras de amor o notas musicales semi-destruidas." },
+    { category: "grunge", title: "🏠 Abandoned Room", desc: "Habitación abandonada con elementos grunge y decadencia urbana.", prompt: "Interior de habitación abandonada con papel tapiz despegándose, graffitis en las paredes, ventanas rotas, muebles cubiertos de polvo, y efectos de decadencia. Incluir elementos como botellas vacías, instrumentos musicales olvidados, pósters desgarrados, y iluminación filtrada a través de ventanas sucias." },
+    { category: "minimalista", title: "○ Circle Zen", desc: "Círculo perfecto con espacio negativo y líneas minimalistas.", prompt: "Círculo perfecto en trazo fino sobre fondo blanco limpio, con líneas geométricas minimalistas que lo complementen. El diseño debe usar solo negro y blanco, con mucho espacio negativo, proporciones áureas, y una estética zen que transmita calma y simplicidad. Sin elementos decorativos innecesarios." },
+    { category: "minimalista", title: "△ Triangle Balance", desc: "Triángulos geométricos balanceados con composición simple.", prompt: "Composición de triángulos geométricos en diferentes tamaños, balanceados asimétricamente, usando solo líneas negras finas sobre fondo blanco. Los triángulos deben crear una composición armoniosa con mucho espacio en blanco, siguiendo principios de diseño minimalista y balance visual." },
+    { category: "minimalista", title: "— Line Art", desc: "Arte de línea simple con formas abstractas minimalistas.", prompt: "Arte de línea ultra simple usando trazos continuos para crear formas abstractas minimalistas. Una sola línea que fluye creando formas orgánicas, sin levantar el trazo, sobre fondo limpio. El diseño debe ser elegante, simple, y expresivo usando el mínimo de elementos posible." },
+    { category: "minimalista", title: "🌙 Moon Phase", desc: "Fases lunares en composición minimalista y astronómica.", prompt: "Secuencia de fases lunares representadas con círculos simples y medias lunas, organizadas en composición limpia horizontal. Usar solo formas geométricas básicas en negro sobre blanco, con espaciado uniforme que cree ritmo visual y represente el ciclo lunar de manera minimalista." },
+    { category: "minimalista", title: "🏔️ Mountain Simple", desc: "Silueta de montaña con líneas limpias y forma icónica.", prompt: "Silueta de montaña ultra simplificada con líneas limpias y formas triangulares básicas, capturando la esencia del paisaje montañoso con elementos mínimos. Una sola línea continua que defina picos y valles, sobre fondo limpio, transmitiendo grandeza através de la simplicidad." },
+    { category: "naturaleza", title: "🌿 Botanical Leaves", desc: "Hojas botánicas detalladas con venas y texturas naturales.", prompt: "Composición de hojas botánicas de diferentes especies, con venas detalladas, texturas naturales realistas, y variedad de formas orgánicas. Incluir helechos, hojas de monstera, eucalipto, y otras plantas tropicales, con colores verdes naturales y efectos de luz filtrada que resalten la belleza de cada especie." },
+    { category: "naturaleza", title: "🌸 Cherry Blossom", desc: "Flores de cerezo con pétalos delicados y rama natural.", prompt: "Rama de cerezo en floración con flores delicadas de cinco pétalos, estambres visibles, brotes sin abrir, y textura de corteza natural. Los pétalos deben ser rosa suave con transiciones delicadas, mostrando translucidez natural, con composición que capture la elegancia y fragilidad de la primavera japonesa." },
+    { category: "naturaleza", title: "🦋 Butterfly Garden", desc: "Mariposas coloridas con patrones de alas detallados y flores.", prompt: "Jardín de mariposas con diferentes especies, mostrando patrones detallados en las alas, colores iridiscentes, antenas delicadas, y interacción natural con flores. Incluir especies como monarca, morpho azul, y cola de golondrina, con flores complementarias y efectos de luz natural del jardín." },
+    { category: "naturaleza", title: "🦅 Eagle Flight", desc: "Águila en vuelo con alas extendidas y detalles de plumaje.", prompt: "Águila calva en pleno vuelo con alas completamente extendidas, mostrando detalles precisos del plumaje, plumas primarias separadas, cabeza blanca característica, y pico amarillo. El águila debe estar en pose dinámica de vuelo, con efectos de viento en las plumas y cielo de montaña como fondo." },
+    { category: "naturaleza", title: "🐺 Wolf Pack", desc: "Manada de lobos en paisaje nevado con liderazgo natural.", prompt: "Manada de lobos en paisaje nevado, mostrando jerarquía natural, pelaje de invierno espeso, aliento visible en aire frío, y ojos intensos. Los lobos deben mostrar diferentes poses y edades, con el alfa en posición dominante, sobre nieve profunda con árboles coníferos como fondo." },
+    { category: "naturaleza", title: "🌺 Tropical Paradise", desc: "Flores tropicales con colores vibrantes y ambiente exótico.", prompt: "Composición de flores tropicales exóticas: orquídeas, hibiscos, aves del paraíso, y plumeria, con colores intensos y vibrantes. Incluir hojas tropicales grandes como telón de fondo, efectos de rocío en los pétalos, y mariposas tropicales visitando las flores en ambiente de selva húmeda." },
+    { category: "musica", title: "🎵 Music Notes Flow", desc: "Notas musicales flotando con pentagramas y ritmo visual.", prompt: "Composición dinámica de notas musicales (corcheas, negras, trebles) flotando libre en el aire, saliendo de un pentagrama que se descompone en curvas orgánicas. Las notas deben tener movimiento fluido, con efectos de trail, colores que sugieran diferentes tonos, y una sensación de música en movimiento." },
+    { category: "musica", title: "🎸 Guitar Strings", desc: "Cuerdas de guitarra vibrando con ondas sonoras visibles.", prompt: "Primer plano de cuerdas de guitarra en plena vibración, con ondas sonoras visibles, efectos de movimiento que muestren la vibración, reflejos de luz en las cuerdas metálicas, y clavijas de afinación detalladas. Las cuerdas deben mostrar diferentes grosores y tensiones, con efectos que capturen la música siendo creada." },
+    { category: "musica", title: "🎹 Piano Keys", desc: "Teclas de piano con perspectiva artística y luz dramática.", prompt: "Teclas de piano en perspectiva artística, con teclas negras y blancas creando patrón rítmico, iluminación dramática que resalte las texturas del marfil y ébano, y efectos de luz que sugieran música siendo tocada. Incluir reflejos sutiles y sombras que creen profundidad y elegancia." },
+    { category: "musica", title: "🥁 Drum Kit Energy", desc: "Batería con baquetas en movimiento y efectos de impacto.", prompt: "Kit de batería completo con baquetas capturadas en movimiento, efectos de impacto visual en parches, platillos con efectos de vibración, y energía dinámica del ritmo. Los tambores deben mostrar diferentes tamaños, con hardware cromado brillante, y efectos que capturen la potencia y energía del drumming." },
+    { category: "musica", title: "🎤 Microphone Stage", desc: "Micrófono vintage en escenario con luces y atmósfera de concierto.", prompt: "Micrófono vintage en stand en primer plano, con luces de escenario creando ambiente dramático, efectos de humo sutil, y atmósfera de concierto íntimo. El micrófono debe tener detalles retro, con rejilla metálica brillante, y luces de colores creando mood de performance en vivo." },
+    { category: "musica", title: "🎺 Jazz Trumpet", desc: "Trompeta de jazz con notas doradas y ambiente de club nocturno.", prompt: "Trompeta dorada con válvulas brillantes, notas musicales saliendo de la campana en colores dorados, ambiente de jazz club nocturno con iluminación suave, y efectos que capturen la elegancia del jazz. La trompeta debe mostrar reflejos realistas del metal pulido y detalles de craftmanship." },
+    { category: "abstracto", title: "🌪️ Color Vortex", desc: "Vórtice de colores con movimiento fluido y energía dinámica.", prompt: "Vórtice abstracto de colores vibrantes (azul, púrpura, rosa, amarillo) con movimiento espiral hipnótico, efectos de mezcla de colores, partículas flotantes, y energía dinámica que sugiera rotación infinita. Los colores deben fluir orgánicamente, creando gradientes suaves y transiciones que capturen el movimiento perpetuo." },
+    { category: "abstracto", title: "🔺 Geometric Chaos", desc: "Formas geométricas superpuestas con colores contrastantes.", prompt: "Composición caótica de formas geométricas (triángulos, círculos, polígonos) superpuestas en diferentes escalas, con colores contrastantes y efectos de transparencia. Las formas deben crear patrones complejos a través de la superposición, con algunos elementos brillantes y otros opacos, generando profundidad visual." },
+    { category: "abstracto", title: "💫 Particle System", desc: "Sistema de partículas con conexiones y red de energía.", prompt: "Sistema de partículas brillantes conectadas por líneas de energía, creando una red compleja tridimensional, con partículas de diferentes tamaños, colores que van del azul al blanco, y efectos de pulsación. Las conexiones deben mostrar flujo de energía, con algunas partículas más brillantes actuando como nodos principales." },
+    { category: "abstracto", title: "🌊 Fluid Motion", desc: "Formas fluidas orgánicas con texturas líquidas dinámicas.", prompt: "Formas fluidas abstractas que parecen líquido en movimiento, con texturas orgánicas, colores que se mezclan suavemente (turquesa, violeta, dorado), efectos de reflejo como si fueran metales líquidos, y movimiento que sugiera fluidez perpetua sin forma fija." },
+    { category: "abstracto", title: "🎨 Paint Splash", desc: "Salpicaduras de pintura con colores vibrantes y texturas dinámicas.", prompt: "Salpicaduras de pintura abstracta con colores primarios vibrantes (rojo, azul, amarillo) mezclándose caóticamente, gotas en el aire, texturas de pintura líquida, efectos de impacto, y movimiento que capture el momento exacto del splash creativo." },
+    { category: "deportivo", title: "⚽ Soccer Ball", desc: "Pelota de fútbol con efectos de movimiento y césped realista.", prompt: "Pelota de fútbol profesional con patrón hexagonal clásico, efectos de movimiento y velocidad, césped natural detallado volando alrededor, gotas de agua o rocío, y iluminación que resalte las texturas del cuero. La pelota debe mostrar desgaste realista de uso profesional." },
+    { category: "deportivo", title: "🏀 Basketball Dunk", desc: "Pelota de basket atravesando la red con efectos dinámicos.", prompt: "Pelota de baloncesto atravesando la red con efecto swoosh, red deformándose por el impacto, texturas realistas de la pelota con líneas características, efectos de movimiento vertical, y ambiente de cancha con iluminación dramática que capture el momento del dunk perfecto." },
+    { category: "deportivo", title: "🏋️ Weightlifting", desc: "Pesas y equipos de gym con ambiente de entrenamiento intenso.", prompt: "Barra olímpica con discos de peso, manos con chalk, ambiente de gimnasio con iluminación intensa, efectos de polvo de magnesio en el aire, texturas metálicas de las pesas, y atmósfera que capture la dedicación e intensidad del entrenamiento de fuerza." },
+    { category: "deportivo", title: "🥊 Boxing Gloves", desc: "Guantes de boxeo con efectos de impacto y sudor realista.", prompt: "Guantes de boxeo rojos clásicos con cordones, efectos de impacto con partículas, gotas de sudor, texturas de cuero desgastado por entrenamiento, vendajes visibles en las muñecas, y iluminación dramática que capture la intensidad y determinación del boxeo." },
+    { category: "mascotas", title: "🐕 Golden Retriever", desc: "Golden retriever feliz con pelaje dorado y expresión amigable.", prompt: "Golden retriever con pelaje dorado brillante, lengua afuera en expresión feliz, ojos marrones expresivos, textura realista del pelo, collar colorido, y ambiente de parque o jardín. El perro debe transmitir lealtad y alegría, con detalles en las orejas caídas y nariz húmeda negra." },
+    { category: "mascotas", title: "🐱 Persian Cat", desc: "Gato persa con pelaje esponjoso y ojos azules intensos.", prompt: "Gato persa de pelaje largo y esponjoso, ojos azules intensos y expresivos, cara aplastada característica, pelaje en tonos crema o blanco, textura ultra suave del pelo, pose elegante, y iluminación suave que resalte la belleza y dignidad del gato de raza." },
+    { category: "mascotas", title: "🦋 Colorful Parrot", desc: "Loro tropical con plumas vibrantes y pico curvo característico.", prompt: "Loro tropical con plumaje de colores vibrantes (rojo, azul, amarillo, verde), pico curvo negro brillante, ojos redondos expresivos, plumas detalladas con texturas realistas, posado en rama natural, y fondo de selva tropical que complemente sus colores naturales." },
+    { category: "mascotas", title: "🐾 Paw Prints", desc: "Huellas de mascotas con corazones y elementos tiernos.", prompt: "Sendero de huellas de perro y gato alternadas, con pequeños corazones flotantes, colores pastel suaves, texturas que sugieran arena o tierra, algunas huellas más marcadas que otras, y elementos decorativos como huesos pequeños y pelotas que celebren el amor por las mascotas." },
+    { category: "cyberpunk", title: "🤖 Cyborg Portrait", desc: "Retrato cyberpunk con implantes tecnológicos y ojos LED.", prompt: "Retrato de cyborg con mitad cara humana y mitad mecánica, implantes tecnológicos visibles, ojos con LED azul brillante, circuitos expuestos en la sien, cables neurales, texturas de metal y piel combinadas, iluminación neón azul/rosa, y ambiente futurista distópico urbano." },
+    { category: "cyberpunk", title: "🌃 Neon City", desc: "Ciudad futurista nocturna con neones y lluvia ácida.", prompt: "Paisaje urbano cyberpunk nocturno con rascacielos cubiertos de neones coloridos, lluvia ácida cayendo, hologramas publicitarios flotantes, autos voladores con luces, cables y antenas por todos lados, colores predominantes azul neón y rosa magenta, y atmósfera distópica futurista." },
+    { category: "cyberpunk", title: "💻 Hacker Interface", desc: "Interfaz de hacking con códigos y matrices de datos.", prompt: "Interfaz de hacking con códigos corriendo en pantallas múltiples, matrices de datos verdes cayendo, terminales de comando, cables conectados a puertos neurales, manos con guantes tecnológicos tipeando, ambiente oscuro iluminado solo por pantallas, y estética de matrix digital." },
+    { category: "cyberpunk", title: "⚡ Electric Katana", desc: "Katana futurista con filo eléctrico y empuñadura tech.", prompt: "Katana futurista con filo que emite electricidad azul, empuñadura con detalles tecnológicos, circuitos integrados en la hoja, efectos eléctricos corriendo por el metal, reflexión de luces neón en el filo, y ambiente cyberpunk oscuro con efectos de luz dramática." },
+    { category: "cyberpunk", title: "👁️ Cyber Eye", desc: "Ojo cibernético con HUD y análisis de datos en tiempo real.", prompt: "Primer plano de ojo cibernético con iris LED azul, HUD (heads-up display) con información superpuesta, análisis de datos en tiempo real, reflectores y lentes adicionales, cableado neural visible alrededor, efectos de zoom digital, y interfaz futurista integrada." },
+    { category: "tipografia", title: "📝 3D Typography", desc: "Letras 3D con efectos de profundidad y sombras realistas.", prompt: "Tipografía 3D con letras que tienen profundidad física real, sombras dramáticas, efectos de bisel, texturas metálicas o de piedra, iluminación que resalte la dimensionalidad, y composición que haga que las letras parezcan objetos sólidos flotando en el espacio." },
+    { category: "tipografia", title: "🌈 Rainbow Letters", desc: "Letras con gradientes de arcoíris y efectos prismáticos.", prompt: "Tipografía con gradientes de arcoíris suaves, efectos prismáticos que descompongan la luz, reflejos iridiscentes, transiciones de color fluidas a través de las letras, efectos de dispersión lumínica, y acabado que simule cristal o material holográfico con todos los colores del espectro." },
+    { category: "tipografia", title: "🔥 Burning Letters", desc: "Letras en llamas con efectos de combustión y calor.", prompt: "Tipografía ardiendo con llamas realistas, efectos de combustión en los bordes, partículas de fuego flotantes, gradientes de temperatura (rojo, naranja, amarillo, azul en la base), efectos de calor distorsionando el aire, y textura carbonizada en partes de las letras." },
+    { category: "tipografia", title: "⚡ Electric Text", desc: "Texto con efectos eléctricos y rayos corriendo por las letras.", prompt: "Tipografía con electricidad corriendo por las letras, rayos y chispas saltando entre caracteres, efectos de tesla coil, iluminación azul eléctrica intensa, partículas cargadas flotando, y ambiente oscuro que haga contrastar la electricidad brillante de las letras electrificadas." }
+];
+
+let currentCategory = 'todos';
+let searchTerm = '';
+
+const searchInput = document.getElementById('search-input');
+const filterButtons = document.querySelectorAll('.filter-btn');
+const promptsGrid = document.getElementById('prompts-grid');
+const countSpan = document.getElementById('count');
+
+function filterPrompts() {
+    return PROMPTS.filter(p => {
+        const matchCat = currentCategory === 'todos' || p.category === currentCategory;
+        const matchSearch = !searchTerm ||
+            p.title.toLowerCase().includes(searchTerm) ||
+            p.desc.toLowerCase().includes(searchTerm) ||
+            p.prompt.toLowerCase().includes(searchTerm);
+        return matchCat && matchSearch;
+    });
+}
+
+const categoryLabels = {
+    streetwear:'STREETWEAR', anime:'ANIME', vintage:'VINTAGE', gotico:'GÓTICO',
+    motivacional:'MOTIVACIONAL', grunge:'GRUNGE', minimalista:'MINIMAL',
+    naturaleza:'NATURALEZA', musica:'MÚSICA', abstracto:'ABSTRACTO',
+    deportivo:'DEPORTIVO', mascotas:'MASCOTAS', cyberpunk:'CYBERPUNK', tipografia:'TIPOGRAFÍA'
+};
+
+function renderPrompts() {
+    const filtered = filterPrompts();
+    countSpan.textContent = filtered.length;
+    if (!filtered.length) {
+        promptsGrid.innerHTML = '<div class="no-results"><h3>🔍 No se encontraron prompts</h3><p>Prueba con otros términos o cambia la categoría.</p></div>';
+        return;
+    }
+    promptsGrid.innerHTML = filtered.map(p => `
+        <div class="card">
+            <div class="category-badge">${categoryLabels[p.category] || p.category}</div>
+            <div class="card-title">${p.title}</div>
+            <div class="card-desc">${p.desc}</div>
+            <pre>${p.prompt}</pre>
+            <button class="copy-btn" data-prompt="${encodeURIComponent(p.prompt)}">Copiar prompt</button>
+        </div>
+    `).join('');
+}
+
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    const text = decodeURIComponent(btn.dataset.prompt);
+    navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✅ Copiado';
+        btn.style.background = '#16a34a';
+        btn.style.borderColor = '#16a34a';
+        setTimeout(() => {
+            btn.textContent = 'Copiar prompt';
+            btn.style.background = '#dc2626';
+            btn.style.borderColor = '#dc2626';
+        }, 1500);
+    });
+});
+
+searchInput.addEventListener('input', e => {
+    searchTerm = e.target.value.toLowerCase();
+    renderPrompts();
+});
+
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        renderPrompts();
+    });
+});
+
+renderPrompts();
+</script>
+
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promo Maker - Chechena Shirts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        #promo-maker-root .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        #promo-maker-root .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        #promo-maker-root .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        #promo-maker-root .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        body { margin: 0; padding: 0; overflow: hidden; }
+    </style>
+</head>
+<body>
+
+<div id="promo-maker-root" class="bg-gray-100 text-gray-900 font-sans flex flex-col lg:flex-row w-full overflow-hidden" style="height: 100vh; max-height: 100dvh; background-color: #f3f4f6 !important; color: #111827 !important; color-scheme: light; text-align: left;">
+
+    <div class="hidden hover:bg-blue-600 hover:bg-red-500 hover:text-white bg-[#111111] p-2 aspect-square"></div>
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="w-full lg:w-[380px] h-auto max-h-[50vh] lg:max-h-none lg:h-full flex-shrink-0 bg-white border-t lg:border-t-0 lg:border-r border-gray-200 flex flex-col z-30 order-2 lg:order-1 relative">
+
+        <div class="p-5 border-b border-gray-200 bg-white sticky top-0 z-20 flex justify-between items-center">
+            <h1 class="text-lg font-black tracking-tight flex items-center gap-2 m-0 text-gray-900">
+                <div class="bg-black text-white w-8 h-8 rounded-lg shadow-sm flex items-center justify-center font-bold text-sm">
+                    CS
+                </div>
+                Chechena Shirts <span class="text-[9px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Promo Maker</span>
+            </h1>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-5 space-y-6 custom-scrollbar bg-white">
+
+            <!-- Subir diseños -->
+            <label for="upload-main" class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-gray-400 transition-all group m-0">
+                <i data-lucide="upload" class="w-6 h-6 mb-2 text-gray-400 group-hover:text-gray-600 transition-colors"></i>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Subir Diseños (PNG/JPG)</span>
+                <input id="upload-main" type="file" class="hidden" accept="image/png, image/jpeg" multiple />
+            </label>
+
+            <!-- Textos -->
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
+                <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-600 mb-4 flex items-center gap-2 m-0">
+                    <i data-lucide="type" class="w-3.5 h-3.5"></i> Textos Principales
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">Línea 1 (Gruesa)</label>
+                        <input id="textLine1" type="text" value="VECTORES" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-black text-gray-900 focus:outline-none focus:border-gray-500 shadow-sm" />
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">Línea 2 (Subtítulo)</label>
+                        <input id="textLine2" type="text" value="EDITABLES" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:border-gray-500 shadow-sm" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marca -->
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
+                <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-600 mb-4 flex items-center gap-2 m-0">
+                    <i data-lucide="tag" class="w-3.5 h-3.5"></i> Tu Marca (Opcional)
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex gap-2">
+                        <button type="button" id="btnBrandText" class="flex-1 text-[10px] font-bold uppercase px-2 py-1 rounded-md border bg-black text-white border-black transition-colors">Texto</button>
+                        <button type="button" id="btnBrandLogo" class="flex-1 text-[10px] font-bold uppercase px-2 py-1 rounded-md border bg-transparent text-gray-500 border-gray-300 transition-colors hover:bg-gray-200">Logo</button>
+                    </div>
+                    <div id="brandTextContainer">
+                        <input id="brandText" type="text" placeholder="EJ. CHECHENA SHIRTS" value="" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:border-gray-500 shadow-sm" />
+                    </div>
+                    <div id="brandLogoContainer" style="display: none;">
+                        <label for="upload-logo" class="flex flex-col items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 bg-white rounded-lg cursor-pointer hover:bg-gray-100 hover:border-gray-400 transition-all m-0 shadow-sm">
+                            <span class="text-[10px] font-bold uppercase text-gray-500" id="logoUploadLabel">Subir Logo (PNG)</span>
+                            <input id="upload-logo" type="file" class="hidden" accept="image/png" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ajuste en playera -->
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
+                <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-600 mb-4 flex items-center gap-2 m-0">
+                    <i data-lucide="image" class="w-3.5 h-3.5"></i> Ajuste en Playera
+                </h3>
+                <div class="space-y-5">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-gray-500">
+                            <span>Escala</span><span id="val-shirtDesignScale">45%</span>
+                        </div>
+                        <input id="shirtDesignScale" type="range" min="10" max="80" value="45" class="w-full accent-black" />
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-gray-500">
+                            <span>Posición Y (Altura)</span><span id="val-shirtDesignY">40%</span>
+                        </div>
+                        <input id="shirtDesignY" type="range" min="10" max="80" value="40" class="w-full accent-black" />
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-gray-500">
+                            <span>Posición X (Centro)</span><span id="val-shirtDesignX">50%</span>
+                        </div>
+                        <input id="shirtDesignX" type="range" min="20" max="80" value="50" class="w-full accent-black" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arte de Fondo -->
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-600 flex items-center gap-2 m-0">
+                        <i data-lucide="layers" class="w-3.5 h-3.5"></i> Arte de Fondo
+                    </h3>
+                    <button id="btnBgGrayscale" type="button" class="text-[9px] font-bold uppercase px-2 py-1 rounded-md border bg-black text-white border-black transition-colors">
+                        Blanco y Negro
+                    </button>
+                </div>
+                <div class="space-y-5">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-gray-500">
+                            <span>Opacidad</span><span id="val-bgOpacity">25%</span>
+                        </div>
+                        <input id="bgOpacity" type="range" min="0" max="100" value="25" class="w-full accent-black" />
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-gray-500">
+                            <span>Escala</span><span id="val-bgDesignScale">150%</span>
+                        </div>
+                        <input id="bgDesignScale" type="range" min="50" max="300" value="150" class="w-full accent-black" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <div class="text-[10px] uppercase font-bold text-gray-500 text-center">Eje X</div>
+                            <input id="bgDesignX" type="range" min="-50" max="150" value="10" class="w-full accent-black" />
+                        </div>
+                        <div class="space-y-2">
+                            <div class="text-[10px] uppercase font-bold text-gray-500 text-center">Eje Y</div>
+                            <input id="bgDesignY" type="range" min="-50" max="150" value="50" class="w-full accent-black" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Botón exportar -->
+        <div class="p-4 border-t border-gray-200 bg-white z-30 flex flex-col gap-2">
+            <button id="btnExportZip" disabled type="button" class="w-full py-3.5 bg-black text-white font-black uppercase tracking-[0.1em] text-[12px] rounded-xl hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md">
+                <i data-lucide="archive" class="w-4 h-4" id="zipIcon"></i>
+                <span id="btnExportZipText">Exportar Todos (ZIP)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ÁREA DE PREVIEW -->
+    <div class="flex-1 h-full overflow-y-auto bg-gray-200 relative order-1 lg:order-2 custom-scrollbar" id="previewArea"></div>
+
+</div>
+
+<script>
+    // Parche CORS
+    try {
+        if (typeof CSSStyleSheet !== 'undefined') {
+            const sheet = CSSStyleSheet.prototype;
+            const originalRules = Object.getOwnPropertyDescriptor(sheet, 'cssRules');
+            if (originalRules && !sheet.__patchedCssRules) {
+                Object.defineProperty(sheet, 'cssRules', {
+                    get() { try { return originalRules.get.call(this); } catch (e) { return []; } }
+                });
+                sheet.__patchedCssRules = true;
+            }
+        }
+    } catch (err) {}
+
+    // ===== CONFIGURACIÓN =====
+    // Ruta al mockup de playera (archivo en la misma carpeta)
+    const MOCKUP_PATH = "playera 1.png";
+    const DUMMY_IMG = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+    const state = {
+        designs: [],
+        textLine1: "VECTORES",
+        textLine2: "EDITABLES",
+        brandType: 'text',
+        brandText: '',
+        brandLogoUrl: null,
+        shirtDesignScale: 45,
+        shirtDesignX: 50,
+        shirtDesignY: 40,
+        bgDesignScale: 150,
+        bgDesignX: 10,
+        bgDesignY: 50,
+        bgOpacity: 25,
+        bgGrayscale: true,
+        isExporting: false,
+        mockupBase64: null
+    };
+
+    // Inyectar fuentes
+    fetch("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap")
+        .then(res => res.text())
+        .then(css => {
+            const style = document.createElement('style');
+            style.innerHTML = css;
+            document.head.appendChild(style);
+        }).catch(() => {});
+
+    function preloadMockup() {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            try {
+                state.mockupBase64 = canvas.toDataURL('image/png');
+            } catch(e) {
+                state.mockupBase64 = MOCKUP_PATH;
+            }
+            renderUI();
+        };
+        img.onerror = () => {
+            state.mockupBase64 = MOCKUP_PATH;
+            renderUI();
+        };
+        img.src = MOCKUP_PATH;
+    }
+
+    function updateCSSVariables(targetNode) {
+        const root = targetNode || document.getElementById('promo-maker-root') || document.documentElement;
+        root.style.setProperty('--shirt-scale', state.shirtDesignScale + '%');
+        root.style.setProperty('--shirt-x', state.shirtDesignX + '%');
+        root.style.setProperty('--shirt-y', state.shirtDesignY + '%');
+        root.style.setProperty('--bg-scale', state.bgDesignScale + '%');
+        root.style.setProperty('--bg-x', state.bgDesignX + '%');
+        root.style.setProperty('--bg-y', state.bgDesignY + '%');
+        root.style.setProperty('--bg-opacity', state.bgOpacity / 100);
+        root.style.setProperty('--bg-filter', state.bgGrayscale ? 'grayscale(100%)' : 'none');
+    }
+
+    function updateBrandUI() {
+        const btnText = document.getElementById('btnBrandText');
+        const btnLogo = document.getElementById('btnBrandLogo');
+        if (state.brandType === 'text') {
+            btnText.className = 'flex-1 text-[10px] font-bold uppercase px-2 py-1 rounded-md border bg-black text-white border-black transition-colors';
+            btnLogo.className = 'flex-1 text-[10px] font-bold uppercase px-2 py-1 rounded-md border bg-transparent text-gray-500 border-gray-300 transition-colors hover:bg-gray-200';
+            document.getElementById('brandTextContainer').style.display = 'block';
+            document.getElementById('brandLogoContainer').style.display = 'none';
+        } else {
+            btnLogo.className = 'flex-1 text-[10px] font-bold uppercase px-2 py-1 rounded-md border bg-black text-white border-black transition-colors';
+            btnText.className = 'flex-1 text-[10px] font-bold uppercase px-2 py-1 rounded-md border bg-transparent text-gray-500 border-gray-300 transition-colors hover:bg-gray-200';
+            document.getElementById('brandTextContainer').style.display = 'none';
+            document.getElementById('brandLogoContainer').style.display = 'block';
+        }
+        document.querySelectorAll('.dynamic-brand-text').forEach(n => {
+            n.style.display = (state.brandType === 'text' && state.brandText) ? 'block' : 'none';
+        });
+        document.querySelectorAll('.dynamic-brand-logo').forEach(n => {
+            n.style.display = (state.brandType === 'logo' && state.brandLogoUrl) ? 'block' : 'none';
+        });
+    }
+
+    function getCanvasHTML(designUrl) {
+        const safeDesignUrl = designUrl || DUMMY_IMG;
+        const safeBrandLogo = state.brandLogoUrl || DUMMY_IMG;
+        const finalMockupUrl = state.mockupBase64 || MOCKUP_PATH;
+        const mockupCrossAttr = finalMockupUrl.startsWith('data:') ? '' : 'crossorigin="anonymous"';
+
+        const bgHTML = designUrl ? `
+            <img src="${safeDesignUrl}" alt="" class="absolute pointer-events-none origin-center"
+                 style="width: var(--bg-scale); height: auto; left: var(--bg-x); top: var(--bg-y); transform: translate(-50%, -50%); opacity: var(--bg-opacity); filter: var(--bg-filter); mix-blend-mode: lighten;">
+        ` : '';
+
+        return `
+            ${bgHTML}
+            <div class="absolute top-[50px] left-[50px] z-30 flex flex-col items-start pointer-events-none">
+                <h1 class="text-white m-0 p-0 leading-none relative z-10 dynamic-text-1"
+                    style="font-family: 'Archivo Black', sans-serif; font-size: 75px; letter-spacing: -0.02em; text-transform: uppercase; text-shadow: 0 5px 20px rgba(0,0,0,0.8); display: ${state.textLine1 ? 'block' : 'none'};">
+                    ${state.textLine1}
+                </h1>
+                <div class="bg-white inline-block relative z-20 dynamic-text-2-container"
+                     style="box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 6px 14px; margin-top: -10px; margin-left: 8px; display: ${state.textLine2 ? 'inline-block' : 'none'};">
+                    <span class="text-black font-black uppercase block leading-none dynamic-text-2"
+                          style="font-family: 'Inter', sans-serif; font-size: 24px; letter-spacing: 0.04em;">
+                        ${state.textLine2}
+                    </span>
+                </div>
+            </div>
+            <div class="absolute pointer-events-none z-20" style="width: 1200px; height: 1200px; right: -150px; top: 50px;">
+                <img src="${finalMockupUrl}" ${mockupCrossAttr} class="w-full h-full object-contain"
+                     style="filter: drop-shadow(0 0 50px rgba(0,0,0,0.8));">
+                ${designUrl ? `
+                <div class="absolute" style="left: var(--shirt-x); top: var(--shirt-y); width: var(--shirt-scale); transform: translate(-50%, -50%); z-index: 25;">
+                    <img src="${safeDesignUrl}" class="w-full h-auto drop-shadow-2xl">
+                </div>` : ''}
+            </div>
+            <div class="absolute pointer-events-none z-[100]" style="top: 50px; right: 50px; opacity: 0.8; text-align: right; display: flex; justify-content: flex-end;">
+                <h2 class="dynamic-brand-text text-white m-0"
+                    style="font-family: 'Inter', sans-serif; font-size: 40px; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.5); display: ${state.brandType === 'text' && state.brandText ? 'block' : 'none'};">
+                    ${state.brandText}
+                </h2>
+                <img class="dynamic-brand-logo" src="${safeBrandLogo}"
+                     style="height: 60px; width: auto; max-width: 250px; object-fit: contain; display: ${state.brandType === 'logo' && state.brandLogoUrl ? 'block' : 'none'};">
+            </div>
+        `;
+    }
+
+    function renderUI() {
+        const previewArea = document.getElementById('previewArea');
+        updateCSSVariables();
+
+        if (state.designs.length === 0) {
+            previewArea.innerHTML = `
+                <label for="upload-empty" class="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-gray-300/30 transition-colors z-10 m-0">
+                    <div class="text-center p-12 bg-white border border-gray-300 rounded-3xl shadow-lg">
+                        <i data-lucide="image" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600 font-bold tracking-widest uppercase text-sm m-0">Área de Visualización</p>
+                        <p class="text-gray-500 text-xs mt-2 font-medium m-0">Sube tus diseños a la izquierda o haz clic aquí.</p>
+                    </div>
+                    <input id="upload-empty" type="file" class="hidden" accept="image/png, image/jpeg" multiple onchange="handleFileUpload(event)" />
+                </label>
+            `;
+            document.getElementById('btnExportZip').disabled = true;
+            lucide.createIcons();
+            return;
+        }
+
+        document.getElementById('btnExportZip').disabled = state.isExporting;
+
+        let gridHTML = '<div class="p-4 md:p-6 min-h-full"><div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">';
+        state.designs.forEach((design, idx) => {
+            const labelNum = String(idx + 1).padStart(2, '0');
+            gridHTML += `
+                <div class="preview-card-container relative w-full aspect-square bg-[#111111] overflow-hidden rounded-2xl border border-gray-400 shadow-md group">
+                    <div class="preview-canvas-wrapper absolute top-0 left-0 origin-top-left pointer-events-none" style="width: 1080px; height: 1080px;">
+                        ${getCanvasHTML(design.url)}
+                    </div>
+                    <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-50">
+                        <button type="button" onclick="handleExportSingle(${idx})" ${state.isExporting ? 'disabled' : ''} class="p-2 bg-white hover:bg-blue-600 hover:text-white rounded-lg text-gray-800 shadow-lg disabled:opacity-50 transition-colors" title="Descargar">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                        </button>
+                        <button type="button" onclick="removeDesign(${idx})" ${state.isExporting ? 'disabled' : ''} class="p-2 bg-white hover:bg-red-500 hover:text-white rounded-lg text-gray-800 shadow-lg disabled:opacity-50 transition-colors" title="Eliminar">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <div class="absolute bottom-3 left-3 z-50 pointer-events-none opacity-50 text-2xl text-white font-black">
+                        ${labelNum}
+                    </div>
+                </div>
+            `;
+        });
+        gridHTML += '</div></div>';
+        previewArea.innerHTML = gridHTML;
+        lucide.createIcons();
+        updateScales();
+        setTimeout(updateScales, 10);
+        setTimeout(updateScales, 150);
+    }
+
+    function updateScales() {
+        document.querySelectorAll('.preview-card-container').forEach(container => {
+            const wrapper = container.querySelector('.preview-canvas-wrapper');
+            if (wrapper) {
+                const scale = container.clientWidth / 1080;
+                wrapper.style.transform = `scale(${scale})`;
+            }
+        });
+    }
+    window.addEventListener('resize', updateScales);
+
+    function attachInputListeners() {
+        ['shirtDesignScale', 'shirtDesignY', 'shirtDesignX', 'bgOpacity', 'bgDesignScale', 'bgDesignX', 'bgDesignY'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', (e) => {
+                    state[id] = e.target.value;
+                    const valDisplay = document.getElementById(`val-${id}`);
+                    if (valDisplay) valDisplay.textContent = e.target.value + '%';
+                    updateCSSVariables();
+                });
+            }
+        });
+
+        ['textLine1', 'textLine2'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', (e) => {
+                    state[id] = e.target.value;
+                    document.querySelectorAll(id === 'textLine1' ? '.dynamic-text-1' : '.dynamic-text-2').forEach(node => {
+                        node.textContent = e.target.value;
+                    });
+                    document.querySelectorAll(id === 'textLine1' ? '.dynamic-text-1' : '.dynamic-text-2-container').forEach(node => {
+                        node.style.display = e.target.value ? (id === 'textLine1' ? 'block' : 'inline-block') : 'none';
+                    });
+                });
+            }
+        });
+
+        document.getElementById('btnBrandText').addEventListener('click', () => { state.brandType = 'text'; updateBrandUI(); });
+        document.getElementById('btnBrandLogo').addEventListener('click', () => { state.brandType = 'logo'; updateBrandUI(); });
+
+        document.getElementById('brandText').addEventListener('input', (e) => {
+            state.brandText = e.target.value;
+            document.querySelectorAll('.dynamic-brand-text').forEach(node => {
+                node.textContent = e.target.value;
+                node.style.display = (state.brandType === 'text' && e.target.value) ? 'block' : 'none';
+            });
+        });
+
+        document.getElementById('upload-logo').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                state.brandLogoUrl = event.target.result;
+                document.getElementById('logoUploadLabel').textContent = "Logo Cargado ✓";
+                document.querySelectorAll('.dynamic-brand-logo').forEach(node => {
+                    node.src = state.brandLogoUrl || DUMMY_IMG;
+                    node.style.display = (state.brandType === 'logo' && state.brandLogoUrl) ? 'block' : 'none';
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+
+        const btnBgGrayscale = document.getElementById('btnBgGrayscale');
+        btnBgGrayscale.addEventListener('click', () => {
+            state.bgGrayscale = !state.bgGrayscale;
+            if (state.bgGrayscale) {
+                btnBgGrayscale.className = 'text-[9px] font-bold uppercase px-2 py-1 rounded-md border bg-black text-white border-black transition-colors';
+            } else {
+                btnBgGrayscale.className = 'text-[9px] font-bold uppercase px-2 py-1 rounded-md border bg-transparent text-gray-500 border-gray-300 transition-colors hover:bg-gray-200';
+            }
+            updateCSSVariables();
+        });
+
+        document.getElementById('upload-main').addEventListener('change', handleFileUpload);
+        document.getElementById('btnExportZip').addEventListener('click', handleExportZip);
+    }
+
+    async function handleFileUpload(e) {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+        const newDesigns = await Promise.all(files.map(file => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (event) => resolve({ id: Math.random().toString(36).substr(2, 9), url: event.target.result, name: file.name });
+                reader.readAsDataURL(file);
+            });
+        }));
+        state.designs = [...state.designs, ...newDesigns];
+        e.target.value = '';
+        renderUI();
+    }
+
+    window.removeDesign = function(index) {
+        state.designs.splice(index, 1);
+        renderUI();
+    };
+
+    function setExportingState(isExporting, text = '') {
+        state.isExporting = isExporting;
+        const btn = document.getElementById('btnExportZip');
+        const icon = document.getElementById('zipIcon');
+        const btnText = document.getElementById('btnExportZipText');
+        if (isExporting) {
+            btn.disabled = true;
+            icon.style.display = 'none';
+            btnText.textContent = text;
+            btnText.classList.add('animate-pulse');
+        } else {
+            btn.disabled = state.designs.length === 0;
+            icon.style.display = 'block';
+            btnText.textContent = 'Exportar Todos (ZIP)';
+            btnText.classList.remove('animate-pulse');
+        }
+        renderUI();
+    }
+
+    function getFriendlyErrorMessage(err) {
+        if (err instanceof Event) return "Recurso bloqueado por permisos o imagen corrupta.";
+        return err && err.message ? err.message : String(err);
+    }
+
+    async function captureNodeToBlob(idx) {
+        const design = state.designs[idx];
+        if (!design || !window.htmlToImage) throw new Error("Dependencias no listas");
+
+        const tempNode = document.createElement('div');
+        tempNode.style.cssText = 'width:1080px;height:1080px;background-color:#111111;position:fixed;top:0;left:0;z-index:-9999;pointer-events:none;overflow:hidden;';
+        updateCSSVariables(tempNode);
+        tempNode.innerHTML = getCanvasHTML(design.url);
+        document.body.appendChild(tempNode);
+
+        const images = Array.from(tempNode.querySelectorAll('img'));
+        await Promise.all(images.map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+        }));
+        await document.fonts.ready;
+        await new Promise(r => setTimeout(r, 50));
+
+        try {
+            const dataUrl = await window.htmlToImage.toJpeg(tempNode, {
+                quality: 0.85,
+                pixelRatio: 1.5,
+                backgroundColor: '#111111',
+                style: { transform: 'scale(1)', transformOrigin: 'top left' }
+            });
+            const arr = dataUrl.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) { u8arr[n] = bstr.charCodeAt(n); }
+            return new Blob([u8arr], { type: mime });
+        } finally {
+            if (tempNode.parentNode) tempNode.parentNode.removeChild(tempNode);
+        }
+    }
+
+    window.handleExportSingle = async function(idx) {
+        setExportingState(true, 'Generando...');
+        try {
+            const blob = await captureNodeToBlob(idx);
+            const link = document.createElement('a');
+            link.download = `chechenashirts-${state.textLine1.replace(/\s+/g, '-')}-${idx + 1}.jpg`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        } catch (err) {
+            alert(`Error al generar la imagen (${getFriendlyErrorMessage(err)}).`);
+        } finally {
+            setExportingState(false);
+        }
+    };
+
+    window.handleExportZip = async function() {
+        if (state.designs.length === 0 || !window.JSZip) return;
+        setExportingState(true, 'Preparando ZIP...');
+        try {
+            const zip = new window.JSZip();
+            for (let i = 0; i < state.designs.length; i++) {
+                setExportingState(true, `Procesando ${i + 1}/${state.designs.length}...`);
+                const blob = await captureNodeToBlob(i);
+                zip.file(`chechenashirts-${state.textLine1.replace(/\s+/g, '-')}-${i + 1}.jpg`, blob);
+                await new Promise(r => setTimeout(r, 50));
+            }
+            setExportingState(true, 'Comprimiendo...');
+            const zipContent = await zip.generateAsync({ type: 'blob' });
+            const link = document.createElement('a');
+            link.download = `chechenashirts-${state.textLine1.replace(/\s+/g, '-')}-Pack.zip`;
+            link.href = URL.createObjectURL(zipContent);
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        } catch (err) {
+            alert(`Error al generar el ZIP (${getFriendlyErrorMessage(err)}).`);
+        } finally {
+            setExportingState(false);
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        preloadMockup();
+        attachInputListeners();
+        updateBrandUI();
+        renderUI();
+        setTimeout(updateScales, 100);
+        setTimeout(updateScales, 500);
+    });
+</script>
+
+</body>
+</html>

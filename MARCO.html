@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CHECHENA SHIRTS – Marco Desgastado</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --accent: #e8ff00;
+    --accent2: #ff3c00;
+    --text: #f0f0f0;
+    --text2: #888;
+    --panel-w: 280px;
+    --radius: 8px;
+  }
+  [data-theme="light"] {
+    --bg: #f0ede8;
+    --surface: #ffffff;
+    --surface2: #e8e4de;
+    --border: #ccc9c1;
+    --accent: #1a1a1a;
+    --accent2: #ff3c00;
+    --text: #111;
+    --text2: #666;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Arial Black', Arial, sans-serif; overflow: hidden; }
+
+  /* ── OVERLAY ── */
+  #studio-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column;
+    background: var(--bg);
+  }
+
+  /* ── HEADER ── */
+  #studio-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 18px;
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  #studio-header .brand {
+    display: flex; align-items: center; gap: 10px;
+  }
+  #studio-header .brand img {
+    height: 36px; width: auto; object-fit: contain;
+  }
+  #studio-header .brand-text {
+    font-size: 13px; font-weight: 900; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--text);
+    line-height: 1.1;
+  }
+  #studio-header .brand-text span {
+    display: block; font-size: 9px; letter-spacing: 5px;
+    color: var(--accent); font-weight: 700;
+  }
+  #studio-header .title-tool {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--text2); font-weight: 700;
+  }
+  #studio-header .header-actions { display: flex; gap: 8px; align-items: center; }
+  .icon-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); cursor: pointer; padding: 7px;
+    border-radius: var(--radius); transition: all .15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+  /* ── BODY ── */
+  #studio-body {
+    display: flex; flex: 1; overflow: hidden;
+  }
+
+  /* ── SIDE PANEL ── */
+  #sidePanel {
+    width: var(--panel-w); flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .panel-section {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-label {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--text2); font-weight: 900; margin-bottom: 8px;
+  }
+
+  /* upload zone */
+  #uploadZone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 18px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .15s;
+    background: var(--surface2);
+  }
+  #uploadZone:hover, #uploadZone.drag-over {
+    border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--surface2));
+  }
+  #uploadZone .upload-icon { color: var(--accent); margin-bottom: 6px; }
+  #uploadZone p { font-size: 10px; color: var(--text2); letter-spacing: 1px; line-height: 1.5; }
+  #uploadZone strong { color: var(--text); font-size: 11px; letter-spacing: 2px; }
+
+  /* mask grid */
+  #maskGrid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+    padding: 12px 14px; overflow-y: auto; flex: 1;
+  }
+  .mask-thumb {
+    aspect-ratio: 1; border-radius: 6px; overflow: hidden;
+    border: 2px solid transparent; cursor: pointer;
+    background: var(--surface2); transition: all .15s;
+    position: relative;
+  }
+  .mask-thumb:hover { border-color: var(--accent); }
+  .mask-thumb.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .mask-thumb canvas { width: 100%; height: 100%; display: block; }
+  .mask-thumb .mask-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,.7); font-size: 7px; letter-spacing: 1px;
+    text-align: center; padding: 2px; color: #fff; display: none;
+  }
+  .mask-thumb:hover .mask-label { display: block; }
+
+  /* action buttons */
+  .action-btn {
+    width: 100%; padding: 9px 12px;
+    border-radius: var(--radius);
+    font-size: 10px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; border: none; transition: all .15s;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .btn-primary {
+    background: var(--accent); color: #000;
+  }
+  .btn-primary:hover { background: #fff; }
+  .btn-secondary {
+    background: var(--surface2); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger {
+    background: transparent; color: var(--accent2);
+    border: 1px solid var(--accent2);
+  }
+  .btn-danger:hover { background: var(--accent2); color: #fff; }
+  .btn-download {
+    background: var(--accent2); color: #fff;
+  }
+  .btn-download:hover { background: #ff6030; }
+
+  /* ── MAIN AREA ── */
+  #mainArea {
+    flex: 1; position: relative; overflow: hidden;
+    background: repeating-conic-gradient(var(--surface2) 0% 25%, var(--bg) 0% 50%) 0 0 / 20px 20px;
+    cursor: grab;
+  }
+  #mainArea.grabbing { cursor: grabbing; }
+  #mainArea.no-image {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .empty-state {
+    text-align: center; pointer-events: none; user-select: none;
+  }
+  .empty-state .big-icon { color: var(--border); margin-bottom: 16px; }
+  .empty-state h2 {
+    font-size: 28px; font-weight: 900; letter-spacing: 6px;
+    text-transform: uppercase; color: var(--border);
+  }
+  .empty-state p {
+    font-size: 11px; letter-spacing: 3px; color: var(--text2); margin-top: 6px;
+  }
+
+  #canvasWrap {
+    position: absolute; transform-origin: center center;
+    will-change: transform;
+  }
+  #mainCanvas { display: block; }
+
+  /* floating controls */
+  #floatControls {
+    position: absolute; bottom: 18px; right: 18px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  #bgControls {
+    position: absolute; bottom: 18px; left: 18px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .bg-dot {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 2px solid var(--border); cursor: pointer; transition: border-color .15s;
+  }
+  .bg-dot:hover, .bg-dot.active { border-color: var(--accent); }
+  .bg-dot.checker {
+    background: repeating-conic-gradient(#555 0% 25%, #888 0% 50%) 0 0 / 10px 10px;
+  }
+  [data-theme="light"] .bg-dot.checker {
+    background: repeating-conic-gradient(#bbb 0% 25%, #ddd 0% 50%) 0 0 / 10px 10px;
+  }
+
+  /* zoom display */
+  #zoomBadge {
+    position: absolute; top: 14px; right: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 10px; letter-spacing: 2px; font-weight: 700;
+    color: var(--text2); pointer-events: none;
+  }
+
+  /* progress */
+  #progressBar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: var(--border); display: none;
+  }
+  #progressFill {
+    height: 100%; background: var(--accent); width: 0%; transition: width .1s;
+  }
+
+  /* toast */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--surface); border: 1px solid var(--accent);
+    color: var(--text); padding: 10px 22px; border-radius: 30px;
+    font-size: 11px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase;
+    z-index: 99999; transition: transform .3s; pointer-events: none;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* scrollbar */
+  #maskGrid::-webkit-scrollbar { width: 4px; }
+  #maskGrid::-webkit-scrollbar-track { background: var(--surface); }
+  #maskGrid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  #maskGrid::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* custom mask btn */
+  #customMaskThumb {
+    aspect-ratio: 1; border-radius: 6px; overflow: hidden;
+    border: 2px dashed var(--border); cursor: pointer;
+    background: var(--surface2); transition: all .15s;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 3px; color: var(--text2);
+    font-size: 7px; letter-spacing: 1px; text-align: center;
+  }
+  #customMaskThumb:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div id="studio-overlay">
+
+  <!-- HEADER -->
+  <header id="studio-header">
+    <div class="brand">
+      <img src="logo.png" alt="Chechena Shirts" onerror="this.style.display='none'"/>
+      <div class="brand-text">
+        CHECHENA SHIRTS
+        <span>MARCO DESGASTADO</span>
+      </div>
+    </div>
+    <div class="title-tool">Herramienta de Diseño</div>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeToggle" title="Modo claro / oscuro">
+        <i data-lucide="sun" size="16"></i>
+      </button>
+      <button class="icon-btn" id="helpBtn" title="Ayuda">
+        <i data-lucide="help-circle" size="16"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <div id="studio-body">
+
+    <!-- SIDE PANEL -->
+    <aside id="sidePanel">
+
+      <!-- Upload -->
+      <div class="panel-section">
+        <div class="panel-label">Tu Diseño</div>
+        <div id="uploadZone">
+          <div class="upload-icon" style="display:flex;justify-content:center">
+            <i data-lucide="upload-cloud" size="28"></i>
+          </div>
+          <p><strong>SUBIR IMAGEN</strong><br/>PNG, JPG, WEBP<br/>Arrastra o da clic</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display:none"/>
+      </div>
+
+      <!-- Mask grid -->
+      <div class="panel-label" style="padding:10px 14px 4px; flex-shrink:0">Marcos Desgastados</div>
+      <div id="maskGrid">
+        <!-- thumbs injected by JS -->
+        <div id="customMaskThumb" title="Subir tu propio marco (B/N)">
+          <i data-lucide="plus-circle" size="18"></i>
+          <span>PROPIO</span>
+        </div>
+        <input type="file" id="customMaskInput" accept="image/*" style="display:none"/>
+      </div>
+
+      <!-- Actions -->
+      <div class="panel-section" style="display:flex;flex-direction:column;gap:6px">
+        <button class="action-btn btn-primary" id="applyBtn">
+          <i data-lucide="zap" size="14"></i> APLICAR MARCO
+        </button>
+        <button class="action-btn btn-secondary" id="undoBtn">
+          <i data-lucide="undo-2" size="14"></i> DESHACER
+        </button>
+        <button class="action-btn btn-download" id="downloadBtn">
+          <i data-lucide="download" size="14"></i> DESCARGAR 300 DPI
+        </button>
+        <button class="action-btn btn-danger" id="resetBtn">
+          <i data-lucide="trash-2" size="14"></i> LIMPIAR TODO
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- MAIN CANVAS AREA -->
+    <main id="mainArea" class="no-image">
+      <div class="empty-state" id="emptyState">
+        <div class="big-icon" style="display:flex;justify-content:center">
+          <i data-lucide="image" size="72"></i>
+        </div>
+        <h2>CHECHENA</h2>
+        <p>SUBE TU DISEÑO PARA COMENZAR</p>
+      </div>
+      <div id="canvasWrap" style="display:none">
+        <canvas id="mainCanvas"></canvas>
+      </div>
+      <div id="zoomBadge">100%</div>
+      <div id="bgControls">
+        <div class="bg-dot checker active" data-bg="checker" title="Transparente"></div>
+        <div class="bg-dot" style="background:#fff" data-bg="white" title="Blanco"></div>
+        <div class="bg-dot" style="background:#111" data-bg="black" title="Negro"></div>
+      </div>
+      <div id="floatControls">
+        <button class="icon-btn" id="zoomInBtn" title="Acercar"><i data-lucide="zoom-in" size="16"></i></button>
+        <button class="icon-btn" id="zoomOutBtn" title="Alejar"><i data-lucide="zoom-out" size="16"></i></button>
+        <button class="icon-btn" id="fitBtn" title="Ajustar"><i data-lucide="maximize-2" size="16"></i></button>
+      </div>
+      <div id="progressBar"><div id="progressFill"></div></div>
+    </main>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+// ── Masks definition ──
+const MASKS = [
+  { id:'m1',  label:'Torn 1',   url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/6551842_11533.jpg?v=1762155300' },
+  { id:'m2',  label:'Torn 2',   url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/7373.jpg?v=1762157667' },
+  { id:'m3',  label:'Grunge 1', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-025-png.png?v=1766818824' },
+  { id:'m4',  label:'Grunge 2', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-036-png.png?v=1766818823' },
+  { id:'m5',  label:'Grunge 3', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-012-png.png?v=1766818824' },
+  { id:'m6',  label:'Grunge 4', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-018-png.png?v=1766818824' },
+  { id:'m7',  label:'Grunge 5', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-004-png.png?v=1766818824' },
+  { id:'m8',  label:'Grunge 6', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-031-png.png?v=1766818825' },
+  { id:'m9',  label:'Grunge 7', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-014-png.png?v=1766818825' },
+  { id:'m10', label:'Grunge 8', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-032-png.png?v=1766818825' },
+  { id:'m11', label:'Grunge 9', url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-026-png.png?v=1766818825' },
+  { id:'m12', label:'Grunge 10',url:'https://cdn.shopify.com/s/files/1/0686/6658/9357/files/grunge-edge-border-029-png.png?v=1766818825' },
+  { id:'noise-fine',  label:'Ruido Fino',   url:null, procedural:'fine' },
+  { id:'noise-rough', label:'Ruido Áspero', url:null, procedural:'rough' },
+];
+
+// ── State ──
+const state = {
+  originalImg: null,
+  currentImg: null,
+  history: [],
+  selectedMask: null,
+  zoom: 1,
+  panX: 0, panY: 0,
+  bgMode: 'checker',
+  isDragging: false,
+  dragStartX: 0, dragStartY: 0,
+};
+
+// ── Elements ──
+const overlay    = document.getElementById('studio-overlay');
+const mainArea   = document.getElementById('mainArea');
+const canvasWrap = document.getElementById('canvasWrap');
+const mainCanvas = document.getElementById('mainCanvas');
+const ctx        = mainCanvas.getContext('2d');
+const emptyState = document.getElementById('emptyState');
+const uploadZone = document.getElementById('uploadZone');
+const fileInput  = document.getElementById('fileInput');
+const maskGrid   = document.getElementById('maskGrid');
+const customThumb = document.getElementById('customMaskThumb');
+const customMaskInput = document.getElementById('customMaskInput');
+const applyBtn   = document.getElementById('applyBtn');
+const undoBtn    = document.getElementById('undoBtn');
+const downloadBtn= document.getElementById('downloadBtn');
+const resetBtn   = document.getElementById('resetBtn');
+const zoomBadge  = document.getElementById('zoomBadge');
+const progressBar= document.getElementById('progressBar');
+const progressFill= document.getElementById('progressFill');
+const themeToggle= document.getElementById('themeToggle');
+const bgDots     = document.querySelectorAll('.bg-dot');
+const toast      = document.getElementById('toast');
+
+let toastTimer;
+function showToast(msg, duration=2200){
+  clearTimeout(toastTimer);
+  toast.textContent = msg;
+  toast.classList.add('show');
+  toastTimer = setTimeout(()=> toast.classList.remove('show'), duration);
+}
+
+// ── Theme toggle ──
+themeToggle.addEventListener('click', ()=>{
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  const icon = themeToggle.querySelector('i');
+  icon.setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+  lucide.createIcons();
+});
+
+// ── Procedural mask generator ──
+function generateProceduralMask(type, w, h){
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const cx = c.getContext('2d');
+  const id = cx.createImageData(w, h);
+  const d = id.data;
+  const isFine = type === 'fine';
+  for(let y=0; y<h; y++){
+    for(let x=0; x<w; x++){
+      const i = (y*w + x)*4;
+      const edge = Math.min(x, y, w-1-x, h-1-y) / (Math.min(w,h)*0.15);
+      const edgeFactor = Math.min(1, edge);
+      const noise = isFine
+        ? Math.random()
+        : (Math.random() < 0.5 ? Math.random() : Math.random()*0.3);
+      const v = Math.floor(noise * edgeFactor * 255);
+      d[i] = d[i+1] = d[i+2] = v;
+      d[i+3] = 255;
+    }
+  }
+  cx.putImageData(id, 0, 0);
+  return c;
+}
+
+// ── Load mask image ──
+function loadMaskImg(mask, w, h){
+  return new Promise((resolve)=>{
+    if(mask.procedural){
+      resolve(generateProceduralMask(mask.procedural, w, h));
+      return;
+    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = mask.url;
+  });
+}
+
+// ── Web Worker for luma matte ──
+const workerCode = `
+self.onmessage = function(e){
+  const { srcData, maskData, width, height } = e.data;
+  const out = new Uint8ClampedArray(srcData.length);
+  for(let i=0; i<width*height; i++){
+    const p = i*4;
+    const luma = 0.299*maskData[p] + 0.587*maskData[p+1] + 0.114*maskData[p+2];
+    out[p]   = srcData[p];
+    out[p+1] = srcData[p+1];
+    out[p+2] = srcData[p+2];
+    out[p+3] = Math.floor((luma/255) * srcData[p+3]);
+  }
+  self.postMessage({ out }, [out.buffer]);
+};
+`;
+const workerBlob = new Blob([workerCode], {type:'application/javascript'});
+const workerURL  = URL.createObjectURL(workerBlob);
+
+function applyLumaMatte(srcCanvas, maskCanvas){
+  return new Promise((resolve)=>{
+    const w = srcCanvas.width, h = srcCanvas.height;
+    const tc = document.createElement('canvas');
+    tc.width = w; tc.height = h;
+    const tx = tc.getContext('2d');
+    tx.drawImage(maskCanvas, 0, 0, w, h);
+    const maskData = tx.getImageData(0,0,w,h).data;
+    const sc = document.createElement('canvas');
+    sc.width = w; sc.height = h;
+    const sx = sc.getContext('2d');
+    sx.drawImage(srcCanvas, 0, 0);
+    const srcData = sx.getImageData(0,0,w,h).data;
+    const worker = new Worker(workerURL);
+    worker.onmessage = function(ev){
+      const out = ev.data.out;
+      const result = new ImageData(out, w, h);
+      const rc = document.createElement('canvas');
+      rc.width = w; rc.height = h;
+      rc.getContext('2d').putImageData(result, 0, 0);
+      worker.terminate();
+      resolve(rc);
+    };
+    worker.postMessage({srcData: new Uint8ClampedArray(srcData), maskData: new Uint8ClampedArray(maskData), width:w, height:h},
+      [srcData.buffer.slice(0), maskData.buffer.slice(0)]);
+  });
+}
+
+// ── Render canvas ──
+function renderCanvas(){
+  if(!state.currentImg) return;
+  mainCanvas.width  = state.currentImg.width;
+  mainCanvas.height = state.currentImg.height;
+  ctx.clearRect(0,0,mainCanvas.width, mainCanvas.height);
+  if(state.bgMode === 'white'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,mainCanvas.width,mainCanvas.height); }
+  else if(state.bgMode === 'black'){ ctx.fillStyle='#000'; ctx.fillRect(0,0,mainCanvas.width,mainCanvas.height); }
+  ctx.drawImage(state.currentImg,0,0);
+  updateTransform();
+}
+
+function updateTransform(){
+  canvasWrap.style.transform = `translate(calc(-50% + ${state.panX}px), calc(-50% + ${state.panY}px)) scale(${state.zoom})`;
+  canvasWrap.style.left = '50%';
+  canvasWrap.style.top  = '50%';
+  zoomBadge.textContent = Math.round(state.zoom*100)+'%';
+}
+
+// ── Fit to screen ──
+function fitToScreen(){
+  if(!state.currentImg) return;
+  const area = mainArea.getBoundingClientRect();
+  const pad = 60;
+  const zx = (area.width - pad) / state.currentImg.width;
+  const zy = (area.height - pad) / state.currentImg.height;
+  state.zoom = Math.min(zx, zy, 1);
+  state.panX = 0; state.panY = 0;
+  updateTransform();
+}
+
+// ── Load user image ──
+function loadUserImage(file){
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = ()=>{
+    const c = document.createElement('canvas');
+    c.width = img.width; c.height = img.height;
+    c.getContext('2d').drawImage(img,0,0);
+    state.originalImg = c;
+    state.currentImg  = c;
+    state.history = [];
+    canvasWrap.style.display = 'block';
+    emptyState.style.display = 'none';
+    mainArea.classList.remove('no-image');
+    renderCanvas();
+    fitToScreen();
+    showToast('✓ IMAGEN CARGADA');
+    URL.revokeObjectURL(url);
+    buildThumbnails();
+  };
+  img.src = url;
+}
+
+// ── Build mask thumbnails ──
+async function buildThumbnails(){
+  // clear existing thumbs (keep customThumb)
+  Array.from(maskGrid.querySelectorAll('.mask-thumb')).forEach(el=> el.remove());
+  const frag = document.createDocumentFragment();
+  for(const mask of MASKS){
+    const div = document.createElement('div');
+    div.className = 'mask-thumb';
+    div.dataset.maskId = mask.id;
+    const lbl = document.createElement('div');
+    lbl.className = 'mask-label';
+    lbl.textContent = mask.label;
+    div.appendChild(lbl);
+    const tc = document.createElement('canvas');
+    div.appendChild(tc);
+    frag.appendChild(div);
+    div.addEventListener('click', ()=> selectMask(mask.id));
+    // draw thumbnail async
+    (async ()=>{
+      if(!state.currentImg) return;
+      const w = state.currentImg.width, h = state.currentImg.height;
+      const maskImg = await loadMaskImg(mask, w, h);
+      if(!maskImg){ tc.width=60; tc.height=60; return; }
+      const result = await applyLumaMatte(state.currentImg, maskImg);
+      tc.width  = result.width;
+      tc.height = result.height;
+      tc.getContext('2d').drawImage(result,0,0);
+    })();
+  }
+  maskGrid.insertBefore(frag, customThumb);
+}
+
+function selectMask(id){
+  state.selectedMask = id;
+  document.querySelectorAll('.mask-thumb').forEach(el=>{
+    el.classList.toggle('active', el.dataset.maskId === id);
+  });
+}
+
+// ── Apply mask ──
+applyBtn.addEventListener('click', async ()=>{
+  if(!state.currentImg){ showToast('⚠ SUBE UNA IMAGEN PRIMERO'); return; }
+  if(!state.selectedMask){ showToast('⚠ SELECCIONA UN MARCO'); return; }
+  const mask = MASKS.find(m=>m.id===state.selectedMask) || state._customMask;
+  if(!mask){ showToast('⚠ MARCO NO ENCONTRADO'); return; }
+  progressBar.style.display='block';
+  progressFill.style.width='30%';
+  const w = state.currentImg.width, h = state.currentImg.height;
+  const maskImg = await loadMaskImg(mask, w, h);
+  progressFill.style.width='60%';
+  if(!maskImg){ showToast('✕ ERROR AL CARGAR MARCO'); progressBar.style.display='none'; return; }
+  const result = await applyLumaMatte(state.currentImg, maskImg);
+  progressFill.style.width='95%';
+  state.history.push(state.currentImg);
+  state.currentImg = result;
+  renderCanvas();
+  progressFill.style.width='100%';
+  setTimeout(()=>{ progressBar.style.display='none'; progressFill.style.width='0%'; }, 400);
+  showToast('✓ MARCO APLICADO');
+});
+
+// ── Undo ──
+undoBtn.addEventListener('click', ()=>{
+  if(!state.history.length){ showToast('⚠ NADA QUE DESHACER'); return; }
+  state.currentImg = state.history.pop();
+  renderCanvas();
+  showToast('↩ DESHECHO');
+});
+
+// ── Reset ──
+resetBtn.addEventListener('click', ()=>{
+  if(!state.originalImg){ showToast('⚠ NADA QUE LIMPIAR'); return; }
+  state.history.push(state.currentImg);
+  state.currentImg = state.originalImg;
+  renderCanvas();
+  showToast('✓ IMAGEN RESTAURADA');
+});
+
+// ── Download 300 DPI ──
+downloadBtn.addEventListener('click', ()=>{
+  if(!state.currentImg){ showToast('⚠ SUBE UNA IMAGEN PRIMERO'); return; }
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width  = state.currentImg.width;
+  exportCanvas.height = state.currentImg.height;
+  const ec = exportCanvas.getContext('2d');
+  if(state.bgMode==='white'){ ec.fillStyle='#fff'; ec.fillRect(0,0,exportCanvas.width,exportCanvas.height); }
+  else if(state.bgMode==='black'){ ec.fillStyle='#000'; ec.fillRect(0,0,exportCanvas.width,exportCanvas.height); }
+  ec.drawImage(state.currentImg,0,0);
+
+  exportCanvas.toBlob(blob=>{
+    blob.arrayBuffer().then(buf=>{
+      const arr = new Uint8Array(buf);
+      const pHYs = buildPHYsChunk(11811, 11811); // ~300 DPI = 11811 pixels/meter
+      const idat = findChunkOffset(arr, 'IDAT');
+      if(idat > 0){
+        const merged = new Uint8Array(arr.length + pHYs.length);
+        merged.set(arr.slice(0, idat), 0);
+        merged.set(pHYs, idat);
+        merged.set(arr.slice(idat), idat + pHYs.length);
+        const url = URL.createObjectURL(new Blob([merged], {type:'image/png'}));
+        triggerDownload(url, 'chechena-marco-300dpi.png');
+        URL.revokeObjectURL(url);
+      } else {
+        const url = URL.createObjectURL(blob);
+        triggerDownload(url, 'chechena-marco.png');
+        URL.revokeObjectURL(url);
+      }
+      showToast('✓ DESCARGANDO 300 DPI');
+    });
+  }, 'image/png');
+});
+
+function triggerDownload(url, name){
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+}
+
+function findChunkOffset(arr, type){
+  const sig = type.split('').map(c=>c.charCodeAt(0));
+  for(let i=8; i<arr.length-8; i++){
+    if(arr[i+4]===sig[0]&&arr[i+5]===sig[1]&&arr[i+6]===sig[2]&&arr[i+7]===sig[3]) return i;
+  }
+  return -1;
+}
+
+function buildPHYsChunk(xPPU, yPPU){
+  const data = new Uint8Array(9);
+  const dv = new DataView(data.buffer);
+  dv.setUint32(0, xPPU);
+  dv.setUint32(4, yPPU);
+  data[8] = 1; // unit = meter
+  const typeBytes = [112,72,89,115]; // pHYs
+  const crcInput = new Uint8Array(4 + 9);
+  crcInput.set(typeBytes, 0); crcInput.set(data, 4);
+  const crcVal = crc32(crcInput);
+  const chunk = new Uint8Array(4 + 4 + 9 + 4);
+  const cv = new DataView(chunk.buffer);
+  cv.setUint32(0, 9);
+  chunk.set(typeBytes, 4);
+  chunk.set(data, 8);
+  cv.setUint32(17, crcVal);
+  return chunk;
+}
+
+function crc32(data){
+  const table = crc32.table || (crc32.table = (()=>{
+    const t = new Uint32Array(256);
+    for(let i=0;i<256;i++){
+      let c=i;
+      for(let j=0;j<8;j++) c = c&1 ? 0xEDB88320^(c>>>1) : c>>>1;
+      t[i]=c;
+    }
+    return t;
+  })());
+  let crc = 0xFFFFFFFF;
+  for(let i=0;i<data.length;i++) crc = table[(crc^data[i])&0xFF]^(crc>>>8);
+  return (crc^0xFFFFFFFF)>>>0;
+}
+
+// ── Upload ──
+uploadZone.addEventListener('click', ()=> fileInput.click());
+fileInput.addEventListener('change', e=>{ if(e.target.files[0]) loadUserImage(e.target.files[0]); });
+uploadZone.addEventListener('dragover', e=>{ e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', ()=> uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e=>{ e.preventDefault(); uploadZone.classList.remove('drag-over'); if(e.dataTransfer.files[0]) loadUserImage(e.dataTransfer.files[0]); });
+
+// ── Custom mask ──
+customThumb.addEventListener('click', ()=> customMaskInput.click());
+customMaskInput.addEventListener('change', async e=>{
+  if(!e.target.files[0]) return;
+  const url = URL.createObjectURL(e.target.files[0]);
+  const img = new Image();
+  img.onload = ()=>{
+    const c = document.createElement('canvas');
+    c.width=img.width; c.height=img.height;
+    c.getContext('2d').drawImage(img,0,0);
+    const customMask = { id:'custom', label:'Propio', url:null, _canvas:c };
+    MASKS.push(customMask);
+    state._customMask = customMask;
+    loadMaskImg.cache = loadMaskImg.cache||{};
+    // override loadMaskImg for custom
+    state.selectedMask = 'custom';
+    buildThumbnails();
+    showToast('✓ MARCO PROPIO CARGADO');
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+});
+
+// Patch loadMaskImg to support custom canvas-based mask
+const _origLoadMask = loadMaskImg;
+
+// ── Pan & Zoom ──
+mainArea.addEventListener('mousedown', e=>{
+  if(e.target.closest('#floatControls')||e.target.closest('#bgControls')) return;
+  state.isDragging = true;
+  state.dragStartX = e.clientX - state.panX;
+  state.dragStartY = e.clientY - state.panY;
+  mainArea.classList.add('grabbing');
+});
+window.addEventListener('mousemove', e=>{
+  if(!state.isDragging) return;
+  state.panX = e.clientX - state.dragStartX;
+  state.panY = e.clientY - state.dragStartY;
+  updateTransform();
+});
+window.addEventListener('mouseup', ()=>{ state.isDragging=false; mainArea.classList.remove('grabbing'); });
+
+mainArea.addEventListener('wheel', e=>{
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.9 : 1.1;
+  state.zoom = Math.min(10, Math.max(0.05, state.zoom * delta));
+  updateTransform();
+}, {passive:false});
+
+// touch pan
+let lastTouchX=0, lastTouchY=0;
+mainArea.addEventListener('touchstart', e=>{
+  if(e.touches.length===1){ lastTouchX=e.touches[0].clientX; lastTouchY=e.touches[0].clientY; }
+});
+mainArea.addEventListener('touchmove', e=>{
+  if(e.touches.length===1){
+    state.panX += e.touches[0].clientX - lastTouchX;
+    state.panY += e.touches[0].clientY - lastTouchY;
+    lastTouchX = e.touches[0].clientX;
+    lastTouchY = e.touches[0].clientY;
+    updateTransform();
+  }
+  e.preventDefault();
+}, {passive:false});
+
+// ── Zoom buttons ──
+document.getElementById('zoomInBtn').addEventListener('click',  ()=>{ state.zoom = Math.min(10, state.zoom*1.25); updateTransform(); });
+document.getElementById('zoomOutBtn').addEventListener('click', ()=>{ state.zoom = Math.max(0.05, state.zoom*0.8); updateTransform(); });
+document.getElementById('fitBtn').addEventListener('click', fitToScreen);
+
+// ── Background ──
+bgDots.forEach(dot=>{
+  dot.addEventListener('click', ()=>{
+    bgDots.forEach(d=> d.classList.remove('active'));
+    dot.classList.add('active');
+    state.bgMode = dot.dataset.bg;
+    renderCanvas();
+  });
+});
+
+// ── Help ──
+document.getElementById('helpBtn').addEventListener('click', ()=>{
+  showToast('Sube tu diseño → Elige marco → Aplica → Descarga 300DPI', 4000);
+});
+
+// ── Init lucide ──
+lucide.createIcons();
+
+})();
+</script>
+</body>
+</html>
