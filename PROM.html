@@ -252,6 +252,7 @@ footer strong { color: #dc2626; }
 
         <div class="filters-container">
             <button class="filter-btn active" data-category="todos">🔍 Todos</button>
+            <button class="filter-btn" data-category="chechena">PROS</button>
             <button class="filter-btn" data-category="streetwear">🏢 Streetwear</button>
             <button class="filter-btn" data-category="anime">🎌 Anime</button>
             <button class="filter-btn" data-category="vintage">📻 Vintage</button>
@@ -272,12 +273,24 @@ footer strong { color: #dc2626; }
 
         <div class="grid" id="prompts-grid"></div>
     </div>
+
+    
 </section>
 
 
 <script>
 const PROMPTS = [
-    { category: "streetwear", title: "🐻 Oso Streetwear Boss", desc: "Oso dominante con actitud urbana y accesorios gold.", prompt: "Diseño de un oso de cuerpo completo en estilo streetwear, con una pose imponente y detalles modernos. El oso debe llevar accesorios urbanos como gafas de sol, cadenas de oro gruesas, gorra de lado y zapatillas Jordan. Su pelaje puede tener texturas estilizadas o patrones para darle un toque artístico. Incluir detalles de graffiti o elementos urbanos en el diseño, con colores vibrantes que contrasten fuertemente contra un fondo negro. Sin elementos extra alrededor, solo el oso de cuerpo completo y los detalles mencionados." },
+
+    { category: "chechena", title: "✂️ Corte limpio PRO", desc: "Extraer diseño listo para usar", prompt: "Extrae únicamente el diseño impreso de la camiseta. Mantén exactamente los colores, formas, estilo y detalles originales, sin alteraciones. Elimina completamente la tela, sombras, arrugas y fondo original. Entrega el resultado como imagen PNG con fondo sólido de un color fuerte que no esté presente en el diseño, para facilitar su recorte posterior." },
+
+    { category: "chechena", title: "💿 Cromo metálico PRO", desc: "Efecto espejo ultra realista", prompt: "Convierte la imagen en un diseño de cromo metálico brillante con acabado tipo espejo. Aplica reflejos realistas, superficie pulida estilo metal líquido, bordes suaves y volumen 3D bien definido. Mantén sombras intensas y puntos de luz especular para mayor realismo. Fondo verde intenso sólido (no presente en el diseño) para facilitar la extracción. Entregar en alta resolución, 300 DPI, listo para impresión DTF." },
+
+    { category: "chechena", title: "🧸 Amigurumi PRO", desc: "Estilo tejido ultra realista", prompt: "Convierte la imagen en un personaje estilo amigurumi ultra realista, conservando colores, rasgos y expresión originales. Simula tejido a mano con lana gruesa y puntos de crochet visibles en forma de V, con textura suave y realista. Mantén proporciones, esencia y el mismo tamaño de letras en el diseño original. Iluminación suave, sin sombras fuertes, calidad fotográfica profesional. Composición centrada y limpia. Fondo sólido de un color que no esté presente en el diseño para fácil extracción. Alta resolución, bordes definidos, listo para sublimación o DTF en tazas." },
+
+    { category: "chechena", title: "🪡 Parche bordado PRO", desc: "Efecto bordado 3D realista", prompt: "Crea un parche bordado altamente detallado del logotipo cargado. El parche debe tener costuras elevadas y bordado con textura, dándole un aspecto realista y en 3D. Manten los colores y proporciones del logotipo con precisión. Presenta el parche aislado sobre un fondo PNG transparente, sin ninguna tela o superficie debajo. Haz que parezca un parche de logotipo hecho profesionalmente, listo para prendas o accesorios." },
+
+    // 🔥 ESTA COMA ERA LA QUE FALTABA
+    { category: "streetwear", title: "🐻 Oso Streetwear Boss", desc: "Oso dominante con actitud urbana y accesorios gold.", prompt: "Extrae únicamente el diseño impreso de la camiseta. Mantén exactamente los colores, formas, estilo y detalles originales, sin alteraciones. Elimina completamente la tela, sombras, arrugas y fondo original. Entrega el resultado como imagen PNG con fondo sólido de un color fuerte que no esté presente en el diseño, para facilitar su recorte posterior. Convierte la imagen en un diseño de cromo metálico brillante con acabado tipo espejo. Aplica reflejos realistas, superficie pulida estilo metal líquido, bordes suaves y volumen 3D bien definido. Mantén sombras intensas y puntos de luz especular para mayor realismo. Fondo verde intenso sólido (no presente en el diseño) para facilitar la extracción. Entregar en alta resolución, 300 DPI, listo para impresión DTF. Convierte la imagen en un personaje estilo amigurumi ultra realista, conservando colores, rasgos y expresión originales. Simula tejido a mano con lana gruesa y puntos de crochet visibles en forma de V, con textura suave y realista. Mantén proporciones, esencia y el mismo tamaño de letras en el diseño original. Iluminación suave, sin sombras fuertes, calidad fotográfica profesional. Composición centrada y limpia. Fondo sólido de un color que no esté presente en el diseño para fácil extracción. Alta resolución, bordes definidos, listo para sublimación o DTF en tazas. Crea un parche bordado altamente detallado del logotipo cargado. El parche debe tener costuras elevadas y bordado con textura, dándole un aspecto realista y en 3D. Manten los colores y proporciones del logotipo con precisión. Presenta el parche aislado sobre un fondo PNG transparente, sin ninguna tela o superficie debajo. Haz que parezca un parche de logotipo hecho profesionalmente, listo para prendas o accesorios. Diseño de un oso de cuerpo completo en estilo streetwear, con una pose imponente y detalles modernos. El oso debe llevar accesorios urbanos como gafas de sol, cadenas de oro gruesas, gorra de lado y zapatillas Jordan. Su pelaje puede tener texturas estilizadas o patrones para darle un toque artístico. Incluir detalles de graffiti o elementos urbanos en el diseño, con colores vibrantes que contrasten fuertemente contra un fondo negro. Sin elementos extra alrededor, solo el oso de cuerpo completo y los detalles mencionados." },
     { category: "streetwear", title: "🦁 León Grafitero", desc: "León con corona en estilo grafiti urbano vibrante.", prompt: "Ilustración de un león de cuerpo completo en streetwear urbano con corona dorada, cadenas gruesas, gafas de sol reflectantes y fondo de graffiti colorido. El león debe tener melena estilizada con texturas urbanas, ropa oversize tipo hoodie, y pose dominante. Incorporar detalles modernos como auriculares, sneakers premium y elementos de spray paint en colores neón sobre fondo negro." },
     { category: "streetwear", title: "🦅 Águila Skater", desc: "Águila en skate con accesorios urbanos y fondo de ciudad.", prompt: "Diseño de un águila antropomorfa haciendo un truco en patineta, ropa deportiva oversize, gorra hacia atrás, mochila vintage y auriculares grandes. El águila debe tener alas extendidas en pose dinámica, plumas con detalles urbanos, y estar rodeada de grafismos de ciudad. Incorporar tipografía bold y colores street sobre fondo oscuro con luces de neón." },
     { category: "streetwear", title: "👟 Sneaker Fusion", desc: "Zapatillas icónicas fusionadas con elementos abstractos.", prompt: "Ilustración de un par de sneakers flotando en el aire, fusionados con formas abstractas geométricas y salpicaduras de pintura estilo graffiti. Los sneakers deben tener detalles hiperrealistas, cordones dinámicos, y estar rodeados de elementos urbanos como códigos QR, iconos digitales y texturas de concreto. Usar paleta de colores saturados con acentos en neón." },
@@ -388,7 +401,7 @@ function filterPrompts() {
 }
 
 const categoryLabels = {
-    streetwear:'STREETWEAR', anime:'ANIME', vintage:'VINTAGE', gotico:'GÓTICO',
+    category: "chechena",streetwear:'STREETWEAR', anime:'ANIME', vintage:'VINTAGE', gotico:'GÓTICO',
     motivacional:'MOTIVACIONAL', grunge:'GRUNGE', minimalista:'MINIMAL',
     naturaleza:'NATURALEZA', musica:'MÚSICA', abstracto:'ABSTRACTO',
     deportivo:'DEPORTIVO', mascotas:'MASCOTAS', cyberpunk:'CYBERPUNK', tipografia:'TIPOGRAFÍA'

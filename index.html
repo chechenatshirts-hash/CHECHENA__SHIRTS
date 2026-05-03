@@ -1038,11 +1038,193 @@ background:#000000;
   .products-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
+
+
   </style>
 </head>
 <body>
 
+<style>
+#fomo-flotante{
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
 
+.fomo-card{
+  background: rgba(15,15,15,0.96);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 360px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  animation: fadeSlide .5s ease;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e9e9e9;
+}
+
+@keyframes fadeSlide{
+  from{ opacity:0; transform: translateY(16px) scale(.96); }
+  to{ opacity:1; transform: translateY(0) scale(1); }
+}
+
+.fomo-avatar{
+  width:36px; height:36px; border-radius:50%;
+  background: linear-gradient(135deg, #22c55e, #3b82f6);
+  color:#001013;
+  display:flex; align-items:center; justify-content:center;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.fomo-text{
+  font-size:13px;
+  line-height:1.35;
+  color:#e2e8f0;
+}
+
+.fomo-text strong{ color:#fff; }
+
+.fomo-dot{
+  width:6px;
+  height:6px;
+  background:#22c55e;
+  border-radius:50%;
+  animation: pulse 1.4s infinite;
+  margin-left: auto;
+}
+
+@keyframes pulse{
+  0%{opacity:.4; transform:scale(1);}
+  50%{opacity:1; transform:scale(1.25);}
+  100%{opacity:.4; transform:scale(1);}
+}
+</style>
+
+<div id="fomo-flotante"></div>
+
+<script>
+// MUCHOS NOMBRES (realista LATAM + USA + EUROPA)
+const nombres = [
+"Juan","Luis","Carlos","Miguel","José","Andrés","Diego","Mateo","Santiago","Kevin",
+"Daniel","Alejandro","Jorge","Fernando","Ricardo","Emilio","Sebastián","Gabriel",
+"Leonardo","Iván","Hugo","Rafael","Marco","Esteban","Bruno","Adrián","Pablo",
+"Camila","Sofía","Valentina","Fernanda","María","Andrea","Daniela","Paula","Lucía",
+"Isabela","Renata","Diana","Emma","Olivia","Mia","Emily","Ashley","Jessica","Laura"
+];
+
+// CIUDAD + PAÍS
+const ubicaciones = [
+["CDMX","México"],["Monterrey","México"],["Guadalajara","México"],["Puebla","México"],["Veracruz","México"],
+["Bogotá","Colombia"],["Medellín","Colombia"],["Cali","Colombia"],["Cartagena","Colombia"],
+["Caracas","Venezuela"],["Maracaibo","Venezuela"],
+["Lima","Perú"],["Cusco","Perú"],
+["Quito","Ecuador"],["Guayaquil","Ecuador"],
+["Santiago","Chile"],
+["La Paz","Bolivia"],
+["San José","Costa Rica"],
+["Managua","Nicaragua"],
+["Miami","Estados Unidos"],["Houston","Estados Unidos"],["Los Ángeles","Estados Unidos"],
+["Madrid","España"],["Barcelona","España"],
+["Milán","Italia"],["Roma","Italia"]
+];
+
+// LO QUE REALMENTE VENDES
+const productos = [
+"MEGAPACK OJITO CON MAS DE 50,000 DISEÑOS",
+"MEGAPACK OJITO CON MAS DE 50,000 DISEÑOS Y PROGRAMAS",
+"MEGAPACK CHECHENA CON MAS DE 40,000 DISEÑOS"
+];
+
+// MENSAJES DE COMPRA (REALISTAS)
+const accionesCompra = [
+"acaba de comprar",
+"compró hace unos minutos",
+"adquirió",
+"aprovechó la promo de",
+"compró el"
+];
+
+// MENSAJES DE USO (HERRAMIENTAS GRATIS)
+const accionesUso = [
+"está usando",
+"probó",
+"está trabajando con",
+"está creando algo nuevo en",
+"está explorando",
+"acaba de probar",
+"acaba de finalizar en"
+];
+
+const herramientas = [
+"Semitonos Studio",
+"Marco Desgastado",
+"Mezzotinta Studio",
+"SEMITRANSPARENCIAS",
+"Pedrería PRO",
+"CALCULADORA",
+"Mockups Studio",
+"GENERADOR DE TICKERS",
+"Removedor IA",
+"Vectorizador"
+];
+
+function random(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function crearFomo(){
+  const container = document.getElementById('fomo-flotante');
+  if(!container) return;
+
+  const nombre = random(nombres);
+  const [ciudad, pais] = random(ubicaciones);
+
+  const esCompra = Math.random() < 0.75; // 🔥 75% compras (más ventas)
+
+  let texto;
+
+  if(esCompra){
+    const accion = random(accionesCompra);
+    const producto = random(productos);
+    texto = `<strong>${nombre}</strong> · ${ciudad}, ${pais}<br>${accion} <strong>${producto}</strong>`;
+  }else{
+    const accion = random(accionesUso);
+    const herramienta = random(herramientas);
+    texto = `<strong>${nombre}</strong> · ${ciudad}, ${pais}<br>${accion} <strong>${herramienta}</strong>`;
+  }
+
+  const card = document.createElement('div');
+  card.className = 'fomo-card';
+
+  card.innerHTML = `
+    <div class="fomo-avatar">${nombre[0]}</div>
+    <div class="fomo-text">${texto}</div>
+    <div class="fomo-dot"></div>
+  `;
+
+  container.appendChild(card);
+
+  setTimeout(()=>{
+    card.style.opacity="0";
+    card.style.transform="translateY(20px)";
+    setTimeout(()=> card.remove(),400);
+  },6500);
+}
+
+// 🔥 TIMING MÁS REALISTA
+setTimeout(crearFomo,2000);
+setInterval(crearFomo,9000);
+</script>
 
 <!-- TICKER -->
 <div class="ticker-wrap">

@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Semitransparencias Pro — Checheña Shirts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── TOKENS ─── */
+    :root {
+      --cream:   #faf7f2;
+      --linen:   #f3ede3;
+      --blush:   #e8d9cd;
+      --sand:    #d4c4b0;
+      --clay:    #b8a090;
+      --terra:   #8b6b5a;
+      --ink:     #2d2420;
+      --ink-soft:#6b5a52;
+      --mint:    #c8e0d8;
+      --sage:    #8bb5a8;
+      --rose:    #e8c4b8;
+      --amber:   #e8b870;
+      --white:   #ffffff;
+      --shadow:  0 2px 20px rgba(45,36,32,.08);
+      --shadow-lg: 0 8px 40px rgba(45,36,32,.14);
+      --r-sm:    8px;
+      --r-md:    14px;
+      --r-lg:    22px;
+      --r-xl:    32px;
+    }
+
+    /* ─── RESET ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%; width: 100%;
+      overflow: hidden;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── LAYOUT ROOT ─── */
+    #app {
+      display: flex;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* ─── SIDEBAR ─── */
+    #sidebar {
+      width: 320px;
+      min-width: 320px;
+      height: 100%;
+      background: var(--white);
+      border-right: 1px solid var(--blush);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 30;
+      box-shadow: 2px 0 24px rgba(45,36,32,.06);
+    }
+
+    /* Sidebar Header */
+    .sb-header {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--linen);
+      flex-shrink: 0;
+    }
+
+    .sb-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .sb-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--rose), var(--blush));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sb-icon svg { width: 18px; height: 18px; color: var(--terra); }
+
+    .sb-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 17px;
+      color: var(--ink);
+      letter-spacing: -.3px;
+    }
+
+    .sb-badge {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--terra);
+      background: var(--linen);
+      border: 1px solid var(--blush);
+      border-radius: 20px;
+      padding: 2px 7px;
+      margin-left: 2px;
+    }
+
+    .sb-subtitle {
+      font-size: 11px;
+      color: var(--clay);
+      font-weight: 400;
+    }
+
+    /* Sidebar Scroll Body */
+    .sb-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .sb-body::-webkit-scrollbar { width: 4px; }
+    .sb-body::-webkit-scrollbar-thumb { background: var(--blush); border-radius: 2px; }
+
+    /* Section Label */
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--linen);
+    }
+
+    /* Drop Zone */
+    .dropzone {
+      position: relative;
+      border: 2px dashed var(--blush);
+      border-radius: var(--r-lg);
+      background: var(--linen);
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .dropzone:hover, .dropzone.drag-over {
+      border-color: var(--sage);
+      background: var(--mint);
+    }
+
+    .dropzone input[type=file] {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .dz-icon {
+      width: 44px; height: 44px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+      box-shadow: var(--shadow);
+      color: var(--sage);
+    }
+
+    .dz-title {
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .dz-sub { font-size: 11px; color: var(--clay); }
+
+    /* Status Card */
+    .status-card {
+      background: var(--linen);
+      border-radius: var(--r-md);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--sand);
+      flex-shrink: 0;
+    }
+
+    .status-dot.clean { background: var(--sage); }
+    .status-dot.warn  { background: var(--amber); }
+
+    .status-text {
+      flex: 1;
+    }
+
+    .status-text strong {
+      display: block;
+      font-size: 12px;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .status-text span {
+      font-size: 11px;
+      color: var(--clay);
+    }
+
+    .status-size {
+      font-size: 10px;
+      font-family: 'DM Sans', monospace;
+      color: var(--sand);
+      background: var(--white);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--blush);
+      white-space: nowrap;
+    }
+
+    /* Threshold Slider */
+    .slider-wrap {
+      background: var(--linen);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .slider-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .slider-val {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--terra);
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+      margin-bottom: 8px;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+      height: 5px;
+      background: linear-gradient(90deg, var(--sage) 0%, var(--amber) 100%);
+      border-radius: 3px;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--terra);
+      box-shadow: 0 2px 8px rgba(139,107,90,.3);
+      cursor: pointer;
+      margin-top: -7.5px;
+      transition: transform .15s;
+    }
+
+    input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+    input[type=range]:disabled::-webkit-slider-thumb { border-color: var(--sand); cursor: not-allowed; }
+    input[type=range]:disabled::-webkit-slider-runnable-track { opacity: .4; }
+
+    .slider-hint { font-size: 10px; color: var(--clay); line-height: 1.4; }
+
+    /* BG Selector */
+    .bg-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .bg-btn {
+      padding: 7px 4px;
+      border-radius: var(--r-sm);
+      border: 2px solid var(--blush);
+      background: var(--white);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--clay);
+      cursor: pointer;
+      transition: all .15s;
+      text-align: center;
+      letter-spacing: .3px;
+    }
+
+    .bg-btn:hover { border-color: var(--sage); color: var(--terra); }
+    .bg-btn.active { border-color: var(--terra); background: var(--linen); color: var(--terra); }
+
+    /* Toggle */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--linen);
+      border-radius: var(--r-md);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-row input { display: none; }
+
+    .toggle-switch {
+      width: 36px; height: 20px;
+      background: var(--blush);
+      border-radius: 10px;
+      position: relative;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--white);
+      transition: left .2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    }
+
+    .toggle-row input:checked ~ .toggle-switch { background: var(--sage); }
+    .toggle-row input:checked ~ .toggle-switch::after { left: 19px; }
+
+    .toggle-info strong {
+      display: block;
+      font-size: 12px;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .toggle-info span { font-size: 10px; color: var(--clay); }
+
+    /* Buttons */
+    .btn-reset {
+      width: 100%;
+      padding: 10px;
+      border-radius: var(--r-md);
+      border: 1.5px solid var(--blush);
+      background: transparent;
+      color: var(--clay);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all .15s;
+    }
+
+    .btn-reset:hover { border-color: var(--clay); color: var(--terra); background: var(--linen); }
+    .btn-reset:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Sidebar Footer */
+    .sb-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--linen);
+      background: var(--white);
+      flex-shrink: 0;
+    }
+
+    .btn-download {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--r-md);
+      border: none;
+      background: linear-gradient(135deg, var(--terra) 0%, #a07060 100%);
+      color: var(--white);
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .2s;
+      box-shadow: 0 4px 16px rgba(139,107,90,.35);
+      letter-spacing: -.1px;
+    }
+
+    .btn-download:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(139,107,90,.45); }
+    .btn-download:active { transform: translateY(0); }
+    .btn-download:disabled {
+      background: var(--sand);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ─── CANVAS AREA ─── */
+    #canvas-area {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    #wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #wrap:active { cursor: grabbing; }
+
+    /* BG variants */
+    .bg-checker {
+      background-color: #ede8e0;
+      background-image: repeating-conic-gradient(#ddd8d0 0% 25%, transparent 0% 50%);
+      background-size: 22px 22px;
+    }
+
+    .bg-white-c { background: #fff; }
+    .bg-black-c { background: #1a1410; }
+    .bg-gray-c  { background: #c0b8b0; }
+
+    canvas#lmx-canvas {
+      display: block;
+      image-rendering: pixelated;
+      box-shadow: 0 20px 60px rgba(45,36,32,.22), 0 4px 16px rgba(45,36,32,.1);
+      border-radius: 4px;
+    }
+
+    /* Empty State */
+    #empty-state {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      pointer-events: none;
+    }
+
+    .es-orb {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose), var(--mint));
+      opacity: .5;
+      margin-bottom: 6px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .es-text {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--sand);
+      letter-spacing: -.3px;
+    }
+
+    .es-sub { font-size: 12px; color: var(--clay); opacity: .7; }
+
+    /* Zoom Controls */
+    #zoom-bar {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      background: var(--white);
+      border: 1px solid var(--blush);
+      border-radius: var(--r-lg);
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .zoom-btn {
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      border: none;
+      background: transparent;
+      border-radius: var(--r-sm);
+      color: var(--clay);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .zoom-btn:hover { background: var(--linen); color: var(--terra); }
+    .zoom-btn:disabled { opacity: .3; cursor: not-allowed; }
+    .zoom-btn:disabled:hover { background: transparent; color: var(--clay); }
+
+    .zoom-divider { height: 1px; background: var(--linen); margin: 2px 4px; }
+
+    /* Hint Pill */
+    #drag-hint {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(45,36,32,.7);
+      color: var(--cream);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .3px;
+      opacity: 0;
+      transition: opacity .4s;
+      pointer-events: none;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      #app { flex-direction: column; }
+      #sidebar {
+        width: 100%; min-width: 0;
+        height: auto;
+        max-height: 52%;
+        border-right: none;
+        border-bottom: 1px solid var(--blush);
+        order: 2;
+      }
+      #canvas-area { order: 1; flex: 1; }
+    }
+
+    /* SVG icons inline */
+    .icon { display: inline-block; vertical-align: middle; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside id="sidebar">
+
+    <div class="sb-header">
+      <div class="sb-brand">
+        <div class="sb-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="sb-title">Semitransparencias <span class="sb-badge">PRO v2</span></div>
+        </div>
+      </div>
+      <div class="sb-subtitle">Corrector de transparencias para DTF · Checheña Shirts</div>
+    </div>
+
+    <div class="sb-body">
+
+      <!-- ARCHIVO -->
+      <section>
+        <div class="section-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Archivo
+        </div>
+
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="lmx-file" accept="image/png">
+          <div class="dz-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+          </div>
+          <div class="dz-title">Subir PNG</div>
+          <div class="dz-sub">Arrastra o haz clic · Solo PNG</div>
+        </div>
+
+        <div class="status-card" style="margin-top:10px;">
+          <div class="status-dot" id="status-dot"></div>
+          <div class="status-text">
+            <strong id="lmx-status">Sin imagen</strong>
+            <span id="lmx-result">Esperando análisis…</span>
+          </div>
+          <div class="status-size" id="lmx-size">—</div>
+        </div>
+
+        <button class="btn-reset" id="lmx-reset" disabled style="margin-top:10px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          Reiniciar
+        </button>
+      </section>
+
+      <!-- AJUSTES -->
+      <section>
+        <div class="section-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Ajustes
+        </div>
+
+        <div class="slider-wrap">
+          <div class="slider-header">
+            <span class="slider-label">Umbral de corte</span>
+            <span class="slider-val" id="lmx-threshold-value">254</span>
+          </div>
+          <input type="range" id="lmx-threshold" min="1" max="254" value="254" disabled>
+          <div class="slider-hint">Píxeles con alfa ≤ umbral → transparentes. Mayores → sólidos.</div>
+        </div>
+      </section>
+
+      <!-- VISTA -->
+      <section>
+        <div class="section-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Vista previa
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <div style="font-size:11px;color:var(--clay);font-weight:600;margin-bottom:7px;">Fondo del lienzo</div>
+          <div class="bg-grid">
+            <button class="bg-btn active" data-bg="checker">Grid</button>
+            <button class="bg-btn" data-bg="white">Blanco</button>
+            <button class="bg-btn" data-bg="black">Negro</button>
+            <button class="bg-btn" data-bg="gray">Gris</button>
+          </div>
+        </div>
+
+        <label class="toggle-row">
+          <input type="checkbox" id="lmx-overlay">
+          <div class="toggle-switch"></div>
+          <div class="toggle-info">
+            <strong>Resaltar zonas afectadas</strong>
+            <span>Muestra en rojo lo que se eliminará</span>
+          </div>
+        </label>
+      </section>
+
+    </div>
+
+    <!-- Footer CTA -->
+    <div class="sb-footer">
+      <button class="btn-download" id="apply" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar PNG · 300 DPI
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ─── CANVAS AREA ─── -->
+  <div id="canvas-area">
+    <div id="wrap" class="bg-checker">
+      <canvas id="lmx-canvas" width="0" height="0"></canvas>
+
+      <div id="empty-state">
+        <div class="es-orb"></div>
+        <div class="es-text">Sube una imagen para comenzar</div>
+        <div class="es-sub">Solo archivos PNG · Arrastra aquí o usa el panel lateral</div>
+      </div>
+    </div>
+
+    <div id="drag-hint">Arrastra para mover · Rueda para zoom</div>
+
+    <div id="zoom-bar">
+      <button class="zoom-btn" id="zoom-in" disabled title="Acercar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <div class="zoom-divider"></div>
+      <button class="zoom-btn" id="zoom-reset" disabled title="Ajustar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      </button>
+      <div class="zoom-divider"></div>
+      <button class="zoom-btn" id="zoom-out" disabled title="Alejar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+
+  const els = {
+    file:       $('lmx-file'),
+    reset:      $('lmx-reset'),
+    wrap:       $('wrap'),
+    canvas:     $('lmx-canvas'),
+    overlay:    $('lmx-overlay'),
+    threshold:  $('lmx-threshold'),
+    thresholdVal:$('lmx-threshold-value'),
+    size:       $('lmx-size'),
+    status:     $('lmx-status'),
+    result:     $('lmx-result'),
+    statusDot:  $('status-dot'),
+    apply:      $('apply'),
+    zoomIn:     $('zoom-in'),
+    zoomOut:    $('zoom-out'),
+    zoomReset:  $('zoom-reset'),
+    dragHint:   $('drag-hint'),
+    emptyState: $('empty-state'),
+    dropzone:   $('dropzone'),
+  };
+
+  const ctx = els.canvas.getContext('2d', { willReadFrequently: true });
+
+  let originalBitmap = null;
+  let originalImageData = null;
+  let offscreenCanvas = null;
+  let semiTransparentIndices = [];
+  let zoom = 1, panX = 0, panY = 0;
+  let isPanning = false, lastMouseX = 0, lastMouseY = 0;
+  let rafId = null;
+
+  // ─── BG Switcher ───
+  document.querySelectorAll('.bg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      els.wrap.className = '';
+      const baseClasses = ['bg-checker','bg-white-c','bg-black-c','bg-gray-c'];
+      baseClasses.forEach(c => els.wrap.classList.remove(c));
+      const map = { checker:'bg-checker', white:'bg-white-c', black:'bg-black-c', gray:'bg-gray-c' };
+      els.wrap.classList.add(map[btn.dataset.bg] || 'bg-checker');
+      els.wrap.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;cursor:grab;overflow:hidden;position:relative;';
+      schedDraw();
+    });
+  });
+
+  function setEnabled(en) {
+    [els.reset, els.apply, els.threshold, els.zoomIn, els.zoomOut, els.zoomReset].forEach(el => el.disabled = !en);
+    els.dragHint.style.opacity = en ? '1' : '0';
+    els.emptyState.style.display = en ? 'none' : 'flex';
+  }
+
+  function resetView() {
+    if (!originalBitmap) return;
+    const r = els.wrap.getBoundingClientRect();
+    const scale = Math.min((r.width - 40) / originalBitmap.width, (r.height - 40) / originalBitmap.height);
+    zoom = Math.min(scale, 1);
+    panX = (r.width  - originalBitmap.width  * zoom) / 2;
+    panY = (r.height - originalBitmap.height * zoom) / 2;
+  }
+
+  function analyzeImage() {
+    if (!originalImageData) return;
+    semiTransparentIndices = [];
+    const d = originalImageData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const a = d[i + 3];
+      if (a > 0 && a < 255) semiTransparentIndices.push(i);
+    }
+    if (semiTransparentIndices.length > 0) {
+      els.result.textContent = '⚠ Semitransparencias detectadas';
+      els.status.textContent = 'Requiere corrección';
+      els.statusDot.className = 'status-dot warn';
+    } else {
+      els.result.textContent = '✓ Sin semitransparencias';
+      els.status.textContent = 'Imagen limpia';
+      els.statusDot.className = 'status-dot clean';
+    }
+  }
+
+  function getCorrectedImageData() {
+    if (!originalImageData) return null;
+    const threshold = parseInt(els.threshold.value, 10);
+    const corrected = new ImageData(new Uint8ClampedArray(originalImageData.data), originalImageData.width, originalImageData.height);
+    const d = corrected.data;
+    for (const i of semiTransparentIndices) {
+      d[i + 3] = d[i + 3] <= threshold ? 0 : 255;
+    }
+    return corrected;
+  }
+
+  function updateOffscreen() {
+    if (!offscreenCanvas || !originalImageData) return;
+    const oc = offscreenCanvas.getContext('2d');
+    oc.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+    oc.putImageData(getCorrectedImageData(), 0, 0);
+  }
+
+  function draw() {
+    rafId = null;
+    if (!originalBitmap) return;
+    const r = els.wrap.getBoundingClientRect();
+    els.canvas.width  = r.width;
+    els.canvas.height = r.height;
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, r.width, r.height);
+    ctx.save();
+    ctx.translate(panX, panY);
+    ctx.scale(zoom, zoom);
+    if (offscreenCanvas) ctx.drawImage(offscreenCanvas, 0, 0);
+    if (els.overlay.checked) drawOverlay();
+    ctx.restore();
+  }
+
+  function schedDraw() {
+    if (!rafId) rafId = requestAnimationFrame(draw);
+  }
+
+  function drawOverlay() {
+    const threshold = parseInt(els.threshold.value, 10);
+    const d = originalImageData.data;
+    ctx.fillStyle = 'rgba(220,80,60,.65)';
+    for (const i of semiTransparentIndices) {
+      if (d[i + 3] > 0 && d[i + 3] <= threshold) {
+        const x = (i / 4) % originalImageData.width;
+        const y = Math.floor((i / 4) / originalImageData.width);
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+  }
+
+  function zoomAt(factor, cx, cy) {
+    const r = els.wrap.getBoundingClientRect();
+    const mx = cx !== undefined ? cx - r.left : r.width / 2;
+    const my = cy !== undefined ? cy - r.top  : r.height / 2;
+    const wx = (mx - panX) / zoom;
+    const wy = (my - panY) / zoom;
+    zoom *= factor;
+    panX = mx - wx * zoom;
+    panY = my - wy * zoom;
+    schedDraw();
+  }
+
+  // ─── CRC + pHYs for 300 DPI ───
+  function crc32(arr) {
+    let c = ~0;
+    for (let i = 0; i < arr.length; i++) { c ^= arr[i]; for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xEDB88320 & -(c & 1)); }
+    return ~c;
+  }
+
+  function addPHYS300DPI(buf) {
+    const dpi = 11811;
+    const type = new Uint8Array([112,72,89,115]);
+    const b = n => [(n>>24)&255,(n>>16)&255,(n>>8)&255,n&255];
+    const data = new Uint8Array([...b(dpi),...b(dpi),1]);
+    const toCRC = new Uint8Array([...type,...data]);
+    const crc = crc32(toCRC);
+    const chunk = new Uint8Array([0,0,0,9,...type,...data,...[(crc>>24)&255,(crc>>16)&255,(crc>>8)&255,crc&255]]);
+    const out = new Uint8Array(buf.length + chunk.length);
+    out.set(buf.slice(0, 33), 0);
+    out.set(chunk, 33);
+    out.set(buf.slice(33), 33 + chunk.length);
+    return out;
+  }
+
+  async function exportPNG() {
+    if (!originalBitmap) return;
+    const out = document.createElement('canvas');
+    out.width = originalBitmap.width;
+    out.height = originalBitmap.height;
+    out.getContext('2d').putImageData(getCorrectedImageData(), 0, 0);
+    const dataURL = out.toDataURL('image/png');
+    const bin = atob(dataURL.split(',')[1]);
+    const buf = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    const final = addPHYS300DPI(buf);
+    const a = document.createElement('a');
+    a.download = 'corregido_300dpi.png';
+    a.href = URL.createObjectURL(new Blob([final], { type: 'image/png' }));
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // ─── LOAD IMAGE ───
+  async function loadFile(file) {
+    if (!file || file.type !== 'image/png') { alert('Solo se permiten archivos PNG.'); return; }
+    try {
+      originalBitmap = await createImageBitmap(file);
+      const tmp = document.createElement('canvas');
+      tmp.width = originalBitmap.width;
+      tmp.height = originalBitmap.height;
+      const tctx = tmp.getContext('2d', { willReadFrequently: true });
+      tctx.drawImage(originalBitmap, 0, 0);
+      originalImageData = tctx.getImageData(0, 0, tmp.width, tmp.height);
+      offscreenCanvas = document.createElement('canvas');
+      offscreenCanvas.width = originalBitmap.width;
+      offscreenCanvas.height = originalBitmap.height;
+      els.size.textContent = `${originalBitmap.width}×${originalBitmap.height}`;
+      setEnabled(true);
+      analyzeImage();
+      updateOffscreen();
+      resetView();
+      schedDraw();
+    } catch(e) {
+      console.error(e);
+      alert('No se pudo cargar la imagen.');
+    }
+  }
+
+  // ─── EVENT LISTENERS ───
+  els.file.addEventListener('change', ev => {
+    if (ev.target.files?.[0]) loadFile(ev.target.files[0]);
+  });
+
+  // Drag & Drop on whole canvas area
+  const ca = $('canvas-area');
+  ['dragover','dragenter'].forEach(e => {
+    document.addEventListener(e, ev => {
+      ev.preventDefault();
+      els.dropzone.classList.add('drag-over');
+    });
+  });
+  ['dragleave','drop'].forEach(e => {
+    document.addEventListener(e, ev => {
+      els.dropzone.classList.remove('drag-over');
+      if (e === 'drop') {
+        ev.preventDefault();
+        const f = ev.dataTransfer?.files?.[0];
+        if (f) loadFile(f);
+      }
+    });
+  });
+
+  els.reset.addEventListener('click', () => {
+    originalBitmap = null; originalImageData = null; offscreenCanvas = null; semiTransparentIndices = [];
+    els.canvas.width = 0; els.canvas.height = 0;
+    ctx.clearRect(0, 0, 1, 1);
+    els.result.textContent = 'Esperando análisis…';
+    els.status.textContent = 'Sin imagen';
+    els.statusDot.className = 'status-dot';
+    els.size.textContent = '—';
+    setEnabled(false);
+    els.file.value = '';
+  });
+
+  els.threshold.addEventListener('input', () => {
+    els.thresholdVal.textContent = els.threshold.value;
+    updateOffscreen();
+    schedDraw();
+  });
+
+  els.overlay.addEventListener('change', () => schedDraw());
+  els.apply.addEventListener('click', exportPNG);
+
+  els.zoomIn.addEventListener('click', () => zoomAt(1.25));
+  els.zoomOut.addEventListener('click', () => zoomAt(1/1.25));
+  els.zoomReset.addEventListener('click', () => { resetView(); schedDraw(); });
+
+  // Mouse pan & zoom
+  els.wrap.addEventListener('mousedown', e => {
+    if (!originalBitmap) return;
+    isPanning = true; lastMouseX = e.clientX; lastMouseY = e.clientY;
+    els.wrap.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isPanning) return;
+    e.preventDefault();
+    panX += e.clientX - lastMouseX;
+    panY += e.clientY - lastMouseY;
+    lastMouseX = e.clientX; lastMouseY = e.clientY;
+    schedDraw();
+  });
+
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    els.wrap.style.cursor = 'grab';
+  });
+
+  els.wrap.addEventListener('wheel', e => {
+    if (!originalBitmap) return;
+    e.preventDefault();
+    zoomAt(e.deltaY < 0 ? 1.1 : 1/1.1, e.clientX, e.clientY);
+  }, { passive: false });
+
+  // Touch support
+  let lastTouchDist = 0;
+  els.wrap.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      lastTouchDist = Math.sqrt(dx*dx + dy*dy);
+    } else if (e.touches.length === 1) {
+      isPanning = true;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  els.wrap.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (lastTouchDist) zoomAt(dist / lastTouchDist);
+      lastTouchDist = dist;
+    } else if (isPanning && e.touches.length === 1) {
+      panX += e.touches[0].clientX - lastMouseX;
+      panY += e.touches[0].clientY - lastMouseY;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+      schedDraw();
+    }
+  }, { passive: false });
+
+  els.wrap.addEventListener('touchend', () => { isPanning = false; lastTouchDist = 0; });
+
+  window.addEventListener('resize', () => { if (originalBitmap) schedDraw(); });
+
+  // Initial state
+  setEnabled(false);
+})();
+</script>
+</body>
+</html>

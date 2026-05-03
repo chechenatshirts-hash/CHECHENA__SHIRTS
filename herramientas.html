@@ -1,1059 +1,1090 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suite de Herramientas – Chechena Shirts</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHECHENA — Herramientas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
 
-    :root {
-      --black: #000000;
-      --white: #ffffff;
-      --gold: #f8b500;
-      --gold-light: #fceabb;
-      --gray-dark: #0a0a0a;
-      --gray-mid: #111111;
-      --gray-border: #222222;
-      --gray-text: #999999;
-      --gray-muted: #666666;
-      --green: #10b981;
-      --blue: #3b82f6;
-      --purple: #8b5cf6;
-      --orange: #f97316;
-      --pink: #ec4899;
-      --teal: #14b8a6;
-      --red: #ef4444;
-    }
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
 
-    html { scroll-behavior: smooth; }
+/* ── TOKENS ── */
+:root{
+  --black:#0a0a0a;
+  --black2:#111;
+  --black3:#1a1a1a;
+  --grey1:#000000;
+  --grey2:#ffffff;
+  --grey3:#ffffff;
+  --grey4:#fffcfc;
+  --grey5:#ffffff;
+  --white:#f5f5f5;
+  --pure:#fff;
+  --f-display:'Anton',sans-serif;
+  --f-ui:'Unbounded',sans-serif;
+  --f-mono:'DM Mono',monospace;
+}
 
-    body {
-      background-color: var(--black);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.5;
-      overflow-x: hidden;
-      scrollbar-width: none;
-    }
-    body::-webkit-scrollbar { display: none; }
+/* ── GRAIN OVERLAY ── */
+body{
+  background:
+    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
+    url("FONDO.png") center/cover no-repeat fixed;
 
-    /* ===== TOP BANNER ===== */
-    .top-banner {
-      background: var(--black);
-      border-bottom: 1px solid #222;
-      overflow: hidden;
-      padding: 9px 0;
-    }
-    .banner-track {
-      display: flex;
-      width: max-content;
-      animation: scroll-banner 22s linear infinite;
-      white-space: nowrap;
-    }
-    .banner-track span {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.5px;
-      margin-right: 40px;
-    }
-    @keyframes scroll-banner {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+  color:var(--white);
+  font-family:var(--f-mono);
+  overflow-x:hidden;
+  position:relative;
+  scrollbar-width:thin;
+  scrollbar-color:var(--grey2) transparent;
+}
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.028;
+  pointer-events:none;
+  z-index:9999;
+}
 
-    /* ===== HEADER ===== */
-    header {
-      background: #0a0a0a;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 16px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .logo span { color: var(--gold); }
-    nav { display: flex; gap: 24px; align-items: center; }
-    nav a {
-      color: #aaa;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: color 0.2s;
-    }
-    nav a:hover, nav a.active { color: var(--white); }
-    .cart-btn {
-      background: var(--white);
-      color: var(--black);
-      padding: 8px 18px;
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      text-decoration: none;
-      letter-spacing: 0.5px;
-    }
+/* ── TICKER ── */
+.ticker{
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.9)),
+    url("FONDO.png") center/cover no-repeat fixed;
+  color:var(--black);
+  padding:7px 0;
+  overflow:hidden;
+  position:relative;
+  z-index:200;
+}
+.ticker-inner{
+  display:flex;
+  width:max-content;
+  animation:tk 35s linear infinite;
+  white-space:nowrap;
+}
+.ticker-inner span{
+  font-family:var(--f-mono);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:0 36px;
+}
+.ticker-inner span::after{content:'·';margin-left:36px;opacity:.4;}
+@keyframes tk{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
-    /* ===== MAIN HUB SECTION ===== */
-    .tools-hub-section {
-      background-color: var(--black);
-      padding: 60px 0;
-      position: relative;
-      overflow: hidden;
-    }
-    .tools-hub-section::before {
-      content: '';
-      position: absolute;
-      top: -150px;
-      left: -10%;
-      width: 50%;
-      height: 600px;
-      background: radial-gradient(ellipse at center, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 70%);
-      z-index: 0;
-      pointer-events: none;
-    }
+/* ── NAV ── */
+nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(10,10,10,.96);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--grey1);
+  height:60px;
+  display:flex;
+  align-items:center;
+  padding:0 5%;
+}
+.nav-logo{
+  font-family:var(--f-display);
+  font-size:1.55rem;
+  letter-spacing:.12em;
+  color:var(--pure);
+  text-decoration:none;
+  margin-right:auto;
+}
+.nav-links{display:flex;gap:0;align-items:center;}
+.nav-links a{
+  font-family:var(--f-mono);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--grey3);
+  text-decoration:none;
+  padding:0 18px;
+  height:60px;
+  display:flex;
+  align-items:center;
+  border-right:1px solid var(--grey1);
+  transition:color .2s,background .2s;
+}
+.nav-links a:first-child{border-left:1px solid var(--grey1);}
+.nav-links a:hover{color:var(--white);background:var(--grey1);}
+.burger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+  padding:6px;
+  margin-left:16px;
+}
+.burger span{display:block;width:22px;height:1.5px;background:var(--white);}
 
-    .tools-hub-container {
-      max-width: 1800px;
-      width: 95%;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
+/* ── HERO ── */
+.hero{
+  min-height:92vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  position:relative;
+  overflow:hidden;
+  padding:0 5% 7vh;
+  border-bottom:1px solid var(--grey1);
+}
+.hero-bg-text{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding-left:3%;
+  pointer-events:none;
+  user-select:none;
+  z-index:0;
+}
+.hero-bg-text span{
+  font-family:var(--f-display);
+  font-size:clamp(90px,18vw,260px);
+  line-height:.85;
+  letter-spacing:-.02em;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.05);
+  display:block;
+}
+.hero-bg-text span:nth-child(2){
+  -webkit-text-stroke:1px rgba(255,255,255,.03);
+  padding-left:8%;
+}
+.hero-stripe{
+  position:absolute;
+  top:0;bottom:0;right:0;
+  width:38%;
+  background:var(--black2);
+  clip-path:polygon(14% 0,100% 0,100% 100%,0% 100%);
+  border-left:1px solid var(--grey1);
+  z-index:0;
+}
+.hero-stripe-grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(var(--grey1) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grey1) 1px,transparent 1px);
+  background-size:40px 40px;
+  opacity:.45;
+}
+.hero-content{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+.hero-label{
+  font-family:var(--f-mono);
+  font-size:10px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--grey4);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.hero-label::before{content:'';display:block;width:28px;height:1px;background:var(--grey3);}
+.hero-title{
+  font-family:var(--f-display);
+  font-size:clamp(72px,15vw,200px);
+  line-height:.88;
+  letter-spacing:-.02em;
+  color:var(--pure);
+  text-transform:uppercase;
+}
+.hero-title em{
+  font-style:normal;
+  display:block;
+  color:transparent;
+  -webkit-text-stroke:2px var(--grey2);
+  font-size:.42em;
+  letter-spacing:.08em;
+}
+.hero-bottom{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:40px;
+  flex-wrap:wrap;
+}
+.hero-copy{
+  font-family:var(--f-mono);
+  font-size:12px;
+  line-height:1.8;
+  color:var(--grey4);
+  max-width:360px;
+  border-left:2px solid var(--grey2);
+  padding-left:18px;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  font-family:var(--f-mono);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  text-decoration:none;
+  padding:14px 28px;
+  border:1px solid;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  transition:all .22s;
+}
+.btn-solid{background:var(--pure);color:var(--black);border-color:var(--pure);}
+.btn-solid:hover{background:transparent;color:var(--pure);}
+.btn-ghost{background:transparent;color:var(--grey4);border-color:var(--grey2);}
+.btn-ghost:hover{border-color:var(--grey4);color:var(--white);}
+.hero-counter{display:flex;gap:32px;}
+.counter-n{font-family:var(--f-display);font-size:2.4rem;color:var(--white);line-height:1;}
+.counter-l{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey3);margin-top:4px;}
 
-    /* ===== HEADER WRAPPER ===== */
-    .tools-hub-header-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 30px;
-      padding-bottom: 30px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      gap: 30px;
-    }
+/* ── MEGAPACK ── */
+.mega-section{
+  padding:80px 5%;
+  border-bottom:1px solid var(--grey1);
+  position:relative;
+  overflow:hidden;
+}
+.mega-section::before{
+  content:'MEGA';
+  position:absolute;
+  right:-2%;top:50%;
+  transform:translateY(-50%);
+  font-family:var(--f-display);
+  font-size:clamp(120px,20vw,280px);
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.03);
+  pointer-events:none;
+  line-height:1;
+  user-select:none;
+}
+.mega-inner{
+  max-width:1300px;margin:0 auto;
+  display:grid;grid-template-columns:1fr auto;gap:60px;align-items:center;
+}
+.mega-tag{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey3);margin-bottom:20px;display:flex;align-items:center;gap:10px;
+}
+.mega-tag::before{content:'';display:block;width:20px;height:1px;background:var(--grey3);}
+.mega-title{
+  font-family:var(--f-display);font-size:clamp(52px,8vw,100px);
+  line-height:.9;letter-spacing:-.01em;color:var(--pure);text-transform:uppercase;margin-bottom:24px;
+}
+.mega-title span{display:block;color:transparent;-webkit-text-stroke:1.5px var(--grey3);font-size:.65em;}
+.mega-desc{font-family:var(--f-mono);font-size:12px;line-height:1.8;color:var(--grey4);max-width:420px;margin-bottom:36px;}
+.mega-packs{display:flex;flex-direction:column;gap:12px;min-width:220px;}
+.pack-card{
+  background:var(--black2);border:1px solid var(--grey1);
+  padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  transition:border-color .2s,background .2s;
+}
+.pack-card:hover{border-color:var(--grey2);background:var(--black3);}
+.pack-name{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey4);}
+.pack-num{font-family:var(--f-display);font-size:1.6rem;color:var(--white);letter-spacing:.02em;}
 
-    .tools-hub-header {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      flex: 1;
-    }
+/* ── TOOLS ── */
+.tools-section{
+  padding:80px 5%;
+  background:
+    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
+    url("FONDO.png") center/cover no-repeat fixed;
+  position:relative;
+}
+.tools-section::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,var(--grey1) 1px,transparent 1px);
+  background-size:28px 28px;
+  opacity:.5;
+  pointer-events:none;z-index:0;
+}
+.tools-inner{max-width:1300px;margin:0 auto;position:relative;z-index:1;}
+.tools-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;margin-bottom:56px;
+  padding-bottom:28px;border-bottom:1px solid var(--grey1);
+}
+.tools-sup{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--white);margin-bottom:12px;display:flex;align-items:center;gap:10px;
+}
+.tools-sup::before{content:'02';color:var(--grey2);}
+.tools-h{
+  font-family:var(--f-display);font-size:clamp(36px,5vw,64px);
+  letter-spacing:.03em;text-transform:uppercase;color:var(--pure);line-height:.95;
+}
+.search-box{
+  display:flex;align-items:center;
+  border:1px solid var(--grey2);background:var(--black2);overflow:hidden;min-width:260px;
+}
+.search-box svg{
+  width:14px;height:14px;stroke:var(--grey3);fill:none;stroke-width:2;stroke-linecap:round;
+  flex-shrink:0;margin:0 14px;transition:stroke .2s;
+}
+.search-input{
+  background:none;border:none;outline:none;color:var(--white);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;
+  padding:13px 16px 13px 0;width:100%;
+}
+.search-input::placeholder{color:var(--grey3);}
+.search-box:focus-within{border-color:var(--grey4);}
+.search-box:focus-within svg{stroke:var(--grey4);}
 
-    .bookmark-tip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.05);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      color: #aaa;
-      border: 1px solid rgba(255,255,255,0.1);
-      width: fit-content;
-    }
-    .bookmark-tip svg { width: 14px; height: 14px; fill: var(--gold); }
-    .bookmark-tip kbd {
-      background: #222;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: #fff;
-      border: 1px solid #444;
-    }
+/* Category */
+.cat-block{margin-bottom:64px;}
+.cat-bar{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.cat-num{
+  font-family:var(--f-mono);font-size:9px;color:var(--grey2);
+  letter-spacing:.1em;border:1px solid var(--grey2);padding:3px 7px;
+}
+.cat-name{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey4);}
+.cat-line{flex:1;height:1px;background:var(--grey1);}
+.cat-cnt{font-family:var(--f-mono);font-size:9px;color:var(--grey2);letter-spacing:.1em;}
 
-    .tools-hub-header h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 6vw, 5.5rem);
-      letter-spacing: 2px;
-      margin: 0;
-      line-height: 1;
-      background: linear-gradient(135deg, #ffffff 0%, #777777 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .tools-hub-header p {
-      color: #a3a3a3;
-      font-size: clamp(1rem, 1.5vw, 1.1rem);
-      max-width: 800px;
-      margin: 0;
-      line-height: 1.6;
-      border-left: 3px solid #555;
-      padding-left: 15px;
-    }
+/* Grid */
+.tool-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1px;background:var(--grey1);border:1px solid var(--grey1);
+}
 
-    .tools-hub-header-actions {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      flex-shrink: 0;
-    }
+/* Card */
+.tcard{
+  background:var(--black);padding:28px 26px 22px;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .25s;
+}
+.tcard::after{
+  content:'';position:absolute;bottom:0;left:0;
+  width:0;height:2px;background:var(--white);transition:width .35s ease;
+}
+.tcard:hover{background:var(--black2);}
+.tcard:hover::after{width:100%;}
+.tcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.tcard-icon{
+  width:44px;height:44px;border:1px solid var(--grey2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.tcard-icon svg{
+  width:20px;height:20px;stroke:var(--grey4);fill:none;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s;
+}
+.tcard:hover .tcard-icon{border-color:var(--grey4);}
+.tcard:hover .tcard-icon svg{stroke:var(--white);}
+.tcard-meta{display:flex;align-items:center;gap:8px;}
+.badge{
+  font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;
+  text-transform:uppercase;padding:3px 8px;border:1px solid;
+}
+.badge-free{color:var(--grey3);border-color:var(--grey2);}
+.badge-new{color:var(--grey5);border-color:var(--grey4);}
+.badge-ai{color:var(--white);border-color:var(--grey3);background:var(--black3);}
+.star-btn{
+  background:none;border:none;cursor:pointer;
+  color:var(--grey2);padding:4px;transition:color .2s;display:flex;align-items:center;
+}
+.star-btn:hover{color:var(--grey4);}
+.star-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+.star-btn.active{color:var(--white);}
+.star-btn.active svg{fill:var(--white);stroke:var(--white);}
+.tcard-title{
+  font-family:var(--f-ui);font-size:13px;font-weight:700;
+  letter-spacing:-.01em;text-transform:uppercase;color:var(--white);margin-bottom:6px;line-height:1.2;
+}
+.tcard-sub{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--grey3);margin-bottom:14px;
+}
+.tcard-desc{
+  font-family:var(--f-mono);font-size:11px;line-height:1.7;
+  color:var(--grey3);flex-grow:1;margin-bottom:22px;
+}
+.tcard-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;}
+.tcard-btn-p{
+  display:block;text-align:center;
+  background:var(--black3);border:1px solid var(--grey2);color:var(--grey5);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  text-decoration:none;padding:11px;transition:all .22s;
+}
+.tcard:hover .tcard-btn-p{background:var(--white);color:var(--black);border-color:var(--white);}
+.tcard-btn-s{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  background:transparent;border:1px solid var(--grey1);color:var(--grey3);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  text-decoration:none;padding:9px;transition:all .22s;
+}
+.tcard-btn-s:hover{border-color:var(--grey3);color:var(--grey5);}
+.tcard-btn-s svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
+.no-res{
+  display:none;text-align:center;padding:80px 20px;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--grey2);border:1px solid var(--grey1);margin-bottom:40px;
+}
+#fav-cat{display:none;}
 
-    .premium-active-msg {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--white);
-      font-weight: 800;
-      font-size: 1rem;
-      background: rgba(255,255,255,0.1);
-      padding: 12px 24px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .premium-active-msg svg { width: 18px; height: 18px; fill: var(--gold); }
+/* ── CONTACT ── */
+.contact-section{
+  padding:80px 5%;border-top:1px solid var(--grey1);
+  background:var(--black2);position:relative;overflow:hidden;
+}
+.contact-section::before{
+  content:'CONTACT';
+  position:absolute;bottom:-5%;right:-1%;
+  font-family:var(--f-display);font-size:clamp(80px,14vw,180px);
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.025);
+  pointer-events:none;user-select:none;line-height:1;
+}
+.contact-inner{
+  max-width:1300px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;
+  position:relative;z-index:1;
+}
+.contact-tag{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey3);margin-bottom:20px;display:flex;align-items:center;gap:10px;
+}
+.contact-tag::before{content:'03';}
+.contact-h{
+  font-family:var(--f-display);font-size:clamp(40px,6vw,80px);
+  letter-spacing:.02em;text-transform:uppercase;color:var(--pure);
+  line-height:.92;margin-bottom:24px;
+}
+.contact-copy{font-family:var(--f-mono);font-size:12px;line-height:1.8;color:var(--grey4);margin-bottom:36px;}
+.contact-links{display:flex;flex-direction:column;gap:2px;}
+.contact-link{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px;background:var(--black);border:1px solid var(--grey1);
+  text-decoration:none;color:var(--white);transition:all .22s;
+  position:relative;overflow:hidden;
+}
+.contact-link::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:0;background:var(--white);transition:width .28s ease;z-index:0;
+}
+.contact-link:hover::before{width:4px;}
+.contact-link:hover{background:var(--black3);border-color:var(--grey2);}
+.contact-link>*{position:relative;z-index:1;}
+.cl-channel{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey3);}
+.cl-value{font-family:var(--f-ui);font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--white);}
+.cl-arrow{font-family:var(--f-mono);font-size:14px;color:var(--grey2);transition:color .2s,transform .2s;}
+.contact-link:hover .cl-arrow{color:var(--white);transform:translateX(4px);}
 
-    /* ===== SEARCH ===== */
-    .hub-search-container {
-      margin-bottom: 50px;
-    }
-    .hub-search-wrapper {
-      position: relative;
-      max-width: 600px;
-    }
-    .hub-search-input {
-      width: 100%;
-      background-color: #0f0f0f;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 16px 20px 16px 50px;
-      color: var(--white);
-      font-size: 1.05rem;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.3s ease;
-    }
-    .hub-search-input::placeholder { color: #666; }
-    .hub-search-input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 15px rgba(248,181,0,0.15);
-      background-color: #151515;
-    }
-    .hub-search-icon {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      fill: none;
-      stroke: #666;
-      stroke-width: 2;
-      pointer-events: none;
-      transition: stroke 0.3s;
-    }
-    .hub-search-input:focus ~ .hub-search-icon { stroke: var(--gold); }
+/* ── FOOTER ── */
+footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%;}
+.foot-inner{
+  max-width:1300px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;
+}
+.foot-logo{font-family:var(--f-display);font-size:1.2rem;letter-spacing:.1em;color:var(--white);text-decoration:none;}
+.foot-copy{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey2);}
+.foot-socials{display:flex;gap:2px;}
+.foot-socials a{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--grey3);text-decoration:none;padding:8px 14px;border:1px solid var(--grey1);transition:all .2s;
+}
+.foot-socials a:hover{color:var(--white);border-color:var(--grey2);}
 
-    /* ===== NO RESULTS ===== */
-    .no-results-msg {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-      color: #888;
-      font-size: 1.2rem;
-      background: rgba(255,255,255,0.02);
-      border-radius: 10px;
-      border: 1px dashed #222;
-    }
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
 
-    /* ===== CATEGORY ===== */
-    .hub-category {
-      margin-bottom: 50px;
-      transition: opacity 0.3s;
-    }
-    .category-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
-      letter-spacing: 2px;
-      color: var(--white);
-      margin-bottom: 25px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .category-title span { color: #555; font-size: 1.3rem; }
-
-    /* ===== GRID ===== */
-    .hub-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 18px;
-    }
-
-    /* ===== CARD ===== */
-    .hub-card {
-      background-color: #0a0a0a;
-      border: 1px solid #222;
-      border-radius: 10px;
-      padding: 18px 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .hub-card:hover {
-      transform: translateY(-4px);
-      border-color: #444;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-      background-color: #111;
-    }
-
-    /* Ribbon */
-    .ribbon-wrapper {
-      position: absolute;
-      top: 0; right: 0;
-      width: 85px; height: 85px;
-      overflow: hidden;
-      border-radius: 0 10px 0 0;
-      z-index: 5;
-      pointer-events: none;
-    }
-    .ribbon {
-      font-size: 0.6rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      text-align: center;
-      line-height: 20px;
-      transform: rotate(45deg);
-      width: 120px;
-      display: block;
-      position: absolute;
-      top: 15px; right: -30px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-      letter-spacing: 1px;
-    }
-    .ribbon-premium {
-      background: linear-gradient(135deg, #fceabb, #f8b500);
-      color: #000;
-    }
-    .ribbon-gratis {
-      background: #2a2a2a;
-      color: #999;
-      border-top: 1px solid #3d3d3d;
-      border-bottom: 1px solid #1a1a1a;
-    }
-
-    /* Card header */
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-      padding-right: 15px;
-    }
-    .icon-box {
-      width: 38px; height: 38px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-    }
-    .icon-box svg {
-      width: 20px; height: 20px;
-      fill: none;
-      stroke: #fff;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .bg-studio   { background: linear-gradient(135deg, #8b5cf6, #6366f1); }
-    .bg-dtf      { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .bg-seri     { background: linear-gradient(135deg, #f97316, #ea580c); }
-    .bg-estilos  { background: linear-gradient(135deg, #ec4899, #e11d48); }
-    .bg-ai       { background: linear-gradient(135deg, #14b8a6, #0d9488); }
-    .bg-utils    { background: linear-gradient(135deg, #71717a, #52525b); }
-    .bg-mockups  { background: linear-gradient(135deg, #10b981, #059669); }
-
-    .title-box { display: flex; flex-direction: column; }
-    .hub-card-title {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #fff;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-      line-height: 1.2;
-    }
-
-    .badge-nuevo {
-      background: rgba(16,185,129,0.15);
-      color: #34d399;
-      border: 1px solid rgba(16,185,129,0.3);
-      font-size: 0.55rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 8px;
-      text-transform: uppercase;
-    }
-    .badge-actualizado {
-      background: rgba(59,130,246,0.15);
-      color: #60a5fa;
-      border: 1px solid rgba(59,130,246,0.3);
-      font-size: 0.55rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 8px;
-      text-transform: uppercase;
-    }
-
-    .hub-card-subtitle {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 3px;
-    }
-    .hub-card-desc {
-      font-size: 0.8rem;
-      color: #999;
-      line-height: 1.4;
-      margin-bottom: 15px;
-      flex-grow: 1;
-    }
-
-    /* Star */
-    .star-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      margin-left: auto;
-      color: #444;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-    }
-    .star-btn:hover { transform: scale(1.15); color: #888; }
-    .star-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; transition: all 0.3s; }
-    .star-btn.active { color: var(--gold); }
-    .star-btn.active svg { fill: var(--gold); stroke: var(--gold); }
-
-    /* Actions */
-    .hub-actions { display: flex; flex-direction: column; gap: 8px; }
-    .hub-btn-primary {
-      display: block;
-      width: 100%;
-      text-align: center;
-      background: var(--white);
-      color: var(--black);
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: 800;
-      text-decoration: none;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-      transition: all 0.3s;
-    }
-    .hub-btn-primary:hover { background: #e0e0e0; }
-    .hub-btn-secondary {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      width: 100%;
-      text-align: center;
-      background: #1a1a1a;
-      color: #ccc;
-      padding: 8px;
-      border: 1px solid #333;
-      border-radius: 6px;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 0.75rem;
-      transition: all 0.3s;
-    }
-    .hub-btn-secondary:hover { border-color: #666; color: #fff; background: #222; }
-    .hub-btn-secondary svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
-
-    /* Favorites */
-    #favorites-category { display: none; }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: #0a0a0a;
-      border-top: 1px solid #1a1a1a;
-      padding: 30px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-      color: var(--white);
-    }
-    .footer-logo span { color: var(--gold); }
-    footer small { color: #555; font-size: 0.8rem; }
-    .footer-socials { display: flex; gap: 14px; }
-    .footer-socials a { color: #666; transition: color 0.2s; text-decoration: none; font-size: 1.2rem; }
-    .footer-socials a:hover { color: var(--white); }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .tools-hub-header-wrapper { flex-direction: column; align-items: flex-start; }
-      .tools-hub-header-actions { align-items: flex-start; }
-      nav { display: none; }
-    }
-    @media (max-width: 768px) {
-      .tools-hub-container { width: 100%; padding: 0 15px; }
-      .hub-grid {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        gap: 15px;
-        padding-bottom: 20px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-      }
-      .hub-grid::-webkit-scrollbar { display: none; }
-      .hub-card { min-width: 85vw; max-width: 320px; flex: 0 0 auto; scroll-snap-align: start; }
-    }
-  </style>
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .nav-links.open{
+    display:flex;flex-direction:column;
+    position:fixed;top:60px;left:0;right:0;
+    background:rgba(10,10,10,.98);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--grey1);z-index:99;padding:8px 0;
+  }
+  .nav-links.open a{height:48px;border:none;border-bottom:1px solid var(--grey1);}
+  .nav-links.open a:first-child{border-left:none;}
+  .burger{display:flex;}
+  .mega-inner{grid-template-columns:1fr;}
+  .mega-section::before{display:none;}
+  .contact-inner{grid-template-columns:1fr;}
+  .hero-counter{display:none;}
+}
+@media(max-width:620px){
+  .hero-title{font-size:clamp(58px,18vw,90px);}
+  .tool-grid{
+    display:flex;flex-wrap:nowrap;overflow-x:auto;
+    scroll-snap-type:x mandatory;gap:1px;padding-bottom:4px;
+    scrollbar-width:none;background:none;border:none;
+  }
+  .tool-grid::-webkit-scrollbar{display:none;}
+  .tcard{min-width:80vw;flex:0 0 auto;scroll-snap-align:start;border:1px solid var(--grey1);}
+  .tools-section::before{display:none;}
+}
+</style>
 </head>
 <body>
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
 
-  <!-- CALCULADORA -->
-  <symbol id="icon-calculator" viewBox="0 0 24 24">
-    <rect x="4" y="2" width="16" height="20" rx="2"/>
-    <rect x="7" y="6" width="10" height="2"/>
-    <rect x="7" y="10" width="2" height="2"/>
-    <rect x="11" y="10" width="2" height="2"/>
-    <rect x="15" y="10" width="2" height="2"/>
-    <rect x="7" y="14" width="2" height="2"/>
-    <rect x="11" y="14" width="2" height="2"/>
-    <rect x="15" y="14" width="2" height="2"/>
-  </symbol>
-
-  <!-- QR -->
-  <symbol id="icon-qr" viewBox="0 0 24 24">
-    <rect x="3" y="3" width="6" height="6"/>
-    <rect x="15" y="3" width="6" height="6"/>
-    <rect x="3" y="15" width="6" height="6"/>
-    <rect x="16" y="16" width="2" height="2"/>
-    <rect x="12" y="12" width="2" height="2"/>
-    <rect x="18" y="12" width="2" height="2"/>
-    <rect x="12" y="18" width="2" height="2"/>
-  </symbol>
-
-  <!-- PLAYERA -->
-  <symbol id="icon-shirt" viewBox="0 0 24 24">
-    <path d="M8 3l4 2 4-2 4 4-3 2v10H7V9L4 7l4-4z"/>
-  </symbol>
-
-  <!-- IA / MAGIA -->
-  <symbol id="icon-magic" viewBox="0 0 24 24">
-    <path d="M3 21l3-3m0 0l12-12 3 3-12 12-3-3z"/>
-    <path d="M14 4l1-2 1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>
-  </symbol>
-
-  <!-- IMAGEN / DISEÑO -->
-  <symbol id="icon-image" viewBox="0 0 24 24">
-    <rect x="3" y="5" width="18" height="14" rx="2"/>
-    <circle cx="8" cy="10" r="2"/>
-    <path d="M21 15l-5-5-6 6-3-3-4 4"/>
-  </symbol>
-
-  <!-- HERRAMIENTAS -->
-  <symbol id="icon-tool" viewBox="0 0 24 24">
-    <path d="M14 7l3-3 3 3-3 3-3-3zM2 22l10-10 2 2L4 24H2v-2z"/>
-  </symbol>
-
-</svg>
-<!-- SVG DEFS -->
-<svg style="display:none">
-  <symbol id="icon-diamond" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></symbol>
-  <symbol id="icon-printer" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></symbol>
-  <symbol id="icon-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></symbol>
-  <symbol id="icon-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></symbol>
-  <symbol id="icon-wand" viewBox="0 0 24 24"><path d="m15 4-2 2"/><path d="M17 11h.01"/><path d="M21 7h.01"/><path d="M2 22 22 2"/><path d="m3 8 2-2"/><path d="m9 4-2 2"/></symbol>
-  <symbol id="icon-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
-  <symbol id="icon-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></symbol>
-  <symbol id="icon-book" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></symbol>
-  <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
-  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
-</svg>
-
-<!-- TOP BANNER -->
-<div class="top-banner">
-  <div class="banner-track">
-    <span>🎁 MEGAPACK CHECHENA →(+40,000 DISEÑOS) —</span>
-    <span>🎁 MEGAPACK OJITO →  (+50,000 DISEÑOS) —</span>
-    <span>🎁 MEGAPACK CHECHENA →(+40,000 DISEÑOS) —</span>
-    <span>🎁 MEGAPACK OJITO →  (+50,000 DISEÑOS) —</span>
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Megapack Chechena +40,000 diseños</span>
+    <span>Megapack Ojito +50,000 diseños</span>
+    <span>Herramientas 100% gratis</span>
+    <span>DTF · Sublimación · Serigrafía</span>
+    <span>Marca original · Estampado profesional</span>
+    <span>Megapack Chechena +40,000 diseños</span>
+    <span>Megapack Ojito +50,000 diseños</span>
+    <span>Herramientas 100% gratis</span>
+    <span>DTF · Sublimación · Serigrafía</span>
+    <span>Marca original · Estampado profesional</span>
   </div>
 </div>
 
-<!-- HEADER -->
-<header>
-  <nav>
-<a href="index.html" class="nav-link">INICIO</a>
-<a href="PROM.html" class="nav-link">PROMTS IA</a>
-<a href="CL.html" class="nav-link">CLINICA</a>
-<a href="BOR.html" class="nav-link">GALLERY</a>
-  </nav>
-</header>
-
-<!-- MAIN TOOLS HUB -->
-<div class="tools-hub-section">
-  <div class="tools-hub-container">
-
-    <!-- HEADER -->
-    <div class="tools-hub-header-wrapper">
-      <div class="tools-hub-header">
-
-        <h2>SUITE DE HERRAMIENTAS CHECHENA SHIRTS</h2>
-        <p>Explora una colección completa de herramientas diseñadas para potenciar tus diseños. Desde inteligencia artificial hasta utilidades de preprensa, todo está pensado para llevar tus impresiones DTF y sublimacion a otro nivel.</p>
-      </div>
-              <div class="bookmark-tip">
-          <svg viewBox="0 0 24 24"><use href="#icon-star"></use></svg>
-          Guarda esta página presionando <kbd>Ctrl + D</kbd> (o <kbd>⌘ + D</kbd>)
-        </div>
-      <div class="tools-hub-header-actions">
-        <div class="premium-active-msg">
-          <svg viewBox="0 0 24 24"><use href="#icon-star"></use></svg>
-          HERRAMIENTAS GRATIS
-        </div>
-      </div>
-    </div>
-
-    <!-- SEARCH -->
-    <div class="hub-search-container">
-      <div class="hub-search-wrapper">
-        <input type="text" id="hubSearchInput" class="hub-search-input" placeholder="Buscar herramienta (ej. SEMITONO, MOCKUP, etc.)..." autocomplete="off">
-        <svg class="hub-search-icon"><use href="#icon-search"></use></svg>
-      </div>
-    </div>
-
-    <div id="no-results-message" class="no-results-msg">No se encontraron herramientas que coincidan con tu búsqueda.</div>
-
-    <!-- FAVORITOS (dinámico) -->
-    <div class="hub-category" id="favorites-category">
-      <h3 class="category-title"><span style="color:#f8b500;">★</span> MIS FAVORITOS</h3>
-      <div class="hub-grid" id="favorites-grid"></div>
-    </div>
-
-    <!-- ===== CATEGORÍA 01: STUDIOS ===== -->
-    <div class="hub-category">
-      <h3 class="category-title"><span>01.</span> STUDIOS PRO</h3>
-      <div class="hub-grid">
-
-
-<div class="hub-card" data-tool-id="semitonos-studio">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-
-  <div class="card-header">
-    <div class="icon-box bg-studio">
-      <svg><use href="#icon-diamond"></use></svg>
-    </div>
-
-    <div class="title-box">
-      <h3 class="hub-card-title">Semitonos Studio</h3>
-      <span class="hub-card-subtitle">Halftone Generator</span>
-    </div>
-
-    <button class="star-btn" aria-label="Favorito">
-      <svg><use href="#icon-star"></use></svg>
-    </button>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">CHECHENA</a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="PROM.html">Prompts IA</a>
+    <a href="BOR.html">Gallery</a>
+    <a href="#contacto">Contacto</a>
   </div>
-
-  <p class="hub-card-desc">
-    Genera semitonos con calidad profesional y control total sobre cada detalle.
-  </p>
-
-  <div class="hub-actions">
-    <a href="halftone_master_REAL.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+  <div class="burger" id="burger">
+    <span></span><span></span><span></span>
   </div>
-</div>
+</nav>
 
-        <div class="hub-card" data-tool-id="pedreria-pro">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-studio"><svg><use href="#icon-diamond"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Pedrería PRO</h3>
-              <span class="hub-card-subtitle">Rhinestone Studio</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text" aria-hidden="true">
+    <span>CHECHENA</span>
+    <span>SHIRTS</span>
+  </div>
+  <div class="hero-stripe">
+    <div class="hero-stripe-grid"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-label">Marca original · Herramientas pro · 2026</div>
+    <h1 class="hero-title">
+      CHECHENA
+      <p>SHIRTS</p>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-copy">Suite completa de herramientas para diseñadores y estampadores. DTF, semitonos, mockups, IA — todo gratis.</p>
+      <div class="hero-actions">
+        <a href="#herramientas" class="btn btn-solid">Ver herramientas</a>
+<a href="index.html#megapacks" class="btn btn-solid">
+  Megapack de diseños →
+</a>
+      </div>
+      <div class="hero-counter">
+        <div class="counter-item">
+          <div class="counter-n">10+</div>
+          <div class="counter-l">HERRAMIENTAS</div>
+        </div>
+        <div class="counter-item">
+          <div class="counter-n">4+</div>
+          <div class="counter-l">CATEGORIAS</div>
+        </div>
+          <div class="counter-item">
+          <div class="counter-n">24/7</div>
+          <div class="counter-l">DISPONIBLE</div>
+        </div>
+        <div class="counter-item">
+          <div class="counter-n">100%</div>
+          <div class="counter-l">Gratis</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- TOOLS -->
+<section class="tools-section" id="herramientas">
+  <div class="tools-inner">
+
+    <div class="tools-head reveal">
+      <div>
+        <div class="tools-sup">Suite de herramientas pro</div>
+        <h2 class="tools-h">STUDIO<br>HUB</h2>
+      </div>
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="search" class="search-input" placeholder="Buscar herramienta..." autocomplete="off">
+      </div>
+    </div>
+
+    <div id="no-res" class="no-res">Sin resultados.</div>
+
+    <!-- FAVORITOS -->
+    <div class="cat-block" id="fav-cat">
+      <div class="cat-bar">
+        <span class="cat-num">★</span>
+        <span class="cat-name">Mis favoritos</span>
+        <div class="cat-line"></div>
+        <span class="cat-cnt" id="fav-cnt">0</span>
+      </div>
+      <div class="tool-grid" id="fav-grid"></div>
+    </div>
+
+    <!-- 01 STUDIOS -->
+    <div class="cat-block cat-grp reveal">
+      <div class="cat-bar">
+        <span class="cat-num">01</span>
+        <span class="cat-name">Studios Pro</span>
+        <div class="cat-line"></div>
+        <span class="cat-cnt">3</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tcard" data-id="semitonos">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><circle cx="5" cy="5" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="19" cy="5" r="1.5"/><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="19" r="1.5"/><circle cx="12" cy="19" r="1.5"/><circle cx="19" cy="19" r="1.5"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <p class="hub-card-desc">Convierte imágenes en plantillas precisas para rhinestones y pedrería.</p>
-          <div class="hub-actions">
-    <a href="D.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">Semitonos Studio</div>
+          <div class="tcard-sub">Halftone Generator</div>
+          <p class="tcard-desc">Genera semitonos con calidad profesional y control total sobre frecuencia, ángulo y forma.</p>
+          <div class="tcard-actions">
+            <a href="halftone_master_REAL.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
+          </div>
+        </div>
+        <div class="tcard" data-id="pedreria">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Pedrería PRO</div>
+          <div class="tcard-sub">Rhinestone Studio</div>
+          <p class="tcard-desc">Convierte imágenes en plantillas de alta precisión para rhinestones y pedrería en playeras.</p>
+          <div class="tcard-actions">
+            <a href="D.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="https://www.tiktok.com/@chechena_shirts/video/7625845030661410069" 
+   target="_blank" 
+   class="tcard-btn-s"
+   onclick="mostrarVideo()">
+   Ver guía
+</a>
+
+          </div>
+        </div>
+        <div class="tcard" data-id="mejorar">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">EN REPARACION</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Mejorar Calidad</div>
+          <div class="tcard-sub">AI Upscaler</div>
+          <p class="tcard-desc">Mejora la resolución y nitidez de tus imágenes con IA. Resultados listos para impresión.</p>
+          <div class="tcard-actions">
+            <a href="mejorador-chechena.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>
 
-        <div class="hub-card" data-tool-id="mejorador-chechena">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-studio"><svg><use href="#icon-diamond"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">MEJORAR CALIDAD</h3>
-              <span class="hub-card-subtitle">CHECHENIA</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+                <div class="tcard" data-id="mejorar">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <p class="hub-card-desc">MEJORA LA CALIDAD DE TUS IMAGENES</p>
-          <div class="hub-actions">
-    <a href="mejorador-chechena.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">VECTORIZAR</div>
+          <div class="tcard-sub">VT</div>
+          <p class="tcard-desc">Transforma imágenes en vectores SVG/PDF escalables al infinito.</p>
+          <div class="tcard-actions">
+            <a href="vectorizador-chechena.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>
-
 
 
       </div>
     </div>
 
-    <!-- ===== CATEGORÍA 04: ESTILOS ===== -->
-    <div class="hub-category">
-      <h3 class="category-title"><span>04.</span> ESTILOS Y PLANTILLAS</h3>
-      <div class="hub-grid">
-
-
-        <div class="hub-card" data-tool-id="estilo-collage">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-estilos"><svg><use href="#icon-palette"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Estilo Collage</h3>
-              <span class="hub-card-subtitle">Photo Layout</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+    <!-- 04 ESTILOS -->
+    <div class="cat-block cat-grp reveal">
+      <div class="cat-bar">
+        <span class="cat-num">04</span>
+        <span class="cat-name">Estilos y Plantillas</span>
+        <div class="cat-line"></div>
+        <span class="cat-cnt">2</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tcard" data-id="collage">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <div class="hub-actions">
-    <a href="chechena-collage.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">Estilo Collage</div>
+          <div class="tcard-sub">LETRAS Layout</div>
+          <p class="tcard-desc">Crea composiciones tipo collage urbano para tus playeras bootleg.</p>
+          <div class="tcard-actions">
+            <a href="chechena-collage.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
+        </div>
+        <div class="tcard" data-id="marco">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><rect x="7" y="7" width="10" height="10"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-
-
-
-
-
-        <div class="hub-card" data-tool-id="marco-desgastado">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-estilos"><svg><use href="#icon-palette"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Marco Desgastado</h3>
-              <span class="hub-card-subtitle">Vintage Borders</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+          <div class="tcard-title">Marco Desgastado</div>
+          <div class="tcard-sub">Vintage Borders</div>
+          <p class="tcard-desc">Aplica marcos desgastados y efectos vintage a tus diseños para un estilo auténtico y urbano.</p>
+          <div class="tcard-actions">
+            <a href="chechena-marco-desgastado-v2.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
-          <div class="hub-actions">
-    <a href="MARCO.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 IA -->
+    <div class="cat-block cat-grp reveal">
+      <div class="cat-bar">
+        <span class="cat-num">05</span>
+        <span class="cat-name">Inteligencia Artificial</span>
+        <div class="cat-line"></div>
+        <span class="cat-cnt">1</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tcard" data-id="fondo">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-ai">IA</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
+          <div class="tcard-title">Remover Fondo</div>
+          <div class="tcard-sub">AI Background Removal</div>
+          <p class="tcard-desc">Elimina fondos complejos de tus fotografías automáticamente con un solo clic usando IA.</p>
+          <div class="tcard-actions">
+            <a href="REMO.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
+        </div>
+
+                <div class="tcard" data-id="mejorar">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Mezzotinta Studio</div>
+          <div class="tcard-sub">Mezzotint Effect AIr</div>
+          <p class="tcard-desc">Aplica efectos de mezzotinta y grabado clásico a tus fotografías.</p>
+          <div class="tcard-actions">
+            <a href="mezzotinta-studio-chechena (2).html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
+          </div>
+        </div>
 
       </div>
     </div>
 
-    <!-- ===== CATEGORÍA 05: IA ===== -->
-    <div class="hub-category">
-      <h3 class="category-title"><span>05.</span> INTELIGENCIA ARTIFICIAL</h3>
-      <div class="hub-grid">
 
+        <!-- 05 IA -->
+    <div class="cat-block cat-grp reveal">
+      <div class="cat-bar">
+        <span class="cat-num">05</span>
+        <span class="cat-name">IMPRESION DTF</span>
+        <div class="cat-line"></div>
+        <span class="cat-cnt">1</span>
+      </div>
 
-        <div class="hub-card" data-tool-id="remover-fondo">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-ai"><svg><use href="#icon-wand"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Remover Fondo</h3>
-              <span class="hub-card-subtitle">AI Background Removal</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+<div class="tool-grid">
+          <div class="tcard" data-id="mejorar">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <p class="hub-card-desc">Borra fondos complejos de fotografías automáticamente en un clic.</p>
-          <div class="hub-actions">
-    <a href="REMO.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">DETECTOR DE METRO DTF</div>
+          <div class="tcard-sub">Final Check</div>
+          <p class="tcard-desc">Última revisión técnica para garantizar que tu rollo DTF salga impecable.</p>
+          <div class="tcard-actions">
+            <a href="scanner-dtf.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>
 
 
+              <div class="tool-grid">
+        <div class="tcard" data-id="fondo">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-ai">IA</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">SEMITRANSPARENCIAS</div>
+          <div class="tcard-sub">Opacity Fixer</div>
+          <p class="tcard-desc">Prepara tus áreas semi-transparentes para que se impriman sin manchas.</p>
+          <div class="tcard-actions">
+            <a href="semitransparencias.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- ===== CATEGORÍA 06: UTILIDADES ===== -->
-    <div class="hub-category">
-      <h3 class="category-title"><span>06.</span> CONVERSORES Y UTILIDADES</h3>
-      <div class="hub-grid">
 
-
-        <div class="hub-card" data-tool-id="generador-qr">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-utils"><svg><use href="#icon-tool"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Generador QR <span class="badge-nuevo">Nuevo</span></h3>
-              <span class="hub-card-subtitle">QR Code Creator</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
-          </div>
-          <p class="hub-card-desc">
-  Convierte cualquier enlace en un QR listo para imprimir y vender. Más branding, más impacto, más ventas.
-</p>
-          <div class="hub-actions">
-    <a href="qrs.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
-          </div>
-
+    <!-- 06 UTILIDADES -->
+    <div class="cat-block cat-grp reveal">
+      <div class="cat-bar">
+        <span class="cat-num">06</span>
+        <span class="cat-name">Conversores y Utilidades</span>
+        <div class="cat-line"></div>
+        <span class="cat-cnt">2</span>
       </div>
-      <div class="hub-card" data-tool-id="cotizador-playera">
-  <div class="ribbon-wrapper">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-  </div>
+      <div class="tool-grid">
+        <div class="tcard" data-id="qr">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="5" y="5" width="3" height="3"/><rect x="14" y="3" width="7" height="7"/><rect x="16" y="5" width="3" height="3"/><rect x="3" y="14" width="7" height="7"/><rect x="5" y="16" width="3" height="3"/><path d="M14 14h3v3h-3zm3 3h3v3h-3z"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Generador QR</div>
+          <div class="tcard-sub">QR Code Creator</div>
+          <p class="tcard-desc">Crea códigos QR listos para imprimir en tus playeras y material promocional.</p>
+          <div class="tcard-actions">
+            <a href="qrs.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
+          </div>
+        </div>
 
-  <div class="card-header">
-    <div class="icon-box bg-utils">
-<svg><use href="#icon-calculator"></use></svg>
+
+                        <div class="tcard" data-id="cotizador">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">CALCULADORA</div>
+          <div class="tcard-sub">T-Shirt Cost Calculator</div>
+          <p class="tcard-desc">Calcula el precio final de tus playeras: materiales, impresión y margen de ganancia.</p>
+          <div class="tcard-actions">
+            <a href="CA.html" class="tcard-btn-p">Abrir Herramienta</a>
+            <a href="guia-cotizador.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
+          </div>
+        </div>
+
+        <div class="tcard" data-id="cotizador">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Generador de Tickets</div>
+          <div class="tcard-sub">Cost Calculator</div>
+          <p class="tcard-desc">GENERA TUS TICKETS PARA TUS CLIENTES</p>
+          <div class="tcard-actions">
+            <a href="cotizador-playeras.html" class="tcard-btn-p">Abrir Herramienta</a>
+                        <a href="https://www.tiktok.com/@chechena_shirts/video/7625761693787933973?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" 
+   target="_blank" 
+   class="tcard-btn-s"
+   onclick="mostrarVideo()">
+   Ver guía
+</a>
+          </div>
+        </div>
+
+                <div class="tcard" data-id="cotizador">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Guía de medidas diseños</div>
+          <div class="tcard-sub">Ajuste de diseño</div>
+          <p class="tcard-desc">Ajusta los diseños en tu playera y descargalos en medidas reales</p>
+          <div class="tcard-actions">
+            <a href="chechenia.html" class="tcard-btn-p">Abrir Herramienta</a>
+            <a href="guia-cotizador.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
+          </div>
+        </div>
+
+        
+        
+      </div>
     </div>
 
-    <div class="title-box">
-      <h3 class="hub-card-title">Cotizador Playera <span class="badge-nuevo">Nuevo</span></h3>
-      <span class="hub-card-subtitle">T-Shirt Cost Calculator</span>
-    </div>
-
-    <button class="star-btn" aria-label="Favorito">
-      <svg><use href="#icon-star"></use></svg>
-    </button>
-  </div>
-
-  <p class="hub-card-desc">
-    Calcula el precio final de tus playeras estampadas considerando materiales, impresión y ganancia.
-  </p>
-
-  <div class="hub-actions">
-    <a href="cotizador.html" class="hub-btn-primary">Abrir Herramienta</a>
-    <a href="guia-cotizador.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
-  </div>
-</div>
-    </div>
-
-    <!-- ===== CATEGORÍA 07: NEGOCIO ===== -->
-    <div class="hub-category">
-      <h3 class="category-title"><span>07.</span>MOCKUPS</h3>
-      <div class="hub-grid">
-
-
-
-        <div class="hub-card" data-tool-id="mockups-3d">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Mockups 3D</h3>
-              <span class="hub-card-subtitle">3D Visualizer</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+    <!-- 07 MOCKUPS -->
+    <div class="cat-block cat-grp reveal">
+      <div class="cat-bar">
+        <span class="cat-num">07</span>
+        <span class="cat-name">Mockups Studio</span>
+        <div class="cat-line"></div>
+        <span class="cat-cnt">4</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tcard" data-id="mockup3d">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <p class="hub-card-desc">Visualiza tu impresión en modelos de playeras tridimensionales.</p>
-          <div class="hub-actions">
-    <a href="MOCKUP 3D.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">Mockups 3D</div>
+          <div class="tcard-sub">3D Visualizer</div>
+          <p class="tcard-desc">Visualiza tu diseño en modelos 3D de playeras con iluminación realista.</p>
+          <div class="tcard-actions">
+            <a href="MOCKUP 3D.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>
-
-        <div class="hub-card" data-tool-id="mockups-3d">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Mockups automaticos</h3>
-              <span class="hub-card-subtitle">AUTOMATICOS</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+        <div class="tcard" data-id="mockupauto">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/><path d="M9 13l2 2 4-4"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <p class="hub-card-desc">Visualiza tu impresión en modelos de playeras tridimensionales.</p>
-          <div class="hub-actions">
-    <a href="mockup-studio1.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">Mockups Automáticos</div>
+          <div class="tcard-sub">Auto Generator</div>
+          <p class="tcard-desc">Genera mockups de forma automática. Sube tu diseño y listo en segundos.</p>
+          <div class="tcard-actions">
+            <a href="mockup-studio1.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>
-
-
-                <div class="hub-card" data-tool-id="mockups-3d">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Mockups</h3>
-              <span class="hub-card-subtitle">STUDIO</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+        <div class="tcard" data-id="mockupstudio">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/><path d="M12 10v4M10 12h4"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-new">PRO</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <p class="hub-card-desc"> Genera múltiples diseños en segundos. Solo sube tus archivos y obtén resultados listos para producción de forma automática.</p>
-          <div class="hub-actions">
-    <a href="mockup-studio.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">Mockup Studio</div>
+          <div class="tcard-sub">Batch Studio</div>
+          <p class="tcard-desc">Procesa múltiples diseños en un solo paso. Producción masiva en segundos.</p>
+          <div class="tcard-actions">
+            <a href="mockup-studio.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>
-
-                        <div class="hub-card" data-tool-id="mockups-3d">
-          <div class="ribbon-wrapper"><span class="ribbon ribbon-gratis">Gratis</span></div>
-          <div class="card-header">
-            <div class="icon-box bg-mockups"><svg><use href="#icon-shirt"></use></svg></div>
-            <div class="title-box">
-              <h3 class="hub-card-title">Mockups</h3>
-              <span class="hub-card-subtitle">DISEÑO CON FONDO</span>
-            </div>
-            <button class="star-btn" aria-label="Favorito"><svg><use href="#icon-star"></use></svg></button>
+        <div class="tcard" data-id="promomaker">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <p class="hub-card-desc">Crea material promocional e imágenes publicitarias impactantes para tus redes sociales y tienda.</p>
-          <div class="hub-actions">
-    <a href="promo-maker.html" class="hub-btn-primary">Abrir Studio</a>
-    <a href="guia-semitonos.html" class="hub-btn-secondary">
-      <svg><use href="#icon-book"></use></svg> Guía de Uso
-    </a>
+          <div class="tcard-title">Diseño con Fondo</div>
+          <div class="tcard-sub">Promo Maker</div>
+          <p class="tcard-desc">Crea imágenes promocionales impactantes para redes sociales y tu tienda en minutos.</p>
+          <div class="tcard-actions">
+            <a href="promo-maker.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>
-
-
-
       </div>
     </div>
 
   </div>
-</div>
+</section>
 
+<!-- CONTACT -->
+<section class="contact-section reveal" id="contacto">
+  <div class="contact-inner">
+    <div>
+      <div class="contact-tag">Contacto directo</div>
+      <h2 class="contact-h">HABLA<br>CON<br>NOSOTROS</h2>
+      <p class="contact-copy">¿Quieres tu pack personalizado o tienes dudas sobre alguna herramienta? Escríbenos directamente. Respondemos rápido.</p>
+      <a href="https://wa.me/529212337934?text=Hola%20CHECHENA" target="_blank" rel="noopener" class="btn btn-solid">Escribir por WhatsApp</a>
+    </div>
+    <div class="contact-links">
+      <a href="https://wa.me/529212337934" target="_blank" rel="noopener" class="contact-link">
+        <div><div class="cl-channel">WhatsApp</div><div class="cl-value">Escríbenos ahora</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://www.instagram.com/chechena_shirts" target="_blank" rel="noopener" class="contact-link">
+        <div><div class="cl-channel">Instagram</div><div class="cl-value">@chechena</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://www.facebook.com/share/1GyQAhvMFY/" target="_blank" rel="noopener" class="contact-link">
+        <div><div class="cl-channel">Facebook</div><div class="cl-value">@chechena</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+            <a href="https://www.tiktok.com/@chechena_shirts" target="_blank" rel="noopener" class="contact-link">
+        <div><div class="cl-channel">TikTok</div><div class="cl-value">@chechena</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="index.html" class="contact-link">
+        <div><div class="cl-channel">Tienda</div><div class="cl-value">Ver catálogo completo</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <a href="index.html" class="foot-logo">CHECHENA</a>
+    <span class="foot-copy">© 2026 · Todos los derechos reservados</span>
+  </div>
+</footer>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+/* BURGER */
+document.getElementById('burger').addEventListener('click',()=>{
+  document.getElementById('nav-links').classList.toggle('open');
+});
 
-    // ===== FAVORITOS =====
-    const storageKey = 'chechena_favorites';
-    let favorites = JSON.parse(localStorage.getItem(storageKey)) || [];
-    const favCat = document.getElementById('favorites-category');
-    const favGrid = document.getElementById('favorites-grid');
-    const allCards = document.querySelectorAll('.hub-card[data-tool-id]');
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+},{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-    function saveFavorites() {
-      localStorage.setItem(storageKey, JSON.stringify(favorites));
-      renderFavorites();
-      updateStarsUI();
-    }
-
-    function toggleFavorite(toolId) {
-      favorites = favorites.includes(toolId)
-        ? favorites.filter(id => id !== toolId)
-        : [...favorites, toolId];
-      saveFavorites();
-    }
-
-    function updateStarsUI() {
-      document.querySelectorAll('.star-btn').forEach(btn => {
-        const card = btn.closest('.hub-card');
-        if (!card) return;
-        const id = card.getAttribute('data-tool-id');
-        btn.classList.toggle('active', favorites.includes(id));
-      });
-    }
-
-    function renderFavorites() {
-      const searchVal = document.getElementById('hubSearchInput').value.trim();
-      if (searchVal.length > 0) return;
-      favGrid.innerHTML = '';
-      if (favorites.length === 0) { favCat.style.display = 'none'; return; }
-      favCat.style.display = 'block';
-      favorites.forEach(toolId => {
-        let original = null;
-        document.querySelectorAll(`.hub-card[data-tool-id="${toolId}"]`).forEach(c => {
-          if (!c.closest('#favorites-grid')) original = c;
-        });
-        if (!original) return;
-        const clone = original.cloneNode(true);
-        clone.style.display = 'flex';
-        clone.querySelector('.star-btn').addEventListener('click', () => toggleFavorite(toolId));
-        favGrid.appendChild(clone);
-      });
-    }
-
-    allCards.forEach(card => {
-      if (card.closest('#favorites-grid')) return;
-      const id = card.getAttribute('data-tool-id');
-      card.querySelector('.star-btn').addEventListener('click', () => toggleFavorite(id));
-    });
-
-    updateStarsUI();
-    renderFavorites();
-
-    // ===== BUSCADOR =====
-    document.getElementById('hubSearchInput').addEventListener('input', function () {
-      const q = this.value.toLowerCase().trim();
-      let visible = 0;
-
-      document.querySelectorAll('.hub-category:not(#favorites-category)').forEach(cat => {
-        let catVisible = 0;
-        cat.querySelectorAll('.hub-card').forEach(card => {
-          const title = card.querySelector('.hub-card-title').textContent.toLowerCase();
-          const desc = card.querySelector('.hub-card-desc').textContent.toLowerCase();
-          const match = title.includes(q) || desc.includes(q);
-          card.style.display = match ? 'flex' : 'none';
-          if (match) { catVisible++; visible++; }
-        });
-        cat.style.display = catVisible === 0 ? 'none' : 'block';
-      });
-
-      favCat.style.display = q.length > 0 ? 'none' : (favorites.length > 0 ? 'block' : 'none');
-      document.getElementById('no-results-message').style.display = (visible === 0 && q.length > 0) ? 'block' : 'none';
-    });
-
+/* FAVORITOS */
+const FK='chechena_fv3';
+let favs=(()=>{try{return JSON.parse(localStorage.getItem(FK))||[];}catch(e){return[];}})();
+function saveFavs(){try{localStorage.setItem(FK,JSON.stringify(favs));}catch(e){}renderFavs();updateStars();}
+function toggleFav(id){favs=favs.includes(id)?favs.filter(x=>x!==id):[...favs,id];saveFavs();}
+function updateStars(){
+  document.querySelectorAll('.tcard[data-id]').forEach(c=>{
+    if(c.closest('#fav-grid'))return;
+    c.querySelector('.star-btn')?.classList.toggle('active',favs.includes(c.dataset.id));
   });
-</script>
+}
+function renderFavs(){
+  const q=document.getElementById('search').value.trim();
+  const grid=document.getElementById('fav-grid');
+  const cat=document.getElementById('fav-cat');
+  const cnt=document.getElementById('fav-cnt');
+  grid.innerHTML='';
+  if(!favs.length||q.length){cat.style.display='none';return;}
+  cat.style.display='block';cnt.textContent=favs.length;
+  favs.forEach(id=>{
+    const orig=document.querySelector(`.tcard[data-id="${id}"]:not(#fav-grid .tcard)`);
+    if(!orig)return;
+    const cl=orig.cloneNode(true);
+    cl.querySelector('.star-btn')?.addEventListener('click',()=>toggleFav(id));
+    grid.appendChild(cl);
+  });
+}
+document.querySelectorAll('.tcard[data-id]').forEach(c=>{
+  if(c.closest('#fav-grid'))return;
+  c.querySelector('.star-btn')?.addEventListener('click',e=>{e.stopPropagation();toggleFav(c.dataset.id);});
+});
+updateStars();renderFavs();
 
+/* SEARCH */
+document.getElementById('search').addEventListener('input',function(){
+  const q=this.value.toLowerCase().trim();
+  let vis=0;
+  document.querySelectorAll('.cat-grp').forEach(cat=>{
+    let cv=0;
+    cat.querySelectorAll('.tcard').forEach(c=>{
+      const t=(c.querySelector('.tcard-title')?.textContent||'').toLowerCase();
+      const d=(c.querySelector('.tcard-desc')?.textContent||'').toLowerCase();
+      const show=!q||t.includes(q)||d.includes(q);
+      c.style.display=show?'':'none';
+      if(show){cv++;vis++;}
+    });
+    cat.style.display=cv===0?'none':'';
+  });
+  document.getElementById('no-res').style.display=(!vis&&q)?'block':'none';
+  document.getElementById('fav-cat').style.display=q?'none':(favs.length?'block':'none');
+});
+</script>
 </body>
 </html>

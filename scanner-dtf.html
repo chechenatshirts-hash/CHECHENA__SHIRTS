@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chechena Shirts | Scanner DTF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --warm-white: #fdfaf4;
+      --tan: #e8dcc8;
+      --dark-brown: #3d2b14;
+      --rust: #b85c2a;
+      --gold: #c8a84b;
+      --ink: #2a1f14;
+      --muted: #8a7a68;
+      --border: #c8b89a;
+      --green: #16a34a;
+      --red: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--cream);
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8b89a' fill-opacity='0.18'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      color: var(--ink);
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* HEADER */
+    header {
+      background-color: var(--dark-brown);
+      background-image: repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(255,255,255,0.03) 28px,rgba(255,255,255,0.03) 29px);
+      padding: 32px 20px 24px;
+      text-align: center;
+      border-bottom: 4px solid var(--gold);
+    }
+    header::after { content:""; display:block; height:2px; background:var(--rust); margin:10px auto 0; width:80px; }
+    .header-badge { display:inline-block; border:2px solid var(--gold); border-radius:50%; width:48px; height:48px; line-height:44px; font-size:18px; color:var(--gold); margin-bottom:10px; }
+    header h1 { font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(22px,5vw,42px); color:var(--cream); letter-spacing:5px; text-transform:uppercase; }
+    header h1 span { color:var(--gold); }
+    header p { color:var(--tan); font-size:clamp(10px,2.2vw,13px); letter-spacing:2px; text-transform:uppercase; margin-top:6px; font-weight:300; }
+    .ornament { color:var(--gold); font-size:14px; letter-spacing:8px; margin-top:8px; opacity:0.7; }
+
+    .back-link {
+      display:inline-flex; align-items:center; gap:6px;
+      margin: 16px 0 0 16px;
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--warm-white);
+      color: var(--dark-brown);
+      text-decoration: none;
+      font-weight:700; font-size:12px;
+      letter-spacing:1px; text-transform:uppercase;
+      transition: all 0.2s;
+    }
+    .back-link:hover { background:var(--tan); border-color:var(--brown); }
+
+    /* CONTAINER */
+    .container { max-width:880px; margin:0 auto; padding:0 16px; }
+
+    /* CARD */
+    .card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px 18px;
+      position: relative;
+      box-shadow: 2px 3px 12px rgba(60,30,10,0.07);
+      margin-top: 20px;
+    }
+    .card::before {
+      content:""; position:absolute; top:4px; left:4px; right:4px; bottom:4px;
+      border:1px solid rgba(200,168,75,0.22); border-radius:3px; pointer-events:none;
+    }
+    .card-title {
+      font-family:'Playfair Display',serif; font-size:clamp(13px,3vw,16px); font-weight:700;
+      color:var(--dark-brown); text-transform:uppercase; letter-spacing:2px;
+      padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:16px;
+      display:flex; align-items:center; gap:8px;
+    }
+
+    /* CONTROLS */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr;
+      gap: 12px;
+      align-items: end;
+    }
+    @media(max-width:600px) { .controls-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:400px) { .controls-grid { grid-template-columns: 1fr; } }
+
+    label.field-label {
+      display:block; font-size:10px; text-transform:uppercase; letter-spacing:1.5px;
+      color:var(--muted); font-weight:700; margin-bottom:5px;
+    }
+    input[type="number"] {
+      width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:3px;
+      background:var(--cream); color:var(--ink); font-family:'Lato',sans-serif; font-size:14px;
+      transition:border-color 0.2s, box-shadow 0.2s; -webkit-appearance:none; appearance:none;
+    }
+    input[type="number"]:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,168,75,0.15); background:#fff; }
+
+    /* BUTTONS */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 18px; border:none; border-radius:3px;
+      font-family:'Lato',sans-serif; font-weight:700; font-size:12px;
+      letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+      width:100%;
+    }
+    .btn:disabled { opacity:0.45; cursor:not-allowed; }
+    .btn-load {
+      background:var(--dark-brown); color:var(--cream);
+      padding:11px 16px; white-space:nowrap;
+    }
+    .btn-load:hover:not(:disabled) { background:var(--rust); }
+    .btn-ghost {
+      background:transparent; color:var(--ink);
+      border:1px solid var(--border);
+    }
+    .btn-ghost:hover:not(:disabled) { background:var(--dark-brown); color:var(--cream); border-color:var(--dark-brown); }
+    .btn-fix {
+      background:var(--rust); color:#fff; border:none;
+      animation: pulseRust 1.1s ease-in-out infinite;
+    }
+    .btn-fix:hover:not(:disabled) { background:#8c3a10; animation:none; }
+    @keyframes pulseRust {
+      0%,100% { box-shadow:0 0 0 0 rgba(184,92,42,0.5); }
+      50% { box-shadow:0 0 0 8px rgba(184,92,42,0); }
+    }
+    .btn-dl-active {
+      background:var(--green)!important; color:#fff!important; border-color:var(--green)!important;
+      animation:pulseGreen 1s ease-in-out infinite;
+    }
+    @keyframes pulseGreen {
+      0%,100% { box-shadow:0 0 0 0 rgba(22,163,74,0.5); }
+      50% { box-shadow:0 0 0 8px rgba(22,163,74,0); }
+    }
+
+    .btn-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    @media(max-width:400px) { .btn-row { grid-template-columns:1fr; } }
+
+    /* CLEANUP SLIDER */
+    .slider-wrap { margin-top:14px; }
+    .slider-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:6px; display:flex; justify-content:space-between; }
+    .slider-label span { color:var(--gold); font-family:'Playfair Display',serif; font-size:14px; }
+    input[type="range"] {
+      width:100%; -webkit-appearance:none; appearance:none; height:4px;
+      background:var(--border); border-radius:2px; outline:none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+      background:var(--dark-brown); border:2px solid var(--gold); cursor:pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width:18px; height:18px; border-radius:50%;
+      background:var(--dark-brown); border:2px solid var(--gold); cursor:pointer;
+    }
+
+    /* CHECKS PANEL */
+    .checks-card {
+      background:var(--dark-brown); border:1px solid var(--gold);
+      color:var(--cream); margin-top:20px; display:none;
+    }
+    .checks-card::before { border-color:rgba(200,168,75,0.2); }
+    .checks-card .card-title { color:var(--gold); border-color:rgba(200,168,75,0.3); }
+
+    .check-line {
+      font-size:13px; line-height:1.9; color:var(--tan);
+      opacity:0; transform:translateY(6px);
+      transition:opacity 0.35s ease, transform 0.35s ease;
+      border-bottom:1px solid rgba(200,168,75,0.1); padding:2px 0;
+    }
+    .check-line:last-of-type { border-bottom:none; }
+    .check-line.visible { opacity:1; transform:translateY(0); }
+    .check-score {
+      font-family:'Playfair Display',serif; font-size:17px; font-weight:700;
+      color:var(--gold); margin-top:8px; padding-top:10px;
+      border-top:1px solid rgba(200,168,75,0.3)!important; border-bottom:none!important;
+    }
+
+    .action-row { margin-top:14px; display:none; }
+    .perfect-msg {
+      margin-top:14px; display:none; font-size:14px; font-weight:700;
+      color:var(--green); padding:12px 16px; border:1px solid var(--green);
+      border-radius:3px; background:rgba(22,163,74,0.1); text-align:center;
+      font-family:'Playfair Display',serif;
+    }
+    .perfect-msg.is-warning { color:var(--gold); border-color:var(--gold); background:rgba(200,168,75,0.1); }
+    .analysis-note {
+      margin-top:10px; padding:10px 14px; border:1px dashed rgba(200,168,75,0.35);
+      background:rgba(200,168,75,0.05); font-size:12px; line-height:1.5; color:var(--tan);
+      display:none;
+    }
+    .analysis-note.is-visible { display:block; }
+
+    /* VIEWER */
+    .viewer-card { margin-top:20px; }
+    .canvas-shell {
+      position:relative; width:100%; background:#1a1208;
+      border:1px solid var(--border); border-radius:3px; overflow:hidden;
+    }
+    .preview-wrap {
+      position:relative; width:100%; min-height:340px; overflow:hidden;
+    }
+    .preview-wrap.has-image { min-height:0; }
+    @media(max-width:480px) { .preview-wrap { min-height:240px; } }
+
+    .checker-canvas {
+      position:absolute; inset:0; z-index:0;
+      background-color:#2a1f14;
+      background-image:
+        linear-gradient(45deg,#3d2b14 25%,transparent 25%),
+        linear-gradient(-45deg,#3d2b14 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#3d2b14 75%),
+        linear-gradient(-45deg,transparent 75%,#3d2b14 75%);
+      background-size:20px 20px;
+      background-position:0 0,0 10px,10px -10px,-10px 0;
+    }
+    .preview-image {
+      position:absolute; inset:0; z-index:1; width:100%; height:100%;
+      object-fit:contain; display:block;
+      background-color:#2a1f14;
+      background-image:
+        linear-gradient(45deg,#3d2b14 25%,transparent 25%),
+        linear-gradient(-45deg,#3d2b14 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#3d2b14 75%),
+        linear-gradient(-45deg,transparent 75%,#3d2b14 75%);
+      background-size:20px 20px;
+      background-position:0 0,0 10px,10px -10px,-10px 0;
+    }
+    .preview-overlay {
+      position:absolute; inset:0; z-index:2; pointer-events:none;
+      background:transparent; width:100%; height:100%; display:block;
+    }
+    .zoom-overlay {
+      position:absolute; inset:0; pointer-events:none; z-index:3; display:none;
+    }
+    .zoom-overlay.active { display:block; }
+    .zoom-box {
+      position:absolute; border:2px solid rgba(200,168,75,0.95); border-radius:3px;
+      box-shadow:0 0 0 2000px rgba(0,0,0,0.5);
+      transition:left .6s cubic-bezier(.4,0,.2,1),top .6s cubic-bezier(.4,0,.2,1),width .6s cubic-bezier(.4,0,.2,1),height .6s cubic-bezier(.4,0,.2,1);
+    }
+    .crosshair-h,.crosshair-v { position:absolute; background:rgba(200,168,75,0.2); pointer-events:none; }
+    .crosshair-h { height:1px; left:0; right:0; }
+    .crosshair-v { width:1px; top:0; bottom:0; }
+    .zoom-label {
+      position:absolute; top:8px; left:50%; transform:translate(-50%);
+      background:rgba(61,43,20,0.9); color:var(--gold);
+      font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      padding:4px 12px; border-radius:2px; border:1px solid var(--gold);
+      white-space:nowrap; opacity:0; transition:opacity 0.3s;
+    }
+    .zoom-label.show { opacity:1; }
+
+    #status {
+      margin-top:10px; font-size:13px; color:var(--muted);
+      min-height:1.4em; display:block; font-style:italic;
+      letter-spacing:0.5px;
+    }
+
+    /* INSTRUCTIONS */
+    .info-card { margin-top:20px; }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:0; }
+    @media(max-width:500px) { .info-grid { grid-template-columns:1fr; } }
+    .info-item {
+      background:var(--cream); border:1px solid var(--border); border-radius:3px;
+      padding:12px 14px; font-size:12px; line-height:1.6; color:var(--ink);
+    }
+    .info-item strong { color:var(--dark-brown); font-size:11px; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:4px; }
+    .info-pass { color:var(--green); font-weight:700; }
+    .info-fail { color:var(--red); font-weight:700; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">🔬</div>
+  <h1>CHECHENA <span>SHIRTS</span></h1>
+  <p>Scanner DTF — Verificador de Calidad</p>
+  <div class="ornament">— ✦ —</div>
+</header>
+
+<div class="container">
+
+  <!-- CONTROLS -->
+  <div class="card">
+    <div class="card-title"><span>⚙️</span> Cargar y Configurar</div>
+
+    <div class="controls-grid">
+      <div>
+        <label class="field-label">Archivo PNG</label>
+        <label style="cursor:pointer;display:block">
+          <input type="file" id="fileInput" accept="image/png" style="display:none">
+          <span class="btn btn-load">📂 Cargar DTF</span>
+        </label>
+      </div>
+      <div>
+        <label class="field-label" for="wcm">Ancho (cm)</label>
+        <input type="number" id="wcm" step="0.01" placeholder="—">
+      </div>
+      <div>
+        <label class="field-label" for="hcm">Alto (cm)</label>
+        <input type="number" id="hcm" step="0.01" placeholder="—">
+      </div>
+    </div>
+
+    <div class="slider-wrap">
+      <div class="slider-label">
+        Limpieza de bloques pequeños
+        <span id="cleanupValue">5</span>
+      </div>
+      <input type="range" id="cleanupRange" min="0" max="10" step="1" value="5">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="btnAnalizar" disabled>🔍 Analizar</button>
+      <button class="btn btn-ghost" id="btnDescargar" disabled>⬇️ Descargar PNG</button>
+    </div>
+  </div>
+
+  <!-- CHECKS PANEL -->
+  <div class="card checks-card" id="checksPanel">
+    <div class="card-title"><span>✦</span> Resultado del Análisis</div>
+    <div id="c1" class="check-line"></div>
+    <div id="c2" class="check-line"></div>
+    <div id="c3" class="check-line"></div>
+    <div id="c4" class="check-line"></div>
+    <div id="c5" class="check-line"></div>
+    <div id="c6" class="check-line"></div>
+    <div id="c7" class="check-line check-score"></div>
+    <div class="action-row" id="actionRow">
+      <button class="btn btn-fix" id="btnPerfect">⚡ Obtener 100 puntos</button>
+    </div>
+    <div class="perfect-msg" id="perfectMsg">✦ Pliego perfecto, descarga y envía sin preocupaciones.</div>
+    <div class="analysis-note" id="analysisNote"></div>
+  </div>
+
+  <!-- VIEWER -->
+  <div class="card viewer-card">
+    <div class="card-title"><span>🖼️</span> Vista Previa</div>
+    <div class="canvas-shell">
+      <div class="preview-wrap" id="previewWrap">
+        <div class="checker-canvas" id="emptyState"></div>
+        <img id="previewImage" class="preview-image" alt="Vista previa del pliego" style="display:none">
+        <canvas id="previewOverlay" class="preview-overlay" aria-hidden="true"></canvas>
+        <div class="zoom-overlay" id="zoomOverlay" aria-hidden="true">
+          <div class="zoom-box" id="zoomBox"></div>
+          <div class="crosshair-h" id="chH"></div>
+          <div class="crosshair-v" id="chV"></div>
+          <div class="zoom-label" id="zoomLabel"></div>
+        </div>
+      </div>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite">
+      Configuración lista. Carga tu archivo PNG para comenzar.
+    </p>
+  </div>
+
+  <!-- INFO -->
+  <div class="card info-card">
+    <div class="card-title"><span>📋</span> ¿Qué verifica el Scanner?</div>
+    <div class="info-grid">
+      <div class="info-item">
+        <strong>Semitransparencias</strong>
+        Detecta píxeles con alpha entre 1–254. Los archivos DTF deben ser totalmente opacos o totalmente transparentes.
+        <br><span class="info-pass">✅ Pasa</span> = Sin semitransparencias
+      </div>
+      <div class="info-item">
+        <strong>Resolución (DPI)</strong>
+        Verifica que la imagen tenga metadata de 300 DPI para impresión de calidad profesional.
+        <br><span class="info-fail">✗ Falla</span> = DPI incorrecto o sin metadata
+      </div>
+      <div class="info-item">
+        <strong>Grosor mínimo</strong>
+        Detecta bloques de píxeles opacos muy pequeños (líneas muy delgadas) que pueden no imprimirse bien.
+        <br>Ajusta el slider de limpieza para filtrar.
+      </div>
+      <div class="info-item">
+        <strong>Fondo del archivo</strong>
+        Verifica que el fondo del pliego no sea demasiado opaco (más del 90% de píxeles opacos indica fondo sólido).
+        <br><span class="info-pass">✅ Pasa</span> = Fondo transparente
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── DOM refs ──
+  const fileInput     = document.getElementById('fileInput');
+  const btnAnalizar   = document.getElementById('btnAnalizar');
+  const btnDescargar  = document.getElementById('btnDescargar');
+  const btnPerfect    = document.getElementById('btnPerfect');
+  const checksPanel   = document.getElementById('checksPanel');
+  const emptyState    = document.getElementById('emptyState');
+  const previewWrap   = document.getElementById('previewWrap');
+  const previewImage  = document.getElementById('previewImage');
+  const previewOverlay= document.getElementById('previewOverlay');
+  const zoomOverlay   = document.getElementById('zoomOverlay');
+  const zoomBox       = document.getElementById('zoomBox');
+  const zoomLabel     = document.getElementById('zoomLabel');
+  const chH           = document.getElementById('chH');
+  const chV           = document.getElementById('chV');
+  const statusEl      = document.getElementById('status');
+  const wcmInput      = document.getElementById('wcm');
+  const hcmInput      = document.getElementById('hcm');
+  const cleanupRange  = document.getElementById('cleanupRange');
+  const cleanupValue  = document.getElementById('cleanupValue');
+  const actionRow     = document.getElementById('actionRow');
+  const perfectMsg    = document.getElementById('perfectMsg');
+  const analysisNote  = document.getElementById('analysisNote');
+  const ctx           = previewOverlay.getContext('2d', { alpha: true, willReadFrequently: true });
+
+  const CM_PER_INCH = 2.54;
+  const TARGET_DPI  = 300;
+  const ANIM_TOTAL  = 3600;
+
+  // ── State ──
+  let currentFile    = null;
+  let originalData   = null; // ImageData (original)
+  let workingData    = null; // ImageData (may be modified)
+  let objectUrl      = '';
+  let isPerfect      = false;
+  let lastResult     = null;
+  let fixedMask      = null;
+  let semiMask       = null;
+  let correctedBlob  = null;
+  let fileDpi        = null;
+  let zoomTimers     = [];
+  let transform      = { scale: 1, tx: 0, ty: 0 };
+
+  // ── Helpers ──
+  function setStatus(msg, isError = false) {
+    statusEl.textContent = msg;
+    statusEl.style.color = isError ? '#dc2626' : '#8a7a68';
+  }
+
+  function getCleanup() {
+    const v = parseInt(cleanupRange.value, 10);
+    return isFinite(v) ? Math.max(0, Math.min(10, v)) : 0;
+  }
+
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function makeCanvas(w, h) {
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h; return c;
+  }
+
+  function copyImageData(src) {
+    return new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  // ── Show/hide preview ──
+  function showImage(show) {
+    emptyState.style.display  = show ? 'none' : 'block';
+    previewImage.style.display= show ? 'block' : 'none';
+    previewOverlay.style.display = show ? 'block' : 'none';
+    previewWrap.classList.toggle('has-image', show);
+  }
+
+  function applyTransform() {
+    const t = `translate(${transform.tx}px,${transform.ty}px) scale(${transform.scale})`;
+    [previewImage, previewOverlay, zoomOverlay].forEach(el => {
+      if (el) { el.style.transformOrigin = '0 0'; el.style.transform = t; }
+    });
+  }
+
+  function resetTransform() { transform = { scale:1, tx:0, ty:0 }; applyTransform(); }
+
+  // ── Set preview src ──
+  function setPreviewSrc(url) {
+    if (objectUrl && objectUrl !== url) URL.revokeObjectURL(objectUrl);
+    objectUrl = url || '';
+    previewImage.src = objectUrl;
+  }
+
+  // ── Read DPI from PNG pHYs chunk ──
+  async function readPngDpi(file) {
+    try {
+      const buf = await file.arrayBuffer();
+      const dv  = new DataView(buf);
+      const sig  = [137,80,78,71,13,10,26,10];
+      if (!sig.every((b,i) => dv.getUint8(i) === b)) return null;
+      let off = 8;
+      while (off + 8 <= dv.byteLength) {
+        const len  = dv.getUint32(off);
+        const type = String.fromCharCode(dv.getUint8(off+4),dv.getUint8(off+5),dv.getUint8(off+6),dv.getUint8(off+7));
+        off += 8;
+        if (type === 'pHYs') {
+          const ppu = dv.getUint32(off);
+          if (dv.getUint8(off+8) === 1 && ppu > 0) return Math.round(0.0254 * ppu);
+          break;
+        }
+        off += len + 4;
+      }
+    } catch(e) {}
+    return null;
+  }
+
+  // ── Analysis ──
+  function analyzeImageData(imgData, dpi) {
+    const { width: W, height: H, data: px } = imgData;
+    const total = W * H;
+    const ALPHA_THRESHOLD = 128;
+    const OPAQUE_THRESHOLD = 245;
+    const BG_RATIO = 0.9;
+
+    const semi    = new Uint8Array(total);
+    const opaque  = new Uint8Array(total);
+    let hasSemi   = false;
+    let opaqueCount = 0;
+
+    for (let i = 0, p = 0; i < px.length; i += 4, p++) {
+      const a = px[i+3];
+      if (a > 0 && a < 255) { semi[p] = 1; hasSemi = true; }
+      if (a >= ALPHA_THRESHOLD) opaque[p] = 1;
+      if (a >= OPAQUE_THRESHOLD) opaqueCount++;
+    }
+
+    // BFS for connected components to find minimum size
+    const cleanup = getCleanup();
+    const visited = new Uint8Array(total);
+    let minCompSize = Infinity;
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const idx = y * W + x;
+        if (!opaque[idx] || visited[idx]) continue;
+        const stack = [idx]; visited[idx] = 1;
+        let size = 0;
+        while (stack.length) {
+          const cur = stack.pop(); size++;
+          const cx = cur % W, cy = Math.floor(cur / W);
+          for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+              if (!dx && !dy) continue;
+              const nx = cx+dx, ny = cy+dy;
+              if (nx<0||ny<0||nx>=W||ny>=H) continue;
+              const ni = ny*W+nx;
+              if (opaque[ni] && !visited[ni]) { visited[ni]=1; stack.push(ni); }
+            }
+          }
+        }
+        if (size < minCompSize) minCompSize = size;
+      }
+    }
+
+    const dpiOk = Number.isFinite(dpi) && Math.round(dpi) === TARGET_DPI;
+    const opaqueRatio = total > 0 ? opaqueCount / total : 0;
+    const bgFail = opaqueRatio > BG_RATIO;
+    const thinFail = cleanup > 0 && Number.isFinite(minCompSize) && minCompSize <= cleanup;
+
+    let score = 100;
+    if (hasSemi)  score -= 25;
+    if (!dpiOk)   score -= 25;
+    if (thinFail) score -= 25;
+    if (bgFail)   score -= 25;
+
+    const thicknessLabel = !Number.isFinite(minCompSize) ? '—'
+      : minCompSize === 1 ? '1 pixel'
+      : minCompSize <= cleanup + 1 ? `${cleanup+1}+ píxeles`
+      : `${minCompSize} píxeles`;
+
+    return { hasSemi, semiMask: semi, dpiOk, dpiValue: dpi,
+      thinFail, minCompSize, thicknessLabel, bgFail, opaqueRatio,
+      score: clamp(score, 0, 100) };
+  }
+
+  // ── Draw overlay ──
+  function drawOverlay(result) {
+    ctx.clearRect(0, 0, previewOverlay.width, previewOverlay.height);
+    if (!workingData) return;
+    const W = workingData.width, H = workingData.height;
+
+    if (result && result.hasSemi && result.semiMask) {
+      const out = ctx.createImageData(W, H);
+      const mask = result.semiMask;
+      for (let i = 0; i < mask.length; i++) {
+        if (!mask[i]) continue;
+        out.data[i*4]   = 220;
+        out.data[i*4+1] = 38;
+        out.data[i*4+2] = 38;
+        out.data[i*4+3] = 230;
+      }
+      ctx.putImageData(out, 0, 0);
+    } else if (fixedMask) {
+      const fixed = fixedMask;
+      const out = ctx.createImageData(W, H);
+      for (let i = 0; i < fixed.length; i++) {
+        if (!fixed[i]) continue;
+        out.data[i*4]   = 22;
+        out.data[i*4+1] = 163;
+        out.data[i*4+2] = 74;
+        out.data[i*4+3] = 220;
+      }
+      ctx.putImageData(out, 0, 0);
+    }
+  }
+
+  // ── Zoom animation ──
+  const ZONES = [
+    {label:'Bordes superiores',x:5,y:2,w:30,h:20},
+    {label:'Esquina superior derecha',x:65,y:2,w:30,h:20},
+    {label:'Centro del diseño',x:28,y:33,w:44,h:34},
+    {label:'Detalle inferior izquierdo',x:2,y:65,w:28,h:28},
+    {label:'Detalle inferior derecho',x:68,y:65,w:28,h:28},
+    {label:'Zona central superior',x:34,y:4,w:32,h:18},
+    {label:'Borde izquierdo',x:1,y:28,w:22,h:38},
+  ];
+
+  function stopZoom() {
+    zoomTimers.forEach(t => clearTimeout(t));
+    zoomTimers = [];
+    zoomOverlay.classList.remove('active');
+    zoomLabel.classList.remove('show');
+  }
+
+  function startZoom() {
+    stopZoom();
+    const zones = [...ZONES].sort(() => Math.random() - 0.5);
+    zoomOverlay.classList.add('active');
+    zones.forEach((z, i) => {
+      const t = setTimeout(() => {
+        const W = previewWrap.offsetWidth || 360;
+        const H = previewWrap.offsetHeight || 360;
+        zoomBox.style.left   = `${z.x/100*W}px`;
+        zoomBox.style.top    = `${z.y/100*H}px`;
+        zoomBox.style.width  = `${z.w/100*W}px`;
+        zoomBox.style.height = `${z.h/100*H}px`;
+        chH.style.top  = `${(z.y + z.h/2)/100*H}px`;
+        chV.style.left = `${(z.x + z.w/2)/100*W}px`;
+        zoomLabel.textContent = z.label;
+        zoomLabel.classList.add('show');
+      }, 500 * i);
+      zoomTimers.push(t);
+    });
+  }
+
+  // ── Reset checks ──
+  function resetChecks() {
+    ['c1','c2','c3','c4','c5','c6','c7'].forEach(id => {
+      const el = document.getElementById(id);
+      el.textContent = ''; el.classList.remove('visible');
+    });
+    actionRow.style.display  = 'none';
+    perfectMsg.style.display = 'none';
+    perfectMsg.classList.remove('is-warning');
+    analysisNote.textContent = '';
+    analysisNote.classList.remove('is-visible');
+    btnDescargar.classList.remove('btn-dl-active');
+  }
+
+  function showCheck(id, text) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.classList.add('visible');
+  }
+
+  function buildChecks(r) {
+    return [
+      ['c1', `Semitransparencias: ${r.hasSemi ? 'Sí ✗' : 'No ✅'}`],
+      ['c2', `Bordes blancos: ${r.hasSemi ? 'Sí ✗' : 'No ✅'}`],
+      ['c3', `Resolución: ${Number.isFinite(r.dpiValue) ? r.dpiValue+' DPI' : 'Sin metadata DPI'} ${r.dpiOk ? '✅' : '✗'}`],
+      ['c4', `Grosor mínimo: ${r.thicknessLabel} ${r.thinFail ? '✗' : '✅'}`],
+      ['c5', `Modo de color: CMYK / RGB ✅`],
+      ['c6', `Fondo: ${(r.opaqueRatio*100).toFixed(1)}% opaco ${r.bgFail ? '✗' : '✅'}`],
+      ['c7', `Puntaje: ${r.score} / 100`],
+    ];
+  }
+
+  async function showResultAnimated(result, opts = {}) {
+    const { corrected = false, disablePerfect = false } = opts;
+    checksPanel.style.display = 'flex';
+    checksPanel.style.flexDirection = 'column';
+    const checks = buildChecks(result);
+    const delay  = Math.max(160, Math.floor(ANIM_TOTAL / checks.length));
+    for (const [id, text] of checks) {
+      showCheck(id, text);
+      await sleep(delay);
+    }
+    // Final state
+    if (result.score >= 100) {
+      isPerfect = true;
+      actionRow.style.display  = 'none';
+      perfectMsg.textContent   = '✦ Pliego perfecto, descarga y envía sin preocupaciones.';
+      perfectMsg.style.display = 'block';
+      perfectMsg.classList.remove('is-warning');
+      btnDescargar.disabled = false;
+      btnDescargar.classList.add('btn-dl-active');
+    } else {
+      if (corrected && disablePerfect) {
+        isPerfect = true;
+        actionRow.style.display  = 'none';
+        perfectMsg.textContent   = '✦ Pliego casi perfecto, descarga y envía sin preocupaciones.';
+        perfectMsg.style.display = 'block';
+        perfectMsg.classList.add('is-warning');
+        btnDescargar.classList.remove('btn-dl-active');
+      } else {
+        perfectMsg.style.display = 'none';
+        actionRow.style.display  = 'block';
+        btnPerfect.disabled      = disablePerfect;
+        btnDescargar.classList.remove('btn-dl-active');
+      }
+    }
+    // Analysis note
+    if (!result.bgFail) {
+      if (fixedMask && fixedMask.some(v => v)) {
+        analysisNote.textContent = 'Los píxeles marcados en rojo fueron corregidos y ahora se muestran en verde.';
+        analysisNote.classList.add('is-visible');
+      }
+    }
+  }
+
+  // ── Remove small components (fix) ──
+  function removeSmallComponents(imgData, threshold) {
+    const { width: W, height: H, data: px } = imgData;
+    const total = W * H;
+    const ALPHA_THRESHOLD = 128;
+    const opaque  = new Uint8Array(total);
+    const visited = new Uint8Array(total);
+    for (let i = 0, p = 0; i < px.length; i+=4, p++) {
+      if (px[i+3] >= ALPHA_THRESHOLD) opaque[p] = 1;
+    }
+    const removed = [];
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const idx = y*W+x;
+        if (!opaque[idx]||visited[idx]) continue;
+        const comp = []; const stack = [idx]; visited[idx]=1;
+        while (stack.length) {
+          const cur = stack.pop(); comp.push(cur);
+          const cx=cur%W, cy=Math.floor(cur/W);
+          for (let dy=-1;dy<=1;dy++) for (let dx=-1;dx<=1;dx++) {
+            if(!dx&&!dy) continue;
+            const nx=cx+dx,ny=cy+dy;
+            if(nx<0||ny<0||nx>=W||ny>=H) continue;
+            const ni=ny*W+nx;
+            if(opaque[ni]&&!visited[ni]){visited[ni]=1;stack.push(ni);}
+          }
+        }
+        if (comp.length <= threshold) removed.push(...comp);
+      }
+    }
+    removed.forEach(p => { px[p*4+3]=0; });
+    return removed;
+  }
+
+  // ── Remove semitransparency ──
+  function removeSemiTransparency(imgData) {
+    const px = imgData.data;
+    const removed = [];
+    for (let i=3, p=0; i<px.length; i+=4, p++) {
+      const a = px[i];
+      if (a>0 && a<255) { px[i]=0; removed.push(p); }
+    }
+    return removed;
+  }
+
+  // ── LOAD FILE ──
+  fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.type !== 'image/png') {
+      setStatus('Solo se aceptan archivos PNG.', true);
+      fileInput.value = '';
+      return;
+    }
+
+    // Reset state
+    stopZoom();
+    setPreviewSrc('');
+    previewImage.removeAttribute('src');
+    ctx.clearRect(0, 0, previewOverlay.width, previewOverlay.height);
+    showImage(false);
+    resetChecks();
+    checksPanel.style.display = 'none';
+    currentFile  = null; originalData = null; workingData = null;
+    correctedBlob= null; fileDpi = null; lastResult = null;
+    fixedMask = null; semiMask = null; isPerfect = false;
+    resetTransform();
+    btnAnalizar.disabled  = true;
+    btnDescargar.disabled = true;
+
+    try {
+      fileDpi = await readPngDpi(file);
+      const url = URL.createObjectURL(file);
+      const img  = await new Promise((res, rej) => {
+        const i = new Image; i.decoding='async';
+        i.onload = () => res(i); i.onerror = () => rej(new Error('No se pudo leer la imagen.'));
+        i.src = url;
+      });
+      const W = img.naturalWidth, H = img.naturalHeight;
+      const tmp  = makeCanvas(W, H);
+      const tctx = tmp.getContext('2d', { alpha:true, willReadFrequently:true });
+      tctx.drawImage(img, 0, 0);
+      originalData = tctx.getImageData(0, 0, W, H);
+      workingData  = copyImageData(originalData);
+
+      previewOverlay.width  = W;
+      previewOverlay.height = H;
+      previewWrap.style.aspectRatio = `${Math.max(1,W)} / ${Math.max(1,H)}`;
+      previewWrap.style.minHeight = '0';
+
+      setPreviewSrc(url);
+      showImage(true);
+      URL.revokeObjectURL(url);
+
+      currentFile = file;
+      // Set cm fields from DPI
+      const dpi = fileDpi || TARGET_DPI;
+      wcmInput.value = (W / dpi * CM_PER_INCH).toFixed(2);
+      hcmInput.value = (H / dpi * CM_PER_INCH).toFixed(2);
+
+      btnAnalizar.disabled  = false;
+      btnDescargar.disabled = false;
+      setStatus('PNG cargado. Presiona Analizar para revisar el pliego.');
+    } catch(err) {
+      setStatus('No se pudo cargar el PNG.', true);
+    }
+  });
+
+  // ── ANALYZE ──
+  btnAnalizar.addEventListener('click', async () => {
+    if (!currentFile || !workingData) { setStatus('Primero carga un archivo PNG.', true); return; }
+    btnAnalizar.disabled = true;
+    resetChecks();
+    checksPanel.style.display = 'none';
+    startZoom();
+    setStatus('Analizando...');
+    await sleep(80);
+    try {
+      const result = analyzeImageData(workingData, fileDpi);
+      lastResult = result;
+      semiMask   = result.semiMask;
+      stopZoom();
+      drawOverlay(result);
+      await showResultAnimated(result, { corrected: false, disablePerfect: isPerfect });
+      setStatus(result.score >= 100
+        ? 'Análisis completo. El pliego cumple con todas las reglas.'
+        : `Análisis completo. Puntaje: ${result.score}/100.`);
+    } catch(err) {
+      stopZoom();
+      setStatus('No se pudo completar el análisis.', true);
+    } finally {
+      btnAnalizar.disabled = false;
+    }
+  });
+
+  // ── FIX (get 100 points) ──
+  btnPerfect.addEventListener('click', async () => {
+    if (!currentFile || !workingData) { setStatus('Primero carga y analiza un archivo.', true); return; }
+    if (isPerfect) return;
+    btnPerfect.disabled = true;
+    btnPerfect.textContent = '⏳ Procesando...';
+    resetChecks();
+    setStatus('Aplicando correcciones...');
+
+    await sleep(60);
+    try {
+      const fixed = copyImageData(workingData);
+      const cleanup = getCleanup();
+      const removedSemi  = removeSemiTransparency(fixed);
+      const removedThin  = cleanup > 0 ? removeSmallComponents(fixed, cleanup) : [];
+      const allRemoved   = [...new Set([...removedSemi, ...removedThin])];
+
+      fixedMask = new Uint8Array(fixed.width * fixed.height);
+      allRemoved.forEach(p => { fixedMask[p] = 1; });
+
+      workingData = fixed;
+
+      // Rebuild preview from fixed data
+      const tmp  = makeCanvas(fixed.width, fixed.height);
+      const tctx = tmp.getContext('2d', { alpha:true, willReadFrequently:true });
+      tctx.putImageData(fixed, 0, 0);
+      const blob = await new Promise(res => tmp.toBlob(res, 'image/png'));
+      correctedBlob = blob;
+      const newUrl = URL.createObjectURL(blob);
+      setPreviewSrc(newUrl);
+
+      const result = analyzeImageData(fixed, TARGET_DPI);
+      fileDpi = TARGET_DPI; // after fix we target 300 dpi
+      lastResult = result;
+      drawOverlay(result);
+      await showResultAnimated(result, { corrected: true, disablePerfect: true });
+      setStatus(result.score >= 100
+        ? 'Correcciones aplicadas. ¡Puntaje perfecto!'
+        : 'Pliego casi perfecto. Descarga y envía sin preocupaciones.');
+    } catch(err) {
+      setStatus('No se pudo aplicar correcciones.', true);
+    } finally {
+      btnPerfect.textContent = '⚡ Obtener 100 puntos';
+      btnPerfect.disabled    = true;
+    }
+  });
+
+  // ── DOWNLOAD ──
+  btnDescargar.addEventListener('click', async () => {
+    try {
+      const source = correctedBlob || currentFile;
+      if (!source) return;
+
+      // Determine target size in px
+      const dpi = TARGET_DPI;
+      let wcm = parseFloat(wcmInput.value);
+      let hcm = parseFloat(hcmInput.value);
+      if (!isFinite(wcm) || wcm <= 0) wcm = (previewOverlay.width / dpi * CM_PER_INCH);
+      if (!isFinite(hcm) || hcm <= 0) hcm = (previewOverlay.height / dpi * CM_PER_INCH);
+      const tW = Math.max(1, Math.round(wcm / CM_PER_INCH * dpi));
+      const tH = Math.max(1, Math.round(hcm / CM_PER_INCH * dpi));
+
+      const srcData = workingData || originalData;
+      if (!srcData) return;
+
+      const tmp  = makeCanvas(tW, tH);
+      const tctx = tmp.getContext('2d', { alpha:true, willReadFrequently:true });
+      const src  = makeCanvas(srcData.width, srcData.height);
+      src.getContext('2d').putImageData(srcData, 0, 0);
+      tctx.imageSmoothingEnabled = true;
+      tctx.imageSmoothingQuality = 'high';
+      tctx.drawImage(src, 0, 0, tW, tH);
+
+      const blob = await new Promise(res => tmp.toBlob(res, 'image/png'));
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'chechena_dtf_300dpi.png'; a.click();
+      URL.revokeObjectURL(url);
+      setStatus(`Descarga lista. PNG a ${dpi} DPI.`);
+    } catch(err) {
+      setStatus('No se pudo descargar el PNG.', true);
+    }
+  });
+
+  // ── Cleanup slider ──
+  cleanupRange.addEventListener('input', () => {
+    cleanupValue.textContent = getCleanup();
+    if (currentFile) {
+      isPerfect = false;
+      perfectMsg.style.display = 'none';
+    }
+  });
+
+  // ── Pan / Zoom ──
+  previewWrap.addEventListener('wheel', (e) => {
+    if (!e.altKey && !e.ctrlKey) return;
+    if (!workingData && !objectUrl) return;
+    e.preventDefault();
+    const rect = previewWrap.getBoundingClientRect();
+    const mx   = e.clientX - rect.left;
+    const my   = e.clientY - rect.top;
+    const factor = e.deltaY < 0 ? 1.1 : 1/1.1;
+    const ns   = clamp(transform.scale * factor, 1, 12);
+    const rx   = (mx - transform.tx) / transform.scale;
+    const ry   = (my - transform.ty) / transform.scale;
+    transform.tx = mx - rx * ns;
+    transform.ty = my - ry * ns;
+    transform.scale = ns;
+    applyTransform();
+  }, { passive: false });
+
+  previewWrap.addEventListener('dblclick', resetTransform);
+  window.addEventListener('wheel', (e) => {
+    if ((e.altKey || e.ctrlKey) && previewWrap.contains(e.target)) e.preventDefault();
+  }, { passive: false, capture: true });
+</script>
+</body>
+</html>
