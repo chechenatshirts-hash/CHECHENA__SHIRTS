@@ -218,10 +218,31 @@
     .gallery-item:hover img { transform: scale(1.08); filter: grayscale(0%); }
 
     @media (max-width: 680px) {
-      .product-wrap { grid-template-columns: 1fr; }
-      /* En celular: precio y métodos de pago primero, galería después */
-      .product-gallery { order: 2; }
-      .product-info    { order: 1; }
+      .product-wrap {
+        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0;
+      }
+      .product-gallery { order: 1; }
+      .product-info    { order: 2; }
+      .mobile-extra    { order: 3; }
+
+      .features { grid-template-columns: 1fr !important; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .social-grid { grid-template-columns: 1fr 1fr; }
+
+      /* En móvil: ocultar grupo y reviews de la galería, mostrar los del mobile-extra */
+      .grupo-desktop { display: none; }
+      .grupo-mobile  { display: block; }
+      .reviews-desktop { display: none; }
+      .reviews-mobile  { display: block; }
+    }
+
+    @media (min-width: 681px) {
+      /* En laptop: ocultar los del mobile-extra */
+      .grupo-mobile { display: none; }
+      .reviews-mobile { display: none; }
     }
 
 
@@ -557,79 +578,30 @@ margin-bottom:6px;
     <div class="thumb" onclick="changeImg(this,'galleryD9.jpg')"><img src="galleryD9.jpg"></div>
   </div>
 
-  <!-- SECCIÓN GRUPO -->
-  <div class="grupo-section">
-
+  <!-- Grupo: visible en laptop (columna izquierda), oculto en móvil -->
+  <div class="grupo-section grupo-desktop">
     <div class="grupo-icon">🚀</div>
-
     <h2>Grupo de Emprendedores</h2>
-
-    <p>
-      Comparto tips, ayudas y todos los nuevos diseños que agrego al megapack.
-      Aprende, inspírate y lleva tu negocio al siguiente nivel.
-    </p>
-
-    <a href="https://chat.whatsapp.com/E7sagZb9fAn7ekZk1p5INI" target="_blank" class="grupo-btn">
-      Unirme al grupo
-    </a>
-
+    <p>Comparto tips, ayudas y todos los nuevos diseños que agrego al megapack. Aprende, inspírate y lleva tu negocio al siguiente nivel.</p>
+    <a href="https://chat.whatsapp.com/E7sagZb9fAn7ekZk1p5INI" target="_blank" class="grupo-btn">Unirme al grupo</a>
   </div>
-<div class="reviews-section">
 
-  <h2 class="reviews-title">⭐ Lo que dicen quienes ya ahorran tiempo diseñando y estampando</h2>
-
-  <div class="reviews-grid">
-
-    <div class="review">
-      <h4>María López</h4>
-      <div class="stars">★★★★☆</div>
-      <p>Los diseños están listos para imprimir. Me ahorró meses de trabajo.</p>
+  <!-- Referencias: visible en laptop (columna izquierda), oculto en móvil -->
+  <div class="reviews-section reviews-desktop">
+    <h2 class="reviews-title">⭐ Lo que dicen quienes ya ahorran tiempo diseñando y estampando</h2>
+    <div class="reviews-grid">
+      <div class="review"><h4>María López</h4><div class="stars">★★★★☆</div><p>Los diseños están listos para imprimir. Me ahorró meses de trabajo.</p></div>
+      <div class="review"><h4>Carlos</h4><div class="stars">★★★★☆</div><p>Muy buena calidad y los extras PRO valen muchísimo la pena.</p></div>
+      <div class="review"><h4>Lucía</h4><div class="stars">★★★★★</div><p>¡Increíble calidad y variedad de diseños! Super recomendado.</p></div>
+      <div class="review"><h4>Juanma</h4><div class="stars">★★★★★</div><p>Muy buenos diseños, igual los programas, excelentes.</p></div>
+      <div class="review"><h4>Yazminarellano</h4><div class="stars">★★★★★</div><p>Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p></div>
+      <div class="review"><h4>Donerling</h4><div class="stars">★★★★★</div><p>Excelente pack. Muy agradecido por la ayuda continua y actualizaciones. ¡Recomendado!</p></div>
+      <div class="review"><h4>Josafat Ontiveros</h4><div class="stars">★★★★☆</div><p>Un buen pack que contiene todo lo que describe. Me ayudó a sacar muchas cosas adelante.</p></div>
+      <div class="review"><h4>Diegocazares</h4><div class="stars">★★★★★</div><p>Excelente servicio, rápido y eficiente. Muy buena calidad en diseño y tendencia. 100% recomendado.</p></div>
     </div>
-
-    <div class="review">
-      <h4>Carlos</h4>
-      <div class="stars">★★★★☆</div>
-      <p>Muy buena calidad y los extras PRO valen muchísimo la pena.</p>
-    </div>
-
-    <div class="review">
-      <h4>Lucía</h4>
-      <div class="stars">★★★★★</div>
-      <p>¡Increíble calidad y variedad de diseños! Super recomendado.</p>
-    </div>
-
-    <div class="review">
-      <h4>Juanma</h4>
-      <div class="stars">★★★★★</div>
-      <p>Muy buenos diseños, igual los programas, excelentes.</p>
-    </div>
-
-    <div class="review">
-      <h4>Yazminarellano</h4>
-      <div class="stars">★★★★★</div>
-      <p>Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
-    </div>
-
-    <div class="review">
-      <h4>Donerling</h4>
-      <div class="stars">★★★★★</div>
-      <p>Excelente pack. Muy agradecido por la ayuda continua y actualizaciones. ¡Recomendado!</p>
-    </div>
-
-    <div class="review">
-      <h4>Josafat Ontiveros</h4>
-      <div class="stars">★★★★☆</div>
-      <p>Un buen pack que contiene todo lo que describe. Me ayudó a sacar muchas cosas adelante.</p>
-    </div>
-
-    <div class="review">
-      <h4>Diegocazares</h4>
-      <div class="stars">★★★★★</div>
-      <p>Excelente servicio, rápido y eficiente. Muy buena calidad en diseño y tendencia. 100% recomendado.</p>
-    </div>
-</div>
-</div>
   </div>
+
+</div><!-- /product-gallery -->
 
 
 
@@ -858,15 +830,64 @@ No es solo un paquete de imágenes. Es un sistema completo de producción y vent
       <li>Emprendedores que quieren vender sin perder meses diseñando</li>
     </ul>
   </div>
-</div>
+</div>    </div><!-- /product-info -->
+  </div><!-- /product-wrap -->
 
+  <!-- SECCIÓN EXTRA: Grupo + Reviews — al final en mobile -->
+  <div class="mobile-extra" style="max-width:1100px;margin:0 auto;padding:0 clamp(16px,5vw,48px);">
 
-
-
-</div>
+    <div class="grupo-section grupo-mobile">
+      <div class="grupo-icon">🚀</div>
+      <h2>Grupo de Emprendedores</h2>
+      <p>Comparto tips, ayudas y todos los nuevos diseños que agrego al megapack. Aprende, inspírate y lleva tu negocio al siguiente nivel.</p>
+      <a href="https://chat.whatsapp.com/E7sagZb9fAn7ekZk1p5INI" target="_blank" class="grupo-btn">Unirme al grupo</a>
     </div>
-  </div>
 
+    <div class="reviews-section reviews-mobile">
+      <h2 class="reviews-title">⭐ Lo que dicen quienes ya ahorran tiempo diseñando y estampando</h2>
+      <div class="reviews-grid">
+        <div class="review">
+          <h4>María López</h4>
+          <div class="stars">★★★★☆</div>
+          <p>Los diseños están listos para imprimir. Me ahorró meses de trabajo.</p>
+        </div>
+        <div class="review">
+          <h4>Carlos</h4>
+          <div class="stars">★★★★☆</div>
+          <p>Muy buena calidad y los extras PRO valen muchísimo la pena.</p>
+        </div>
+        <div class="review">
+          <h4>Lucía</h4>
+          <div class="stars">★★★★★</div>
+          <p>¡Increíble calidad y variedad de diseños! Super recomendado.</p>
+        </div>
+        <div class="review">
+          <h4>Juanma</h4>
+          <div class="stars">★★★★★</div>
+          <p>Muy buenos diseños, igual los programas, excelentes.</p>
+        </div>
+        <div class="review">
+          <h4>Yazminarellano</h4>
+          <div class="stars">★★★★★</div>
+          <p>Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
+        </div>
+        <div class="review">
+          <h4>Donerling</h4>
+          <div class="stars">★★★★★</div>
+          <p>Excelente pack. Muy agradecido por la ayuda continua y actualizaciones. ¡Recomendado!</p>
+        </div>
+        <div class="review">
+          <h4>Josafat Ontiveros</h4>
+          <div class="stars">★★★★☆</div>
+          <p>Un buen pack que contiene todo lo que describe. Me ayudó a sacar muchas cosas adelante.</p>
+        </div>
+        <div class="review">
+          <h4>Diegocazares</h4>
+          <div class="stars">★★★★★</div>
+          <p>Excelente servicio, rápido y eficiente. Muy buena calidad en diseño y tendencia. 100% recomendado.</p>
+        </div>
+      </div>
+    </div>
 
   </div>
 
