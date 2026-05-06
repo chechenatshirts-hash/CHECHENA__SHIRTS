@@ -1,1149 +1,1585 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promo Maker — Chechena Shirts</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; overflow: hidden; background: #f1f5f9; }
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promo Maker Pro · Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --bg2: #ede8df;
+      --surface: #faf7f2;
+      --surface2: #f2ede4;
+      --surface3: #e8e2d8;
+      --border: #ddd7cc;
+      --border2: #ccc5b8;
+      --text: #2d2820;
+      --text2: #6b6358;
+      --text3: #a09890;
+      --accent: #7c6ff7;
+      --accent2: #5b51e8;
+      --accent-lt: rgba(124,111,247,.1);
+      --accent-glow: rgba(124,111,247,.25);
+      --green: #2a9d6e;
+      --red: #d94f4f;
+      --orange: #e07830;
+      --yellow: #d4a017;
+      --r-sm: 6px;
+      --r: 10px;
+      --r-lg: 16px;
+      --r-xl: 22px;
+      --sh: 0 2px 12px rgba(0,0,0,.08);
+      --sh-lg: 0 8px 32px rgba(0,0,0,.12);
+      --font-head: 'Bebas Neue', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-w: 320px;
+      --tr: .18s cubic-bezier(.4,0,.2,1);
+    }
 
-        :root {
-            --c-bg: #f1f5f9;
-            --c-white: #ffffff;
-            --c-black: #0f0f0f;
-            --c-gray-100: #f8fafc;
-            --c-gray-200: #e2e8f0;
-            --c-gray-300: #cbd5e1;
-            --c-gray-500: #64748b;
-            --c-gray-700: #334155;
-            --c-accent: #0f0f0f;
-            --shirt-scale: 45%;
-            --shirt-x: 50%;
-            --shirt-y: 40%;
-            --bg-scale: 150%;
-            --bg-x: 10%;
-            --bg-y: 50%;
-            --bg-opacity: 0.25;
-            --bg-filter: grayscale(100%);
-        }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 14px; scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; height: 100vh; }
 
-        #app { display: flex; height: 100vh; font-family: 'Barlow Condensed', sans-serif; background: var(--c-bg); }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
 
-        /* SIDEBAR */
-        #sidebar {
-            width: 360px;
-            flex-shrink: 0;
-            background: var(--c-white);
-            border-right: 1px solid var(--c-gray-200);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-        }
-        #sidebar-header {
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--c-gray-200);
-            background: var(--c-white);
-            flex-shrink: 0;
-        }
-        .brand-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .brand-logo-mark {
-            width: 36px; height: 36px;
-            background: var(--c-black);
-            color: #fff;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 16px;
-            letter-spacing: -1px;
-            flex-shrink: 0;
-        }
-        .brand-name { font-family: 'Archivo Black', sans-serif; font-size: 15px; color: var(--c-black); letter-spacing: -0.3px; }
-        .brand-sub { font-size: 11px; color: var(--c-gray-500); font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
-        .ver-badge { font-size: 9px; background: var(--c-gray-200); color: var(--c-gray-500); padding: 2px 6px; border-radius: 4px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-left: auto; }
+    /* HEADER */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 52px;
+      position: sticky; top: 0; z-index: 100;
+    }
 
-        #sidebar-scroll { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
-        #sidebar-scroll::-webkit-scrollbar { width: 4px; }
-        #sidebar-scroll::-webkit-scrollbar-thumb { background: var(--c-gray-300); border-radius: 4px; }
+    .logo {
+      font-family: var(--font-head);
+      font-size: 1.4rem;
+      letter-spacing: .06em;
+      color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none;
+    }
 
-        /* Upload Zone */
-        .upload-zone {
-            border: 2px dashed var(--c-gray-300);
-            border-radius: 14px;
-            padding: 20px 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: var(--c-gray-100);
-        }
-        .upload-zone:hover { border-color: var(--c-black); background: #f8f9fa; }
-        .upload-zone .icon-wrap { width: 40px; height: 40px; background: var(--c-gray-200); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
-        .upload-zone span.main { display: block; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-gray-700); }
-        .upload-zone span.sub { display: block; font-size: 11px; color: var(--c-gray-500); margin-top: 2px; }
+    .logo-icon {
+      width: 30px; height: 30px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-size: .65rem; font-weight: 700;
+      color: #fff; letter-spacing: .04em;
+    }
 
-        /* Card Sections */
-        .control-card {
-            background: var(--c-gray-100);
-            border: 1px solid var(--c-gray-200);
-            border-radius: 14px;
-            padding: 14px 16px;
-        }
-        .control-card-title {
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--c-gray-500);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .control-card-title svg { width: 12px; height: 12px; }
+    .badge {
+      font-size: .6rem; font-weight: 600;
+      background: var(--accent-lt); color: var(--accent);
+      border: 1px solid rgba(124,111,247,.3);
+      border-radius: 20px; padding: 2px 8px;
+      letter-spacing: .08em; text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
 
-        /* Inputs */
-        .field-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-gray-500); display: block; margin-bottom: 5px; }
-        .text-input {
-            width: 100%;
-            background: var(--c-white);
-            border: 1px solid var(--c-gray-300);
-            border-radius: 8px;
-            padding: 9px 12px;
-            font-size: 13px;
-            font-weight: 700;
-            font-family: 'Barlow Condensed', sans-serif;
-            color: var(--c-black);
-            outline: none;
-            transition: border 0.15s;
-        }
-        .text-input:focus { border-color: var(--c-black); }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 
-        /* Range */
-        .range-row { display: flex; flex-direction: column; gap: 6px; }
-        .range-label-row { display: flex; justify-content: space-between; align-items: center; }
-        .range-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-gray-500); display: flex; align-items: center; gap: 4px; }
-        .range-label svg { width: 10px; height: 10px; }
-        .range-val { font-size: 11px; font-weight: 800; color: var(--c-black); font-family: 'Archivo Black', sans-serif; }
-        input[type="range"] { width: 100%; accent-color: var(--c-black); height: 4px; }
+    .design-count-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 5px 12px;
+      font-family: var(--font-mono); font-size: .72rem; color: var(--text2);
+    }
 
-        /* Toggle Buttons */
-        .toggle-group { display: flex; gap: 6px; }
-        .toggle-btn {
-            flex: 1;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            padding: 7px 10px;
-            border-radius: 8px;
-            border: 1px solid var(--c-gray-300);
-            cursor: pointer;
-            transition: all 0.15s;
-            background: transparent;
-            color: var(--c-gray-500);
-            font-family: 'Barlow Condensed', sans-serif;
-        }
-        .toggle-btn.active { background: var(--c-black); color: #fff; border-color: var(--c-black); }
+    .design-count-badge strong { color: var(--accent); }
 
-        /* Logo upload */
-        .logo-upload-label {
-            display: flex; align-items: center; justify-content: center;
-            width: 100%; height: 40px;
-            border: 2px dashed var(--c-gray-300);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--c-gray-500);
-            background: var(--c-white);
-            transition: all 0.15s;
-        }
-        .logo-upload-label:hover { border-color: var(--c-black); color: var(--c-black); }
+    .icon-btn {
+      width: 34px; height: 34px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; transition: all var(--tr); color: var(--text2);
+    }
+    .icon-btn:hover { background: var(--surface3); border-color: var(--border2); color: var(--text); }
 
-        /* BW Toggle button */
-        .bw-btn {
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid var(--c-black);
-            background: var(--c-black);
-            color: #fff;
-            cursor: pointer;
-            font-family: 'Barlow Condensed', sans-serif;
-        }
-        .bw-btn.off { background: transparent; color: var(--c-gray-500); border-color: var(--c-gray-300); }
+    /* MAIN LAYOUT */
+    .app-layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      overflow: hidden;
+      height: calc(100vh - 52px);
+    }
 
-        /* Footer */
-        #sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--c-gray-200); background: var(--c-white); flex-shrink: 0; }
-        .export-btn {
-            width: 100%;
-            padding: 13px;
-            background: var(--c-black);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 12px;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background 0.15s, opacity 0.15s;
-        }
-        .export-btn:hover:not(:disabled) { background: #222; }
-        .export-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .export-btn svg { width: 15px; height: 15px; }
+    @media (max-width: 860px) {
+      .app-layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
+      body { height: auto; overflow: auto; }
+    }
 
-        /* PREVIEW AREA */
-        #preview-area {
-            flex: 1;
-            height: 100%;
-            overflow-y: auto;
-            background: #e2e8f0;
-            position: relative;
-        }
-        #preview-area::-webkit-scrollbar { width: 5px; }
-        #preview-area::-webkit-scrollbar-thumb { background: var(--c-gray-300); border-radius: 4px; }
+    /* SIDEBAR */
+    aside {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow: visible;
+    }
 
-        .empty-state {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .empty-box {
-            background: var(--c-white);
-            border: 1px solid var(--c-gray-200);
-            border-radius: 20px;
-            padding: 40px 50px;
-            text-align: center;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-        }
-        .empty-box svg { width: 48px; height: 48px; color: var(--c-gray-300); margin-bottom: 12px; }
-        .empty-box .t1 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-gray-700); }
-        .empty-box .t2 { font-size: 12px; color: var(--c-gray-500); margin-top: 4px; font-weight: 500; }
+    .sidebar-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 6px 6px 0;
+      gap: 2px;
+    }
 
-        /* Grid */
-        #cards-grid { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; min-height: 100%; }
+    .stab {
+      flex: 1; padding: 8px 6px; text-align: center;
+      font-size: .6rem; font-weight: 600; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--text3);
+      cursor: pointer; 
+      border-radius: var(--r-sm) var(--r-sm) 0 0;
+      border: 1px solid transparent;
+      border-bottom: none;
+      transition: all var(--tr); font-family: var(--font-mono);
+      background: transparent;
+    }
+    .stab.active { 
+      color: var(--text); 
+      background: var(--surface);
+      border-color: var(--border);
+      border-bottom-color: var(--surface);
+      position: relative; top: 1px;
+    }
+    .stab:hover:not(.active) { color: var(--text2); background: rgba(255,255,255,.03); }
 
-        /* Canvas Card */
-        .card-wrap {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: #111;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
-            border: 1px solid #333;
-        }
-        .canvas-inner {
-            position: absolute;
-            top: 0; left: 0;
-            width: 1080px;
-            height: 1080px;
-            transform-origin: top left;
-            pointer-events: none;
-        }
-        .card-actions {
-            position: absolute;
-            top: 8px; right: 8px;
-            display: flex; gap: 5px;
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 50;
-        }
-        .card-wrap:hover .card-actions { opacity: 1; }
-        .card-action-btn {
-            width: 32px; height: 32px;
-            background: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            color: #111;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            transition: background 0.15s, color 0.15s;
-        }
-        .card-action-btn:hover.dl { background: #2563eb; color: white; }
-        .card-action-btn:hover.rm { background: #ef4444; color: white; }
-        .card-action-btn svg { width: 14px; height: 14px; }
-        .card-num {
-            position: absolute;
-            bottom: 10px; left: 12px;
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 28px;
-            color: rgba(255,255,255,0.25);
-            z-index: 50;
-            pointer-events: none;
-            line-height: 1;
-        }
+    .sidebar-panel { display: none; flex: 1; flex-direction: column; overflow: visible; }
+    .sidebar-panel.active { display: flex; }
 
-        /* Canvas Layers */
-        .layer-bg-art {
-            position: absolute;
-            pointer-events: none;
-            transform-origin: center center;
-            width: var(--bg-scale);
-            height: auto;
-            left: var(--bg-x);
-            top: var(--bg-y);
-            transform: translate(-50%, -50%);
-            opacity: var(--bg-opacity);
-            filter: var(--bg-filter);
-            mix-blend-mode: lighten;
-        }
-        .layer-texts {
-            position: absolute;
-            top: 50px; left: 50px;
-            z-index: 30;
-            pointer-events: none;
-        }
-        .canvas-title {
-            color: white;
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 82px;
-            line-height: 1;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-            text-shadow: 0 6px 24px rgba(0,0,0,0.8);
-            display: block;
-        }
-        .canvas-subtitle-wrap {
-            display: inline-block;
-            background: white;
-            padding: 7px 16px 6px;
-            margin-top: -6px;
-            margin-left: 8px;
-            box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-        }
-        .canvas-subtitle {
-            color: black;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 26px;
-            font-weight: 900;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            line-height: 1;
-            display: block;
-        }
-        .layer-shirt {
-            position: absolute;
-            pointer-events: none;
-            z-index: 20;
-        }
-        .layer-shirt-inner { width: 100%; height: auto; }
-        .layer-mockup-wrap {
-            position: absolute;
-            width: 1200px; height: 1200px;
-            right: -150px; top: 50px;
-            pointer-events: none;
-            z-index: 20;
-        }
-        .layer-mockup-wrap img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 50px rgba(0,0,0,0.8)); }
-        .layer-brand {
-            position: absolute;
-            top: 50px; right: 50px;
-            z-index: 100;
-            pointer-events: none;
-            opacity: 0.9;
-            text-align: right;
-        }
-        .canvas-brand-text {
-            color: white;
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 38px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.5);
-            line-height: 1;
-        }
-        .canvas-brand-logo { height: 60px; width: auto; max-width: 260px; object-fit: contain; }
+    .sidebar-scroll {
+      flex: 1; overflow-y: auto; padding: 14px;
+      display: flex; flex-direction: column; gap: 12px;
+      height: 0; /* forces flex child to respect overflow */
+    }
 
-        /* Shirt Picker */
-        .shirt-thumb {
-            position: relative;
-            aspect-ratio: 1/1;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid var(--c-gray-200);
-            cursor: pointer;
-            background: #fff;
-            transition: all 0.15s;
-        }
-        .shirt-thumb:hover { border-color: #888; }
-        .shirt-thumb.selected { border-color: var(--c-black); box-shadow: 0 0 0 2px var(--c-black); }
-        .shirt-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 4px; }
-        .shirt-thumb .shirt-remove {
-            position: absolute;
-            top: 3px; right: 3px;
-            width: 18px; height: 18px;
-            background: rgba(239,68,68,0.85);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 12px;
-            line-height: 1;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-        }
-        .shirt-thumb:hover .shirt-remove { display: flex; }
-        .shirt-thumb .shirt-label {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(0,0,0,0.55);
-            color: #fff;
-            font-size: 8px;
-            font-weight: 800;
-            text-align: center;
-            padding: 2px 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: none;
-        }
-        .shirt-thumb:hover .shirt-label { display: block; }
-        .shirt-thumb.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 3px; left: 3px;
-            width: 16px; height: 16px;
-            background: var(--c-black);
-            color: #fff;
-            font-size: 10px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-        }
+    /* Section group divider label */
+    .sec-group-label {
+      font-size: .58rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--text3);
+      font-family: var(--font-mono); padding: 4px 4px 0;
+      border-top: 1px solid var(--border); margin-top: 4px;
+    }
+    .sec-group-label:first-child { border-top: none; margin-top: 0; }
 
-        @media (max-width: 900px) {
-            #app { flex-direction: column; }
-            #sidebar { width: 100%; height: auto; max-height: 50vh; border-right: none; border-bottom: 1px solid var(--c-gray-200); order: 2; }
-            #preview-area { order: 1; flex: none; height: 50vh; }
-        }
-    </style>
+    /* UPLOAD ZONE */
+    .upload-zone {
+      border: 2px dashed var(--border2);
+      border-radius: var(--r-lg);
+      padding: 20px 14px; text-align: center;
+      cursor: pointer;
+      transition: all var(--tr);
+      position: relative; background: var(--bg2);
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--accent); background: var(--accent-lt);
+    }
+    .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-zone-icon {
+      width: 38px; height: 38px; background: rgba(124,111,247,.12);
+      border-radius: 10px; margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; border: 1px solid rgba(124,111,247,.2);
+    }
+    .upload-zone p { font-size: .78rem; color: var(--text2); font-weight: 500; }
+    .upload-zone small { font-size: .62rem; color: var(--text3); margin-top: 4px; display: block; font-family: var(--font-mono); letter-spacing: .04em; }
+
+    /* SECTION CARD */
+    .sec {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); overflow: hidden;
+      transition: border-color var(--tr), box-shadow var(--tr);
+      box-shadow: var(--sh);
+    }
+    .sec.open {
+      border-color: var(--border2);
+      box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    }
+    .sec-head {
+      display: flex; align-items: center; gap: 9px;
+      padding: 12px 14px; cursor: default;
+      font-size: .68rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text);
+      font-family: var(--font-mono);
+      border-bottom: 1px solid var(--border);
+      transition: all var(--tr); user-select: none;
+      background: var(--surface2);
+    }
+    .sec-head:hover { background: var(--surface2); }
+    .sec.open .sec-head { 
+      border-bottom-color: var(--border); 
+      background: var(--surface2);
+    }
+    .sec-icon {
+      width: 26px; height: 26px; border-radius: 7px;
+      background: var(--accent-lt); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; flex-shrink: 0;
+      border: 1px solid rgba(124,111,247,.15);
+    }
+    .sec-title { flex: 1; }
+    .sec-chev { display: none; }
+    .sec.open .sec-chev { transform: rotate(180deg); background: var(--accent-lt); color: var(--accent); border-color: rgba(124,111,247,.2); }
+    .sec-body { display: flex; padding: 14px; flex-direction: column; gap: 14px; background: var(--surface); }
+
+    /* FORM CONTROLS */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .lbl {
+      font-size: .6rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--text3);
+      font-family: var(--font-mono);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    input[type="text"], select, textarea {
+      font-family: var(--font-body); font-size: .82rem;
+      color: var(--text); background: var(--bg);
+      border: 1px solid var(--border2); border-radius: var(--r-sm);
+      padding: 8px 10px; outline: none; width: 100%;
+      transition: border-color var(--tr), box-shadow var(--tr);
+    }
+    select option { background: var(--surface); color: var(--text); }
+    input[type="text"]:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-lt);
+    }
+
+    /* SEGMENTED BUTTONS */
+    .seg { display: flex; background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--r-sm); padding: 2px; gap: 2px; }
+    .seg-btn {
+      flex: 1; font-family: var(--font-mono); font-size: .62rem;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
+      padding: 5px 6px; border: none; border-radius: 4px;
+      cursor: pointer; background: transparent; color: var(--text3);
+      transition: all var(--tr);
+    }
+    .seg-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.1); border: 1px solid var(--border); }
+
+    /* COLOR BUTTONS */
+    #colorBtnGroup { flex-wrap: wrap; gap: 4px; }
+    #colorBtnGroup .seg-btn { flex: none; min-width: 44px; }
+
+    /* RANGE */
+    .range-row { display: flex; flex-direction: column; gap: 6px; }
+    .range-head { display: flex; justify-content: space-between; align-items: center; }
+    .range-head span:first-child { font-size: .6rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text3); font-family: var(--font-mono); }
+    .range-val { font-size: .65rem; font-weight: 700; color: var(--accent); background: var(--accent-lt); padding: 2px 7px; border-radius: 20px; font-family: var(--font-mono); border: 1px solid rgba(124,111,247,.2); }
+    input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--border2); border-radius: 10px; outline: none; cursor: pointer; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 0 3px var(--accent-lt); transition: transform .15s; }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+
+    /* TOGGLE */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+    .toggle-row .tl { font-size: .78rem; font-weight: 500; color: var(--text2); }
+    .toggle { position: relative; width: 36px; height: 20px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .ttrack { position: absolute; inset: 0; background: var(--border2); border-radius: 20px; cursor: pointer; transition: background var(--tr); }
+    .ttrack::after { content: ''; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; left: 3px; top: 3px; transition: left var(--tr); box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+    .toggle input:checked + .ttrack { background: var(--accent); }
+    .toggle input:checked + .ttrack::after { left: 19px; }
+
+    /* LOGO UPLOAD */
+    .logo-upload-label {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border: 1px dashed var(--border2);
+      border-radius: var(--r-sm); cursor: pointer;
+      transition: all var(--tr); position: relative; color: var(--text2);
+    }
+    .logo-upload-label:hover { border-color: var(--accent); background: var(--accent-lt); }
+    .logo-upload-label input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .logo-upload-label span { font-size: .75rem; font-weight: 500; }
+
+    /* COLOR PRESETS (fondo) */
+    .color-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cp {
+      width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+      border: 2px solid transparent; transition: all var(--tr);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+    }
+    .cp.active { border-color: var(--text); box-shadow: 0 0 0 3px var(--accent-lt); }
+
+    /* TEXT PRESETS */
+    .text-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tp {
+      font-family: var(--font-mono); font-size: .6rem; font-weight: 600;
+      padding: 4px 8px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer; color: var(--text2);
+      transition: all var(--tr); letter-spacing: .04em;
+    }
+    .tp:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+
+    /* SIDEBAR FOOTER */
+    .sidebar-footer {
+      padding: 12px 12px; border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 8px;
+      background: var(--bg2);
+    }
+
+    /* BUTTONS */
+    .btn {
+      font-family: var(--font-body); font-size: .8rem; font-weight: 600;
+      cursor: pointer; border: none; border-radius: var(--r-sm);
+      padding: 10px 16px; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+      transition: all var(--tr);
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent2);
+      box-shadow: 0 4px 20px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover:not(:disabled) { background: var(--surface3); border-color: var(--border2); }
+    .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+    .btn-ghost:hover:not(:disabled) { background: var(--surface2); }
+    .btn:disabled { opacity: .35; cursor: not-allowed; }
+
+    /* PREVIEW AREA */
+    .preview-area {
+      background: var(--bg);
+      overflow-y: auto; padding: 20px;
+      position: relative;
+    }
+
+    /* TOOLBAR BAR */
+    .preview-toolbar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .preview-toolbar h2 {
+      font-family: var(--font-head); font-size: 1.3rem;
+      letter-spacing: .06em; color: var(--text);
+    }
+    .toolbar-right { margin-left: auto; display: flex; gap: 8px; }
+
+    /* GRID MODES */
+    .grid-mode-btn {
+      width: 30px; height: 30px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; color: var(--text2); transition: all var(--tr);
+    }
+    .grid-mode-btn.active { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+
+    /* EMPTY STATE */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 400px;
+      border: 2px dashed var(--border); border-radius: var(--r-xl);
+      cursor: pointer; transition: all var(--tr); position: relative;
+    }
+    .empty-state:hover { border-color: var(--accent); background: var(--accent-lt); }
+    .empty-state input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .empty-icon { font-size: 3.5rem; margin-bottom: 16px; opacity: .3; }
+    .empty-state h3 { font-family: var(--font-head); font-size: 1.5rem; letter-spacing: .06em; color: var(--text3); margin-bottom: 8px; }
+    .empty-state p { font-size: .78rem; color: var(--text3); text-align: center; font-family: var(--font-mono); }
+
+    /* CARD GRID */
+    .card-grid { display: grid; gap: 16px; }
+    .card-grid.grid-2 { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    .card-grid.grid-3 { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .card-grid.grid-1 { grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); }
+
+    /* PREVIEW CARD */
+    .preview-card {
+      position: relative; border-radius: var(--r);
+      overflow: hidden; background: #0a0a0c;
+      aspect-ratio: 1; cursor: pointer;
+      transition: all var(--tr);
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+    }
+    .preview-card:hover { transform: translateY(-2px); box-shadow: var(--sh-lg); border-color: var(--border2); }
+
+    .card-canvas-wrapper {
+      position: absolute; top: 0; left: 0;
+      width: 1080px; height: 1080px;
+      transform-origin: top left; pointer-events: none;
+    }
+
+    .card-actions {
+      position: absolute; top: 8px; right: 8px;
+      display: flex; gap: 5px; opacity: 0;
+      transition: opacity var(--tr);
+    }
+    .preview-card:hover .card-actions { opacity: 1; }
+    .card-btn {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.1);
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: .8rem; color: var(--text);
+      transition: all var(--tr);
+    }
+    .card-btn:hover { background: rgba(0,0,0,.9); }
+    .card-btn.del:hover { background: var(--red); border-color: var(--red); }
+    .card-btn.dl:hover { background: var(--accent); border-color: var(--accent); }
+
+    .card-num {
+      position: absolute; bottom: 8px; left: 10px;
+      font-family: var(--font-head); font-size: 1.3rem;
+      letter-spacing: .06em; color: rgba(255,255,255,.2);
+      pointer-events: none; user-select: none;
+    }
+
+    /* EXPORT OVERLAY */
+    .export-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(13,13,15,.92); backdrop-filter: blur(12px);
+      z-index: 200; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+    }
+    .export-overlay.visible { display: flex; }
+    .export-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-xl); padding: 36px 44px;
+      text-align: center; box-shadow: var(--sh-lg); min-width: 280px;
+    }
+    .export-spinner {
+      width: 44px; height: 44px; border: 2px solid var(--border2);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin .7s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .export-card h3 { font-family: var(--font-head); font-size: 1.2rem; letter-spacing: .06em; margin-bottom: 6px; }
+    .export-card p { font-size: .75rem; color: var(--text2); font-family: var(--font-mono); }
+    .export-bar { width: 100%; height: 3px; background: var(--border); border-radius: 10px; overflow: hidden; margin-top: 16px; }
+    .export-bar-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: width .3s; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.92); z-index: 300;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-close {
+      position: fixed; top: 20px; right: 20px;
+      width: 36px; height: 36px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text); font-size: 1rem;
+      z-index: 301; transition: all var(--tr);
+    }
+    .modal-close:hover { background: var(--red); border-color: var(--red); }
+    .modal-canvas {
+      max-width: min(700px, calc(100vw - 40px));
+      max-height: calc(100vh - 40px);
+      aspect-ratio: 1; position: relative;
+      border-radius: var(--r-lg); overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .modal-canvas .card-canvas-wrapper { position: absolute; top: 0; left: 0; }
+
+    /* CANVAS STYLES */
+    .c-line1 { font-family: 'Bebas Neue', sans-serif; font-size: 74px; font-weight: 400; color: #fff; line-height: 1; letter-spacing: .04em; text-transform: uppercase; text-shadow: 0 6px 24px rgba(0,0,0,.7); }
+    .c-line2-wrap { display: inline-block; background: #fff; padding: 5px 14px; margin-top: -8px; margin-left: 6px; box-shadow: 0 8px 28px rgba(0,0,0,.45); }
+    .c-line2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: #111; letter-spacing: .05em; text-transform: uppercase; line-height: 1; }
+    .c-brand-text { font-family: 'Space Grotesk', sans-serif; font-size: 38px; font-weight: 700; color: #fff; letter-spacing: .06em; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,.5); opacity: .85; }
+    .c-brand-logo { height: 60px; width: auto; max-width: 250px; object-fit: contain; opacity: .85; }
+
+    /* NOTIFICATION */
+    .notif {
+      position: fixed; bottom: 20px; right: 20px; z-index: 400;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: .78rem; font-weight: 500; color: var(--text);
+      box-shadow: var(--sh-lg); transform: translateY(100px);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      max-width: 280px;
+    }
+    .notif.show { transform: translateY(0); }
+    .notif.success { border-left: 3px solid var(--green); }
+    .notif.error { border-left: 3px solid var(--red); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp .25s ease both; }
+
+    /* HISTORY TAB */
+    .hist-list { display: flex; flex-direction: column; gap: 6px; }
+    .hist-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer; transition: all var(--tr);
+    }
+    .hist-item:hover { border-color: var(--border2); background: var(--surface2); }
+    .hist-icon { font-size: .9rem; }
+    .hist-info { flex: 1; min-width: 0; }
+    .hist-name { font-size: .75rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hist-time { font-size: .62rem; color: var(--text3); font-family: var(--font-mono); }
+    .hist-apply { font-size: .65rem; padding: 3px 8px; background: var(--accent-lt); color: var(--accent); border: none; border-radius: 4px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .app-layout { grid-template-columns: 1fr; }
+      aside { max-height: 50vh; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    @media (max-width: 600px) {
+      header { padding: 0 12px; }
+      .design-count-badge { display: none; }
+    }
+
+    /* En tu <style> o archivo .css */
+.sec + .sec {
+  margin-top: 16px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+</style>
 </head>
 <body>
-<div id="app">
 
-    <!-- SIDEBAR -->
-    <div id="sidebar">
-        <div id="sidebar-header">
-            <div class="brand-badge">
-                <div class="brand-logo-mark">CS</div>
-                <div>
-                    <div class="brand-name">Chechena Shirts</div>
-                    <div class="brand-sub">Promo Maker</div>
-                </div>
-                <span class="ver-badge">Social</span>
-            </div>
-        </div>
-
-        <div id="sidebar-scroll">
-
-            <!-- Upload -->
-            <label for="upload-main" class="upload-zone">
-                <div class="icon-wrap">
-                    <i data-lucide="upload" style="width:18px;height:18px;color:#64748b;"></i>
-                </div>
-                <span class="main">Subir Diseños (PNG/JPG)</span>
-                <span class="sub">Puedes subir varios a la vez</span>
-                <input id="upload-main" type="file" style="display:none;" accept="image/png,image/jpeg" multiple />
-            </label>
-
-            <!-- Selector de Playera -->
-            <div class="control-card" id="shirt-picker-card">
-                <div class="control-card-title" style="justify-content:space-between;">
-                    <span style="display:flex;align-items:center;gap:6px;">
-                        <i data-lucide="shirt"></i> Modelo de Playera
-                    </span>
-                    <label for="upload-custom-shirt" style="cursor:pointer;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#64748b;background:#e2e8f0;padding:3px 8px;border-radius:5px;transition:all 0.15s;" onmouseover="this.style.background='#0f0f0f';this.style.color='#fff'" onmouseout="this.style.background='#e2e8f0';this.style.color='#64748b'">
-                        + Añadir
-                    </label>
-                    <input id="upload-custom-shirt" type="file" style="display:none;" accept="image/png,image/jpeg,image/webp" multiple />
-                </div>
-                <div id="shirt-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
-                <p id="shirt-hint" style="font-size:10px;color:#94a3b8;text-align:center;margin-top:8px;font-weight:600;">Haz clic en "+ Añadir" para cargar tus playeras desde<br><strong style="color:#64748b;">PAGINADEDISEÑOS</strong></p>
-            </div>
-            <!-- Enlace a descarga de playeras -->
-<div style="text-align:center;margin-top:10px;">
-  
-  <p style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:6px;">
-    ¿No tienes modelos de playera?
-  </p>
-
-  <a href="https://drive.google.com/drive/folders/1a7FARbTx_EOqnSutoUqNtivttZlaGzR6?usp=drive_link" target="_blank"
-     style="
-        display:inline-block;
-        font-size:10px;
-        font-weight:800;
-        text-transform:uppercase;
-        letter-spacing:0.1em;
-        color:#fff;
-        background:#0f0f0f;
-        padding:6px 12px;
-        border-radius:6px;
-        text-decoration:none;
-        transition:all 0.2s;
-     "
-     onmouseover="this.style.background='#2563eb'"
-     onmouseout="this.style.background='#0f0f0f'">
-     
-     📥 Descargar Playeras
-     
-  </a>
-
-  <p style="font-size:9px;color:#64748b;margin-top:6px;">
-    PNG sin fondo • Listas para usar
-  </p>
-
-</div>
-
-            <!-- Textos -->
-            <div class="control-card">
-                <div class="control-card-title">
-                    <i data-lucide="type"></i> Textos Principales
-                </div>
-                <div style="display:flex;flex-direction:column;gap:10px;">
-                    <div>
-                        <label class="field-label">Línea 1 (Gruesa)</label>
-                        <div style="display:flex;gap:8px;align-items:center;">
-                            <input id="textLine1" type="text" value="VECTORES" class="text-input" style="flex:1;" />
-                            <div style="position:relative;flex-shrink:0;">
-                                <input id="colorLine1" type="color" value="#ffffff" title="Color Línea 1" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="field-label">Línea 2 (Subtítulo Etiqueta)</label>
-                        <div style="display:flex;gap:8px;align-items:center;">
-                            <input id="textLine2" type="text" value="EDITABLES" class="text-input" style="flex:1;" />
-                            <div style="display:flex;gap:4px;flex-shrink:0;">
-                                <input id="colorLine2Text" type="color" value="#000000" title="Color texto" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);" />
-                                <input id="colorLine2Bg" type="color" value="#ffffff" title="Color fondo etiqueta" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);" />
-                            </div>
-                        </div>
-                        <div style="display:flex;gap:4px;margin-top:4px;">
-                            <span style="font-size:9px;color:var(--c-gray-500);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;flex:1;text-align:right;padding-right:2px;">Texto</span>
-                            <span style="font-size:9px;color:var(--c-gray-500);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;width:36px;text-align:center;">Fondo</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Marca -->
-            <div class="control-card">
-                <div class="control-card-title">
-                    <i data-lucide="tag"></i> Tu Marca (Opcional)
-                </div>
-                <div style="display:flex;flex-direction:column;gap:10px;">
-                    <div class="toggle-group">
-                        <button id="btnBrandText" class="toggle-btn active">Texto</button>
-                        <button id="btnBrandLogo" class="toggle-btn">Logo</button>
-                    </div>
-                    <div id="brandTextContainer">
-                        <div style="display:flex;gap:8px;align-items:center;">
-                            <input id="brandText" type="text" placeholder="EJ. MI MARCA" class="text-input" style="flex:1;" />
-                            <input id="colorBrand" type="color" value="#ffffff" title="Color TextoLogo" style="width:36px;height:36px;padding:2px;border:1px solid var(--c-gray-300);border-radius:8px;cursor:pointer;background:var(--c-white);flex-shrink:0;" />
-                        </div>
-                    </div>
-                    <div id="brandLogoContainer" style="display:none;">
-                        <label for="upload-logo" class="logo-upload-label" id="logoUploadLabel">
-                            <i data-lucide="image" style="width:14px;height:14px;margin-right:6px;"></i>
-                            Subir Logo (PNG)
-                        </label>
-                        <input id="upload-logo" type="file" style="display:none;" accept="image/png" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ajuste en Playera -->
-            <div class="control-card">
-                <div class="control-card-title">
-                    <i data-lucide="shirt"></i> Ajuste en Playera
-                </div>
-                <div style="display:flex;flex-direction:column;gap:12px;">
-                    <div class="range-row">
-                        <div class="range-label-row">
-                            <span class="range-label"><i data-lucide="maximize-2"></i> Escala</span>
-                            <span class="range-val" id="val-shirtDesignScale">45%</span>
-                        </div>
-                        <input id="shirtDesignScale" type="range" min="10" max="150" value="45" />
-                    </div>
-                    <div class="range-row">
-                        <div class="range-label-row">
-                            <span class="range-label"><i data-lucide="move-vertical"></i> Posición Y</span>
-                            <span class="range-val" id="val-shirtDesignY">40%</span>
-                        </div>
-                        <input id="shirtDesignY" type="range" min="-20" max="120" value="40" />
-                    </div>
-                    <div class="range-row">
-                        <div class="range-label-row">
-                            <span class="range-label"><i data-lucide="move-horizontal"></i> Posición X</span>
-                            <span class="range-val" id="val-shirtDesignX">50%</span>
-                        </div>
-                        <input id="shirtDesignX" type="range" min="-20" max="120" value="50" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Arte de Fondo -->
-            <div class="control-card">
-                <div class="control-card-title" style="justify-content:space-between;">
-                    <span style="display:flex;align-items:center;gap:6px;">
-                        <i data-lucide="layers"></i> Arte de Fondo
-                    </span>
-                    <div style="display:flex;align-items:center;gap:6px;">
-                        <label style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--c-gray-500);">Fondo</label>
-                        <input id="colorCanvasBg" type="color" value="#111111" title="Color de fondo del canvas" style="width:28px;height:28px;padding:2px;border:1px solid var(--c-gray-300);border-radius:6px;cursor:pointer;background:var(--c-white);" />
-                        <button id="btnBgGrayscale" class="bw-btn">B&W ON</button>
-                    </div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:12px;">
-                    <div class="range-row">
-                        <div class="range-label-row">
-                            <span class="range-label"><i data-lucide="sliders-horizontal"></i> Opacidad</span>
-                            <span class="range-val" id="val-bgOpacity">25%</span>
-                        </div>
-                        <input id="bgOpacity" type="range" min="0" max="100" value="25" />
-                    </div>
-                    <div class="range-row">
-                        <div class="range-label-row">
-                            <span class="range-label"><i data-lucide="maximize"></i> Escala</span>
-                            <span class="range-val" id="val-bgDesignScale">150%</span>
-                        </div>
-                        <input id="bgDesignScale" type="range" min="50" max="300" value="150" />
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                        <div class="range-row">
-                            <div class="range-label-row">
-                                <span class="range-label">Eje X</span>
-                            </div>
-                            <input id="bgDesignX" type="range" min="-50" max="150" value="10" />
-                        </div>
-                        <div class="range-row">
-                            <div class="range-label-row">
-                                <span class="range-label">Eje Y</span>
-                            </div>
-                            <input id="bgDesignY" type="range" min="-50" max="150" value="50" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div id="sidebar-footer">
-            <button id="btnExportZip" class="export-btn" disabled>
-                <i data-lucide="archive" id="zipIcon"></i>
-                <span id="btnExportZipText">Exportar Todos (ZIP)</span>
-            </button>
-        </div>
+  <!-- HEADER -->
+  <header>
+    <a href="#" class="logo">
+      <div class="logo-icon">PM</div>
+      PROMO MAKER
+    </a>
+    <span class="badge">Pro Studio</span>
+    <div class="header-right">
+      <div class="design-count-badge">
+        <span>Diseños:</span>
+        <strong id="headerCount">0</strong>
+      </div>
+      <button class="icon-btn" title="Limpiar todo" onclick="clearAll()">🗑</button>
     </div>
+  </header>
 
+  <!-- MAIN -->
+  <div class="app-layout">
+
+<aside>
+  <div class="sidebar-tabs">
+    <div class="stab active" onclick="switchTab('design')">🎨 Diseño</div>
+    <div class="stab" onclick="switchTab('text')">✏️ Texto</div>
+    <div class="stab" onclick="switchTab('brand')">🏷 Marca</div>
+    <div class="stab" onclick="switchTab('fondo')">🖼 Fondo</div>
+    <div class="stab" onclick="switchTab('history')">⏱ Historial</div>
+  </div>
+
+  <!-- TAB: DESIGN -->
+  <div class="sidebar-panel active" id="tab-design">
+    <div class="sidebar-scroll">
+
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" multiple />
+        <div class="upload-zone-icon">📁</div>
+        <p>Arrastra diseños o <strong>haz clic</strong></p>
+        <small>PNG · JPG · WEBP · Múltiples</small>
+      </div>
+
+      <div class="sec open" id="secPrenda">
+        <div class="sec-head" onclick="toggleSec('secPrenda')">
+          <div class="sec-icon">👕</div>
+          <span class="sec-title">Prenda</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="field">
+            <label class="lbl">Estilo</label>
+            <select id="modelSelect"></select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field">
+              <label class="lbl">Color</label>
+              <div class="seg" id="colorBtnGroup"></div>
+            </div>
+            <div class="field">
+              <label class="lbl">Vista</label>
+              <div class="seg">
+                <button class="seg-btn active" id="btnViewFront" onclick="setView('front')">Frente</button>
+                <button class="seg-btn" id="btnViewBack" onclick="setView('back')">Atrás</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec open" id="secShirt">
+        <div class="sec-head" onclick="toggleSec('secShirt')">
+          <div class="sec-icon">🖼</div>
+          <span class="sec-title">Ajuste en Playera</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="range-row">
+            <div class="range-head"><span>Escala</span><span class="range-val" id="valShirtScale">45%</span></div>
+            <input type="range" id="shirtScale" min="10" max="80" value="45" oninput="onRange(this,'valShirtScale','shirtDesignScale')" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Posición Y</span><span class="range-val" id="valShirtY">40%</span></div>
+            <input type="range" id="shirtY" min="10" max="80" value="40" oninput="onRange(this,'valShirtY','shirtDesignY')" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Posición X</span><span class="range-val" id="valShirtX">50%</span></div>
+            <input type="range" id="shirtX" min="20" max="80" value="50" oninput="onRange(this,'valShirtX','shirtDesignX')" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip" disabled onclick="handleExportZip()">
+        📦 <span id="btnZipText">Exportar Todos (ZIP)</span>
+      </button>
+      <button class="btn btn-ghost" onclick="saveToHistory()">💾 Guardar configuración</button>
+    </div>
+  </div>
+
+  <!-- TAB: TEXT -->
+  <div class="sidebar-panel" id="tab-text">
+    <div class="sidebar-scroll">
+      <div class="sec open" id="secTextos">
+        <div class="sec-head" onclick="toggleSec('secTextos')">
+          <div class="sec-icon">✏️</div>
+          <span class="sec-title">Textos</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="field">
+            <label class="lbl">Línea 1 (Título)</label>
+            <input type="text" id="textLine1" value="VECTORES" oninput="onTextChange()" />
+          </div>
+          <div class="field">
+            <label class="lbl">Línea 2 (Etiqueta)</label>
+            <input type="text" id="textLine2" value="EDITABLES" oninput="onTextChange()" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Tamaño título</span><span class="range-val" id="valFontSize">74px</span></div>
+            <input type="range" id="fontSize" min="30" max="120" value="74" oninput="onRange(this,'valFontSize','fontSize','px')" />
+          </div>
+          <div class="field">
+            <label class="lbl">Color de texto</label>
+            <input type="color" id="textColor" value="#ffffff" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="onTextColorChange(this.value)" />
+          </div>
+          <div class="field">
+            <label class="lbl">Presets rápidos</label>
+            <div class="text-presets" id="textPresets"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip2" disabled onclick="handleExportZip()">
+        📦 Exportar Todos (ZIP)
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB: BRAND -->
+  <div class="sidebar-panel" id="tab-brand">
+    <div class="sidebar-scroll">
+      <div class="sec open" id="secMarca">
+        <div class="sec-head" onclick="toggleSec('secMarca')">
+          <div class="sec-icon">🏷</div>
+          <span class="sec-title">Tu Marca</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="seg">
+            <button class="seg-btn active" id="btnBrandText" onclick="setBrandType('text')">Texto</button>
+            <button class="seg-btn" id="btnBrandLogo" onclick="setBrandType('logo')">Logo</button>
+            <button class="seg-btn" id="btnBrandNone" onclick="setBrandType('none')">Ninguno</button>
+          </div>
+          <div id="brandTextWrap">
+            <div class="field">
+              <label class="lbl">Nombre de Marca</label>
+              <input type="text" id="brandText" placeholder="EJ. MI MARCA" oninput="onBrandTextChange()" />
+            </div>
+          </div>
+          <div id="brandLogoWrap" style="display:none">
+            <label class="logo-upload-label">
+              <span>📤</span>
+              <span id="logoUploadTxt">Subir Logo (PNG)</span>
+              <input type="file" id="logoInput" accept="image/png" onchange="onLogoUpload(event)" />
+            </label>
+          </div>
+          <div class="field">
+            <label class="lbl">Posición de Marca</label>
+            <div class="seg">
+              <button class="seg-btn active" id="btnBrandTR" onclick="setBrandPos('tr')">↗ Arr. Der.</button>
+              <button class="seg-btn" id="btnBrandTL" onclick="setBrandPos('tl')">↖ Arr. Izq.</button>
+              <button class="seg-btn" id="btnBrandBR" onclick="setBrandPos('br')">↘ Ab. Der.</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip3" disabled onclick="handleExportZip()">
+        📦 Exportar Todos (ZIP)
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB: FONDO -->
+  <div class="sidebar-panel" id="tab-fondo">
+    <div class="sidebar-scroll">
+
+      <div class="sec open" id="secBgColor">
+        <div class="sec-head" onclick="toggleSec('secBgColor')">
+          <div class="sec-icon">🎨</div>
+          <span class="sec-title">Color de Fondo</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="color-presets" id="bgColorPresets"></div>
+          <div class="field">
+            <label class="lbl">Color personalizado</label>
+            <input type="color" id="customBgColor" value="#111111" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="setCustomBgColor(this.value)" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Gradiente (ángulo)</span><span class="range-val" id="valGradAngle">135°</span></div>
+            <input type="range" id="gradAngle" min="0" max="360" value="135" oninput="onRange(this,'valGradAngle','gradAngle','°')" />
+          </div>
+          <div class="field">
+            <label class="lbl">Color 2 (gradiente)</label>
+            <input type="color" id="customBgColor2" value="#1a1a2e" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="setCustomBgColor2(this.value)" />
+          </div>
+        </div>
+      </div>
+
+      <div class="sec open" id="secBg">
+        <div class="sec-head" onclick="toggleSec('secBg')">
+          <div class="sec-icon">🌌</div>
+          <span class="sec-title">Arte de Fondo <span style="font-size:.55rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">(detrás)</span></span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div style="font-size:.65rem;color:var(--text3);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-mono);line-height:1.5;">
+            💡 Tu diseño se usa como arte decorativo <strong style="color:var(--text2);">detrás</strong> de la playera, sin tapar el estilo.
+          </div>
+          <div class="toggle-row">
+            <span class="tl">Blanco y Negro</span>
+            <label class="toggle">
+              <input type="checkbox" id="bgGrayscale" checked onchange="onBgGrayscale()" />
+              <span class="ttrack"></span>
+            </label>
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Opacidad</span><span class="range-val" id="valBgOpacity">25%</span></div>
+            <input type="range" id="bgOpacity" min="0" max="100" value="25" oninput="onRange(this,'valBgOpacity','bgOpacity')" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Escala</span><span class="range-val" id="valBgScale">150%</span></div>
+            <input type="range" id="bgScale" min="50" max="300" value="150" oninput="onRange(this,'valBgScale','bgDesignScale')" />
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="range-row">
+              <div class="range-head"><span>Eje X</span></div>
+              <input type="range" id="bgX" min="-50" max="150" value="10" oninput="onRange(this,null,'bgDesignX')" />
+            </div>
+            <div class="range-row">
+              <div class="range-head"><span>Eje Y</span></div>
+              <input type="range" id="bgY" min="-50" max="150" value="50" oninput="onRange(this,null,'bgDesignY')" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip4" disabled onclick="handleExportZip()">
+        📦 Exportar Todos (ZIP)
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB: HISTORY -->
+  <div class="sidebar-panel" id="tab-history">
+    <div class="sidebar-scroll">
+      <p style="font-size:.72rem;color:var(--text3);font-family:var(--font-mono);text-align:center;padding:8px 0;">Guarda configuraciones para reutilizarlas</p>
+      <div class="hist-list" id="histList"></div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-ghost" onclick="clearHistory()">🗑 Borrar historial</button>
+    </div>
+  </div>
+
+</aside>
     <!-- PREVIEW -->
-    <div id="preview-area">
-        <div id="empty-state" class="empty-state">
-            <label for="upload-empty" style="cursor:pointer;">
-                <div class="empty-box">
-                    <i data-lucide="image" style="display:block;margin:0 auto 12px;"></i>
-                    <div class="t1">Área de Visualización</div>
-                    <div class="t2">Sube tus diseños a la izquierda o haz clic aquí.</div>
-                </div>
-                <input id="upload-empty" type="file" style="display:none;" accept="image/png,image/jpeg" multiple />
-            </label>
+    <main class="preview-area">
+      <div class="preview-toolbar">
+        <h2>VISTA PREVIA</h2>
+        <div class="toolbar-right">
+          <button class="grid-mode-btn" onclick="setGridMode(1)" title="Grande">◻</button>
+          <button class="grid-mode-btn active" onclick="setGridMode(2)" title="Mediano">⊞</button>
+          <button class="grid-mode-btn" onclick="setGridMode(3)" title="Pequeño">⊟</button>
         </div>
-        <div id="cards-grid" style="display:none;"></div>
+      </div>
+      <div id="previewArea"></div>
+    </main>
+
+  </div>
+
+  <!-- EXPORT OVERLAY -->
+  <div class="export-overlay" id="exportOverlay">
+    <div class="export-card">
+      <div class="export-spinner"></div>
+      <h3 id="exportTitle">Procesando…</h3>
+      <p id="exportSub">Por favor espera</p>
+      <div class="export-bar"><div class="export-bar-fill" id="exportProgressBar" style="width:0%"></div></div>
     </div>
+  </div>
 
-</div>
+  <!-- MODAL PREVIEW -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-close" onclick="closeModal()">✕</div>
+    <div class="modal-canvas" id="modalCanvas"></div>
+  </div>
 
-<script>
-// Patch CSS rules for html-to-image
-try {
-    if (typeof CSSStyleSheet !== 'undefined') {
-        const sheet = CSSStyleSheet.prototype;
-        const originalRules = Object.getOwnPropertyDescriptor(sheet, 'cssRules');
-        if (originalRules && !sheet.__patchedCssRules) {
-            Object.defineProperty(sheet, 'cssRules', {
-                get() { try { return originalRules.get.call(this); } catch(e) { return []; } }
-            });
-            sheet.__patchedCssRules = true;
-        }
-    }
-} catch(e) {}
+  <!-- NOTIFICATION -->
+  <div class="notif" id="notif"></div>
 
-const MOCKUP_URL = "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/2mkp_oversize.png?v=1769562951";
-const DUMMY_IMG = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  <script>
+  /* ── MODELS (original with all images) ── */
+  const MODELS = {
+    oversize:   { label:'Oversize',   defaultScale:42, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Over_blanca_frente.png?v=1770611266",    back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Over_Blanca_espalda.png?v=1770611264" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/over_negra_frente.png?v=1770611282",     back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/over_negra_espalda.png?v=1770611283" },
+      hueso:  { label:'Hueso',  front:"./img/hueso_front.png", 
+      back:"./img/hueso_back.png" },
+      gris:  { label:'Gris',  front:"./img/gris_front.png"
+            , back:"./img/gris_back.png" },
+    }},
+    oversize2:  { label:'Oversize 2', defaultScale:42, defaultY:50, baseScale:1.0,  colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/LimitedMX_RemoverFondo_300DPI_2026-01-28-07-26-40.png?v=1769585236", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Espalda_blanca_ov_nueva.png?v=1770157262" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/2mkp_oversize.png?v=1769562951",         back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Espalda_negra.png?v=1770156858" },
+acidwash: { 
+  label: 'Acid Wash', 
+  front: "https://i.ibb.co/7JCvcn70/acidwash-frente.png", 
+  back:  "https://i.ibb.co/svNXvWb5/acidwash-espalda.png" 
+},
+    }},
+    boxyfit:    { label:'Boxy Fit',   defaultScale:42, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Boxy_Blanca_Frente.png?v=1770611269",      back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Boxy_Blanca_Espalda.png?v=1770611268" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Box_Negro_1_frente.png?v=1770617022",      back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camiseta_boxy_fit_negra_espalda.png?v=1770617022" },
+    }},
+    regular:    { label:'Regular',    defaultScale:38, defaultY:48, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/CAMISETA_BLANCA_FRENTE.png?v=1770611278",            back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/CAMISETA_BLANCA_ESPALDA.png?v=1770611278" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camisa_regular_frente_negro.png?v=1770612123",       back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camisa_regular_espalda_negro.png?v=1770612123" },
+      azul_claro:  { label:'azul_claro',  front:"./img/azul_claro_front.png",
+       back:"./img/azul_claro_back.png" },
+    azul_oscuro:  { label:'azul_oscuro',  front:"./img/azul_oscuro_front.png",
+     back:"./img/azul_oscuro_back.png" },
+      beige:  { label:'beige',  front:"./img/beige_front.png",
+     back:"./img/beige_back.png" },
+      crema:  { label:'crema',  front:"./img/crema_front.png",
+     back:"./img/crema_back.png" },
+           verde_militar:  { label:'verde_militar',  front:"./img/verde_militar_front.png",
+     back:"./img/verde_militar_back.png" },
+          gris_claro:  { label:'gris_claro',  front:"./img/gris_claro_front.png",
+     back:"./img/gris_claro_back.png" },
 
-const state = {
+    
+  
+      }},
+    longsleeve: { label:'M. Larga',   defaultScale:36, defaultY:48, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_blanco_frente.png?v=1770611287",         back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_blanco_espalda.png?v=1770611288" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_Negro_frente.png?v=1770611278",          back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_largaNegro_espalda.png?v=1770611280" },
+    }},
+    polo:       { label:'Polo',        defaultScale:38, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Blanca_Frente.png?v=1770611272",                back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Blanca_Espalda.png?v=1770611268" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Negra_Frente.png?v=1770611288",                 back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Negra_Espalda.png?v=1770611287" },
+    }},
+    socks:      { label:'Calcetín',    defaultScale:30, defaultY:50, baseScale:1.4,  colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Blanco.png?v=1770611268",                   back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Blanco.png?v=1770611268" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Negro.png?v=1770611277",                    back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Negro.png?v=1770611277" },
+    }},
+    tank:       { label:'Sin Manga',   defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_blanca_frente.png?v=1770611285",  back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_blanca_espalda.png?v=1770611285" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_negra_frente.png?v=1770611286",   back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_negra_espalda.png?v=1770611285" },
+    }},
+    croptop:    { label:'Crop Top',    defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Frente_Blanco.png?v=1770611285",            back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Espalda_Blanco.png?v=1770611283" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Frente_Negro.png?v=1770611284",             back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Negro_Espalda.png?v=1770611284" },
+    }},
+    short: { label:'Short', defaultScale:25, defaultY:60, baseScale:0.85, colors:{
+  negro: { label:'Negro', front:"https://i.ibb.co/0R84b6wG/SHORT.png", },
+}},
+
+pants: { label:'Pants', defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+  negro: { label:'Negro', front:"https://i.ibb.co/8J03yZN/SHORT-19.png", },
+    blanco: { label:'blanco', front:"https://i.ibb.co/BHzNg0TJ/SHORT-20.png", },
+}},
+
+GORRA: { label:'GORRA', defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+  negro: { label:'Negro', front:"https://i.ibb.co/yckT7ht5/SHORT-21.png", },
+  negro_subli: { label:'negro_subli', front:"https://i.ibb.co/Mkm5M6QZ/SHORT-22.png", },
+   azul: { label:'azul', front:"https://i.ibb.co/nt1ZdqM/SHORT-23.png", },
+}},
+
+tote_bag: { label:'tote_bag', defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+  crema: { label:'Negro', front:"https://i.ibb.co/MxDthKF6/SHORT-25.png", },
+}},
+
+  };
+
+  const DUMMY = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+  /* ── BG COLOR PRESETS ── */
+  const BG_PRESETS = [
+    { c1:'#0d0d0d', c2:'#1a1a1a', label:'Obsidian' },
+    { c1:'#0f0c29', c2:'#302b63', label:'Night' },
+    { c1:'#1a0533', c2:'#4a0072', label:'Morado' },
+    { c1:'#000428', c2:'#004e92', label:'Azul' },
+    { c1:'#0f2027', c2:'#2c5364', label:'Teal' },
+    { c1:'#1a1a2e', c2:'#16213e', label:'Dark Blue' },
+    { c1:'#16002d', c2:'#800080', label:'Neon Viol.' },
+    { c1:'#1f0000', c2:'#7f0000', label:'Rojo' },
+    { c1:'#0a3300', c2:'#1a6600', label:'Verde' },
+    { c1:'#1a0f00', c2:'#664400', label:'Café' },
+    { c1:'#111111', c2:'#333333', label:'Gris' },
+    { c1:'#ffffff', c2:'#dddddd', label:'Blanco' },
+  ];
+
+  /* ── TEXT PRESETS ── */
+  const TEXT_PRESETS = [
+    { l1:'NUEVA', l2:'COLECCIÓN', name:'Nueva Col.' },
+    { l1:'EDICIÓN', l2:'LIMITADA', name:'Ed. Limitada' },
+    { l1:'DISPONIBLE', l2:'AHORA', name:'Disponible' },
+    { l1:'SALE', l2:'50% OFF', name:'Sale' },
+    { l1:'EXCLUSIVO', l2:'ONLINE', name:'Exclusivo' },
+    { l1:'AGOTÁNDOSE', l2:'RÁPIDO', name:'Agotándose' },
+    { l1:'LANZAMIENTO', l2:'ESPECIAL', name:'Lanzamiento' },
+    { l1:'VECTORES', l2:'EDITABLES', name:'Vectores' },
+  ];
+
+  /* ── STATE ── */
+  const S = {
     designs: [],
-    textLine1: "VECTORES",
-    textLine2: "EDITABLES",
+    model: 'oversize2',
+    color: 'blanco',
+    view: 'front',
+    line1: 'VECTORES',
+    line2: 'EDITABLES',
+    fontSize: 74,
+    textColor: '#ffffff',
     brandType: 'text',
     brandText: '',
-    brandLogoUrl: null,
-    shirtDesignScale: 45,
-    shirtDesignX: 50,
-    shirtDesignY: 40,
-    bgDesignScale: 150,
-    bgDesignX: 10,
-    bgDesignY: 50,
-    bgOpacity: 25,
-    bgGrayscale: true,
+    brandLogo: null,
+    brandPos: 'tr',
+    shirtDesignScale: '45%',
+    shirtDesignX: '50%',
+    shirtDesignY: '40%',
+    bgDesignScale: '150',
+    bgDesignX: '10',
+    bgDesignY: '50',
+    bgOpacity: '.25',
+    bgFilter: 'grayscale(100%)',
+    bgColor1: '#0d0d0d',
+    bgColor2: '#1a1a1a',
+    gradAngle: 135,
+    mockupB64: null,
     isExporting: false,
-    mockupBase64: null,
-    // Colors
-    colorLine1: '#ffffff',
-    colorLine2Text: '#000000',
-    colorLine2Bg: '#ffffff',
-    colorBrand: '#ffffff',
-    colorCanvasBg: '#111111',
-    // Shirt picker
-    shirtMockups: [], // { id, url, name }
-    selectedShirtId: null
-};
+    gridMode: 2,
+    history: [],
+  };
 
-// Preload mockup
-function getActiveMockupUrl() {
-    if (state.selectedShirtId) {
-        const found = state.shirtMockups.find(s => s.id === state.selectedShirtId);
-        if (found) return found.url;
-    }
-    return state.mockupBase64 || MOCKUP_URL;
-}
+  /* ── TABS ── */
+  function switchTab(name) {
+    document.querySelectorAll('.stab').forEach((t,i) => {
+      const tabs = ['design','text','brand','history'];
+      t.classList.toggle('active', tabs[i] === name);
+    });
+    document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+  }
 
-function preloadMockup() {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.onload = () => {
-        const c = document.createElement('canvas');
-        c.width = img.width; c.height = img.height;
-        c.getContext('2d').drawImage(img, 0, 0);
-        state.mockupBase64 = c.toDataURL('image/png');
-        renderUI();
+  /* ── SECTION TOGGLE ── */
+  function toggleSec(id) { /* secciones siempre abiertas */ }
+
+  /* ── GRID MODE ── */
+  function setGridMode(n) {
+    S.gridMode = n;
+    document.querySelectorAll('.grid-mode-btn').forEach((b,i) => b.classList.toggle('active', i+1 === n));
+    const grid = document.querySelector('.card-grid');
+    if (grid) { grid.className = 'card-grid grid-' + n; updateCardScales(); }
+  }
+
+  /* ── BG COLOR PRESETS ── */
+  function initBgColorPresets() {
+    const cont = document.getElementById('bgColorPresets');
+    BG_PRESETS.forEach((p,i) => {
+      const btn = document.createElement('div');
+      btn.className = 'cp' + (i===0 ? ' active' : '');
+      btn.title = p.label;
+      btn.style.background = `linear-gradient(135deg, ${p.c1}, ${p.c2})`;
+      btn.onclick = () => {
+        document.querySelectorAll('.cp').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        S.bgColor1 = p.c1; S.bgColor2 = p.c2;
+        document.getElementById('customBgColor').value = p.c1;
+        document.getElementById('customBgColor2').value = p.c2;
+        renderCards();
+      };
+      cont.appendChild(btn);
+    });
+  }
+
+  function setCustomBgColor(v) { S.bgColor1 = v; renderCards(); }
+  function setCustomBgColor2(v) { S.bgColor2 = v; renderCards(); }
+
+  /* ── TEXT PRESETS ── */
+  function initTextPresets() {
+    const cont = document.getElementById('textPresets');
+    TEXT_PRESETS.forEach(p => {
+      const btn = document.createElement('div');
+      btn.className = 'tp';
+      btn.textContent = p.name;
+      btn.onclick = () => {
+        S.line1 = p.l1; S.line2 = p.l2;
+        document.getElementById('textLine1').value = p.l1;
+        document.getElementById('textLine2').value = p.l2;
+        renderCards();
+        notify('Texto aplicado: ' + p.name, 'success');
+      };
+      cont.appendChild(btn);
+    });
+  }
+
+  /* ── HISTORY ── */
+  function saveToHistory() {
+    const snap = {
+      id: Date.now(),
+      time: new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}),
+      label: S.line1 + ' · ' + MODELS[S.model].label,
+      state: JSON.stringify({...S, designs:[], mockupB64:null})
     };
-    img.onerror = () => {};
-    img.src = MOCKUP_URL + "?cb=" + Date.now();
-}
+    S.history.unshift(snap);
+    if (S.history.length > 20) S.history.pop();
+    renderHistory();
+    notify('Configuración guardada', 'success');
+  }
 
-function setCSSVars(node) {
-    const el = node || document.documentElement;
-    el.style.setProperty('--shirt-scale', state.shirtDesignScale + '%');
-    el.style.setProperty('--shirt-x', state.shirtDesignX + '%');
-    el.style.setProperty('--shirt-y', state.shirtDesignY + '%');
-    el.style.setProperty('--bg-scale', state.bgDesignScale + '%');
-    el.style.setProperty('--bg-x', state.bgDesignX + '%');
-    el.style.setProperty('--bg-y', state.bgDesignY + '%');
-    el.style.setProperty('--bg-opacity', state.bgOpacity / 100);
-    el.style.setProperty('--bg-filter', state.bgGrayscale ? 'grayscale(100%)' : 'none');
-}
-
-function getCanvasHTML(designUrl) {
-    const safeUrl = designUrl || DUMMY_IMG;
-    const safeLogo = state.brandLogoUrl || DUMMY_IMG;
-
-    const bgHTML = designUrl ? `
-        <img src="${safeUrl}" class="layer-bg-art" alt="" />
-    ` : '';
-
-    const shirtHTML = designUrl ? `
-        <div class="layer-shirt" style="left:var(--shirt-x);top:var(--shirt-y);width:var(--shirt-scale);transform:translate(-50%,-50%);">
-            <img src="${safeUrl}" class="layer-shirt-inner" alt="" />
+  function renderHistory() {
+    const list = document.getElementById('histList');
+    list.innerHTML = '';
+    if (!S.history.length) {
+      list.innerHTML = '<p style="font-size:.72rem;color:var(--text3);font-family:var(--font-mono);text-align:center;padding:20px 0;">Sin guardados aún</p>';
+      return;
+    }
+    S.history.forEach(h => {
+      const item = document.createElement('div');
+      item.className = 'hist-item';
+      item.innerHTML = `
+        <div class="hist-icon">💾</div>
+        <div class="hist-info">
+          <div class="hist-name">${h.label}</div>
+          <div class="hist-time">${h.time}</div>
         </div>
-    ` : '';
+        <button class="hist-apply" onclick="applyHistory(${h.id})">Aplicar</button>
+      `;
+      list.appendChild(item);
+    });
+  }
 
-    const text1Show = state.textLine1 ? 'block' : 'none';
-    const text2Show = state.textLine2 ? 'inline-block' : 'none';
+  function applyHistory(id) {
+    const h = S.history.find(x => x.id === id);
+    if (!h) return;
+    const saved = JSON.parse(h.state);
+    Object.assign(S, saved);
+    // sync UI
+    document.getElementById('textLine1').value = S.line1;
+    document.getElementById('textLine2').value = S.line2;
+    document.getElementById('modelSelect').value = S.model;
+    document.getElementById('fontSize').value = S.fontSize;
+    document.getElementById('textColor').value = S.textColor;
+    renderColorButtons(); applyModelDefaults(); preloadMockup(); renderCards();
+    notify('Configuración aplicada', 'success');
+  }
 
-    const finalMockup = getActiveMockupUrl();
-    const crossAttr = finalMockup.startsWith('data:') ? '' : 'crossorigin="anonymous"';
+  function clearHistory() {
+    S.history = [];
+    renderHistory();
+    notify('Historial borrado', 'success');
+  }
 
-    const brandTextShow = (state.brandType === 'text' && state.brandText) ? 'block' : 'none';
-    const brandLogoShow = (state.brandType === 'logo' && state.brandLogoUrl) ? 'block' : 'none';
+  /* ── NOTIFICATION ── */
+  let _notifT;
+  function notify(msg, type='success') {
+    const n = document.getElementById('notif');
+    n.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
+    n.className = 'notif ' + type + ' show';
+    clearTimeout(_notifT);
+    _notifT = setTimeout(() => n.classList.remove('show'), 2800);
+  }
+
+  /* ── MODEL SELECT ── */
+  function initModelSelect() {
+    const sel = document.getElementById('modelSelect');
+    for (const [key, m] of Object.entries(MODELS)) {
+      const opt = document.createElement('option');
+      opt.value = key; opt.textContent = m.label;
+      sel.appendChild(opt);
+    }
+    sel.value = S.model;
+    sel.addEventListener('change', e => {
+      S.model = e.target.value;
+      const m = MODELS[S.model];
+      S.color = m.colors ? Object.keys(m.colors)[0] : 'blanco';
+      renderColorButtons(); applyModelDefaults(); preloadMockup();
+    });
+    renderColorButtons();
+  }
+
+  function renderColorButtons() {
+    const m = MODELS[S.model];
+    const cont = document.getElementById('colorBtnGroup');
+    cont.innerHTML = '';
+    if (!m.colors) return;
+    for (const [key, c] of Object.entries(m.colors)) {
+      const btn = document.createElement('button');
+      btn.className = 'seg-btn' + (key === S.color ? ' active' : '');
+      btn.textContent = c.label || key;
+      btn.onclick = () => {
+        S.color = key;
+        cont.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        preloadMockup();
+      };
+      cont.appendChild(btn);
+    }
+  }
+
+  function applyModelDefaults() {
+    const m = MODELS[S.model];
+    if (!m) return;
+    const scale = m.defaultScale || 42;
+    const y = m.defaultY || 50;
+    S.shirtDesignScale = scale + '%';
+    S.shirtDesignY = y + '%';
+    document.getElementById('shirtScale').value = scale;
+    document.getElementById('valShirtScale').textContent = scale + '%';
+    document.getElementById('shirtY').value = y;
+    document.getElementById('valShirtY').textContent = y + '%';
+    renderCards();
+  }
+
+  function setView(v) {
+    S.view = v;
+    document.getElementById('btnViewFront').classList.toggle('active', v==='front');
+    document.getElementById('btnViewBack').classList.toggle('active', v==='back');
+    preloadMockup();
+  }
+
+  /* ── BRAND POS ── */
+  function setBrandPos(p) {
+    S.brandPos = p;
+    ['tr','tl','br'].forEach(x => document.getElementById('btnBrand'+x.toUpperCase()).classList.toggle('active', x===p));
+    renderCards();
+  }
+
+  /* ── BRAND TYPE ── */
+  function setBrandType(t) {
+    S.brandType = t;
+    document.getElementById('btnBrandText').classList.toggle('active', t==='text');
+    document.getElementById('btnBrandLogo').classList.toggle('active', t==='logo');
+    document.getElementById('btnBrandNone').classList.toggle('active', t==='none');
+    document.getElementById('brandTextWrap').style.display = t==='text' ? '' : 'none';
+    document.getElementById('brandLogoWrap').style.display = t==='logo' ? '' : 'none';
+    renderCards();
+  }
+
+  /* ── PRELOAD MOCKUP ── */
+  function preloadMockup() {
+    const m = MODELS[S.model];
+    if (!m || !m.colors) { S.mockupB64 = null; renderCards(); return; }
+    const c = m.colors[S.color];
+    if (!c) { S.mockupB64 = null; renderCards(); return; }
+    const url = S.view === 'back' ? c.back : c.front;
+    if (!url || url.startsWith('data:')) { S.mockupB64 = url || null; renderCards(); return; }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const cv = document.createElement('canvas');
+        cv.width = img.naturalWidth; cv.height = img.naturalHeight;
+        cv.getContext('2d').drawImage(img, 0, 0);
+        S.mockupB64 = cv.toDataURL('image/png');
+      } catch(e) { S.mockupB64 = url; }
+      renderCards();
+    };
+    img.onerror = () => { S.mockupB64 = url; renderCards(); };
+    img.src = url;
+  }
+
+  /* ── FILES ── */
+  function handleFiles(files) {
+    const accepted = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (!accepted.length) return;
+    let loaded = 0;
+    accepted.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        S.designs.push({ url: e.target.result, name: file.name });
+        loaded++;
+        if (loaded === accepted.length) {
+          renderPreview();
+          updateHeaderCount();
+          notify(`${accepted.length} diseño(s) añadido(s)`, 'success');
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function clearAll() {
+    if (!S.designs.length) return;
+    if (!confirm('¿Eliminar todos los diseños?')) return;
+    S.designs = [];
+    renderPreview(); updateHeaderCount();
+    notify('Todo limpiado', 'success');
+  }
+
+  function updateHeaderCount() {
+    document.getElementById('headerCount').textContent = S.designs.length;
+    // sync all export buttons
+    ['btnExportZip','btnExportZip2','btnExportZip3'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = S.designs.length === 0 || S.isExporting;
+    });
+  }
+
+  /* ── RANGE ── */
+  function onRange(el, valId, stateKey, suffix='%') {
+    const v = el.value;
+    if (valId) document.getElementById(valId).textContent = v + suffix;
+    if (stateKey === 'shirtDesignScale' || stateKey === 'shirtDesignX' || stateKey === 'shirtDesignY') {
+      S[stateKey] = v + '%';
+    } else if (stateKey === 'bgOpacity') {
+      S.bgOpacity = (v / 100).toFixed(2);
+    } else if (stateKey === 'fontSize') {
+      S.fontSize = parseInt(v);
+    } else if (stateKey === 'gradAngle') {
+      S.gradAngle = parseInt(v);
+    } else {
+      S[stateKey] = v;
+    }
+    renderCards();
+  }
+
+  function onBgGrayscale() {
+    S.bgFilter = document.getElementById('bgGrayscale').checked ? 'grayscale(100%)' : 'none';
+    renderCards();
+  }
+
+  function onTextChange() {
+    S.line1 = document.getElementById('textLine1').value;
+    S.line2 = document.getElementById('textLine2').value;
+    renderCards();
+  }
+
+  function onTextColorChange(v) { S.textColor = v; renderCards(); }
+
+  function onBrandTextChange() {
+    S.brandText = document.getElementById('brandText').value;
+    renderCards();
+  }
+
+  function onLogoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      S.brandLogo = ev.target.result;
+      document.getElementById('logoUploadTxt').textContent = file.name;
+      renderCards();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ── BUILD CANVAS HTML ── */
+  function buildCanvasHTML(designUrl) {
+    const m = MODELS[S.model];
+    const baseScale = m ? m.baseScale || 1.0 : 1.0;
+    const mockup = S.mockupB64 || DUMMY;
+    const crossAttr = mockup.startsWith('http') ? 'crossorigin="anonymous"' : '';
+
+    const bgStyle = `background: linear-gradient(${S.gradAngle}deg, ${S.bgColor1}, ${S.bgColor2}); position:absolute; inset:0;`;
+
+    const bgArt = designUrl ? `<img src="${designUrl}"
+      style="position:absolute;
+        width:calc(${S.bgDesignScale}*10px);height:auto;
+        left:calc(${S.bgDesignX}*1%);top:calc(${S.bgDesignY}*1%);
+        transform:translate(-50%,-50%);
+        opacity:${S.bgOpacity};filter:${S.bgFilter};
+        mix-blend-mode:lighten;pointer-events:none;z-index:2;">` : '';
+
+    const c1 = escHtml(S.line1);
+    const c2 = escHtml(S.line2);
+    const line1 = c1 ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:${S.fontSize}px;font-weight:900;color:${S.textColor};line-height:1;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 6px 24px rgba(0,0,0,.7);">${c1}</div>` : '';
+    const line2 = c2 ? `<div style="display:inline-block;background:#fff;padding:5px 14px;margin-top:-8px;margin-left:6px;box-shadow:0 8px 28px rgba(0,0,0,.45);"><span style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#111;letter-spacing:.05em;text-transform:uppercase;line-height:1;">${c2}</span></div>` : '';
+
+    const designOnShirt = designUrl ? `<div style="position:absolute;left:${S.shirtDesignX};top:${S.shirtDesignY};
+      width:${S.shirtDesignScale};transform:translate(-50%,-50%);z-index:25;">
+      <img src="${designUrl}" style="width:100%;height:auto;">
+    </div>` : '';
+
+    // Brand position
+    let brandPosStyle = 'top:50px;right:50px;text-align:right;';
+    if (S.brandPos === 'tl') brandPosStyle = 'top:50px;left:50px;text-align:left;';
+    if (S.brandPos === 'br') brandPosStyle = 'bottom:50px;right:50px;text-align:right;';
+
+    let brand = '';
+    if (S.brandType === 'text' && S.brandText) {
+      brand = `<div style="font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,.5);opacity:.85;">${escHtml(S.brandText)}</div>`;
+    } else if (S.brandType === 'logo' && S.brandLogo) {
+      brand = `<img src="${S.brandLogo}" style="height:60px;width:auto;max-width:250px;object-fit:contain;opacity:.85;">`;
+    }
 
     return `
-        <div style="position:absolute;inset:0;background:${state.colorCanvasBg};"></div>
-        ${bgHTML}
-        <div class="layer-texts">
-            <span class="canvas-title" style="display:${text1Show};color:${state.colorLine1};">${state.textLine1}</span>
-            <div class="canvas-subtitle-wrap" style="display:${text2Show};background:${state.colorLine2Bg};">
-                <span class="canvas-subtitle" style="color:${state.colorLine2Text};">${state.textLine2}</span>
-            </div>
-        </div>
-        <div class="layer-mockup-wrap">
-            <img src="${finalMockup}" ${crossAttr} alt="mockup" />
-            ${shirtHTML}
-        </div>
-        <div class="layer-brand">
-            <div class="canvas-brand-text dyn-brand-text" style="display:${brandTextShow};color:${state.colorBrand};">${state.brandText}</div>
-            <img class="canvas-brand-logo dyn-brand-logo" src="${safeLogo}" style="display:${brandLogoShow};" alt="logo" />
-        </div>
+      <div style="${bgStyle};z-index:1;"></div>
+      ${bgArt}
+      <div style="position:absolute;top:50px;left:50px;z-index:30;pointer-events:none;">
+        ${line1}${line2}
+      </div>
+      <div style="position:absolute;right:-150px;top:50px;width:1200px;height:1200px;
+        transform:scale(${baseScale});transform-origin:center;pointer-events:none;z-index:20;
+        display:flex;align-items:center;justify-content:center;">
+        <img src="${mockup}" ${crossAttr} style="position:absolute;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 50px rgba(0,0,0,.7));">
+        ${designOnShirt}
+      </div>
+      ${brand ? `<div style="position:absolute;${brandPosStyle}z-index:100;pointer-events:none;">${brand}</div>` : ''}
     `;
-}
+  }
 
-function updateScales() {
-    document.querySelectorAll('.card-wrap').forEach(card => {
-        const inner = card.querySelector('.canvas-inner');
-        if (inner) {
-            const scale = card.clientWidth / 1080;
-            inner.style.transform = `scale(${scale})`;
-        }
+  function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── RENDER PREVIEW ── */
+  function renderPreview() {
+    const area = document.getElementById('previewArea');
+
+    if (S.designs.length === 0) {
+      area.innerHTML = `
+        <div class="empty-state fade-up" onclick="document.getElementById('fileInput').click()">
+          <input type="file" id="fileInputEmpty" accept="image/png,image/jpeg,image/webp" multiple onchange="handleFilesFromInput(this)" style="position:absolute;inset:0;opacity:0;cursor:pointer;" />
+          <div class="empty-icon">🖼️</div>
+          <h3>SUBE TUS DISEÑOS</h3>
+          <p>Arrastra archivos aquí o haz clic para explorar<br/>PNG · JPG · WEBP</p>
+        </div>`;
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'card-grid grid-' + S.gridMode;
+
+    S.designs.forEach((d, i) => {
+      const card = document.createElement('div');
+      card.className = 'preview-card fade-up';
+      card.style.animationDelay = (i * .04) + 's';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'card-canvas-wrapper';
+      wrapper.innerHTML = buildCanvasHTML(d.url);
+
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+      actions.innerHTML = `
+        <button class="card-btn" title="Vista completa" onclick="openModal(${i})">🔍</button>
+        <button class="card-btn dl" title="Descargar" onclick="exportSingle(${i})">⬇</button>
+        <button class="card-btn del" title="Eliminar" onclick="removeDesign(${i})">✕</button>`;
+
+      const num = document.createElement('div');
+      num.className = 'card-num';
+      num.textContent = String(i + 1).padStart(2, '0');
+
+      card.appendChild(wrapper);
+      card.appendChild(actions);
+      card.appendChild(num);
+      grid.appendChild(card);
     });
-}
 
-function renderUI() {
-    setCSSVars();
-    const grid = document.getElementById('cards-grid');
-    const empty = document.getElementById('empty-state');
-    const exportBtn = document.getElementById('btnExportZip');
+    area.innerHTML = '';
+    area.appendChild(grid);
+    updateCardScales();
+  }
 
-    if (state.designs.length === 0) {
-        grid.style.display = 'none';
-        empty.style.display = 'flex';
-        exportBtn.disabled = true;
-        lucide.createIcons();
-        return;
+  function renderCards() {
+    document.querySelectorAll('.card-canvas-wrapper').forEach((wrapper, i) => {
+      const design = S.designs[i];
+      if (!design) return;
+      wrapper.innerHTML = buildCanvasHTML(design.url);
+    });
+    // update modal if open
+    const modal = document.getElementById('modalCanvas');
+    if (modal.children.length && S._modalIdx !== undefined) {
+      const w = modal.querySelector('.card-canvas-wrapper');
+      if (w && S.designs[S._modalIdx]) w.innerHTML = buildCanvasHTML(S.designs[S._modalIdx].url);
     }
+    updateHeaderCount();
+  }
 
-    empty.style.display = 'none';
-    grid.style.display = 'grid';
-    exportBtn.disabled = state.isExporting;
-
-    grid.innerHTML = state.designs.map((d, i) => `
-        <div class="card-wrap" id="card-${i}">
-            <div class="canvas-inner">${getCanvasHTML(d.url)}</div>
-            <div class="card-actions">
-                <button class="card-action-btn dl" onclick="exportSingle(${i})" title="Descargar">
-                    <i data-lucide="download"></i>
-                </button>
-                <button class="card-action-btn rm" onclick="removeDesign(${i})" title="Eliminar">
-                    <i data-lucide="trash-2"></i>
-                </button>
-            </div>
-            <div class="card-num">${String(i+1).padStart(2,'0')}</div>
-        </div>
-    `).join('');
-
-    lucide.createIcons();
-    updateScales();
-    setTimeout(updateScales, 50);
-    setTimeout(updateScales, 300);
-}
-
-async function handleFileUpload(e) {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
-    const newDesigns = await Promise.all(files.map(f => new Promise(resolve => {
-        const r = new FileReader();
-        r.onload = ev => resolve({ id: Math.random().toString(36).slice(2), url: ev.target.result, name: f.name });
-        r.readAsDataURL(f);
-    })));
-    state.designs = [...state.designs, ...newDesigns];
-    e.target.value = '';
-    renderUI();
-}
-
-window.removeDesign = function(i) {
-    state.designs.splice(i, 1);
-    renderUI();
-};
-
-function setExportState(on, text = '') {
-    state.isExporting = on;
-    const btn = document.getElementById('btnExportZip');
-    const icon = document.getElementById('zipIcon');
-    const span = document.getElementById('btnExportZipText');
-    if (on) {
-        btn.disabled = true;
-        icon.style.opacity = '0';
-        span.textContent = text;
-    } else {
-        btn.disabled = state.designs.length === 0;
-        icon.style.opacity = '1';
-        span.textContent = 'Exportar Todos (ZIP)';
+  /* ── CARD SCALES ── */
+  function updateCardScales() {
+    document.querySelectorAll('.preview-card').forEach(card => {
+      const w = card.clientWidth;
+      const scale = w / 1080;
+      const wrapper = card.querySelector('.card-canvas-wrapper');
+      if (wrapper) wrapper.style.transform = `scale(${scale})`;
+    });
+    // modal
+    const mc = document.getElementById('modalCanvas');
+    if (mc.children.length) {
+      const w = mc.clientWidth;
+      const scale = w / 1080;
+      const wrapper = mc.querySelector('.card-canvas-wrapper');
+      if (wrapper) wrapper.style.transform = `scale(${scale})`;
     }
-}
+  }
+  window.addEventListener('resize', updateCardScales);
 
-async function captureDesign(idx) {
-    const design = state.designs[idx];
+  /* ── MODAL ── */
+  function openModal(idx) {
+    S._modalIdx = idx;
+    const mc = document.getElementById('modalCanvas');
+    mc.style.width = Math.min(700, window.innerWidth - 40) + 'px';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'card-canvas-wrapper';
+    wrapper.style.background = '#0a0a0c';
+    wrapper.innerHTML = buildCanvasHTML(S.designs[idx].url);
+    mc.innerHTML = '';
+    mc.appendChild(wrapper);
+    document.getElementById('modalOverlay').classList.add('visible');
+    setTimeout(updateCardScales, 50);
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modalOverlay') && !e.currentTarget.classList.contains('modal-close')) return;
+    document.getElementById('modalOverlay').classList.remove('visible');
+    document.getElementById('modalCanvas').innerHTML = '';
+    S._modalIdx = undefined;
+  }
+
+  /* ── REMOVE ── */
+  window.removeDesign = function(i) {
+    S.designs.splice(i, 1);
+    renderPreview(); updateHeaderCount();
+    notify('Diseño eliminado', 'success');
+  };
+
+  /* ── EXPORT ── */
+  function setExporting(flag, title='Procesando…', sub='Por favor espera', progress=0) {
+    S.isExporting = flag;
+    document.getElementById('exportOverlay').classList.toggle('visible', flag);
+    document.getElementById('exportTitle').textContent = title;
+    document.getElementById('exportSub').textContent = sub;
+    document.getElementById('exportProgressBar').style.width = progress + '%';
+    updateHeaderCount();
+  }
+
+  async function captureDesign(idx) {
+    const design = S.designs[idx];
+    if (!design || !window.htmlToImage) throw new Error('htmlToImage no disponible');
     const node = document.createElement('div');
-    node.style.cssText = `width:1080px;height:1080px;background:${state.colorCanvasBg};position:fixed;top:0;left:0;z-index:-9999;pointer-events:none;overflow:hidden;`;
-    setCSSVars(node);
-    node.innerHTML = getCanvasHTML(design.url);
+    node.style.cssText = 'width:1080px;height:1080px;background:#0a0a0c;position:fixed;top:0;left:0;z-index:-9999;pointer-events:none;overflow:hidden;';
+    node.innerHTML = buildCanvasHTML(design.url);
     document.body.appendChild(node);
-
     await Promise.all(Array.from(node.querySelectorAll('img')).map(img =>
-        img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
+      img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
     ));
     await document.fonts.ready;
     await new Promise(r => setTimeout(r, 80));
-
     try {
-        const dataUrl = await window.htmlToImage.toJpeg(node, {
-            quality: 0.88, pixelRatio: 1.5,
-            backgroundColor: state.colorCanvasBg,
-            style: { transform: 'scale(1)', transformOrigin: 'top left' }
-        });
-        const arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]); let n = bstr.length;
-        const u8 = new Uint8Array(n);
-        while (n--) u8[n] = bstr.charCodeAt(n);
-        return new Blob([u8], { type: mime });
+      const dataUrl = await window.htmlToImage.toJpeg(node, { quality: 0.92, pixelRatio: 1.5, backgroundColor: S.bgColor1 });
+      const arr = dataUrl.split(',');
+      const bstr = atob(arr[1]);
+      const u8 = new Uint8Array(bstr.length);
+      for (let i = 0; i < bstr.length; i++) u8[i] = bstr.charCodeAt(i);
+      return new Blob([u8], { type: 'image/jpeg' });
     } finally {
-        if (node.parentNode) node.parentNode.removeChild(node);
+      document.body.removeChild(node);
     }
-}
+  }
 
-window.exportSingle = async function(idx) {
-    setExportState(true, 'Generando...');
+  window.exportSingle = async function(idx) {
+    setExporting(true, 'Generando imagen…', `Diseño ${idx+1} de ${S.designs.length}`, 50);
     try {
-        const blob = await captureDesign(idx);
-        const a = document.createElement('a');
-        a.download = `chechenashirts-${state.textLine1.replace(/\s+/g,'-')}-${idx+1}.jpg`;
-        a.href = URL.createObjectURL(blob);
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    } catch(e) {
-        alert('Error al exportar: ' + (e.message || e));
-    } finally {
-        setExportState(false);
-    }
-};
+      const blob = await captureDesign(idx);
+      const link = document.createElement('a');
+      link.download = `promo-${S.line1.replace(/\s+/g,'-') || 'diseño'}-${idx+1}.jpg`;
+      link.href = URL.createObjectURL(blob);
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      notify('Imagen descargada', 'success');
+    } catch(err) {
+      notify('Error: ' + (err.message || err), 'error');
+    } finally { setExporting(false); }
+  };
 
-document.getElementById('btnExportZip').addEventListener('click', async () => {
-    if (!state.designs.length || !window.JSZip) return;
-    setExportState(true, 'Preparando ZIP...');
+  window.handleExportZip = async function() {
+    if (!S.designs.length || !window.JSZip) return;
+    const total = S.designs.length;
+    setExporting(true, 'Preparando ZIP…', `0 de ${total} diseños`, 0);
     try {
-        const zip = new window.JSZip();
-        for (let i = 0; i < state.designs.length; i++) {
-            setExportState(true, `Procesando ${i+1}/${state.designs.length}...`);
-            const blob = await captureDesign(i);
-            zip.file(`chechenashirts-${state.textLine1.replace(/\s+/g,'-')}-${i+1}.jpg`, blob);
-            await new Promise(r => setTimeout(r, 40));
-        }
-        setExportState(true, 'Comprimiendo...');
-        const content = await zip.generateAsync({ type: 'blob' });
-        const a = document.createElement('a');
-        a.download = `chechenashirts-${state.textLine1.replace(/\s+/g,'-')}-Pack.zip`;
-        a.href = URL.createObjectURL(content);
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    } catch(e) {
-        alert('Error al crear ZIP: ' + (e.message || e));
-    } finally {
-        setExportState(false);
-    }
-});
+      const zip = new window.JSZip();
+      for (let i = 0; i < total; i++) {
+        setExporting(true, `Procesando ${i+1} de ${total}`, 'Generando imagen…', Math.round((i/total)*90));
+        const blob = await captureDesign(i);
+        zip.file(`promo-${S.line1.replace(/\s+/g,'-') || 'diseño'}-${i+1}.jpg`, blob);
+        await new Promise(r => setTimeout(r, 40));
+      }
+      setExporting(true, 'Comprimiendo…', 'Casi listo…', 95);
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const link = document.createElement('a');
+      link.download = `promo-pack-${S.line1.replace(/\s+/g,'-') || 'diseños'}.zip`;
+      link.href = URL.createObjectURL(zipBlob);
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      notify(`ZIP con ${total} imágenes listo`, 'success');
+    } catch(err) {
+      notify('Error ZIP: ' + (err.message || err), 'error');
+    } finally { setExporting(false); }
+  };
 
-// ── Shirt Picker ──────────────────────────────────────────────
-function renderShirtPicker() {
-    const grid = document.getElementById('shirt-grid');
-    const hint = document.getElementById('shirt-hint');
-    if (!grid) return;
+  /* ── DRAG & DROP ── */
+  function initDragDrop() {
+    const zone = document.getElementById('uploadZone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+  }
 
-    if (state.shirtMockups.length === 0) {
-        grid.innerHTML = '';
-        if (hint) hint.style.display = 'block';
-        return;
-    }
-    if (hint) hint.style.display = 'none';
+  window.handleFilesFromInput = function(inp) { handleFiles(inp.files); inp.value=''; };
 
-    grid.innerHTML = state.shirtMockups.map(s => `
-        <div class="shirt-thumb ${state.selectedShirtId === s.id ? 'selected' : ''}" 
-             onclick="selectShirt('${s.id}')" title="${s.name}">
-            <img src="${s.url}" alt="${s.name}" />
-            <span class="shirt-label">${s.name}</span>
-            <button class="shirt-remove" onclick="event.stopPropagation();removeShirt('${s.id}')" title="Eliminar">×</button>
-        </div>
-    `).join('');
-}
+  /* ── BOOT ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    initModelSelect();
+    applyModelDefaults();
+    initDragDrop();
+    initBgColorPresets();
+    initTextPresets();
+    renderHistory();
 
-window.selectShirt = function(id) {
-    state.selectedShirtId = (state.selectedShirtId === id) ? null : id;
-    renderShirtPicker();
-    renderUI();
-};
+    document.getElementById('fileInput').addEventListener('change', e => { handleFiles(e.target.files); e.target.value=''; });
 
-window.removeShirt = function(id) {
-    state.shirtMockups = state.shirtMockups.filter(s => s.id !== id);
-    if (state.selectedShirtId === id) state.selectedShirtId = null;
-    renderShirtPicker();
-    renderUI();
-};
-
-document.getElementById('upload-custom-shirt').addEventListener('change', async e => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
-    const newShirts = await Promise.all(files.map(f => new Promise(resolve => {
-        const r = new FileReader();
-        r.onload = ev => resolve({
-            id: Math.random().toString(36).slice(2),
-            url: ev.target.result,
-            name: f.name.replace(/\.[^.]+$/, '')
-        });
-        r.readAsDataURL(f);
-    })));
-    state.shirtMockups = [...state.shirtMockups, ...newShirts];
-    // Auto-select the first one if nothing is selected
-    if (!state.selectedShirtId && newShirts.length > 0) {
-        state.selectedShirtId = newShirts[0].id;
-    }
-    e.target.value = '';
-    renderShirtPicker();
-    renderUI();
-});
-// ─────────────────────────────────────────────────────────────
-
-// Color pickers
-document.getElementById('colorLine1').addEventListener('input', e => {
-    state.colorLine1 = e.target.value;
-    renderUI();
-});
-document.getElementById('colorLine2Text').addEventListener('input', e => {
-    state.colorLine2Text = e.target.value;
-    renderUI();
-});
-document.getElementById('colorLine2Bg').addEventListener('input', e => {
-    state.colorLine2Bg = e.target.value;
-    renderUI();
-});
-document.getElementById('colorBrand').addEventListener('input', e => {
-    state.colorBrand = e.target.value;
-    renderUI();
-});
-document.getElementById('colorCanvasBg').addEventListener('input', e => {
-    state.colorCanvasBg = e.target.value;
-    renderUI();
-});
-
-// Inputs
-document.getElementById('upload-main').addEventListener('change', handleFileUpload);
-document.getElementById('upload-empty').addEventListener('change', handleFileUpload);
-
-document.getElementById('textLine1').addEventListener('input', e => {
-    state.textLine1 = e.target.value;
-    document.querySelectorAll('.canvas-title').forEach(n => {
-        n.textContent = e.target.value;
-        n.style.display = e.target.value ? 'block' : 'none';
-    });
-});
-document.getElementById('textLine2').addEventListener('input', e => {
-    state.textLine2 = e.target.value;
-    document.querySelectorAll('.canvas-subtitle').forEach(n => n.textContent = e.target.value);
-    document.querySelectorAll('.canvas-subtitle-wrap').forEach(n => n.style.display = e.target.value ? 'inline-block' : 'none');
-});
-
-document.getElementById('brandText').addEventListener('input', e => {
-    state.brandText = e.target.value;
-    document.querySelectorAll('.dyn-brand-text').forEach(n => {
-        n.textContent = e.target.value;
-        n.style.display = (state.brandType === 'text' && e.target.value) ? 'block' : 'none';
-    });
-});
-
-document.getElementById('btnBrandText').addEventListener('click', () => {
-    state.brandType = 'text';
-    document.getElementById('btnBrandText').classList.add('active');
-    document.getElementById('btnBrandLogo').classList.remove('active');
-    document.getElementById('brandTextContainer').style.display = 'block';
-    document.getElementById('brandLogoContainer').style.display = 'none';
-    document.querySelectorAll('.dyn-brand-text').forEach(n => n.style.display = (state.brandText) ? 'block' : 'none');
-    document.querySelectorAll('.dyn-brand-logo').forEach(n => n.style.display = 'none');
-});
-
-document.getElementById('btnBrandLogo').addEventListener('click', () => {
-    state.brandType = 'logo';
-    document.getElementById('btnBrandLogo').classList.add('active');
-    document.getElementById('btnBrandText').classList.remove('active');
-    document.getElementById('brandTextContainer').style.display = 'none';
-    document.getElementById('brandLogoContainer').style.display = 'block';
-    document.querySelectorAll('.dyn-brand-text').forEach(n => n.style.display = 'none');
-    document.querySelectorAll('.dyn-brand-logo').forEach(n => n.style.display = (state.brandLogoUrl) ? 'block' : 'none');
-});
-
-document.getElementById('upload-logo').addEventListener('change', e => {
-    const f = e.target.files[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = ev => {
-        state.brandLogoUrl = ev.target.result;
-        document.getElementById('logoUploadLabel').innerHTML = '<i data-lucide="check" style="width:14px;height:14px;margin-right:6px;"></i>Logo Cargado ✓';
-        lucide.createIcons();
-        document.querySelectorAll('.dyn-brand-logo').forEach(n => {
-            n.src = state.brandLogoUrl;
-            n.style.display = (state.brandType === 'logo') ? 'block' : 'none';
-        });
-    };
-    r.readAsDataURL(f);
-});
-
-// Ranges
-const rangeIds = ['shirtDesignScale','shirtDesignY','shirtDesignX','bgOpacity','bgDesignScale','bgDesignX','bgDesignY'];
-rangeIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener('input', e => {
-        state[id] = parseFloat(e.target.value);
-        const valEl = document.getElementById('val-' + id);
-        if (valEl) valEl.textContent = e.target.value + '%';
-        setCSSVars();
-    });
-});
-
-document.getElementById('btnBgGrayscale').addEventListener('click', () => {
-    state.bgGrayscale = !state.bgGrayscale;
-    const btn = document.getElementById('btnBgGrayscale');
-    if (state.bgGrayscale) {
-        btn.textContent = 'B&W ON';
-        btn.classList.remove('off');
-    } else {
-        btn.textContent = 'B&W OFF';
-        btn.classList.add('off');
-    }
-    setCSSVars();
-});
-
-window.addEventListener('resize', updateScales);
-
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
     preloadMockup();
-    setCSSVars();
-    renderShirtPicker();
-    renderUI();
-    setTimeout(updateScales, 200);
-});
-</script>
+    renderPreview();
+    updateHeaderCount();
+  });
+  </script>
 </body>
 </html>
