@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chechena Shirts | Mesa de Trabajo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:62.5%}
+body{font-family:'Inter',sans-serif;font-size:1.5rem;background:#f5efe3;color:#2a1a08;min-height:100vh}
+
+/* ══ TOP BAR ══ */
+.topbar{
+  background:linear-gradient(135deg,#2a1a08 0%,#3d2510 100%);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:300;
+  border-bottom:1px solid rgba(200,168,75,.25);
+  box-shadow:0 2px 20px rgba(20,10,2,.25);
+  height:56px;
+}
+.topbar-brand{
+  font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;
+  color:#c8a84b;letter-spacing:3px;
+  display:flex;align-items:center;gap:10px;
+}
+.topbar-brand::before{content:'✦';font-size:1rem;opacity:.7}
+.topbar-label{
+  font-family:'Inter',sans-serif;font-size:.9rem;font-weight:700;
+  color:rgba(200,168,75,.6);letter-spacing:4px;text-transform:uppercase;
+}
+
+/* ══ MAIN LAYOUT ══ */
+.mesa{display:grid;grid-template-columns:1fr 420px;min-height:calc(100vh - 56px)}
+@media(max-width:960px){.mesa{grid-template-columns:1fr}}
+
+/* ══ LEFT — Playera + Precio ══ */
+.left-col{
+  background:linear-gradient(160deg,#fdf9f4 0%,#f5ece0 100%);
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px 24px 36px;border-right:1px solid #e0cba8;gap:0;
+  position:relative;
+}
+
+/* Contenedor principal de la playera */
+.shirt-bg-box{
+  position:relative;
+  width:100%;
+  max-width:500px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:
+    0 2px 0 #e8d5b0,
+    0 4px 24px rgba(120,70,10,.10),
+    0 24px 64px rgba(100,55,10,.10);
+  border:1.5px solid #e8d8b8;
+}
+
+/* Barra superior decorativa del contenedor */
+.shirt-bg-box::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,#c8a84b,#8b5e1a,#c8a84b);
+  z-index:10;
+}
+
+.shirt-bg-layer{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  transition:all .3s;
+  border-radius:24px 24px 0 0;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Side buttons */
+.side-btns{display:flex;gap:6px;margin-bottom:16px;z-index:2}
+.vbtn{
+  padding:8px 24px;border-radius:20px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:1.05rem;
+  cursor:pointer;transition:.2s;
+  border:1.5px solid #d8c490;
+  letter-spacing:.5px;
+}
+.vbtn.active{
+  background:linear-gradient(135deg,#6b3f10,#8b5e1a);
+  color:#fdf8f2;border-color:#6b3f10;
+  box-shadow:0 4px 14px rgba(107,63,16,.3);
+}
+.vbtn.inactive{background:#fff8f0;color:#8b5e1a;border-color:#d8c490}
+.vbtn.inactive:hover{background:#f0e4cc;border-color:#c8a84b}
+
+/* Canvas mockup */
+#mockup-container{position:relative;display:flex;justify-content:center;align-items:center;width:100%;max-width:500px;aspect-ratio:6/7;overflow:visible;background:transparent}
+#dynamic-shirt{width:100%;height:100%;position:absolute;top:0;left:0;z-index:1;pointer-events:none;overflow:visible}
+#design-wrapper{position:absolute;width:100%;height:100%;top:0;left:0;z-index:10}
+#drop-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#b0906a;pointer-events:none;z-index:5;display:flex;flex-direction:column;align-items:center;gap:6px}
+#drop-hint .dh-icon{font-size:3.5rem;opacity:.35}
+#drop-hint span{font-size:1rem;font-weight:600;opacity:.55;letter-spacing:.5px}
+.design-layer{position:absolute;user-select:none;-webkit-user-select:none;touch-action:none;cursor:grab}
+.design-layer.selected{outline:2.5px dashed #c8a84b;box-shadow:0 0 0 4px rgba(200,168,75,.2);z-index:50}
+.design-layer img{width:100%;height:100%;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.dim-tag{position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);background:#6b3f10;color:#fdf8f2;font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:1px;padding:3px 12px;white-space:nowrap;border-radius:20px;z-index:100;pointer-events:none;display:none}
+
+/* ── PRECIO FINAL ── */
+.price-card{
+  width:100%;
+  max-width:500px;
+  background:linear-gradient(135deg,#3d1f06 0%,#6b3f10 60%,#7a4a14 100%);
+  border-radius:0 0 22px 22px;
+  padding:20px 28px 24px;
+  text-align:center;
+  position:relative;
+  z-index:2;
+  border-top:1px solid rgba(200,168,75,.25);
+}
+
+/* línea decorativa superior del price-card */
+.price-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:24px;right:24px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,168,75,.4),transparent);
+}
+
+.price-card-label{
+  font-size:.9rem;
+  font-weight:600;
+  color:#d4b07a;
+  letter-spacing:.3px;
+  line-height:1.5;
+  margin-bottom:10px;
+  opacity:.85;
+}
+.price-card-amount{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(30px,6vw,52px);
+  font-weight:900;
+  color:#c8a84b;
+  line-height:1;
+  margin-bottom:2px;
+  text-shadow:0 2px 12px rgba(200,168,75,.3);
+}
+.price-card-dname{
+  font-size:.85rem;
+  font-weight:700;
+  color:#c8a84b;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-top:8px;
+  opacity:.6;
+}
+
+/* Overlay de marca y logo SOBRE el contenedor */
+#brand-overlay{
+  position:absolute;
+  top:0;left:0;right:0;
+  z-index:20;
+  pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:14px 16px 0;
+  gap:6px;
+}
+#brand-overlay-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;font-weight:900;
+  color:#c8a84b;
+  letter-spacing:4px;text-transform:uppercase;
+  text-shadow:0 1px 8px rgba(0,0,0,.5);
+  opacity:0;transition:opacity .3s, font-size .2s, color .2s;
+  text-align:center;
+}
+#brand-overlay-name.visible{opacity:1}
+#brand-overlay-logo{
+  max-width:200px;
+  width:auto;
+  height:52px; /* controlado por JS */
+  object-fit:contain;
+  display:none;
+  transition:height .2s;
+  filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));
+}
+.dl-btn{
+  margin-top:20px;
+  background:linear-gradient(135deg,#c8a84b,#debb5e);
+  color:#2a1a08;
+  border:none;
+  padding:14px 32px;
+  border-radius:14px;
+  font-family:'Inter',sans-serif;
+  font-weight:800;
+  font-size:1.15rem;
+  cursor:pointer;
+  transition:.25s cubic-bezier(.4,0,.2,1);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  box-shadow:0 4px 20px rgba(200,168,75,.35),0 1px 0 rgba(255,255,255,.3) inset;
+  letter-spacing:.3px;
+  position:relative;
+  overflow:hidden;
+}
+.dl-btn::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 50%);
+  pointer-events:none;
+}
+.dl-btn:hover{
+  background:linear-gradient(135deg,#debb5e,#e8cc70);
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(200,168,75,.45);
+}
+.dl-btn:active{transform:translateY(0);box-shadow:0 2px 10px rgba(200,168,75,.3)}
+.dl-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* spinner dentro del botón */
+.dl-spinner{
+  width:16px;height:16px;
+  border:2px solid rgba(42,26,8,.3);
+  border-top-color:#2a1a08;
+  border-radius:50%;
+  animation:spin .6s linear infinite;
+  display:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dl-btn.loading .dl-spinner{display:block}
+.dl-btn.loading .dl-icon{display:none}
+
+/* Export overlay */
+.export-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(20,10,2,.88);backdrop-filter:blur(10px);
+  z-index:500;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.export-overlay.visible{display:flex}
+.export-card{
+  background:#fdf8f2;border:1.5px solid #e8d5b0;
+  border-radius:20px;padding:36px 48px;
+  text-align:center;
+  box-shadow:0 24px 64px rgba(0,0,0,.3);
+}
+.export-spinner-lg{
+  width:48px;height:48px;border:3px solid #e8d5b0;
+  border-top-color:#c8a84b;border-radius:50%;
+  animation:spin .7s linear infinite;margin:0 auto 16px;
+}
+.export-card h3{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:#5a3010;margin-bottom:6px}
+.export-card p{font-size:.9rem;color:#a08060;font-style:italic}
+
+
+/* ══ RIGHT — Panel controles ══ */
+.right-col{background:#fff8f0;overflow-y:auto;max-height:calc(100vh - 58px);display:flex;flex-direction:column}
+
+/* accordion */
+.acc{border-bottom:1px solid #e8d5b0}
+.acc-head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;cursor:pointer;font-weight:700;font-size:1.15rem;color:#5a3010;background:#fdf8f2;transition:background .15s;user-select:none}
+.acc-head:hover{background:#f5e8d0}
+.acc-head .chevron{font-size:.9rem;transition:transform .2s;color:#a08060}
+.acc-head.open .chevron{transform:rotate(180deg)}
+.acc-body{padding:16px 20px;display:flex;flex-direction:column;gap:12px;background:#fff8f0}
+.acc-body.closed{display:none}
+
+/* Section title */
+.sec-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#5a3010;padding:18px 20px 0;letter-spacing:.5px}
+
+/* form elements */
+label.flabel{display:block;font-size:.95rem;font-weight:700;color:#8b5e1a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+input[type=number].finput,input[type=text].finput,select.fselect{width:100%;padding:9px 12px;border:1.5px solid #d8c4a0;border-radius:8px;background:#fff;color:#2a1a08;font-family:'Inter',sans-serif;font-size:1.3rem;font-weight:600;outline:none;transition:border-color .15s}
+input[type=number].finput:focus,input[type=text].finput:focus,select.fselect:focus{border-color:#c8a84b;box-shadow:0 0 0 3px rgba(200,168,75,.15)}
+select.fselect{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b5e1a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;background-color:#fff}
+textarea.finput-ta{width:100%;padding:9px 12px;border:1.5px solid #d8c4a0;border-radius:8px;background:#fff;color:#2a1a08;font-family:'Inter',sans-serif;font-size:1.2rem;font-weight:600;outline:none;resize:vertical;transition:border-color .15s}
+textarea.finput-ta:focus{border-color:#c8a84b;box-shadow:0 0 0 3px rgba(200,168,75,.15)}
+input[type=range]{width:100%;height:6px;border-radius:3px;background:#e8d5b0;outline:none;cursor:pointer;-webkit-appearance:none;border:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#6b3f10;cursor:pointer;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.slider-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.slider-label{font-size:1rem;font-weight:600;color:#8b5e1a}
+.slider-val{font-family:'Bebas Neue',cursive;font-size:1.6rem;color:#5a3010}
+
+/* color picker */
+.color-row{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:10px 14px;border-radius:8px;border:1.5px solid #d8c4a0}
+.color-row span{font-size:1.1rem;font-weight:600;color:#6b3f10}
+input[type=color]{cursor:pointer;border:2px solid #8b5e1a;border-radius:6px;width:38px;height:38px;padding:2px;background:transparent}
+
+/* size buttons */
+.sz-grid{display:flex;gap:5px;flex-wrap:wrap}
+.sz-btn{background:#fff;border:1.5px solid #d8c4a0;color:#8b5e1a;padding:7px 11px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:.15s;flex-grow:1;text-align:center}
+.sz-btn:hover{background:#f5e8d0}
+.sz-btn.on{background:#6b3f10;color:#fff;border-color:#6b3f10}
+.sz-label{font-size:.95rem;font-weight:700;color:#a08060;display:block;margin-bottom:6px}
+
+/* upload / delete */
+.btn-upload{display:block;width:100%;background:#6b3f10;color:#fdf8f2;text-align:center;padding:13px;font-family:'Inter',sans-serif;font-weight:700;font-size:1.2rem;cursor:pointer;border-radius:8px;border:none;transition:background .2s;letter-spacing:.5px}
+.btn-upload:hover{background:#8b5e1a}
+.btn-delete{width:100%;background:transparent;color:#c0572a;border:2px solid #c0572a;padding:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;border-radius:8px;transition:.2s;opacity:.3;pointer-events:none}
+.btn-delete.on{opacity:1;pointer-events:auto}
+.btn-delete.on:hover{background:#c0572a;color:#fff}
+
+#upload-design{display:none}
+
+/* layer controls */
+#layer-controls{opacity:.3;pointer-events:none;transition:opacity .3s;display:flex;flex-direction:column;gap:12px}
+#layer-controls.enabled{opacity:1;pointer-events:auto}
+
+/* calculadora result */
+.result-box{background:#5a3010;border-radius:12px;padding:16px;color:#fdf8f2;display:flex;flex-direction:column;gap:8px}
+.rb-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(200,168,75,.15);padding-bottom:7px}
+.rb-row:last-child{border-bottom:none;padding-bottom:0}
+.rb-label{font-size:1rem;color:#c8a84b;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.rb-val{font-family:'Playfair Display',serif;font-size:1.5rem;color:#fdf8f2}
+.rb-total{margin-top:4px;padding:14px;background:rgba(200,168,75,.12);border:1.5px solid #c8a84b;border-radius:8px;text-align:center}
+.rb-total-label{font-size:1rem;text-transform:uppercase;letter-spacing:2px;color:#c8a84b;font-weight:700;margin-bottom:4px}
+.rb-total-val{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#c8a84b;line-height:1}
+
+/* live designs */
+.live-designs-box{background:#fff;border:1.5px solid #e8d5b0;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.live-design-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:#fdf8f2;border-radius:6px;border:1px solid #e8d5b0}
+.ldr-name{font-weight:700;font-size:1.1rem;color:#5a3010}
+.ldr-dims{font-family:'Bebas Neue',cursive;font-size:1.3rem;color:#8b5e1a;letter-spacing:.5px}
+.ldr-area{font-size:.95rem;color:#a08060}
+.live-designs-empty{color:#c0a880;font-size:1.1rem;text-align:center;padding:8px}
+
+/* Fondo card config */
+.bg-swatches{display:flex;flex-wrap:wrap;gap:8px}
+.bg-swatch{width:32px;height:32px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:.15s;flex-shrink:0}
+.bg-swatch:hover{transform:scale(1.1)}
+.bg-swatch.on{border-color:#c8a84b;box-shadow:0 0 0 2px rgba(200,168,75,.4)}
+
+/* logo drop */
+.logo-drop{border:2px dashed #d8c4a0;border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:.2s;background:#fdf8f2}
+.logo-drop:hover{border-color:#c8a84b;background:#f5e8d0}
+.logo-preview{max-height:60px;max-width:140px;object-fit:contain;margin:0 auto;display:block;border-radius:4px}
+
+/* tc swatches */
+.tc-row{display:flex;gap:8px;flex-wrap:wrap}
+.tc-swatch{padding:5px 12px;border-radius:20px;border:1.5px solid #d8c4a0;font-size:.9rem;font-weight:700;cursor:pointer;transition:.15s}
+.tc-swatch.on{background:#5a3010;color:#c8a84b;border-color:#5a3010}
+
+/* price preview box */
+.price-preview-box{background:#5a3010;border-radius:10px;padding:14px;text-align:center}
+.ppb-label{font-size:.85rem;text-transform:uppercase;letter-spacing:2px;color:#c8a84b;font-weight:700;margin-bottom:6px}
+.ppb-val{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:#c8a84b}
+.ppb-note{font-size:.9rem;color:#a08060;margin-top:4px;font-style:italic}
+
+/* divider */
+.divider{height:1px;background:#e8d5b0;margin:4px 0}
+
+#crop-canvas,#export-canvas{display:none;position:fixed;top:-9999px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">✦ Chechena Shirts</div>
+  <div class="topbar-label">🖥 Mesa de Trabajo</div>
+</div>
+
+<!-- MESA DE TRABAJO: 2 columnas -->
+<div class="mesa">
+
+  <!-- ═══ IZQUIERDA: Playera + Precio ═══ -->
+  <div class="left-col">
+
+    <div class="side-btns">
+      <button class="vbtn active" id="btn-frente" onclick="switchSide('front')">Frente</button>
+      <button class="vbtn inactive" id="btn-espalda" onclick="switchSide('back')">Espalda</button>
+    </div>
+
+    <!-- CARD que envuelve playera + precio -->
+    <div class="shirt-bg-box" id="shirt-bg-box">
+
+      <!-- capa de fondo (imagen o color) -->
+      <div class="shirt-bg-layer" id="shirt-bg-layer"></div>
+
+      <!-- Overlay de marca/logo visible sobre el fondo -->
+      <div id="brand-overlay">
+        <img id="brand-overlay-logo" src="" alt="logo">
+        <div id="brand-overlay-name"></div>
+      </div>
+
+      <!-- Canvas mockup -->
+      <div id="mockup-container" style="position:relative;width:100%;max-width:480px;aspect-ratio:6/7;overflow:visible">
+        <svg id="dynamic-shirt" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+          <g id="group-playera">
+            <path id="path-perimeter" class="garment-fill" fill="#ffffff" stroke="none" vector-effect="non-scaling-stroke"/>
+            <path id="playera-seam-l" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path id="playera-seam-r" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path id="playera-outline" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <g id="playera-front-collar">
+              <path d="M 456 427 s 6 81.96 76 80.48" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 439.22 432.15 s 6.78 93.52 92.78 93.52" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 459.37 445.37 s 5.63 12.22 72.63 12.22" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 608 427 s -6 81.96 -76 80.48" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 624.78 432.15 s -6.78 93.52 -92.78 93.52" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 604.63 445.37 s -5.63 12.22 -72.63 12.22" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            </g>
+            <g id="playera-back-collar" style="display:none">
+              <path d="M 439.22 432.15 s 6.78 26.52 92.78 26.52" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 624.78 432.15 s -6.78 26.52 -92.78 26.52" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            </g>
+
+          </g>
+          <g id="group-sudadera" style="display:none">
+            <path id="sudadera-body" class="garment-fill" fill="#ffffff" stroke="none" vector-effect="non-scaling-stroke"/>
+            <path id="sudadera-outline" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <path id="sudadera-seam-l" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path id="sudadera-seam-r" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path id="sudadera-pocket" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <g id="sudadera-front-collar">
+              <path id="sud-col-l" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path id="sud-col-r" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="m662.5,331.5c-9.94.46-19.3,4.64-38,13-12.83,5.74-19.25,8.61-22,12-11.48,14.17-8.24,42.78,5,60,8.28,10.76,18.7,14.78,20,27,.42,3.97-.1,9,3,15,2.74,5.32,5.96,6.82,9,10,11.61,12.13,1.05,28.1,13,47,2.05,3.24,6.1,9.64,10,9,4.95-.82,5.36-12.27,12-36,4.25-15.19,6.37-22.79,10-28,7.87-11.32,15.15-11.94,20-24,1.25-3.1,2.53-7.45,6-14,3.1-5.86,3.33-4.76,6-10,5.41-10.61,5.92-17.98,6-21,.02-.83,0-1.02,0-2,0-16.47,5.71-23.89,4-31-1.5-6.26-9-9.5-24-16-17.29-7.49-26.8-11.61-40-11Z" id="sud-drawstring" fill="#111111"/>
+            </g>
+            <g id="sudadera-back-collar" style="display:none">
+              <path id="sud-col-bl" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path id="sud-col-br" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            </g>
+          </g>
+          <g id="group-mangalarga" style="display:none">
+            <path id="ml-body" class="garment-fill" fill="#ffffff" stroke="none" vector-effect="non-scaling-stroke"/>
+            <path id="ml-outline" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <path id="ml-sleeve-l" class="garment-fill garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path id="ml-sleeve-r" class="garment-fill garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path id="ml-seam-l" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path id="ml-seam-r" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <g id="ml-front-collar">
+              <path d="M 595.5 478.5 S 597.5 549.48 660 549.48 C 722.5 549.48 724.5 478.5 724.5 478.5" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 578.5 485.5 S 589.5 567.74 660 567.74 C 730.5 567.74 741.5 485.5 741.5 485.5" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 599.5 501.5 S 624.5 515.6 660 515.6" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+              <path d="M 720.5 501.5 S 695.5 515.6 660 515.6" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            </g>
+            <g id="ml-back-collar" style="display:none">
+              <path d="M 578.5 485.5 S 606.5 512.5 660 512.5 S 741.5 485.5 741.5 485.5" fill="none" class="garment-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            </g>
+          </g>
+        </svg>
+        <div id="design-wrapper"></div>
+        <div id="drop-hint">
+          <div class="dh-icon">🖼️</div>
+          <span>Sube un PNG o arrástralo aquí</span>
+        </div>
+      </div>
+
+      <!-- Precio final debajo de la playera -->
+      <div class="price-card" id="price-card">
+        <div class="price-card-label" id="price-card-label">Si quieres tu diseño de este tamaño, su precio final sería:</div>
+        <div class="price-card-amount" id="price-card-amount">—</div>
+        <div class="price-card-dname" id="price-card-dname"></div>
+      </div>
+
+    </div><!-- /shirt-bg-box -->
+
+    <button class="dl-btn" id="dl-btn-main" onclick="downloadCard()">
+      <span class="dl-icon">📥</span>
+      <div class="dl-spinner"></div>
+      Guardar imagen
+    </button>
+
+    <!-- Export overlay -->
+    <div class="export-overlay" id="export-overlay">
+      <div class="export-card">
+        <div class="export-spinner-lg"></div>
+        <h3>Generando imagen…</h3>
+        <p>Alta resolución · Por favor espera</p>
+      </div>
+    </div>
+
+  </div><!-- /left-col -->
+
+
+  <!-- ═══ DERECHA: Todos los controles ═══ -->
+  <div class="right-col" id="right-col">
+
+    <!-- ── DISEÑO ── -->
+    <div class="sec-title">🎨 Diseño</div>
+
+    <div class="acc">
+      <div class="acc-head open" onclick="toggleAcc(this)">
+        <span>Subir imagen</span><span class="chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div>
+          <label class="flabel">Nombre del diseño</label>
+          <input type="text" id="design-name" class="finput" placeholder="Ej: Hellstar Galaxy" style="font-size:1.2rem">
+        </div>
+        <label for="upload-design" class="btn-upload">+ Subir diseño PNG</label>
+        <input type="file" id="upload-design" accept="image/png,image/jpeg,image/webp">
+        <div id="layer-controls">
+          <div>
+            <div class="slider-row">
+              <span class="slider-label">Tamaño</span>
+              <span class="slider-val" id="val-scale">20.0 cm</span>
+            </div>
+            <input type="range" id="sl-scale" min="5" max="100" step=".1" value="20">
+          </div>
+          <div>
+            <div class="slider-row">
+              <span class="slider-label">Rotación</span>
+              <span class="slider-val" id="val-rotation">0°</span>
+            </div>
+            <input type="range" id="sl-rotation" min="-180" max="180" step="1" value="0">
+          </div>
+        </div>
+        <button class="btn-delete" id="btn-delete">🗑 Eliminar selección</button>
+      </div>
+    </div>
+
+    <!-- ── PRENDA ── -->
+    <div class="acc">
+      <div class="acc-head open" onclick="toggleAcc(this)">
+        <span>👕 Prenda y talla</span><span class="chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div>
+          <label class="flabel">Tipo de prenda</label>
+          <select id="model-selector" class="fselect">
+            <option value="playera">Playera estándar</option>
+            <option value="sudadera">Sudadera / Hoodie</option>
+            <option value="mangalarga">Manga larga</option>
+          </select>
+        </div>
+        <div class="color-row">
+          <span>🌈 Color de prenda</span>
+          <input type="color" id="shirt-color" value="#ffffff">
+        </div>
+        <div>
+          <div class="slider-row">
+            <span class="slider-label" style="color:#6b3f10">Ancho</span>
+            <span class="slider-val" id="val-w">47.0 cm</span>
+          </div>
+          <input type="range" id="sl-ancho" min="43" max="85" step=".1" value="47">
+        </div>
+        <div>
+          <div class="slider-row">
+            <span class="slider-label" style="color:#c0572a">Largo</span>
+            <span class="slider-val" id="val-h">71.0 cm</span>
+          </div>
+          <input type="range" id="sl-largo" min="63" max="90" step=".1" value="71">
+        </div>
+        <div id="sizes-playera">
+          <span class="sz-label">Tallas:</span>
+          <div class="sz-grid">
+            <button class="sz-btn" onclick="setSize(43,63,this)">XCH</button>
+            <button class="sz-btn on" onclick="setSize(47,71,this)">CH</button>
+            <button class="sz-btn" onclick="setSize(51,74,this)">M</button>
+            <button class="sz-btn" onclick="setSize(55,76,this)">G</button>
+            <button class="sz-btn" onclick="setSize(58,78,this)">EG</button>
+            <button class="sz-btn" onclick="setSize(61,80,this)">2EG</button>
+            <button class="sz-btn" onclick="setSize(66,83,this)">3EG</button>
+            <button class="sz-btn" onclick="setSize(71,85,this)">4EG</button>
+          </div>
+        </div>
+        <div id="sizes-sudadera" style="display:none">
+          <span class="sz-label">Tallas:</span>
+          <div class="sz-grid">
+            <button class="sz-btn on" onclick="setSize(47,67.3,this)">XS</button>
+            <button class="sz-btn" onclick="setSize(52.1,69.9,this)">S</button>
+            <button class="sz-btn" onclick="setSize(57.2,72.4,this)">M</button>
+            <button class="sz-btn" onclick="setSize(62.2,74.9,this)">L</button>
+            <button class="sz-btn" onclick="setSize(67.3,77.5,this)">XL</button>
+            <button class="sz-btn" onclick="setSize(72.4,80,this)">XXL</button>
+          </div>
+        </div>
+        <div id="sizes-mangalarga" style="display:none">
+          <span class="sz-label">Tallas:</span>
+          <div class="sz-grid">
+            <button class="sz-btn" onclick="setSize(46,70,this)">CH</button>
+            <button class="sz-btn on" onclick="setSize(51,73,this)">M</button>
+            <button class="sz-btn" onclick="setSize(56,76,this)">G</button>
+            <button class="sz-btn" onclick="setSize(61,78,this)">EG</button>
+            <button class="sz-btn" onclick="setSize(65,82,this)">2EG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CALCULADORA ── -->
+    <div class="sec-title" style="margin-top:8px">🧮 Calculadora DTF</div>
+
+    <div class="acc">
+      <div class="acc-head open" onclick="toggleAcc(this)">
+        <span>Costos y precio</span><span class="chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div>
+          <label class="flabel">Moneda</label>
+          <select id="moneda" class="fselect" onchange="recalcular()">
+            <option value="MXN">🇲🇽 Pesos MXN</option>
+            <option value="USD">🇺🇸 Dólares USD</option>
+            <option value="EUR">🇪🇺 Euros EUR</option>
+            <option value="COP">🇨🇴 Pesos COP</option>
+            <option value="ARS">🇦🇷 Pesos ARS</option>
+            <option value="BRL">🇧🇷 Reales BRL</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">📐 Diseños en la prenda (automático)</label>
+          <div class="live-designs-box" id="live-designs-box">
+            <div class="live-designs-empty">Sin diseños colocados</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><label class="flabel">Precio pliego</label><input type="number" id="precioPliego" class="finput" value="0" min="0" step="0.01" oninput="recalcular()"></div>
+          <div><label class="flabel">Mano de obra</label><input type="number" id="manoObra" class="finput" value="0" min="0" step="0.01" oninput="recalcular()"></div>
+          <div><label class="flabel">Ancho pliego (cm)</label><input type="number" id="anchoPliego" class="finput" value="60" min="1" step="1" oninput="recalcular()"></div>
+          <div><label class="flabel">Alto pliego (cm)</label><input type="number" id="altoPliego" class="finput" value="90" min="1" step="1" oninput="recalcular()"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><label class="flabel">Playera</label><input type="number" id="cPlayera" class="finput" value="0" min="0" step="0.01" oninput="recalcular()"></div>
+          <div><label class="flabel">Materiales</label><input type="number" id="cMateriales" class="finput" value="0" min="0" step="0.01" oninput="recalcular()"></div>
+          <div><label class="flabel">Envío</label><input type="number" id="cTransporte" class="finput" value="0" min="0" step="0.01" oninput="recalcular()"></div>
+          <div><label class="flabel">Otros</label><input type="number" id="cOtros" class="finput" value="0" min="0" step="0.01" oninput="recalcular()"></div>
+        </div>
+        <div>
+          <div class="slider-row">
+            <span class="slider-label">Ganancia</span>
+            <span class="slider-val" id="val-margen">30%</span>
+          </div>
+          <input type="range" id="sl-margen" min="0" max="300" step="1" value="30" oninput="document.getElementById('val-margen').textContent=this.value+'%';recalcular()">
+        </div>
+        <div class="result-box" id="result-box">
+          <div class="rb-row"><span class="rb-label">Área impresión</span><span class="rb-val" id="rb-area">0 cm²</span></div>
+          <div class="rb-row"><span class="rb-label">Costo DTF</span><span class="rb-val" id="rb-dtf">$0.00</span></div>
+          <div class="rb-row"><span class="rb-label">Subtotal costos</span><span class="rb-val" id="rb-sub">$0.00</span></div>
+          <div class="rb-row"><span class="rb-label">Ganancia</span><span class="rb-val" id="rb-gan">$0.00</span></div>
+          <div class="rb-total">
+            <div class="rb-total-label">Precio de venta</div>
+            <div class="rb-total-val" id="rb-total">$0.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PERSONALIZAR TARJETA ── -->
+    <div class="sec-title" style="margin-top:8px">🖼 Personalizar tarjeta</div>
+
+    <div class="acc">
+      <div class="acc-head open" onclick="toggleAcc(this)">
+        <span>🎨 Fondo de tarjeta</span><span class="chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <label class="flabel">Color rápido</label>
+        <div class="bg-swatches" id="bg-swatches">
+          <div class="bg-swatch" data-color="#fdf8f2" style="background:#fdf8f2;border-color:#d8c4a0" onclick="setBgColor(this,'#fdf8f2')"></div>
+          <div class="bg-swatch" data-color="#f0ebe0" style="background:#f0ebe0" onclick="setBgColor(this,'#f0ebe0')"></div>
+          <div class="bg-swatch" data-color="#e8d5b0" style="background:#e8d5b0" onclick="setBgColor(this,'#e8d5b0')"></div>
+          <div class="bg-swatch" data-color="#1a0f00" style="background:#1a0f00" onclick="setBgColor(this,'#1a0f00')"></div>
+          <div class="bg-swatch" data-color="#2d1b4e" style="background:#2d1b4e" onclick="setBgColor(this,'#2d1b4e')"></div>
+          <div class="bg-swatch" data-color="#0d2137" style="background:#0d2137" onclick="setBgColor(this,'#0d2137')"></div>
+          <div class="bg-swatch" data-color="#1a2e1a" style="background:#1a2e1a" onclick="setBgColor(this,'#1a2e1a')"></div>
+          <div class="bg-swatch" data-color="#c8a84b" style="background:#c8a84b" onclick="setBgColor(this,'#c8a84b')"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+          <label class="flabel" style="margin:0;white-space:nowrap">Color personalizado</label>
+          <input type="color" id="bg-custom-color" value="#fdf8f2" style="cursor:pointer;border:2px solid #8b5e1a;border-radius:6px;width:40px;height:36px;padding:2px;background:transparent;flex-shrink:0" onchange="setBgColorCustom(this.value)">
+        </div>
+        <div>
+          <label class="flabel">Imagen de fondo</label>
+          <div class="logo-drop" id="bg-img-drop" onclick="document.getElementById('bg-img-input').click()">
+            <div id="bg-img-preview-wrap">
+              <div style="font-size:1.8rem">🖼️</div>
+              <div style="font-size:1rem;color:#a08060;margin-top:4px">Toca para subir imagen de fondo</div>
+            </div>
+          </div>
+          <input type="file" id="bg-img-input" accept="image/*" style="display:none" onchange="setBgImage(this)">
+          <button id="bg-img-clear" style="display:none;margin-top:6px;background:transparent;color:#c0572a;border:1.5px solid #c0572a;padding:7px 14px;border-radius:6px;font-weight:700;font-size:.95rem;cursor:pointer;width:100%" onclick="clearBgImage()">✕ Quitar imagen</button>
+        </div>
+        <div>
+          <label class="flabel">Opacidad del fondo</label>
+          <div class="slider-row">
+            <span class="slider-label" style="font-size:.9rem">Transparencia</span>
+            <span class="slider-val" id="val-bg-opacity">80%</span>
+          </div>
+          <input type="range" id="sl-bg-opacity" min="10" max="100" step="1" value="80" oninput="document.getElementById('val-bg-opacity').textContent=this.value+'%';applyCardStyle()">
+        </div>
+      </div>
+    </div>
+
+    <div class="acc">
+      <div class="acc-head open" onclick="toggleAcc(this)">
+        <span>🏷️ Tu marca</span><span class="chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div>
+          <label class="flabel">Nombre de marca</label>
+          <input type="text" class="finput" id="brand-name-input" placeholder="Ej: CHECHENA SHIRTS" oninput="updateBrandOverlay()">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end">
+          <div>
+            <label class="flabel">Color del nombre</label>
+            <div class="color-row" style="padding:7px 10px">
+              <span style="font-size:.9rem">Color</span>
+              <input type="color" id="brand-color-input" value="#c8a84b" onchange="updateBrandOverlay()" style="cursor:pointer;border:2px solid #8b5e1a;border-radius:6px;width:38px;height:36px;padding:2px;background:transparent">
+            </div>
+          </div>
+          <div>
+            <label class="flabel">Colores rápidos</label>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <div style="width:26px;height:26px;border-radius:5px;background:#c8a84b;cursor:pointer;border:2px solid transparent" onclick="setBrandColor('#c8a84b')" title="Dorado"></div>
+              <div style="width:26px;height:26px;border-radius:5px;background:#ffffff;cursor:pointer;border:2px solid #d8c4a0" onclick="setBrandColor('#ffffff')" title="Blanco"></div>
+              <div style="width:26px;height:26px;border-radius:5px;background:#111111;cursor:pointer;border:2px solid #d8c4a0" onclick="setBrandColor('#111111')" title="Negro"></div>
+              <div style="width:26px;height:26px;border-radius:5px;background:#e84040;cursor:pointer;border:2px solid transparent" onclick="setBrandColor('#e84040')" title="Rojo"></div>
+              <div style="width:26px;height:26px;border-radius:5px;background:#40a0e8;cursor:pointer;border:2px solid transparent" onclick="setBrandColor('#40a0e8')" title="Azul"></div>
+              <div style="width:26px;height:26px;border-radius:5px;background:#60d060;cursor:pointer;border:2px solid transparent" onclick="setBrandColor('#60d060')" title="Verde"></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="slider-row">
+            <span class="slider-label">Tamaño del nombre</span>
+            <span class="slider-val" id="val-brand-size">1.15 rem</span>
+          </div>
+          <input type="range" id="sl-brand-size" min="8" max="32" step="1" value="12" oninput="updateBrandOverlay()">
+        </div>
+        <div>
+          <label class="flabel">Logo (PNG transparente)</label>
+          <div class="logo-drop" id="logo-drop" onclick="document.getElementById('logo-input').click()">
+            <div id="logo-preview-wrap">
+              <div style="font-size:1.8rem">🏷️</div>
+              <div style="font-size:1rem;color:#a08060;margin-top:4px">Toca para subir tu logo</div>
+            </div>
+          </div>
+          <input type="file" id="logo-input" accept="image/*" style="display:none" onchange="setLogo(this)">
+          <button id="logo-clear" style="display:none;margin-top:6px;background:transparent;color:#c0572a;border:1.5px solid #c0572a;padding:7px 14px;border-radius:6px;font-weight:700;font-size:.95rem;cursor:pointer;width:100%" onclick="clearLogo()">✕ Quitar logo</button>
+        </div>
+        <div>
+          <div class="slider-row">
+            <span class="slider-label">Tamaño del logo</span>
+            <span class="slider-val" id="val-logo-size">52 px</span>
+          </div>
+          <input type="range" id="sl-logo-size" min="24" max="160" step="2" value="52" oninput="updateLogoSize()">
+        </div>
+      </div>
+    </div>
+
+    <div class="acc" style="border-bottom:none">
+      <div class="acc-head open" onclick="toggleAcc(this)">
+        <span>💰 Bloque de precio</span><span class="chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div>
+          <label class="flabel">Frase antes del precio</label>
+          <textarea class="finput-ta" id="price-label-input" rows="2" oninput="updatePriceCard()">Si quieres tu diseño de este tamaño, su precio final sería:</textarea>
+        </div>
+        <div class="price-preview-box">
+          <div class="ppb-label">Precio calculado</div>
+          <div class="ppb-val" id="ppb-val">—</div>
+          <div class="ppb-note" id="ppb-note">Configura los costos arriba</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /right-col -->
+</div><!-- /mesa -->
+
+<!-- hidden canvases -->
+<canvas id="crop-canvas" style="display:none;position:fixed;top:-9999px"></canvas>
+<canvas id="export-canvas" style="display:none;position:fixed;top:-9999px"></canvas>
+
+<script>
+// ════════════════════════════════════════
+// ACCORDION
+// ════════════════════════════════════════
+function toggleAcc(head){
+  const body=head.nextElementSibling;
+  const open=!body.classList.contains('closed');
+  if(open){body.classList.add('closed');head.classList.remove('open');}
+  else{body.classList.remove('closed');head.classList.add('open');}
+}
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+const layersData={playera:{front:[],back:[]},sudadera:{front:[],back:[]},mangalarga:{front:[],back:[]}};
+let currentModel='playera',currentSide='front',activeLayerId=null,layerCounter=0;
+const DPI_FACTOR=118.11;
+
+const cardState={
+  bgColor:'#fdf8f2',
+  bgImageSrc:null,
+  bgOpacity:0.8,
+  brandName:'',
+  logoSrc:null,
+  logoSize:52,
+  brandColor:'#c8a84b',
+  priceLabelText:'Si quieres tu diseño de este tamaño, su precio final sería:'
+};
+
+// DOM refs
+const modelSelector=document.getElementById('model-selector');
+const slAncho=document.getElementById('sl-ancho');
+const slLargo=document.getElementById('sl-largo');
+const slScale=document.getElementById('sl-scale');
+const slRotation=document.getElementById('sl-rotation');
+const valW=document.getElementById('val-w');
+const valH=document.getElementById('val-h');
+const valScale=document.getElementById('val-scale');
+const valRotation=document.getElementById('val-rotation');
+const colorPicker=document.getElementById('shirt-color');
+const uploadInput=document.getElementById('upload-design');
+const btnDelete=document.getElementById('btn-delete');
+const designWrapper=document.getElementById('design-wrapper');
+const mockupContainer=document.getElementById('mockup-container');
+const dynamicShirt=document.getElementById('dynamic-shirt');
+const dropHint=document.getElementById('drop-hint');
+const layerControls=document.getElementById('layer-controls');
+
+// ════════════════════════════════════════
+// METRICS
+// ════════════════════════════════════════
+function getMetrics(){
+  const valWcm=parseFloat(slAncho.value);
+  const valHcm=parseFloat(slLargo.value);
+  const valH_visual=valHcm+5;
+  let minX,minY,viewW,viewH,torsoLeftSVG,torsoTopSVG,torsoWidthSVG,torsoHeightSVG,dw,dh,baseValW,baseTorsoW;
+  if(currentModel==='playera'){
+    dw=(valWcm-47)*4.5957;dh=(valH_visual-71)*10;
+    minX=-150;viewW=1450;minY=0;viewH=1650;
+    torsoWidthSVG=(748+dw)-(316-dw);torsoHeightSVG=(1067+dh)-427;
+    torsoLeftSVG=(316-dw)-minX;torsoTopSVG=427-minY;
+    baseValW=47;baseTorsoW=432;
+  } else if(currentModel==='sudadera'){
+    dw=(valWcm-47)*3.9361;dh=(valH_visual-67.3)*10;
+    minX=210;viewW=900;minY=140;viewH=1100;
+    torsoWidthSVG=(845+dw)-(475-dw);torsoHeightSVG=(947+dh)-282.6;
+    torsoLeftSVG=(475-dw)-minX;torsoTopSVG=282.6-minY;
+    baseValW=47;baseTorsoW=370;
+  } else {
+    dw=(valWcm-51)*3.6274;dh=(valH_visual-73)*6.2;
+    minX=210;viewW=900;minY=300;viewH=800;
+    torsoWidthSVG=(845+dw)-(475-dw);torsoHeightSVG=(947+dh)-494;
+    torsoLeftSVG=(475-dw)-minX;torsoTopSVG=494-minY;
+    baseValW=51;baseTorsoW=370;
+  }
+  const cW=mockupContainer.offsetWidth||480;
+  const cH=mockupContainer.offsetHeight||Math.round(cW*7/6);
+  const scale=Math.min(cW/viewW,cH/viewH);
+  const rW=viewW*scale,rH=viewH*scale;
+  const offX=(cW-rW)/2,offY=(cH-rH)/2;
+  const pxPerCm=(baseTorsoW*scale)/baseValW;
+  return{minX,minY,viewW,viewH,scale,offX,offY,
+    torsoLeftPx:offX+torsoLeftSVG*scale,torsoTopPx:offY+torsoTopSVG*scale,
+    torsoWidthPx:torsoWidthSVG*scale,torsoHeightPx:torsoHeightSVG*scale,pxPerCm};
+}
+
+// ════════════════════════════════════════
+// DRAW GEOMETRY
+// ════════════════════════════════════════
+function drawGeometry(){
+  const m=getMetrics();
+  const vb=`${m.minX} ${m.minY} ${m.viewW} ${m.viewH}`;
+  dynamicShirt.setAttribute('viewBox',vb);
+  dynamicShirt.setAttribute('width',mockupContainer.offsetWidth||480);
+  dynamicShirt.setAttribute('height',mockupContainer.offsetHeight||Math.round((mockupContainer.offsetWidth||480)*7/6));
+
+  const valWcm=parseFloat(slAncho.value);
+  const valHcm=parseFloat(slLargo.value);
+  const valH_v=valHcm+5;
+  valW.textContent=valWcm.toFixed(1)+' cm';
+  valH.textContent=valHcm.toFixed(1)+' cm';
+
+  if(currentModel==='playera'){
+    document.getElementById('group-playera').style.display='';
+    document.getElementById('group-sudadera').style.display='none';
+    document.getElementById('group-mangalarga').style.display='none';
+    const dw=(valWcm-47)*4.5957,dh=(valH_v-71)*10;
+    const bp=`M 532 ${1067+dh} L ${316-dw} ${1067+dh} L ${316-dw} 692 L ${229-dw} 710 L ${150-dw} 571 L ${306-dw} 481 L 456 426 C 482 442,531 439.91,531 439.91 L 532 439.87 C 532.5 439.89,533 439.91,533 439.91 C 533 439.91,582 442,608 426 L ${758+dw} 481 L ${914+dw} 571 L ${835+dw} 710 L ${748+dw} 692 L ${748+dw} ${1067+dh} Z`;
+    document.getElementById('path-perimeter').setAttribute('d',bp);
+    document.getElementById('playera-outline').setAttribute('d',bp);
+    document.getElementById('playera-seam-l').setAttribute('d',`M ${305-dw} 482 s 27 98 11 210`);
+    document.getElementById('playera-seam-r').setAttribute('d',`M ${759+dw} 482 s -27 98 -11 210`);
+    const fc=document.getElementById('playera-front-collar');
+    const bc=document.getElementById('playera-back-collar');
+    if(currentSide==='front'){fc.style.display='';bc.style.display='none';}
+    else{fc.style.display='none';bc.style.display='';}
+  } else if(currentModel==='sudadera'){
+    document.getElementById('group-playera').style.display='none';
+    document.getElementById('group-sudadera').style.display='';
+    document.getElementById('group-mangalarga').style.display='none';
+    const dw=(valWcm-47)*3.9361,dh=(valH_v-67.3)*10;
+    const body=`M ${475-dw} 282.6 L ${475-dw} ${947+dh} L ${845+dw} ${947+dh} L ${845+dw} 282.6 C ${845+dw} 282.6 ${810+dw} 210 ${760+dw} 180 L ${710+dw} 155 C ${710+dw} 155 ${700+dw} 145 ${680+dw} 155 L ${660} 165 L ${640-dw+dw*2} 155 C ${620-dw+dw*2} 145 ${610-dw+dw*2} 155 ${610-dw+dw*2} 155 L ${560-dw} 180 C ${510-dw} 210 ${475-dw} 282.6 ${475-dw} 282.6 Z`;
+    document.getElementById('sudadera-body').setAttribute('d',body);
+    document.getElementById('sudadera-outline').setAttribute('d',body);
+    document.getElementById('sudadera-seam-l').setAttribute('d',`M ${560-dw} 180 C ${580-dw} 200 ${610-dw} 220 ${660} 235`);
+    document.getElementById('sudadera-seam-r').setAttribute('d',`M ${760+dw} 180 C ${740+dw} 200 ${710+dw} 220 ${660} 235`);
+    document.getElementById('sudadera-pocket').setAttribute('d',`M ${575} ${700} L ${745} ${700} L ${745} ${850+dh} L ${575} ${850+dh} Z`);
+    const sfc=document.getElementById('sudadera-front-collar');
+    const sbc=document.getElementById('sudadera-back-collar');
+    document.getElementById('sud-col-l').setAttribute('d',`M ${610-dw+dw*2} 155 C ${620-dw+dw*2} 175 ${635} 205 ${660} 220`);
+    document.getElementById('sud-col-r').setAttribute('d',`M ${680+dw} 155 C ${695+dw} 175 ${700+dw} 205 ${660} 220`);
+    if(currentSide==='front'){sfc.style.display='';sbc.style.display='none';}
+    else{sfc.style.display='none';sbc.style.display='';}
+    if(sbc.querySelector('#sud-col-bl')){
+      document.getElementById('sud-col-bl').setAttribute('d',`M ${600} 155 C ${610} 165 ${635} 180 ${660} 190`);
+      document.getElementById('sud-col-br').setAttribute('d',`M ${720} 155 C ${710} 165 ${685} 180 ${660} 190`);
+    }
+  } else {
+    document.getElementById('group-playera').style.display='none';
+    document.getElementById('group-sudadera').style.display='none';
+    document.getElementById('group-mangalarga').style.display='';
+    const dw=(valWcm-51)*3.6274,dh=(valH_v-73)*6.2;
+    const body=`M ${475-dw} 494 L ${475-dw} ${947+dh} L ${845+dw} ${947+dh} L ${845+dw} 494 C ${845+dw} 494 ${810+dw} 430 ${760+dw} 410 L ${710+dw} 395 C ${700+dw} 390 ${680+dw} 385 ${660} 390 C ${640} 385 ${620-dw} 390 ${610-dw} 395 L ${560-dw} 410 C ${510-dw} 430 ${475-dw} 494 ${475-dw} 494 Z`;
+    const sleeveL=`M ${475-dw} 494 L ${380-dw} 550 L ${330-dw} 700 L ${390-dw} 710 L ${475-dw} 580 L ${475-dw} 750 Z`;
+    const sleeveR=`M ${845+dw} 494 L ${940+dw} 550 L ${990+dw} 700 L ${930+dw} 710 L ${845+dw} 580 L ${845+dw} 750 Z`;
+    document.getElementById('ml-body').setAttribute('d',body);
+    document.getElementById('ml-outline').setAttribute('d',body);
+    document.getElementById('ml-sleeve-l').setAttribute('d',sleeveL);
+    document.getElementById('ml-sleeve-r').setAttribute('d',sleeveR);
+    document.getElementById('ml-seam-l').setAttribute('d',`M ${610-dw} 395 C ${630-dw} 415 ${645} 435 ${660} 445`);
+    document.getElementById('ml-seam-r').setAttribute('d',`M ${710+dw} 395 C ${690+dw} 415 ${675} 435 ${660} 445`);
+    const mfc=document.getElementById('ml-front-collar');
+    const mbc=document.getElementById('ml-back-collar');
+    if(currentSide==='front'){mfc.style.display='';mbc.style.display='none';}
+    else{mfc.style.display='none';mbc.style.display='';}
+  }
+  updateAllLayerPositions();
+}
+
+// ════════════════════════════════════════
+// LAYERS
+// ════════════════════════════════════════
+function updateAllLayerPositions(){
+  const m=getMetrics();
+  ['front','back'].forEach(sd=>{
+    layersData[currentModel][sd].forEach(layer=>{
+      layer.w=layer.realW*m.pxPerCm;layer.h=layer.w*layer.aspect;
+      if(layer.relCenterX!==undefined){
+        const cx=m.torsoLeftPx+layer.relCenterX*m.torsoWidthPx;
+        const cy=m.torsoTopPx+layer.relCenterY*m.torsoHeightPx;
+        layer.x=cx-layer.w/2;layer.y=cy-layer.h/2;
+      } else {
+        layer.x=m.torsoLeftPx+m.torsoWidthPx/2-layer.w/2;
+        layer.y=m.torsoTopPx+m.torsoHeightPx/2.5-layer.h/2;
+      }
+      if(sd===currentSide){
+        const el=document.getElementById(layer.id);
+        if(el){el.style.width=layer.w+'px';el.style.height=layer.h+'px';el.style.left=layer.x+'px';el.style.top=layer.y+'px';}
+      }
+    });
+  });
+}
+
+function renderLayers(){
+  designWrapper.innerHTML='';
+  const list=layersData[currentModel][currentSide];
+  dropHint.style.display=list.length>0?'none':'flex';
+  list.forEach(layer=>{
+    const el=document.createElement('div');
+    el.id=layer.id;el.className='design-layer'+(layer.id===activeLayerId?' selected':'');
+    el.style.left=layer.x+'px';el.style.top=layer.y+'px';
+    el.style.width=layer.w+'px';el.style.height=layer.h+'px';
+    el.style.zIndex=layer.id===activeLayerId?50:40;
+    const img=document.createElement('img');
+    img.src=layer.imgSrc;img.setAttribute('draggable','false');
+    img.style.transform=`rotate(${layer.rotation||0}deg)`;
+    el.appendChild(img);
+    const tag=document.createElement('div');
+    tag.className='dim-tag';
+    tag.textContent=`${layer.realW.toFixed(1)}×${layer.realH.toFixed(1)} cm`;
+    tag.style.display=layer.id===activeLayerId?'block':'none';
+    el.appendChild(tag);
+    el.addEventListener('mousedown',onStart);
+    el.addEventListener('touchstart',onStart,{passive:false});
+    designWrapper.appendChild(el);
+  });
+  updateLayerUI();
+  updateLiveDesigns();
+  recalcular();
+}
+
+function updateLayerUI(){
+  const has=!!activeLayerId;
+  layerControls.classList.toggle('enabled',has);
+  btnDelete.classList.toggle('on',has);
+  if(has){const l=getActive();if(l){slScale.value=l.scaleCm;slRotation.value=l.rotation||0;valScale.textContent=l.scaleCm.toFixed(1)+' cm';valRotation.textContent=(l.rotation||0)+'°';}}
+}
+function getActive(){return activeLayerId?layersData[currentModel][currentSide].find(l=>l.id===activeLayerId):null;}
+
+// ════════════════════════════════════════
+// DRAG
+// ════════════════════════════════════════
+let isDrag=false,sX,sY,sLX,sLY;
+const gX=e=>e.touches?e.touches[0].clientX:e.clientX;
+const gY=e=>e.touches?e.touches[0].clientY:e.clientY;
+
+function onStart(e){
+  activeLayerId=e.currentTarget.id;renderLayers();
+  isDrag=true;sX=gX(e);sY=gY(e);
+  const l=getActive();sLX=l.x;sLY=l.y;
+  const el=document.getElementById(activeLayerId);if(el)el.style.cursor='grabbing';
+  if(e.cancelable)e.preventDefault();e.stopPropagation();
+}
+function onMove(e){
+  if(!isDrag||!activeLayerId)return;
+  if(e.cancelable)e.preventDefault();
+  const l=getActive();if(!l)return;
+  l.x=sLX+gX(e)-sX;l.y=sLY+gY(e)-sY;
+  const el=document.getElementById(activeLayerId);
+  if(el){el.style.left=l.x+'px';el.style.top=l.y+'px';}
+}
+function onEnd(){
+  if(isDrag&&activeLayerId){
+    const l=getActive();
+    if(l){
+      const m=getMetrics();
+      const el=document.getElementById(activeLayerId);if(el)el.style.cursor='grab';
+      const cx=l.x+l.w/2,cy=l.y+l.h/2;
+      l.relCenterX=(cx-m.torsoLeftPx)/m.torsoWidthPx;
+      l.relCenterY=(cy-m.torsoTopPx)/m.torsoHeightPx;
+    }
+  }
+  isDrag=false;
+}
+document.addEventListener('mousemove',onMove,{passive:false});
+document.addEventListener('touchmove',onMove,{passive:false});
+document.addEventListener('mouseup',onEnd);
+document.addEventListener('touchend',onEnd);
+designWrapper.addEventListener('mousedown',e=>{if(e.target===designWrapper){activeLayerId=null;renderLayers();}});
+
+// ════════════════════════════════════════
+// SLIDERS
+// ════════════════════════════════════════
+slScale.addEventListener('input',function(){
+  const cm=parseFloat(this.value);
+  valScale.textContent=cm.toFixed(1)+' cm';
+  const l=getActive();if(!l)return;
+  const m=getMetrics(),oW=l.w,oH=l.h;
+  l.scaleCm=cm;l.w=cm*m.pxPerCm;l.h=l.w*l.aspect;
+  l.realW=cm;l.realH=cm*l.aspect;
+  l.x=l.x-(l.w-oW)/2;l.y=l.y-(l.h-oH)/2;
+  const cx=l.x+l.w/2,cy=l.y+l.h/2;
+  l.relCenterX=(cx-m.torsoLeftPx)/m.torsoWidthPx;
+  l.relCenterY=(cy-m.torsoTopPx)/m.torsoHeightPx;
+  const el=document.getElementById(l.id);
+  if(el){el.style.width=l.w+'px';el.style.height=l.h+'px';el.style.left=l.x+'px';el.style.top=l.y+'px';
+    const tag=el.querySelector('.dim-tag');if(tag)tag.textContent=`${l.realW.toFixed(1)}×${l.realH.toFixed(1)} cm`;}
+  updateLiveDesigns();recalcular();
+});
+slRotation.addEventListener('input',function(){
+  const rot=parseInt(this.value);valRotation.textContent=rot+'°';
+  const l=getActive();if(!l)return;l.rotation=rot;
+  const el=document.getElementById(l.id);if(el){const img=el.querySelector('img');if(img)img.style.transform=`rotate(${rot}deg)`;}
+});
+slAncho.addEventListener('input',drawGeometry);
+slLargo.addEventListener('input',drawGeometry);
+window.addEventListener('resize',()=>drawGeometry());
+
+// ════════════════════════════════════════
+// COLOR
+// ════════════════════════════════════════
+colorPicker.addEventListener('input',function(){applyColor(this.value);});
+function applyColor(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  const luma=0.2126*r+0.7152*g+0.0722*b;
+  const stroke=luma<120?'rgba(255,255,255,0.85)':'#111111';
+  const holeColor=luma<120?'#222222':'#111111';
+  document.querySelectorAll('.garment-stroke').forEach(e=>e.setAttribute('stroke',stroke));
+  document.querySelectorAll('.garment-fill').forEach(e=>e.setAttribute('fill',hex));
+  const ds=document.getElementById('sud-drawstring');if(ds)ds.setAttribute('fill',holeColor);
+}
+
+// ════════════════════════════════════════
+// MODEL / SIZE
+// ════════════════════════════════════════
+modelSelector.addEventListener('change',function(){
+  currentModel=this.value;activeLayerId=null;
+  document.querySelectorAll('.sz-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('sizes-playera').style.display=currentModel==='playera'?'block':'none';
+  document.getElementById('sizes-sudadera').style.display=currentModel==='sudadera'?'block':'none';
+  document.getElementById('sizes-mangalarga').style.display=currentModel==='mangalarga'?'block':'none';
+  if(currentModel==='playera'){slAncho.min=43;slLargo.min=63;slAncho.value=47;slLargo.value=71;}
+  else if(currentModel==='sudadera'){slAncho.min=47;slLargo.min=67.3;slAncho.value=47;slLargo.value=67.3;}
+  else{slAncho.min=46;slLargo.min=70;slAncho.value=51;slLargo.value=73;}
+  drawGeometry();renderLayers();
+});
+
+window.switchSide=function(side){
+  currentSide=side;activeLayerId=null;
+  document.getElementById('btn-frente').className='vbtn '+(side==='front'?'active':'inactive');
+  document.getElementById('btn-espalda').className='vbtn '+(side==='back'?'active':'inactive');
+  drawGeometry();renderLayers();
+};
+
+window.setSize=function(w,h,btn){
+  slAncho.value=w;slLargo.value=h;
+  document.querySelectorAll('.sz-btn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');drawGeometry();
+};
+
+// ════════════════════════════════════════
+// DELETE
+// ════════════════════════════════════════
+btnDelete.addEventListener('click',function(){
+  if(!activeLayerId)return;
+  layersData[currentModel][currentSide]=layersData[currentModel][currentSide].filter(l=>l.id!==activeLayerId);
+  activeLayerId=null;renderLayers();
+});
+
+// ════════════════════════════════════════
+// AUTO-CROP
+// ════════════════════════════════════════
+function autoCrop(src,cb){
+  const img=new Image();
+  img.onload=function(){
+    const cvs=document.getElementById('crop-canvas');
+    cvs.width=img.width;cvs.height=img.height;
+    const ctx=cvs.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,0,0);
+    const d=ctx.getImageData(0,0,cvs.width,cvs.height).data;
+    let x0=cvs.width,y0=cvs.height,x1=0,y1=0,has=false;
+    for(let y=0;y<cvs.height;y++)for(let x=0;x<cvs.width;x++){
+      if(d[(y*cvs.width+x)*4+3]>5){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;has=true;}
+    }
+    if(!has){cb(src,img.width);return;}
+    const cw=x1-x0+1,ch=y1-y0+1;
+    const c2=document.createElement('canvas');c2.width=cw;c2.height=ch;
+    c2.getContext('2d').drawImage(cvs,x0,y0,cw,ch,0,0,cw,ch);
+    cb(c2.toDataURL('image/png'),cw);
+  };img.src=src;
+}
+
+function addLayer(croppedSrc,cropWidthPx){
+  const img=new Image();
+  img.onload=function(){
+    const aspect=img.height/img.width;
+    layerCounter++;const newId='layer-'+layerCounter;
+    const m=getMetrics();
+    let cm=cropWidthPx/DPI_FACTOR;cm=Math.max(5,Math.min(cm,100));
+    const iW=cm*m.pxPerCm,iH=iW*aspect;
+    const cx=m.torsoLeftPx+m.torsoWidthPx/2,cy=m.torsoTopPx+m.torsoHeightPx/2.5;
+    layersData[currentModel][currentSide].push({
+      id:newId,imgSrc:croppedSrc,
+      x:cx-iW/2,y:cy-iH/2,w:iW,h:iH,
+      scaleCm:cm,realW:cm,realH:cm*aspect,aspect,rotation:0,
+      relCenterX:(cx-m.torsoLeftPx)/m.torsoWidthPx,
+      relCenterY:(cy-m.torsoTopPx)/m.torsoHeightPx
+    });
+    activeLayerId=newId;renderLayers();dropHint.style.display='none';
+  };img.src=croppedSrc;
+}
+
+uploadInput.addEventListener('click',function(){this.value=null;});
+uploadInput.addEventListener('change',function(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>autoCrop(ev.target.result,(src,cw)=>addLayer(src,cw));
+  r.readAsDataURL(f);
+});
+
+document.querySelector('.left-col').addEventListener('dragover',e=>e.preventDefault());
+document.querySelector('.left-col').addEventListener('drop',e=>{
+  e.preventDefault();
+  Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')).forEach(file=>{
+    const r=new FileReader();
+    r.onload=ev=>autoCrop(ev.target.result,(src,cw)=>addLayer(src,cw));
+    r.readAsDataURL(file);
+  });
+});
+
+// ════════════════════════════════════════
+// LIVE DESIGNS
+// ════════════════════════════════════════
+function updateLiveDesigns(){
+  const box=document.getElementById('live-designs-box');
+  const front=layersData[currentModel].front;
+  const back=layersData[currentModel].back;
+  const all=[...front.map((l,i)=>({...l,side:'Frente',num:i+1})),...back.map((l,i)=>({...l,side:'Espalda',num:i+1}))];
+  if(all.length===0){box.innerHTML='<div class="live-designs-empty">Sin diseños colocados</div>';return;}
+  box.innerHTML=all.map(l=>`<div class="live-design-row">
+    <div><div class="ldr-name">${l.side} · Diseño ${l.num}</div><div class="ldr-area">${(l.realW*l.realH).toFixed(1)} cm²</div></div>
+    <div class="ldr-dims">${l.realW.toFixed(1)} × ${l.realH.toFixed(1)} cm</div>
+  </div>`).join('');
+}
+
+// ════════════════════════════════════════
+// CALCULADORA
+// ════════════════════════════════════════
+const currencies={
+  MXN:{sym:'$',locale:'es-MX',name:'Pesos Mexicanos'},
+  USD:{sym:'$',locale:'en-US',name:'US Dollars'},
+  EUR:{sym:'€',locale:'es-ES',name:'Euros'},
+  COP:{sym:'$',locale:'es-CO',name:'Pesos Colombianos'},
+  ARS:{sym:'$',locale:'es-AR',name:'Pesos Argentinos'},
+  BRL:{sym:'R$',locale:'pt-BR',name:'Reales Brasileños'},
+};
+
+function fmt(v,code){const c=currencies[code]||currencies.MXN;return c.sym+v.toLocaleString(c.locale,{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+window._lastCalc=null;
+
+function recalcular(){
+  const code=document.getElementById('moneda').value;
+  const precioPliego=+document.getElementById('precioPliego').value||0;
+  const manoObra=+document.getElementById('manoObra').value||0;
+  const anchoPliego=+document.getElementById('anchoPliego').value||60;
+  const altoPliego=+document.getElementById('altoPliego').value||90;
+  const cPlayera=+document.getElementById('cPlayera').value||0;
+  const cMateriales=+document.getElementById('cMateriales').value||0;
+  const cTransporte=+document.getElementById('cTransporte').value||0;
+  const cOtros=+document.getElementById('cOtros').value||0;
+  const margen=+document.getElementById('sl-margen').value||0;
+  let areaTotal=0;
+  ['front','back'].forEach(sd=>layersData[currentModel][sd].forEach(l=>{areaTotal+=l.realW*l.realH;}));
+  const areaPliego=anchoPliego*altoPliego;
+  const costoDTF=areaPliego>0?(areaTotal/areaPliego)*precioPliego:0;
+  const costoTotal=costoDTF+manoObra+cPlayera+cMateriales+cTransporte+cOtros;
+  const ganancia=costoTotal*(margen/100);
+  const precioVenta=costoTotal+ganancia;
+  document.getElementById('rb-area').textContent=areaTotal.toFixed(2)+' cm²';
+  document.getElementById('rb-dtf').textContent=fmt(costoDTF,code);
+  document.getElementById('rb-sub').textContent=fmt(costoTotal,code);
+  document.getElementById('rb-gan').textContent=fmt(ganancia,code)+' ('+margen+'%)';
+  document.getElementById('rb-total').textContent=fmt(precioVenta,code);
+  window._lastCalc={precioVenta,costoTotal,ganancia,margen,code,areaTotal,c:currencies[code]||currencies.MXN};
+  updatePriceCard();
+}
+
+document.querySelectorAll('#precioPliego,#manoObra,#anchoPliego,#altoPliego,#cPlayera,#cMateriales,#cTransporte,#cOtros,#moneda').forEach(el=>{
+  el.addEventListener('input',recalcular);el.addEventListener('change',recalcular);
+});
+
+// ════════════════════════════════════════
+// PRICE CARD (izquierda, debajo de playera)
+// ════════════════════════════════════════
+function updatePriceCard(){
+  const cc=window._lastCalc;
+  const labelText=document.getElementById('price-label-input').value;
+  document.getElementById('price-card-label').textContent=labelText;
+  cardState.priceLabelText=labelText;
+
+  if(cc&&cc.precioVenta>0){
+    const priceStr=cc.c.sym+cc.precioVenta.toLocaleString(cc.c.locale,{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('price-card-amount').textContent=priceStr;
+    document.getElementById('ppb-val').textContent=priceStr;
+    document.getElementById('ppb-note').textContent='Ganancia '+cc.margen+'% · '+cc.c.name;
+  } else {
+    document.getElementById('price-card-amount').textContent='—';
+    document.getElementById('ppb-val').textContent='—';
+    document.getElementById('ppb-note').textContent='Configura los costos arriba';
+  }
+
+  const dname=document.getElementById('design-name');
+  document.getElementById('price-card-dname').textContent=dname&&dname.value.trim()?dname.value.trim().toUpperCase():'';
+
+  // Actualizar overlay de marca visible
+  const bn=document.getElementById('brand-name-input').value.trim();
+  const bOverlay=document.getElementById('brand-overlay-name');
+  const brandColor=document.getElementById('brand-color-input').value||'#c8a84b';
+  const brandSize=parseInt(document.getElementById('sl-brand-size').value)||12;
+  bOverlay.textContent=bn?'✦ '+bn+' ✦':'';
+  bOverlay.style.color=brandColor;
+  bOverlay.style.fontSize=brandSize+'px';
+  bOverlay.classList.toggle('visible',!!bn);
+}
+
+// ════════════════════════════════════════
+// BRAND OVERLAY CONTROLS
+// ════════════════════════════════════════
+function updateBrandOverlay(){
+  updatePriceCard();
+}
+
+function setBrandColor(color){
+  document.getElementById('brand-color-input').value=color;
+  updateBrandOverlay();
+}
+
+function updateLogoSize(){
+  const sz=parseInt(document.getElementById('sl-logo-size').value)||52;
+  document.getElementById('val-logo-size').textContent=sz+' px';
+  const ol=document.getElementById('brand-overlay-logo');
+  ol.style.height=sz+'px';
+  ol.style.maxWidth=(sz*4)+'px';
+  // guardar en cardState
+  cardState.logoSize=sz;
+}
+
+document.getElementById('design-name').addEventListener('input',updatePriceCard);
+
+// ════════════════════════════════════════
+// CARD BACKGROUND (applies to shirt-bg-box)
+// ════════════════════════════════════════
+function applyCardStyle(){
+  const bgLayer=document.getElementById('shirt-bg-layer');
+  const opacity=parseInt(document.getElementById('sl-bg-opacity').value)/100;
+  cardState.bgOpacity=opacity;
+
+  if(cardState.bgImageSrc){
+    bgLayer.style.backgroundImage=`url(${cardState.bgImageSrc})`;
+    bgLayer.style.backgroundColor=cardState.bgColor;
+    bgLayer.style.opacity=opacity;
+    bgLayer.style.display='block';
+  } else if(cardState.bgColor&&cardState.bgColor!=='#fdf8f2'){
+    bgLayer.style.backgroundImage='none';
+    bgLayer.style.backgroundColor=cardState.bgColor;
+    bgLayer.style.opacity=opacity;
+    bgLayer.style.display='block';
+  } else {
+    bgLayer.style.display='none';
+  }
+}
+
+function setBgColor(el,color){
+  cardState.bgColor=color;
+  document.querySelectorAll('.bg-swatch').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('bg-custom-color').value=color;
+  applyCardStyle();
+}
+function setBgColorCustom(color){
+  cardState.bgColor=color;
+  document.querySelectorAll('.bg-swatch').forEach(s=>s.classList.remove('on'));
+  applyCardStyle();
+}
+function setBgImage(input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    cardState.bgImageSrc=ev.target.result;
+    document.getElementById('bg-img-preview-wrap').innerHTML=`<img src="${ev.target.result}" class="logo-preview" style="max-height:80px;border-radius:6px">`;
+    document.getElementById('bg-img-clear').style.display='block';
+    applyCardStyle();
+  };r.readAsDataURL(f);
+}
+function clearBgImage(){
+  cardState.bgImageSrc=null;
+  document.getElementById('bg-img-preview-wrap').innerHTML=`<div style="font-size:1.8rem">🖼️</div><div style="font-size:1rem;color:#a08060;margin-top:4px">Toca para subir imagen de fondo</div>`;
+  document.getElementById('bg-img-clear').style.display='none';
+  document.getElementById('bg-img-input').value='';
+  applyCardStyle();
+}
+
+// ════════════════════════════════════════
+// LOGO
+// ════════════════════════════════════════
+function setLogo(input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    cardState.logoSrc=ev.target.result;
+    document.getElementById('logo-preview-wrap').innerHTML=`<img src="${ev.target.result}" class="logo-preview">`;
+    document.getElementById('logo-clear').style.display='block';
+    // Mostrar logo en overlay con tamaño del slider
+    const sz=parseInt(document.getElementById('sl-logo-size').value)||52;
+    const ol=document.getElementById('brand-overlay-logo');
+    ol.src=ev.target.result;
+    ol.style.height=sz+'px';
+    ol.style.maxWidth=(sz*4)+'px';
+    ol.style.display='block';
+    cardState.logoSize=sz;
+  };r.readAsDataURL(f);
+}
+function clearLogo(){
+  cardState.logoSrc=null;
+  document.getElementById('logo-preview-wrap').innerHTML=`<div style="font-size:1.8rem">🏷️</div><div style="font-size:1rem;color:#a08060;margin-top:4px">Toca para subir tu logo</div>`;
+  document.getElementById('logo-clear').style.display='none';
+  document.getElementById('logo-input').value='';
+  // Ocultar logo del overlay
+  const ol=document.getElementById('brand-overlay-logo');
+  ol.src='';ol.style.display='none';
+}
+
+// ════════════════════════════════════════
+// DOWNLOAD — alta resolución con html-to-image
+// ════════════════════════════════════════
+async function downloadCard(){
+  const btn=document.getElementById('dl-btn-main');
+  const overlay=document.getElementById('export-overlay');
+  const box=document.getElementById('shirt-bg-box');
+  const dname=(document.getElementById('design-name').value.trim()||'diseño').replace(/\s+/g,'-').toLowerCase();
+
+  // Activar estado de carga
+  btn.disabled=true;btn.classList.add('loading');
+  overlay.classList.add('visible');
+
+  try{
+    // Esperar fuentes
+    await document.fonts.ready;
+    // Pequeña pausa para que el DOM esté 100% renderizado
+    await new Promise(r=>setTimeout(r,120));
+
+    let dataUrl;
+    if(window.htmlToImage){
+      dataUrl=await window.htmlToImage.toPng(box,{
+        pixelRatio:2.5,
+        quality:1,
+        cacheBust:true,
+        skipAutoScale:false,
+        backgroundColor:null,
+        style:{borderRadius:'24px'}
+      });
+    } else {
+      // Fallback: canvas manual
+      dataUrl=await fallbackCanvas();
+    }
+
+    const link=document.createElement('a');
+    link.download='chechena-'+dname+'.png';
+    link.href=dataUrl;
+    link.click();
+    setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+  }catch(err){
+    console.error('Export error:',err);
+    // Fallback al método canvas si html-to-image falla
+    try{const dataUrl=await fallbackCanvas();const link=document.createElement('a');link.download='chechena-'+dname+'.png';link.href=dataUrl;link.click();}catch(e){alert('Error al guardar imagen. Intenta de nuevo.');}
+  }finally{
+    btn.disabled=false;btn.classList.remove('loading');
+    overlay.classList.remove('visible');
+  }
+}
+
+// Canvas fallback (método anterior mejorado)
+function fallbackCanvas(){
+  return new Promise((resolve,reject)=>{
+    const box=document.getElementById('shirt-bg-box');
+    const W=Math.round(box.offsetWidth);
+    const H=Math.round(box.offsetHeight);
+    const DPR=2.5;
+    const out=document.createElement('canvas');
+    out.width=Math.round(W*DPR);out.height=Math.round(H*DPR);
+    const ctx=out.getContext('2d');
+    ctx.scale(DPR,DPR);
+
+    const mcW=mockupContainer.offsetWidth||480;
+    const mcH=mockupContainer.offsetHeight||Math.round(mcW*7/6);
+    const priceH=document.getElementById('price-card').offsetHeight||120;
+
+    // Fondo
+    if(cardState.bgImageSrc){
+      const bgImg=new Image();
+      bgImg.onload=()=>{
+        ctx.save();ctx.globalAlpha=cardState.bgOpacity||0.8;
+        ctx.drawImage(bgImg,0,0,W,H);ctx.globalAlpha=1;ctx.restore();
+        drawShirt();
+      };bgImg.src=cardState.bgImageSrc;
+    } else {
+      ctx.fillStyle=cardState.bgColor||'#fff';ctx.fillRect(0,0,W,H);
+      drawShirt();
+    }
+
+    function drawShirt(){
+      const svgEl=document.getElementById('dynamic-shirt');
+      const svgClone=svgEl.cloneNode(true);
+      svgClone.setAttribute('viewBox',svgEl.getAttribute('viewBox'));
+      svgClone.setAttribute('width',mcW);svgClone.setAttribute('height',mcH);
+      svgClone.setAttribute('preserveAspectRatio','xMidYMid meet');
+      svgEl.querySelectorAll('[fill],[stroke]').forEach((el,i)=>{
+        const c=svgClone.querySelectorAll('[fill],[stroke]')[i];
+        if(!c)return;
+        const f=el.getAttribute('fill'),s=el.getAttribute('stroke');
+        if(f)c.setAttribute('fill',f);if(s)c.setAttribute('stroke',s);
+      });
+      const blob=new Blob([new XMLSerializer().serializeToString(svgClone)],{type:'image/svg+xml;charset=utf-8'});
+      const url=URL.createObjectURL(blob);
+      const si=new Image();
+      si.onload=()=>{ctx.drawImage(si,0,0,mcW,mcH);URL.revokeObjectURL(url);drawDesigns();};
+      si.onerror=()=>{URL.revokeObjectURL(url);drawDesigns();};
+      si.src=url;
+    }
+
+    function drawDesigns(){
+      const layers=layersData[currentModel].front;
+      if(!layers.length){drawPriceCard();return;}
+      let pending=layers.length;
+      layers.forEach(layer=>{
+        const img=new Image();
+        img.onload=function(){
+          const scaleX=mcW/(mockupContainer.offsetWidth||480);
+          const scaleY=mcH/(mockupContainer.offsetHeight||Math.round((mockupContainer.offsetWidth||480)*7/6));
+          const x=layer.x*scaleX,y=layer.y*scaleY,w=layer.w*scaleX,h=layer.h*scaleY;
+          ctx.save();ctx.translate(x+w/2,y+h/2);
+          ctx.rotate(((layer.rotation||0)*Math.PI)/180);
+          ctx.drawImage(img,-w/2,-h/2,w,h);ctx.restore();
+          pending--;if(pending===0)drawPriceCard();
+        };
+        img.onerror=()=>{pending--;if(pending===0)drawPriceCard();};
+        img.src=layer.imgSrc;
+      });
+    }
+
+    function drawPriceCard(){
+      const cc=window._lastCalc;
+      const py=mcH;
+      // Gradiente del price-card
+      const grad=ctx.createLinearGradient(0,py,W,py+priceH);
+      grad.addColorStop(0,'#3d1f06');grad.addColorStop(0.6,'#6b3f10');grad.addColorStop(1,'#7a4a14');
+      ctx.fillStyle=grad;ctx.fillRect(0,py,W,priceH);
+      ctx.textAlign='center';
+
+      const labelTxt=cardState.priceLabelText||'Si quieres tu diseño de este tamaño, su precio final sería:';
+      ctx.fillStyle='#d4b07a';ctx.globalAlpha=.85;
+      ctx.font='600 12px Inter,Arial,sans-serif';
+      const words=labelTxt.split(' ');let line='',lineY=py+22;
+      for(const w of words){
+        const test=line?line+' '+w:w;
+        if(ctx.measureText(test).width>W-48&&line){ctx.fillText(line,W/2,lineY);lineY+=16;line=w;}
+        else line=test;
+      }
+      if(line){ctx.fillText(line,W/2,lineY);lineY+=22;}
+      ctx.globalAlpha=1;
+
+      if(cc&&cc.precioVenta>0){
+        const priceStr=cc.c.sym+cc.precioVenta.toLocaleString(cc.c.locale,{minimumFractionDigits:2,maximumFractionDigits:2});
+        ctx.fillStyle='#c8a84b';
+        ctx.font='900 44px Georgia,"Playfair Display",serif';
+        ctx.fillText(priceStr,W/2,py+priceH-30);
+      }
+
+      const dname=document.getElementById('design-name').value.trim();
+      if(dname){
+        ctx.fillStyle='#c8a84b';ctx.globalAlpha=.6;
+        ctx.font='700 11px Inter,Arial,sans-serif';
+        ctx.fillText(dname.toUpperCase(),W/2,py+priceH-10);
+        ctx.globalAlpha=1;
+      }
+
+      // Logo overlay
+      if(cardState.logoSrc){
+        const li=new Image();
+        li.onload=()=>{
+          const logoH=(cardState.logoSize||52)*DPR*0.5;
+          const r=logoH/li.height;
+          const lw=li.width*r,lh=li.height*r;
+          ctx.drawImage(li,(W-lw)/2,py+10,lw,lh);
+          drawBrand();
+        };li.src=cardState.logoSrc;
+      } else drawBrand();
+    }
+
+    function drawBrand(){
+      const bn=document.getElementById('brand-name-input').value.trim();
+      if(bn){
+        const brandColor=document.getElementById('brand-color-input').value||'#c8a84b';
+        const brandPx=parseInt(document.getElementById('sl-brand-size').value)||12;
+        const scaledPx=Math.round(brandPx*DPR*0.5);
+        ctx.fillStyle='rgba(0,0,0,0.28)';ctx.fillRect(0,0,W,scaledPx+18);
+        ctx.fillStyle=brandColor;
+        ctx.font=`700 ${scaledPx}px Georgia,serif`;ctx.textAlign='center';
+        ctx.fillText(('✦ '+bn+' ✦').toUpperCase(),W/2,scaledPx+6);
+      }
+      resolve(out.toDataURL('image/png'));
+    }
+  });
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+applyColor('#ffffff');
+drawGeometry();
+renderLayers();
+recalcular();
+</script>
+</body>
+</html>
