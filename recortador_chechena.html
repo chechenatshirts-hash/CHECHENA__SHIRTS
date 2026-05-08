@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recortador Inteligente – Chechena Shirts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --cream-50:  #fdf9f3;
+      --cream-100: #f7efe0;
+      --cream-200: #eddec5;
+      --cream-300: #dfc9a5;
+      --cream-400: #cab48a;
+      --sand:      #c8a96e;
+      --sand-dark: #a68950;
+      --brown:     #6b4f35;
+      --brown-dark:#4e3520;
+      --ink:       #2c1f14;
+      --ink-mid:   #5c4230;
+      --ink-light: #8a6e55;
+      --white:     #fefcf8;
+      --accent:    #8b5e3c;
+      --accent-light: #c89470;
+      --success:   #6a8c5a;
+      --warn:      #b08040;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream-50);
+      color: var(--ink);
+    }
+
+    /* ── Scrollbar oculta ── */
+    ::-webkit-scrollbar { display: none; }
+    * { scrollbar-width: none; }
+
+    /* ── Layout principal ── */
+    #studio-root {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    /* ── Topbar ── */
+    #topbar {
+      background: var(--brown-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      height: 56px;
+      flex-shrink: 0;
+      border-bottom: 2px solid var(--sand-dark);
+      position: relative;
+    }
+
+    #topbar::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0; right: 0;
+      height: 3px;
+      background: repeating-linear-gradient(90deg, var(--sand) 0, var(--sand) 8px, transparent 8px, transparent 14px);
+      opacity: 0.6;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .topbar-logo {
+      width: 34px;
+      height: 34px;
+      background: var(--cream-100);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brown-dark);
+      border: 2px solid var(--sand);
+    }
+
+    .topbar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--cream-100);
+      letter-spacing: 0.02em;
+    }
+
+    .topbar-sub {
+      font-size: 0.65rem;
+      color: var(--cream-300);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .topbar-badge {
+      background: var(--sand);
+      color: var(--brown-dark);
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Main layout ── */
+    #studio-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Side Panel ── */
+    #sidePanel {
+      width: 340px;
+      flex-shrink: 0;
+      background: var(--white);
+      border-right: 1px solid var(--cream-200);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* Textura sutil en el panel */
+    #sidePanel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8a96e' fill-opacity='0.04'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .panel-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Section label */
+    .section-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-label svg {
+      color: var(--sand-dark);
+    }
+
+    /* ── Dropzone ── */
+    .dropzone {
+      position: relative;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      background: var(--cream-50);
+      border: 2px dashed var(--cream-300);
+      border-radius: 12px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+
+    .dropzone:hover {
+      background: var(--cream-100);
+      border-color: var(--sand);
+    }
+
+    .dropzone input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+    }
+
+    .dropzone-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--white);
+      border-radius: 50%;
+      border: 1.5px solid var(--cream-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      color: var(--sand-dark);
+      box-shadow: 0 2px 8px rgba(107,79,53,0.1);
+      transition: transform 0.2s;
+    }
+
+    .dropzone:hover .dropzone-icon { transform: scale(1.08); }
+
+    .dropzone-title {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--ink-mid);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 0.5rem;
+    }
+
+    .dropzone-hint {
+      font-size: 0.68rem;
+      color: var(--ink-light);
+      margin-top: 0.25rem;
+    }
+
+    /* ── Info card ── */
+    .info-card {
+      background: var(--cream-50);
+      border: 1px solid var(--cream-200);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .info-label-main {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink-mid);
+    }
+
+    .info-label-sub {
+      font-size: 0.65rem;
+      color: var(--ink-light);
+    }
+
+    .info-value {
+      font-size: 0.7rem;
+      font-family: 'DM Sans', monospace;
+      font-weight: 600;
+      color: var(--ink-mid);
+      background: var(--cream-100);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .info-value-accent {
+      color: var(--success);
+      background: #eef4ec;
+      border: 1px solid #c5dbbf;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--cream-200);
+      margin: 0.75rem 0;
+    }
+
+    .savings-alert {
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.68rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    .savings-alert.warn {
+      background: #fef6e8;
+      border: 1px solid #e8d2a0;
+      color: #7a5020;
+    }
+
+    .savings-alert.ok {
+      background: #f0f5ee;
+      border: 1px solid #c5d8c0;
+      color: #3d6035;
+    }
+
+    /* ── Slider ── */
+    .slider-card {
+      background: var(--cream-50);
+      border: 1px solid var(--cream-200);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    .slider-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-mid);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
+    .pad-val {
+      font-weight: 600;
+      color: var(--sand-dark);
+      background: var(--cream-100);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+
+    input[type=range]::-webkit-slider-track, 
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      background: var(--cream-200);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: var(--sand-dark);
+      cursor: pointer;
+      margin-top: -7px;
+      box-shadow: 0 2px 6px rgba(107,79,53,0.35);
+      border: 2px solid var(--white);
+    }
+
+    input[type=range]:disabled::-webkit-slider-thumb {
+      background: var(--cream-300);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .slider-hint {
+      font-size: 0.62rem;
+      color: var(--ink-light);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-primary {
+      background: var(--brown-dark);
+      color: var(--cream-100);
+      border-color: var(--brown);
+      box-shadow: 0 3px 10px rgba(78,53,32,0.25);
+      letter-spacing: 0.03em;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--brown);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(78,53,32,0.3);
+    }
+
+    .btn-primary:disabled {
+      background: var(--cream-300);
+      color: var(--cream-200);
+      cursor: not-allowed;
+      box-shadow: none;
+      border-color: transparent;
+    }
+
+    .btn-outline {
+      background: var(--white);
+      color: var(--ink-mid);
+      border-color: var(--cream-200);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: var(--cream-50);
+      border-color: var(--cream-300);
+    }
+
+    .btn-outline:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* ── Footer del panel ── */
+    .panel-footer {
+      padding: 1rem;
+      border-top: 1px solid var(--cream-200);
+      background: var(--cream-50);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* Divisor decorativo entre secciones */
+    .ornament {
+      text-align: center;
+      color: var(--cream-300);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      user-select: none;
+    }
+
+    /* ── Main area ── */
+    #mainArea {
+      flex: 1;
+      position: relative;
+      overflow-y: auto;
+      background: var(--cream-100);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Fondo patrón cuadrícula suave */
+    #mainArea::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--cream-200) 1px, transparent 1px),
+        linear-gradient(90deg, var(--cream-200) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* ── Empty state ── */
+    #empty-state {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .empty-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--cream-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      color: var(--cream-300);
+      box-shadow: 0 4px 16px rgba(107,79,53,0.08);
+    }
+
+    #empty-state h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink-mid);
+      margin-bottom: 0.5rem;
+    }
+
+    #empty-state p {
+      font-size: 0.8rem;
+      color: var(--ink-light);
+      max-width: 340px;
+      line-height: 1.6;
+    }
+
+    /* ── Loading overlay ── */
+    #loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(253,249,243,0.92);
+      backdrop-filter: blur(4px);
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #loading-overlay.hidden { display: none; }
+
+    .spinner-ring {
+      width: 50px;
+      height: 50px;
+      border: 3px solid var(--cream-200);
+      border-top-color: var(--sand-dark);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loading-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--ink-mid);
+    }
+
+    /* ── Comparison ── */
+    #comparison-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 20;
+    }
+
+    #comparison-area.hidden { display: none; }
+
+    .image-box {
+      background: var(--white);
+      border-radius: 14px;
+      border: 1px solid var(--cream-200);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(107,79,53,0.08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-box.accent-box {
+      border: 1.5px solid var(--sand);
+      box-shadow: 0 6px 24px rgba(107,79,53,0.14);
+    }
+
+    .image-box-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--cream-100);
+      background: var(--cream-50);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .image-box.accent-box .image-box-header {
+      background: #faf3e5;
+      border-bottom-color: var(--cream-200);
+    }
+
+    .box-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .box-label.orig { color: var(--ink-light); }
+    .box-label.trim { color: var(--sand-dark); }
+
+    .image-preview-area {
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Checker para transparencia */
+    .checker-bg {
+      background-image:
+        linear-gradient(45deg, var(--cream-100) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--cream-100) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--cream-100) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--cream-100) 75%);
+      background-size: 18px 18px;
+      background-position: 0 0, 0 9px, 9px -9px, -9px 0px;
+      background-color: var(--white);
+    }
+
+    .preview-canvas {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 8px rgba(107,79,53,0.15));
+      display: block;
+    }
+
+    /* ── Padding section ── */
+    .pad-section {
+      padding: 0 1rem 1rem;
+    }
+
+    /* ── Panel sections padding ── */
+    .p-section {
+      padding: 1rem;
+    }
+
+    /* ── Responsive ── */
+    @media (min-width: 768px) {
+      #comparison-area {
+        flex-direction: row;
+        align-items: stretch;
+      }
+      .image-box {
+        flex: 1;
+      }
+      .image-preview-area {
+        height: auto;
+        min-height: 220px;
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      #studio-layout { flex-direction: column; }
+      #sidePanel {
+        width: 100%;
+        border-right: none;
+        border-top: 1px solid var(--cream-200);
+        max-height: 52%;
+        order: 2;
+      }
+      #mainArea {
+        flex: 1;
+        order: 1;
+      }
+    }
+
+    /* ── animate-in ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.35s ease forwards;
+    }
+  </style>
+</head>
+<body>
+<div id="studio-root">
+
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <div>
+        <div class="topbar-title">Chechena Shirts</div>
+        <div class="topbar-sub">Recortador Inteligente de Diseños</div>
+      </div>
+    </div>
+    <span class="topbar-badge">✦ DTF Pro</span>
+  </div>
+
+  <!-- LAYOUT -->
+  <div id="studio-layout">
+
+    <!-- ═══════════════════ PANEL LATERAL ═══════════════════ -->
+    <div id="sidePanel">
+      <div class="panel-inner">
+
+        <!-- 1. ARCHIVO -->
+        <div class="p-section" style="padding-bottom:0.5rem;">
+          <div class="section-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Diseño a Recortar
+          </div>
+
+          <label for="lmx-file" class="dropzone">
+            <input type="file" id="lmx-file" accept="image/png">
+            <div class="dropzone-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            </div>
+            <div class="dropzone-title" id="file-name-display">Subir PNG con espacio vacío</div>
+            <div class="dropzone-hint">Detectaremos y eliminaremos el fondo transparente inútil</div>
+          </label>
+        </div>
+
+        <div class="ornament" style="padding:0.4rem 0;">· · · · ·</div>
+
+        <!-- 2. INFO DEL RECORTE -->
+        <div class="p-section" id="section-info" style="display:none; padding-bottom:0.5rem;">
+          <div class="section-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Resumen del Ahorro
+          </div>
+
+          <div class="info-card fade-up">
+            <div class="info-row">
+              <div>
+                <div class="info-label-main">Lienzo Original</div>
+                <div class="info-label-sub">Medida con espacio vacío</div>
+              </div>
+              <span class="info-value" id="info-original-size">0 x 0 px</span>
+            </div>
+            <hr class="divider">
+            <div class="info-row">
+              <div>
+                <div class="info-label-main" style="color:var(--success);">Lienzo Recortado</div>
+                <div class="info-label-sub" style="color:var(--success);opacity:0.7;">Medida real del diseño</div>
+              </div>
+              <span class="info-value info-value-accent" id="info-new-size">0 x 0 px</span>
+            </div>
+
+            <div class="savings-alert warn" id="savings-alert">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="savings-alert-icon" style="flex-shrink:0;margin-top:1px;"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              <div id="savings-alert-text">
+                Se eliminó un <strong id="info-savings-percent">0%</strong> de espacio vacío.
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDER -->
+          <div class="slider-card fade-up">
+            <div class="slider-label">
+              Margen de Seguridad (Padding)
+              <span class="pad-val" id="padding-val">0 px</span>
+            </div>
+            <input type="range" id="padding-slider" min="0" max="50" step="1" value="0">
+            <div class="slider-hint">Agrega un pequeño borde transparente alrededor del diseño recortado si es necesario.</div>
+          </div>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <!-- FOOTER BOTONES -->
+        <div class="panel-footer">
+          <button id="btn-download" class="btn btn-primary" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PNG Recortado
+          </button>
+          <button id="btn-reset" class="btn btn-outline" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+            Subir otra imagen
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════ ÁREA PRINCIPAL ═══════════════════ -->
+    <div id="mainArea">
+
+      <!-- Estado vacío -->
+      <div id="empty-state">
+        <div class="empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </div>
+        <h3>Recorte Automático</h3>
+        <p>Sube una imagen PNG. La herramienta detectará los píxeles vacíos en los bordes y ajustará el lienzo al tamaño exacto de tu diseño — perfecto para DTF y bordado.</p>
+        <div class="ornament" style="margin-top:1.25rem;font-size:0.85rem;">✦ Chechena Shirts ✦</div>
+      </div>
+
+      <!-- Overlay de procesamiento -->
+      <div id="loading-overlay" class="hidden">
+        <div class="spinner-ring"></div>
+        <p id="loading-text">Escaneando píxeles vacíos...</p>
+      </div>
+
+      <!-- Comparativa visual -->
+      <div id="comparison-area" class="hidden">
+
+        <!-- Original -->
+        <div class="image-box">
+          <div class="image-box-header">
+            <span class="box-label orig">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Original — Con espacio vacío
+            </span>
+          </div>
+          <div class="image-preview-area checker-bg" id="container-orig">
+            <canvas id="canvas-original" class="preview-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Recortada -->
+        <div class="image-box accent-box">
+          <div class="image-box-header">
+            <span class="box-label trim">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Recorte Exacto — Listo para DTF
+            </span>
+          </div>
+          <div class="image-preview-area checker-bg" id="container-trim">
+            <canvas id="canvas-trimmed" class="preview-canvas"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+
+  const els = {
+    file:             $('lmx-file'),
+    fileName:         $('file-name-display'),
+    secInfo:          $('section-info'),
+    infoOrig:         $('info-original-size'),
+    infoNew:          $('info-new-size'),
+    infoPercent:      $('info-savings-percent'),
+    savingsAlert:     $('savings-alert'),
+    savingsAlertIcon: $('savings-alert-icon'),
+    savingsAlertText: $('savings-alert-text'),
+    padSlider:        $('padding-slider'),
+    padVal:           $('padding-val'),
+    btnDownload:      $('btn-download'),
+    btnReset:         $('btn-reset'),
+    emptyState:       $('empty-state'),
+    loadingOverlay:   $('loading-overlay'),
+    compArea:         $('comparison-area'),
+    canvasOrig:       $('canvas-original'),
+    canvasTrim:       $('canvas-trimmed'),
+    loadingText:      $('loading-text'),
+  };
+
+  let originalImage = null;
+  let trimData = null;
+  let currentTrimmedCanvas = null;
+
+  function resetApp() {
+    originalImage = null;
+    trimData = null;
+    currentTrimmedCanvas = null;
+    els.fileName.textContent = 'Subir PNG con espacio vacío';
+    els.file.value = '';
+    els.padSlider.value = 0;
+    els.padVal.textContent = '0 px';
+    els.secInfo.style.display = 'none';
+    els.compArea.classList.add('hidden');
+    els.emptyState.style.display = 'flex';
+    els.btnDownload.disabled = true;
+    els.btnReset.disabled = true;
+    els.canvasOrig.width = 0;
+    els.canvasOrig.height = 0;
+    els.canvasTrim.width = 0;
+    els.canvasTrim.height = 0;
+  }
+
+  els.btnReset.addEventListener('click', resetApp);
+
+  els.file.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.type !== 'image/png') {
+      alert('Por favor, sube un archivo PNG.');
+      return;
+    }
+    els.fileName.textContent = file.name;
+    els.loadingOverlay.classList.remove('hidden');
+    els.emptyState.style.display = 'none';
+    els.loadingText.textContent = 'Escaneando píxeles vacíos...';
+
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        originalImage = img;
+        setTimeout(() => calculateTrim(img), 50);
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function drawPreviewBoxOnCanvas(targetCanvas, source, cropX, cropY, cropW, cropH, strokeColor, shadowColor) {
+    const ctx = targetCanvas.getContext('2d');
+    const lineThickness = Math.max(4, Math.floor(Math.min(source.width, source.height) * 0.008));
+    targetCanvas.width = source.width;
+    targetCanvas.height = source.height;
+    ctx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+    ctx.drawImage(source, 0, 0);
+    ctx.fillStyle = shadowColor;
+    ctx.fillRect(0, 0, targetCanvas.width, cropY);
+    ctx.fillRect(0, cropY + cropH, targetCanvas.width, targetCanvas.height - (cropY + cropH));
+    ctx.fillRect(0, cropY, cropX, cropH);
+    ctx.fillRect(cropX + cropW, cropY, targetCanvas.width - (cropX + cropW), cropH);
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineThickness;
+    ctx.setLineDash([lineThickness * 3, lineThickness * 2]);
+    ctx.strokeRect(cropX, cropY, cropW, cropH);
+  }
+
+  function calculateTrim(img) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const w = img.width, h = img.height;
+    canvas.width = w; canvas.height = h;
+    ctx.drawImage(img, 0, 0);
+    const imgData = ctx.getImageData(0, 0, w, h);
+    const data = imgData.data;
+    let top = h, bottom = 0, left = w, right = 0;
+    let foundPixels = false;
+    const alphaThreshold = 5;
+
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const alpha = data[(y * w + x) * 4 + 3];
+        if (alpha >= alphaThreshold) {
+          foundPixels = true;
+          if (x < left)   left = x;
+          if (x > right)  right = x;
+          if (y < top)    top = y;
+          if (y > bottom) bottom = y;
+        }
+      }
+    }
+
+    if (!foundPixels) {
+      alert('¡La imagen parece estar completamente vacía (100% transparente).');
+      els.loadingOverlay.classList.add('hidden');
+      resetApp();
+      return;
+    }
+
+    bottom++; right++;
+    trimData = { left, top, right, bottom, width: right - left, height: bottom - top };
+
+    drawPreviewBoxOnCanvas(
+      els.canvasOrig, originalImage,
+      trimData.left, trimData.top, trimData.width, trimData.height,
+      '#c0392b', 'rgba(255,255,255,0.55)'
+    );
+
+    updateTrimmedResult();
+    els.loadingOverlay.classList.add('hidden');
+    els.secInfo.style.display = 'block';
+    els.compArea.classList.remove('hidden');
+    els.btnDownload.disabled = false;
+    els.btnReset.disabled = false;
+  }
+
+  function updateTrimmedResult() {
+    if (!originalImage || !trimData) return;
+    const padding = parseInt(els.padSlider.value, 10);
+    const finalWidth = trimData.width + padding * 2;
+    const finalHeight = trimData.height + padding * 2;
+
+    currentTrimmedCanvas = document.createElement('canvas');
+    currentTrimmedCanvas.width = finalWidth;
+    currentTrimmedCanvas.height = finalHeight;
+    const ctx = currentTrimmedCanvas.getContext('2d');
+    ctx.drawImage(
+      originalImage,
+      trimData.left, trimData.top, trimData.width, trimData.height,
+      padding, padding, trimData.width, trimData.height
+    );
+
+    drawPreviewBoxOnCanvas(
+      els.canvasTrim, currentTrimmedCanvas,
+      padding, padding, trimData.width, trimData.height,
+      '#8b5e3c', 'rgba(255,255,255,0.3)'
+    );
+
+    const origW = originalImage.width, origH = originalImage.height;
+    const origArea = origW * origH;
+    const finalArea = finalWidth * finalHeight;
+    els.infoOrig.textContent = `${origW} × ${origH} px`;
+    els.infoNew.textContent  = `${finalWidth} × ${finalHeight} px`;
+
+    const percentSaved = ((origArea - finalArea) / origArea) * 100;
+    if (els.infoPercent) els.infoPercent.textContent = `${percentSaved.toFixed(1)}%`;
+
+    if (percentSaved < 5) {
+      els.savingsAlert.className = 'savings-alert ok';
+      els.savingsAlertText.innerHTML = `Tu imagen ya estaba bastante optimizada. Se eliminó un <strong>${percentSaved.toFixed(1)}%</strong> de fondo.`;
+    } else {
+      els.savingsAlert.className = 'savings-alert warn';
+      els.savingsAlertText.innerHTML = `Se eliminó un <strong>${percentSaved.toFixed(1)}%</strong> de espacio vacío. Esto evita cobros extra en tu armado de metros DTF.`;
+    }
+  }
+
+  let animFrameId;
+  els.padSlider.addEventListener('input', e => {
+    els.padVal.textContent = `${e.target.value} px`;
+    cancelAnimationFrame(animFrameId);
+    animFrameId = requestAnimationFrame(() => updateTrimmedResult());
+  });
+
+  // ── Descarga a 300 DPI ──
+  function crc32(arr) {
+    let c = ~0;
+    for (let i = 0; i < arr.length; i++) {
+      c ^= arr[i];
+      for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xEDB88320 & -(c & 1));
+    }
+    return ~c;
+  }
+
+  function addPHYS300DPI(pngUint8) {
+    const IHDR_END = 33;
+    const dpi = 11811;
+    const chunkLen  = new Uint8Array([0, 0, 0, 9]);
+    const chunkType = new Uint8Array([112, 72, 89, 115]);
+    const xppm = new Uint8Array([(dpi>>24)&255,(dpi>>16)&255,(dpi>>8)&255,dpi&255]);
+    const yppm = new Uint8Array([(dpi>>24)&255,(dpi>>16)&255,(dpi>>8)&255,dpi&255]);
+    const unit = new Uint8Array([1]);
+    const chunkData = new Uint8Array([...xppm, ...yppm, ...unit]);
+    const toCRC = new Uint8Array([...chunkType, ...chunkData]);
+    const crc = crc32(toCRC);
+    const crcArr = new Uint8Array([(crc>>24)&255,(crc>>16)&255,(crc>>8)&255,crc&255]);
+    const totalAdd = 4 + 4 + 9 + 4;
+    const out = new Uint8Array(pngUint8.length + totalAdd);
+    out.set(pngUint8.slice(0, IHDR_END), 0);
+    out.set(chunkLen,  IHDR_END);
+    out.set(chunkType, IHDR_END + 4);
+    out.set(chunkData, IHDR_END + 8);
+    out.set(crcArr,    IHDR_END + 17);
+    out.set(pngUint8.slice(IHDR_END), IHDR_END + totalAdd);
+    return out;
+  }
+
+  els.btnDownload.addEventListener('click', () => {
+    if (!currentTrimmedCanvas) return;
+    els.btnDownload.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 0.7s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Procesando...`;
+    els.btnDownload.disabled = true;
+
+    setTimeout(() => {
+      const dataURL = currentTrimmedCanvas.toDataURL('image/png');
+      const bin = atob(dataURL.split(',')[1]);
+      const buffer = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) buffer[i] = bin.charCodeAt(i);
+      const withPhys = addPHYS300DPI(buffer);
+      const blob = new Blob([withPhys], { type: 'image/png' });
+      const a = document.createElement('a');
+      a.download = `Chechena_Recortado_${currentTrimmedCanvas.width}x${currentTrimmedCanvas.height}.png`;
+      a.href = URL.createObjectURL(blob);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+      els.btnDownload.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar PNG Recortado`;
+      els.btnDownload.disabled = false;
+    }, 50);
+  });
+
+})();
+</script>
+</body>
+</html>

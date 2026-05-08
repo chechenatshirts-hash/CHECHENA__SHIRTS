@@ -533,6 +533,45 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
   .tcard{min-width:80vw;flex:0 0 auto;scroll-snap-align:start;border:1px solid var(--grey1);}
   .tools-section::before{display:none;}
 }
+
+
+
+.badge-gold{
+  background: linear-gradient(135deg, #FFD700, #FFB800, #FFF3A0);
+  color: #1a1a1a;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow:
+    0 0 10px rgba(255,215,0,0.6),
+    0 0 20px rgba(255,200,0,0.4);
+  animation: goldPulse 2s infinite ease-in-out;
+}
+
+@keyframes goldPulse {
+  0%{
+    transform: scale(1);
+    box-shadow:
+      0 0 10px rgba(255,215,0,0.5),
+      0 0 20px rgba(255,200,0,0.3);
+  }
+
+  50%{
+    transform: scale(1.05);
+    box-shadow:
+      0 0 18px rgba(255,215,0,0.9),
+      0 0 30px rgba(255,200,0,0.6);
+  }
+
+  100%{
+    transform: scale(1);
+    box-shadow:
+      0 0 10px rgba(255,215,0,0.5),
+      0 0 20px rgba(255,200,0,0.3);
+  }
+}
 </style>
 </head>
 <body>
@@ -689,24 +728,6 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
 
           </div>
         </div>
-        <div class="tcard" data-id="mejorar">
-          <div class="tcard-top">
-            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">EN REPARACION</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
-          </div>
-          <div class="tcard-title">Mejorar Calidad</div>
-          <div class="tcard-sub">AI Upscaler</div>
-          <p class="tcard-desc">Mejora la resolución y nitidez de tus imágenes con IA. Resultados listos para impresión.</p>
-          <div class="tcard-actions">
-            <a href="mejorador-chechena.html" class="tcard-btn-p">Abrir Studio</a>
-            <a href="" 
-   target="_blank" 
-   class="tcard-btn-s"
-   onclick="mostrarVideo()">
-   EN REPARACION
-</a>
-          </div>
-        </div>
 
                 <div class="tcard" data-id="mejorar">
           <div class="tcard-top">
@@ -787,6 +808,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
         <div class="cat-line"></div>
         <span class="cat-cnt">1</span>
       </div>
+      
       <div class="tool-grid">
         <div class="tcard" data-id="fondo">
           <div class="tcard-top">
@@ -804,13 +826,33 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
    onclick="mostrarVideo()">
    Ver guía
 </a>
+
           </div>
         </div>
 
+
+                        <div class="tcard" data-id="mejorar">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-gold">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">MEJORAR CALIDAD</div>
+          <div class="tcard-sub">DISPONIBLE GRATIS HASTA EL 2/06/2026</div>
+          <p class="tcard-desc">Aumenta la resolución y recupera detalles usando Inteligencia Artificial.</p>
+          <div class="tcard-actions">
+            <a href="chechena-mejorador-protected.html" class="tcard-btn-p">Abrir Studio</a>
+<a href="" 
+   target="_blank" 
+   class="tcard-btn-s"
+   onclick="mostrarVideo()">
+   Ver guía
+</a>
+          </div>
+        </div>
                 <div class="tcard" data-id="mejorar">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-gold">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Mezzotinta Studio</div>
           <div class="tcard-sub">Mezzotint Effect AIr</div>
@@ -843,7 +885,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
           <div class="tcard" data-id="mejorar">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-new">NO USAR</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">DETECTOR DE METRO DTF</div>
           <div class="tcard-sub">Final Check</div>
@@ -890,7 +932,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
         <div class="tcard" data-id="qr">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="5" y="5" width="3" height="3"/><rect x="14" y="3" width="7" height="7"/><rect x="16" y="5" width="3" height="3"/><rect x="3" y="14" width="7" height="7"/><rect x="5" y="16" width="3" height="3"/><path d="M14 14h3v3h-3zm3 3h3v3h-3z"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-new">UTILIDADES</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Generador QR</div>
           <div class="tcard-sub">QR Code Creator</div>
@@ -910,7 +952,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
                         <div class="tcard" data-id="cotizador">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-new">UTILIDADES</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">CALCULADORA</div>
           <div class="tcard-sub">T-Shirt Cost Calculator</div>
@@ -929,7 +971,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
         <div class="tcard" data-id="cotizador">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-new">UTILIDADES</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Generador de Tickets</div>
           <div class="tcard-sub">Cost Calculator</div>
@@ -948,7 +990,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
                 <div class="tcard" data-id="cotizador">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-new">UTILIDADES</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Guía de medidas diseños</div>
           <div class="tcard-sub">Ajuste de diseño</div>
@@ -967,13 +1009,68 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
                         <div class="tcard" data-id="cotizador">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-gold">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">TONY</div>
           <div class="tcard-sub">Plataforma para mostrar diseños y cotizaciones al cliente.</div>
           <p class="tcard-desc">Plataforma diseñada para cotizar y mostrar diseños personalizados de manera profesional, permitiendo visualizar mockups, tamaños, tipos de impresión y precios finales de forma clara y enfocada al cliente.</p>
           <div class="tcard-actions">
             <a href="chechena_v7 (2).html" class="tcard-btn-p">Abrir Herramienta</a>
+                        <a href="" 
+   target="_blank" 
+   class="tcard-btn-s"
+   onclick="mostrarVideo()">
+   Ver guía
+</a>
+          </div>
+        </div>
+
+                                <div class="tcard" data-id="cotizador">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-gold">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">RGB a CMYK</div>
+          <div class="tcard-sub">Plataforma para mostrar diseños y cotizaciones al cliente.</div>
+          <p class="tcard-desc"> Convierte tus imágenes del espacio de color RGB a CMYK optimizado para impresión profesional.</p>
+          <div class="tcard-actions">
+            <a href="simulador_cmyk_crema (1).html" class="tcard-btn-p">Abrir Herramienta</a>
+                        <a href="" 
+   target="_blank" 
+   class="tcard-btn-s"
+   onclick="mostrarVideo()">
+   Ver guía
+</a>
+          </div>
+        </div>
+                                        <div class="tcard" data-id="cotizador">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-gold">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Recortador Int.</div>
+          <div class="tcard-sub">Smart Cropper</div>
+          <p class="tcard-desc">Detecta y recorta tus imágenes de forma automática e inteligente alrededor de tu diseño principal. </p>
+          <div class="tcard-actions">
+            <a href="recortador_chechena.html" class="tcard-btn-p">Abrir Herramienta</a>
+                        <a href="" 
+   target="_blank" 
+   class="tcard-btn-s"
+   onclick="mostrarVideo()">
+   Ver guía
+</a>
+          </div>
+        </div>
+                                        <div class="tcard" data-id="cotizador">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-gold">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Recortador</div>
+          <div class="tcard-sub">Image Croppe</div>
+          <p class="tcard-desc"> Ajusta, encuadra y recorta tus imágenes a las dimensiones exactas. </p>
+          <div class="tcard-actions">
+            <a href="recortador_chechena (1).html" class="tcard-btn-p">Abrir Herramienta</a>
                         <a href="" 
    target="_blank" 
    class="tcard-btn-s"
@@ -999,7 +1096,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
         <div class="tcard" data-id="mockup3d">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-free">MOCKUP</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Mockups 3D</div>
           <div class="tcard-sub">3D Visualizer</div>
@@ -1012,7 +1109,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
         <div class="tcard" data-id="mockupauto">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/><path d="M9 13l2 2 4-4"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-free">MOCKUP</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Mockups Automáticos</div>
           <div class="tcard-sub">Auto Generator</div>
@@ -1025,7 +1122,7 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
         <div class="tcard" data-id="mockupstudio">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/><path d="M12 10v4M10 12h4"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-new">PRO</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-new">MOKUP</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Mockup Studio</div>
           <div class="tcard-sub">Batch Studio</div>
@@ -1038,13 +1135,27 @@ footer{background:var(--black);border-top:1px solid var(--grey1);padding:28px 5%
         <div class="tcard" data-id="promomaker">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-free">Gratis</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+            <div class="tcard-meta"><span class="badge badge-gold">MEJORADO</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Diseño con Fondo</div>
           <div class="tcard-sub">Promo Maker</div>
           <p class="tcard-desc">Crea imágenes promocionales impactantes para redes sociales y tu tienda en minutos.</p>
           <div class="tcard-actions">
             <a href="promo-maker.html" class="tcard-btn-p">Abrir Studio</a>
+            <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
+          </div>
+        </div>
+
+                <div class="tcard" data-id="promomaker">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-gold">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">CATALOGO</div>
+          <div class="tcard-sub">COLECCIONES</div>
+          <p class="tcard-desc">Colección completa de blanks premium para tus proyectos.</p>
+          <div class="tcard-actions">
+            <a href="catalogo_chechena.html" class="tcard-btn-p">Abrir Studio</a>
             <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 010-5H20"/></svg>Guía de uso</a>
           </div>
         </div>

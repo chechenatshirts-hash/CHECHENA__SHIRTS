@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalog Studio – Chechena Shirts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --cream:     #faf6f0;
+      --cream-2:   #f3ece2;
+      --cream-3:   #e8ddd0;
+      --cream-4:   #d9ccbc;
+      --sand:      #c8b89a;
+      --terracotta:#a0714f;
+      --brown:     #6b4c35;
+      --dark:      #2d1f14;
+      --accent:    #8b5e3c;
+      --green:     #5a7a5e;
+      --white:     #fffdf9;
+      --shadow:    rgba(107,76,53,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    /* ─── OVERLAY ─── */
+    #studio-overlay {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      z-index: 50 !important;
+      background: var(--cream) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+    }
+
+    /* ─── LAYOUT ─── */
+    @media (min-width: 1024px) {
+      #studio-layout { flex-direction: row !important; height: 100% !important; }
+      #sidePanel { width: 370px !important; height: 100% !important; border-right: 1.5px solid var(--cream-3) !important; overflow-y: auto !important; flex-shrink: 0 !important; }
+      #mainArea { flex: 1 !important; height: 100% !important; overflow-y: auto !important; }
+      .pdf-page-preview { width: 100%; max-width: 480px; aspect-ratio: 210/297; }
+    }
+
+    @media (max-width: 1023px) {
+      #studio-layout { flex-direction: column !important; height: 100% !important; }
+      #mainArea {
+        height: 35vh !important;
+        min-height: 240px !important;
+        flex: none !important;
+        order: 1 !important;
+        padding: 10px !important;
+        background: var(--cream-3) !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .pdf-page-preview {
+        height: 100% !important;
+        width: auto !important;
+        aspect-ratio: 210/297;
+        max-width: none !important;
+      }
+      #sidePanel {
+        height: auto !important;
+        flex: 1 !important;
+        width: 100% !important;
+        border-top: 2px solid var(--cream-3) !important;
+        overflow-y: auto !important;
+        order: 2 !important;
+        background: var(--white) !important;
+        padding-bottom: 80px !important;
+      }
+      .mobile-hide-text { display: none; }
+    }
+
+    /* ─── SIDE PANEL ─── */
+    #sidePanel {
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1.5px solid var(--cream-2);
+      background: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--brown);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream);
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .brand-sub {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-top: 2px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--sand);
+      padding: 4px;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+    .close-btn:hover { color: var(--terracotta); }
+
+    /* ─── PANEL CONTENT ─── */
+    .panel-content {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .section-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sand);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .section-label svg { flex-shrink: 0; }
+
+    /* VIEW TOGGLE */
+    .view-toggle {
+      background: var(--cream-2);
+      padding: 4px;
+      border-radius: 10px;
+      display: flex;
+      margin-bottom: 14px;
+    }
+
+    .view-toggle button {
+      flex: 1;
+      padding: 7px 0;
+      font-size: 11px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--sand);
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-toggle button.active {
+      background: var(--white);
+      color: var(--brown);
+      box-shadow: 0 1px 4px var(--shadow);
+    }
+
+    /* COLOR PALETTE */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .color-swatch {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      position: relative;
+    }
+
+    .color-swatch:hover { transform: scale(1.1); }
+    .color-swatch.active { border-color: var(--brown); box-shadow: 0 0 0 2px var(--cream-2); }
+
+    .color-custom-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--cream-2);
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .color-custom-wrap {
+      width: 28px;
+      height: 22px;
+      border-radius: 5px;
+      border: 1.5px solid var(--cream-3);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .color-custom-wrap input[type=color] {
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      width: 140%;
+      height: 140%;
+      border: none;
+      cursor: pointer;
+    }
+
+    .color-custom-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* MODEL GRID */
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .model-btn {
+      background: var(--cream-2);
+      border: 1.5px solid transparent;
+      border-radius: 10px;
+      padding: 8px 6px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .model-btn:hover { background: var(--cream-3); }
+
+    .model-btn.active {
+      background: var(--brown);
+      color: var(--cream);
+      border-color: var(--terracotta);
+    }
+
+    /* SLIDERS */
+    .slider-group {
+      background: var(--cream-2);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slider-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .slider-val { color: var(--terracotta); font-weight: 700; }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+      height: 4px;
+      background: var(--cream-3);
+      border-radius: 2px;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--brown);
+      cursor: pointer;
+      margin-top: -5px;
+      box-shadow: 0 0 0 2px var(--white), 0 1px 3px var(--shadow);
+    }
+
+    /* UPLOAD AREA */
+    .upload-area {
+      background: var(--cream-2);
+      border: 1.5px dashed var(--cream-4);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .upload-btn-wrap { position: relative; }
+
+    .upload-btn-wrap input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .upload-btn {
+      width: 100%;
+      background: var(--brown);
+      color: var(--cream);
+      border: none;
+      padding: 11px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background 0.2s;
+    }
+
+    .upload-btn:hover { background: var(--terracotta); }
+
+    .upload-count {
+      font-size: 10px;
+      color: var(--sand);
+      text-align: center;
+      margin-top: 7px;
+      font-weight: 600;
+    }
+
+    .upload-tip {
+      font-size: 9px;
+      color: var(--terracotta);
+      text-align: center;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* INPUTS */
+    .field-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sand);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .text-input {
+      width: 100%;
+      background: var(--cream-2);
+      border: 1.5px solid var(--cream-3);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dark);
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s;
+    }
+
+    .text-input:focus { border-color: var(--sand); }
+
+    .num-input {
+      background: var(--cream-2);
+      border: 1.5px solid var(--cream-3);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dark);
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    select.text-input {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 10 6'%3E%3Cpath fill='%23c8b89a' fill-rule='evenodd' d='M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .color-picker-small {
+      width: 38px;
+      height: 34px;
+      border: 1.5px solid var(--cream-3);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    /* GENERATE BTN */
+    .generate-btn {
+      width: 100%;
+      background: var(--dark);
+      color: var(--cream);
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .generate-btn:hover:not(:disabled) { background: var(--brown); }
+    .generate-btn:active:not(:disabled) { transform: scale(0.98); }
+    .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ─── MAIN PREVIEW AREA ─── */
+    #mainArea {
+      background: var(--cream-3);
+      padding: 24px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 14px;
+    }
+
+    .preview-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--sand);
+    }
+
+    .paginator-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      padding: 4px 8px;
+    }
+
+    .paginator-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px;
+      border-radius: 5px;
+      transition: background 0.15s;
+    }
+
+    .paginator-btn:hover:not(:disabled) { background: var(--cream-2); }
+    .paginator-btn:disabled { opacity: 0.35; cursor: default; }
+
+    .paginator-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* A4 PAGE */
+    .pdf-page-preview {
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      isolation: isolate;
+      box-shadow: 0 16px 48px rgba(45,31,20,0.18), 0 4px 12px rgba(45,31,20,0.1);
+      border-radius: 3px;
+    }
+
+    #previewBg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    #previewBg img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* CATALOG GRID */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2%;
+      padding: 4%;
+      flex: 1;
+      align-content: start;
+      position: relative;
+      z-index: 20;
+    }
+
+    .catalog-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .catalog-image-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1/1;
+      overflow: hidden;
+    }
+
+    .catalog-price {
+      margin-top: 2px;
+      font-size: 0.48rem;
+      font-weight: 700;
+      background: rgba(250,246,240,0.88);
+      padding: 1px 5px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* EDIT BUTTON ON ITEM */
+    .item-edit-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--brown);
+      color: var(--cream);
+      border: none;
+      border-radius: 50%;
+      width: 20%;
+      height: 20%;
+      max-width: 24px;
+      max-height: 24px;
+      min-width: 18px;
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    .catalog-item:hover .item-edit-btn { opacity: 1; transform: scale(1); }
+
+    @media (hover: none) {
+      .item-edit-btn { opacity: 1; transform: scale(1); }
+    }
+
+    .item-edited-indicator {
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      z-index: 50;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      grid-column: span 3;
+      grid-row: span 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream-4);
+      border: 2px dashed var(--cream-3);
+      border-radius: 12px;
+    }
+
+    .empty-state span {
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    #sidePanel::-webkit-scrollbar { width: 5px; }
+    #sidePanel::-webkit-scrollbar-thumb { background: var(--cream-3); border-radius: 3px; }
+    #mainArea::-webkit-scrollbar { width: 5px; }
+    #mainArea::-webkit-scrollbar-thumb { background: var(--cream-4); border-radius: 3px; }
+    body::-webkit-scrollbar { display: none; }
+
+    /* ─── LOADING OVERLAY ─── */
+    #loadingOverlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(45,31,20,0.72);
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .loading-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 28px 32px;
+      max-width: 300px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(45,31,20,0.3);
+    }
+
+    .loader { animation: spin 0.9s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .loading-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      color: var(--dark);
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+
+    .loading-text { font-size: 12px; color: var(--sand); }
+
+    /* ─── EDIT MODAL ─── */
+    #editModal {
+      position: absolute;
+      inset: 0;
+      z-index: 70;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(45,31,20,0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-card {
+      background: var(--white);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 85vh;
+      box-shadow: 0 20px 60px rgba(45,31,20,0.3);
+    }
+
+    .modal-header {
+      padding: 14px 18px;
+      border-bottom: 1.5px solid var(--cream-2);
+      background: var(--cream);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .modal-header-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .modal-header-title svg { color: var(--brown); }
+
+    .modal-body {
+      padding: 18px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-body::-webkit-scrollbar { width: 4px; }
+    .modal-body::-webkit-scrollbar-thumb { background: var(--cream-3); }
+
+    .modal-preview-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .modal-preview-box {
+      width: 160px;
+      height: 160px;
+      border-radius: 12px;
+      border: 1.5px solid var(--cream-3);
+      background: var(--cream);
+      overflow: hidden;
+    }
+
+    .modal-preview-box canvas { width: 100%; height: 100%; }
+
+    .modal-section-title {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sand);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .reset-link {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--terracotta);
+      text-decoration: underline;
+      letter-spacing: 0.06em;
+    }
+
+    .modal-slider-group {
+      background: var(--cream-2);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .modal-footer {
+      padding: 14px 18px;
+      border-top: 1.5px solid var(--cream-2);
+      background: var(--cream);
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 11px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      background: none;
+      border: 1.5px solid var(--cream-3);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-secondary:hover { background: var(--cream-2); }
+
+    .btn-primary {
+      flex: 1;
+      padding: 11px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--cream);
+      background: var(--brown);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-primary:hover { background: var(--terracotta); }
+
+    /* BG UPLOAD ROW */
+    .bg-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bg-upload-btn {
+      flex: 1;
+      background: var(--cream-2);
+      border: 1.5px dashed var(--cream-4);
+      border-radius: 8px;
+      padding: 7px;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      position: relative;
+    }
+
+    .bg-upload-btn input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    /* INLINE ROW */
+    .inline-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .field-grow { flex: 1; }
+    .field-price { width: 80px; flex-shrink: 0; }
+    .field-currency { flex: 1; }
+
+    /* DIVIDER */
+    .divider {
+      height: 1.5px;
+      background: var(--cream-2);
+      border: none;
+      border-radius: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="studio-overlay">
+
+  <!-- LOADING -->
+  <div id="loadingOverlay">
+    <div class="loading-card">
+      <svg class="loader" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+      <p class="loading-title" id="loadingTitle">Generando Catálogo...</p>
+      <p class="loading-text" id="loadingText">Procesando páginas y mockups.</p>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div id="editModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-header-title">
+          <i data-lucide="edit-3" style="width:15px;height:15px;color:var(--brown)"></i>
+          Editar Prenda
+        </span>
+        <button onclick="closeEditModal()" class="close-btn"><i data-lucide="x" style="width:18px;height:18px"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-preview-wrap">
+          <div class="modal-preview-box">
+            <canvas id="modalCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Color -->
+        <div>
+          <div class="modal-section-title">
+            Color de esta prenda
+            <button onclick="resetItemSetting('color')" class="reset-link">Restablecer a Global</button>
+          </div>
+          <input type="color" id="editItemColor" style="width:100%;height:34px;border-radius:8px;border:1.5px solid var(--cream-3);cursor:pointer;" oninput="requestModalUpdate()">
+        </div>
+
+        <!-- Scale + Y -->
+        <div class="modal-slider-group">
+          <div>
+            <div class="slider-meta">
+              <span>Tamaño (%)</span>
+              <button onclick="resetItemSetting('scale')" class="reset-link">Global</button>
+            </div>
+            <input type="range" id="editItemScale" min="20" max="200" oninput="requestModalUpdate()">
+          </div>
+          <div>
+            <div class="slider-meta">
+              <span>Posición Vertical</span>
+              <button onclick="resetItemSetting('y')" class="reset-link">Global</button>
+            </div>
+            <input type="range" id="editItemY" min="-30" max="30" oninput="requestModalUpdate()">
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div>
+          <div class="modal-section-title">
+            Precio Individual (Opcional)
+            <button onclick="resetItemSetting('price')" class="reset-link">Usar Global</button>
+          </div>
+          <input type="number" id="editItemPrice" class="text-input" placeholder="Dejar vacío para usar precio global">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button onclick="closeEditModal()" class="btn-secondary">Cancelar</button>
+        <button onclick="saveItemChanges()" class="btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div id="studio-layout" style="display:flex;width:100%;height:100%;">
+
+    <!-- ─── SIDE PANEL ─── -->
+    <div id="sidePanel">
+
+      <div class="panel-header header-mobile">
+        <div class="brand-logo">
+          <div class="brand-icon">
+            <i data-lucide="book-open" style="width:16px;height:16px"></i>
+          </div>
+          <div>
+            <div class="brand-name">Catalog Studio</div>
+            <div class="brand-sub mobile-hide-text">Editor Profesional</div>
+          </div>
+        </div>
+        <button onclick="closeStudio()" class="close-btn">
+          <i data-lucide="x" style="width:18px;height:18px"></i>
+        </button>
+      </div>
+
+      <div class="panel-content">
+
+        <!-- 1. GLOBAL CONFIG -->
+        <section>
+          <div class="section-label">
+            <i data-lucide="settings-2" style="width:11px;height:11px"></i>
+            Configuración Global
+          </div>
+
+          <!-- View toggle -->
+          <div class="view-toggle">
+            <button onclick="setGlobalView('front')" id="btn-view-front" class="active">Frente</button>
+            <button onclick="setGlobalView('back')" id="btn-view-back">Espalda</button>
+          </div>
+
+          <!-- Color Palette -->
+          <div id="colorPalette" class="color-grid"></div>
+
+          <div class="color-custom-row">
+            <div class="color-custom-wrap">
+              <input type="color" id="customColor" value="#ffffff" oninput="setGlobalColor(this.value)">
+            </div>
+            <span class="color-custom-label">Color Global Personalizado</span>
+          </div>
+
+          <!-- Models -->
+          <div id="modelGrid" class="model-grid"></div>
+
+          <!-- Sliders -->
+          <div style="margin-top:14px;">
+            <div class="section-label" style="margin-bottom:8px;">
+              <i data-lucide="sliders" style="width:11px;height:11px"></i>
+              Ajustes Globales del Estampado
+            </div>
+            <div class="slider-group">
+              <div class="slider-row">
+                <div class="slider-meta">
+                  <span>Tamaño Base</span>
+                  <span class="slider-val" id="valScale">100%</span>
+                </div>
+                <input type="range" id="sliderScale" min="20" max="200" value="100" oninput="updateDesignSettings()">
+              </div>
+              <div class="slider-row">
+                <div class="slider-meta">
+                  <span>Posición Vertical Base</span>
+                  <span class="slider-val" id="valY">0</span>
+                </div>
+                <input type="range" id="sliderY" min="-30" max="30" value="0" oninput="updateDesignSettings()">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <hr class="divider">
+
+        <!-- 2. UPLOAD -->
+        <section>
+          <div class="section-label">
+            <i data-lucide="upload-cloud" style="width:11px;height:11px"></i>
+            Subir Diseños
+          </div>
+          <div class="upload-area">
+            <div class="upload-btn-wrap">
+              <input type="file" id="imageUpload" accept="image/*" multiple onchange="handleBulkUpload(event)">
+              <button class="upload-btn">
+                <i data-lucide="plus-circle" style="width:16px;height:16px"></i>
+                Subir Diseños
+              </button>
+            </div>
+            <p class="upload-count" id="designCount">0 Diseños cargados</p>
+            <p class="upload-tip">✦ Toca el ícono de lápiz en cada prenda para ajustes individuales</p>
+          </div>
+        </section>
+
+        <hr class="divider">
+
+        <!-- 3. PRICES & TEXTS -->
+        <section>
+          <div class="section-label">
+            <i data-lucide="tag" style="width:11px;height:11px"></i>
+            Precios y Moneda
+          </div>
+
+          <div class="inline-row" style="margin-bottom:14px;">
+            <div class="field-price">
+              <label class="field-label">Precio</label>
+              <input type="number" id="pdfPrice" class="num-input" style="width:100%;" placeholder="0.00" oninput="updatePreviewText()">
+            </div>
+            <div class="field-currency">
+              <label class="field-label">Moneda</label>
+              <select id="pdfCurrency" class="text-input" onchange="updatePreviewText()">
+                <optgroup label="Norteamérica">
+                  <option value="MXN">MXN (Peso)</option>
+                  <option value="USD">USD (Dólar)</option>
+                  <option value="CAD">CAD (Canadá)</option>
+                </optgroup>
+                <optgroup label="Latinoamérica">
+                  <option value="ARS">ARS (Argentina)</option>
+                  <option value="BOB">BOB (Bolivia)</option>
+                  <option value="BRL">BRL (Brasil)</option>
+                  <option value="CLP">CLP (Chile)</option>
+                  <option value="COP">COP (Colombia)</option>
+                  <option value="CRC">CRC (Costa Rica)</option>
+                  <option value="DOP">DOP (Rep. Dom.)</option>
+                  <option value="GTQ">GTQ (Guatemala)</option>
+                  <option value="HNL">HNL (Honduras)</option>
+                  <option value="NIO">NIO (Nicaragua)</option>
+                  <option value="PEN">PEN (Perú)</option>
+                  <option value="PYG">PYG (Paraguay)</option>
+                  <option value="UYU">UYU (Uruguay)</option>
+                  <option value="VES">VES (Venezuela)</option>
+                </optgroup>
+                <optgroup label="Europa">
+                  <option value="EUR">EUR (Euro)</option>
+                </optgroup>
+              </select>
+            </div>
+            <div style="flex-shrink:0;">
+              <label class="field-label" style="text-align:center;">Color</label>
+              <input type="color" id="pdfPriceColor" class="color-picker-small" value="#2d1f14" oninput="updatePreviewText()" title="Color del Precio">
+            </div>
+          </div>
+
+          <div class="section-label" style="margin-bottom:10px;">
+            <i data-lucide="file-text" style="width:11px;height:11px"></i>
+            Textos y Fondo
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div>
+              <label class="field-label">Título del Catálogo</label>
+              <div class="inline-row">
+                <input type="text" id="pdfTitle" class="text-input" placeholder="Mi Colección 2024" oninput="updatePreviewText()">
+                <input type="color" id="pdfTitleColor" class="color-picker-small" value="#2d1f14" oninput="updatePreviewText()">
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Pie de Página</label>
+              <div class="inline-row">
+                <input type="text" id="pdfWatermark" class="text-input" placeholder="@mitienda" oninput="updatePreviewText()">
+                <input type="color" id="pdfFooterColor" class="color-picker-small" value="#c8b89a" oninput="updatePreviewText()">
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Fondo de Página</label>
+              <div class="bg-row">
+                <input type="color" id="pdfBgColor" class="color-picker-small" value="#fffdf9" oninput="setPdfBackground(this.value,'color')">
+                <div class="bg-upload-btn">
+                  <input type="file" accept="image/*" onchange="handlePdfBgUpload(event)">
+                  <i data-lucide="image" style="width:12px;height:12px"></i>
+                  Imagen Fondo
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- GENERATE -->
+        <div style="padding-top:4px;">
+          <button onclick="generatePDF()" id="btnGenerate" disabled class="generate-btn">
+            <i data-lucide="download" style="width:16px;height:16px"></i>
+            Descargar Catálogo PDF
+          </button>
+        </div>
+
+      </div><!-- /panel-content -->
+    </div><!-- /sidePanel -->
+
+    <!-- ─── MAIN PREVIEW AREA ─── -->
+    <div id="mainArea">
+
+      <div class="preview-header">
+        <span class="preview-label">Vista Previa del Catálogo</span>
+        <div class="paginator-wrap" id="paginatorControls" style="display:none;">
+          <button onclick="prevPage()" id="btnPrevPage" class="paginator-btn">
+            <i data-lucide="chevron-left" style="width:14px;height:14px"></i>
+          </button>
+          <span class="paginator-count" id="pageIndicator">1/1</span>
+          <button onclick="nextPage()" id="btnNextPage" class="paginator-btn">
+            <i data-lucide="chevron-right" style="width:14px;height:14px"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- A4 SHEET -->
+      <div id="pdfPreview" class="pdf-page-preview">
+
+        <div id="previewBg"></div>
+
+        <div style="position:relative;z-index:20;display:flex;flex-direction:column;height:100%;padding:5%;">
+          <div style="text-align:center;margin-bottom:4%;">
+            <h1 id="previewTitle" style="font-family:'Playfair Display',serif;font-size:1.8em;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;line-height:1;color:#2d1f14;">
+              Mi Colección
+            </h1>
+          </div>
+
+          <div id="previewGrid" class="catalog-grid">
+            <div class="empty-state">
+              <i data-lucide="layers" style="width:36px;height:36px;opacity:0.4;"></i>
+              <span>Carga diseños<br>para ver</span>
+            </div>
+          </div>
+
+          <div style="margin-top:auto;padding-top:2%;text-align:center;border-top:1px solid rgba(0,0,0,0.08);">
+            <p id="previewWatermark" style="font-size:0.6em;font-weight:700;color:#c8b89a;">@mitienda</p>
+          </div>
+        </div>
+
+      </div><!-- /pdfPreview -->
+
+    </div><!-- /mainArea -->
+
+  </div><!-- /studio-layout -->
+
+</div><!-- /studio-overlay -->
+
+<script>
+  // ─── UTILS ───
+  const debounce = (fn, delay) => {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  // ─── CONSTANTS ───
+  const MODELS = {
+    oversize:   { label: 'Oversize',  icon: 'shirt',        front: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/WHITE_FRONT.png?v=1763968833",             back: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/WHITE_BACK.png?v=1763711135",            designWidth: 42, y: 25 },
+    oversize2:  { label: 'Oversize 2',icon: 'shirt',        front: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/LIMITED_OVER_BLANCA_FRENTE.png?v=1765602898",back: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/LIMITED_OVER_BLANCA_ESPALDA.png?v=1765602897",designWidth: 42, y: 25 },
+    regular:    { label: 'Regular',   icon: 'user',         front: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/corte_regular_front.png?v=1763971506",       back: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/corte_regular_back.png?v=1763971506",      designWidth: 38, y: 25 },
+    hoodie:     { label: 'Hoodie',    icon: 'cloud-rain',   front: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/WHITE_HOODIE_FRONT.png?v=1763969542",        back: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/WHITE_HOODIE_BACK.png?v=1763969542",       designWidth: 32, y: 30 },
+    longsleeve: { label: 'M. Larga',  icon: 'align-justify',front: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_front.png?v=1763971851",        back: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_back.png?v=1763971851",       designWidth: 36, y: 25 }
+  };
+
+  const PALETTE = [
+    { hex: '#FFFFFF', name: 'Blanco'   },
+    { hex: '#111827', name: 'Negro'    },
+    { hex: '#f3f4f6', name: 'Hueso'    },
+    { hex: '#e5e5e5', name: 'Melange'  },
+    { hex: '#4B5563', name: 'Carbón'   },
+    { hex: '#7f1d1d', name: 'Burgundy' },
+    { hex: '#1e3a8a', name: 'Navy'     },
+    { hex: '#3f6212', name: 'Forest'   },
+    { hex: '#d97706', name: 'Amber'    },
+    { hex: '#5b21b6', name: 'Purple'   }
+  ];
+
+  // ─── STATE ───
+  let state = {
+    model: 'oversize',
+    view: 'front',
+    color: '#ffffff',
+    items: [],
+    currentPage: 0,
+    itemsPerPage: 9,
+    title: 'Mi Colección 2024',
+    titleColor: '#2d1f14',
+    watermark: '@mitienda',
+    price: '',
+    currency: 'MXN',
+    priceColor: '#2d1f14',
+    footerColor: '#c8b89a',
+    bgType: 'color',
+    bgValue: '#fffdf9',
+    designScale: 100,
+    designOffset: 0,
+    baseImage: null,
+    editingItemIndex: null,
+    mockupCache: {},
+    editShirtCanvas: null,
+    editDesignImg: null,
+    editLastColor: null,
+    editLastUrl: null
+  };
+
+  // ─── INIT ───
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    initUI();
+    loadBaseImage();
+    setPdfBackground('#fffdf9', 'color');
+  });
+
+  function closeStudio() {
+    if (confirm('¿Salir? Se perderá el catálogo actual.')) {
+      document.getElementById('studio-overlay').style.display = 'none';
+    }
+  }
+
+  function loadBaseImage() {
+    const url = MODELS[state.model][state.view];
+    state.mockupCache = {};
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = url;
+    img.onload = () => { state.baseImage = img; renderPreviewGrid(); };
+  }
+
+  // ─── IMAGE PROCESSING ───
+  function trimImageWhitespace(img) {
+    const canvas = document.createElement('canvas');
+    const w = img.naturalWidth, h = img.naturalHeight;
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data32 = new Uint32Array(imageData.data.buffer);
+    let minX = w, minY = h, maxX = 0, maxY = 0, found = false;
+
+    for (let y = 0; y < h; y++) { for (let x = 0; x < w; x++) { if ((data32[y*w+x] & 0xFF000000) !== 0) { minY = y; found = true; break; } } if (found) break; }
+    if (!found) return null;
+    found = false;
+    for (let y = h-1; y >= minY; y--) { for (let x = 0; x < w; x++) { if ((data32[y*w+x] & 0xFF000000) !== 0) { maxY = y; found = true; break; } } if (found) break; }
+    found = false;
+    for (let x = 0; x < w; x++) { for (let y = minY; y <= maxY; y++) { if ((data32[y*w+x] & 0xFF000000) !== 0) { minX = x; found = true; break; } } if (found) break; }
+    found = false;
+    for (let x = w-1; x >= minX; x--) { for (let y = minY; y <= maxY; y++) { if ((data32[y*w+x] & 0xFF000000) !== 0) { maxX = x; found = true; break; } } if (found) break; }
+
+    const tw = maxX-minX+1, th = maxY-minY+1;
+    const tc = document.createElement('canvas');
+    tc.width = tw; tc.height = th;
+    tc.getContext('2d').drawImage(canvas, minX, minY, tw, th, 0, 0, tw, th);
+    return tc.toDataURL('image/png');
+  }
+
+  // ─── UI ───
+  function initUI() {
+    const mg = document.getElementById('modelGrid');
+    mg.innerHTML = '';
+    Object.keys(MODELS).forEach(k => {
+      const m = MODELS[k];
+      const btn = document.createElement('button');
+      btn.className = 'model-btn' + (k === state.model ? ' active' : '');
+      btn.id = `btn-model-${k}`;
+      btn.onclick = () => setModel(k);
+      btn.innerHTML = `<i data-lucide="${m.icon}" style="width:14px;height:14px"></i><span>${m.label}</span>`;
+      mg.appendChild(btn);
+    });
+
+    const cp = document.getElementById('colorPalette');
+    cp.innerHTML = '';
+    PALETTE.forEach(c => {
+      const sw = document.createElement('div');
+      sw.className = 'color-swatch' + (c.hex.toLowerCase() === state.color.toLowerCase() ? ' active' : '');
+      sw.style.backgroundColor = c.hex;
+      sw.title = c.name;
+      if (c.hex === '#FFFFFF') sw.style.border = '2px solid #d9ccbc';
+      sw.onclick = () => setGlobalColor(c.hex);
+      cp.appendChild(sw);
+    });
+
+    lucide.createIcons();
+  }
+
+  function setModel(key) {
+    state.model = key;
+    document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`btn-model-${key}`)?.classList.add('active');
+    loadBaseImage();
+  }
+
+  function setGlobalView(v) {
+    state.view = v;
+    document.getElementById('btn-view-front').classList.toggle('active', v === 'front');
+    document.getElementById('btn-view-back').classList.toggle('active', v === 'back');
+    loadBaseImage();
+  }
+
+  function setGlobalColor(hex) {
+    state.color = hex;
+    state.mockupCache = {};
+    document.querySelectorAll('.color-swatch').forEach(s => {
+      s.classList.toggle('active', s.style.backgroundColor === hexToRgb(hex));
+    });
+    renderPreviewGrid();
+  }
+
+  function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function updateDesignSettings() {
+    state.designScale = parseInt(document.getElementById('sliderScale').value);
+    state.designOffset = parseInt(document.getElementById('sliderY').value);
+    document.getElementById('valScale').textContent = state.designScale + '%';
+    document.getElementById('valY').textContent = state.designOffset;
+    updateTransformsOnly();
+  }
+
+  function updatePreviewText() {
+    state.title = document.getElementById('pdfTitle').value || 'Mi Colección';
+    state.titleColor = document.getElementById('pdfTitleColor').value;
+    state.watermark = document.getElementById('pdfWatermark').value || '@mitienda';
+    state.footerColor = document.getElementById('pdfFooterColor').value;
+    state.price = document.getElementById('pdfPrice').value;
+    state.currency = document.getElementById('pdfCurrency').value;
+    state.priceColor = document.getElementById('pdfPriceColor').value;
+    updateTextOnly();
+  }
+
+  function updateTextOnly() {
+    const t = document.getElementById('previewTitle');
+    if (t) { t.textContent = state.title; t.style.color = state.titleColor; }
+    const w = document.getElementById('previewWatermark');
+    if (w) { w.style.color = state.footerColor; }
+    document.querySelectorAll('.catalog-price').forEach(p => { p.style.color = state.priceColor; });
+  }
+
+  function updateTransformsOnly() {
+    const model = MODELS[state.model];
+    const startIdx = state.currentPage * state.itemsPerPage;
+    document.querySelectorAll('.catalog-item').forEach((el, i) => {
+      const realIndex = startIdx + i;
+      if (realIndex < state.items.length) {
+        const item = state.items[realIndex];
+        const fs = item.overrideScale || state.designScale;
+        const fy = item.overrideY || state.designOffset;
+        const ew = model.designWidth * (fs / 100);
+        const ey = model.y + parseInt(fy);
+        const di = el.querySelector('.catalog-image-container img:nth-child(2)');
+        if (di) { di.style.width = `${ew}%`; di.style.top = `${ey}%`; }
+      }
+    });
+  }
+
+  function setPdfBackground(val, type) {
+    state.bgType = type; state.bgValue = val;
+    const bg = document.getElementById('previewBg');
+    const c = document.getElementById('pdfPreview');
+    bg.innerHTML = '';
+    if (type === 'color') {
+      bg.style.backgroundColor = val; c.style.backgroundColor = val;
+    } else {
+      bg.style.backgroundColor = 'transparent'; c.style.backgroundColor = 'transparent';
+      bg.innerHTML = `<img src="${val}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">`;
+    }
+  }
+
+  function handlePdfBgUpload(e) {
+    const f = e.target.files[0];
+    if (f) setPdfBackground(URL.createObjectURL(f), 'image');
+  }
+
+  async function handleBulkUpload(e) {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    const btn = e.target.nextElementSibling;
+    btn.innerHTML = 'Procesando...';
+    btn.disabled = true;
+
+    const newItems = [];
+    for (const f of files) {
+      await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            newItems.push({ file: f, url: trimImageWhitespace(img) || ev.target.result, overrideColor: null, overrideScale: null, overrideY: null, overridePrice: null });
+            resolve();
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(f);
+      });
+    }
+
+    state.items.push(...newItems);
+    document.getElementById('designCount').textContent = `${state.items.length} Diseños cargados`;
+    const gb = document.getElementById('btnGenerate');
+    gb.disabled = false;
+
+    btn.innerHTML = '<i data-lucide="plus-circle" style="width:16px;height:16px"></i> Subir Diseños';
+    btn.disabled = false;
+    lucide.createIcons();
+    state.currentPage = 0;
+    renderPreviewGrid();
+    e.target.value = '';
+  }
+
+  // ─── TINT ───
+  async function getTintedShirtUrl(hex) {
+    if (state.mockupCache[hex]) return state.mockupCache[hex];
+    const canvas = document.createElement('canvas');
+    const url = await tintShirtForPreview(canvas, state.baseImage, hex);
+    state.mockupCache[hex] = url;
+    return url;
+  }
+
+  async function tintShirtForPreview(canvas, baseImg, hexColor) {
+    const ctx = canvas.getContext('2d');
+    const aspect = baseImg.naturalWidth / baseImg.naturalHeight;
+    canvas.height = canvas.width / aspect;
+    ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+    if (hexColor.toLowerCase() !== '#ffffff') {
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-in';
+      ctx.fillStyle = hexColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+      ctx.restore();
+    }
+    return canvas.toDataURL();
+  }
+
+  // ─── RENDER GRID ───
+  async function renderPreviewGrid() {
+    const grid = document.getElementById('previewGrid');
+    grid.innerHTML = '';
+    const totalPages = Math.ceil(state.items.length / state.itemsPerPage);
+    const startIdx = state.currentPage * state.itemsPerPage;
+    const endIdx = startIdx + state.itemsPerPage;
+    const previewItems = state.items.slice(startIdx, endIdx);
+
+    if (totalPages > 1) {
+      document.getElementById('paginatorControls').style.display = 'flex';
+      document.getElementById('pageIndicator').textContent = `${state.currentPage+1}/${totalPages}`;
+      document.getElementById('btnPrevPage').disabled = state.currentPage === 0;
+      document.getElementById('btnNextPage').disabled = state.currentPage === totalPages-1;
+      document.getElementById('previewWatermark').textContent = `${state.watermark} — Página ${state.currentPage+1}/${totalPages}`;
+    } else {
+      document.getElementById('paginatorControls').style.display = 'none';
+      document.getElementById('previewWatermark').textContent = state.watermark;
+    }
+
+    if (state.items.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><i data-lucide="layers" style="width:36px;height:36px;opacity:0.4;"></i><span>Carga diseños<br>para ver</span></div>`;
+      lucide.createIcons();
+      return;
+    }
+
+    const model = MODELS[state.model];
+    const cmap = { 'MXN':'$','USD':'$','EUR':'€','CAD':'$','ARS':'$','BOB':'Bs','BRL':'R$','CLP':'$','COP':'$','CRC':'₡','DOP':'RD$','GTQ':'Q','HNL':'L','NIO':'C$','PEN':'S/','PYG':'₲','UYU':'$','VES':'Bs' };
+    const symbol = cmap[state.currency] || '$';
+
+    for (let i = 0; i < previewItems.length; i++) {
+      const item = previewItems[i];
+      const realIndex = startIdx + i;
+      const fc = item.overrideColor || state.color;
+      const fs = item.overrideScale || state.designScale;
+      const fy = item.overrideY || state.designOffset;
+      const fp = item.overridePrice || state.price;
+      const isEdited = item.overrideColor || item.overrideScale || item.overrideY || item.overridePrice;
+
+      let shirtUrl = model[state.view];
+      if (state.baseImage && state.baseImage.complete) shirtUrl = await getTintedShirtUrl(fc);
+
+      const ew = model.designWidth * (fs / 100);
+      const ey = model.y + parseInt(fy);
+      const priceText = fp ? `${symbol}${fp} ${state.currency}` : '';
+      const priceDisplay = fp ? 'block' : 'none';
+
+      const div = document.createElement('div');
+      div.className = 'catalog-item';
+      div.setAttribute('data-index', realIndex);
+      div.innerHTML = `
+        <div class="catalog-image-container">
+          <img src="${shirtUrl}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:10;">
+          <img src="${item.url}" style="position:absolute;z-index:30;object-fit:contain;width:${ew}%;left:50%;top:${ey}%;transform:translateX(-50%);transition:all 0.3s;">
+          ${isEdited ? '<div class="item-edited-indicator"></div>' : ''}
+        </div>
+        <div class="catalog-price" style="display:${priceDisplay};color:${state.priceColor};">${priceText}</div>
+        <button class="item-edit-btn" onclick="openEditModal(${realIndex})" title="Editar individualmente">
+          <i data-lucide="pencil" style="width:10px;height:10px;"></i>
+        </button>`;
+      grid.appendChild(div);
+    }
+
+    for (let i = previewItems.length; i < 9; i++) {
+      const empty = document.createElement('div');
+      empty.style.cssText = 'border:1.5px dashed var(--cream-3);border-radius:8px;height:100%;width:100%;';
+      grid.appendChild(empty);
+    }
+
+    lucide.createIcons();
+    updateTextOnly();
+  }
+
+  // ─── EDIT MODAL ───
+  async function openEditModal(index) {
+    state.editingItemIndex = index;
+    const item = state.items[index];
+    document.getElementById('editItemColor').value = item.overrideColor || state.color;
+    document.getElementById('editItemScale').value = item.overrideScale || state.designScale;
+    document.getElementById('editItemY').value = item.overrideY || state.designOffset;
+    document.getElementById('editItemPrice').value = item.overridePrice || '';
+    const em = document.getElementById('editModal');
+    em.style.display = 'flex';
+
+    state.editShirtCanvas = null;
+    state.editDesignImg = null;
+    state.editLastColor = null;
+    state.editLastUrl = null;
+
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = item.url;
+    await new Promise(r => img.onload = r);
+    state.editDesignImg = img;
+    state.editLastUrl = item.url;
+    requestModalUpdate();
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+    state.editingItemIndex = null;
+  }
+
+  function resetItemSetting(key) {
+    const elMap = { color:'editItemColor', scale:'editItemScale', y:'editItemY', price:'editItemPrice' };
+    const defMap = { color: state.color, scale: state.designScale, y: state.designOffset, price: '' };
+    document.getElementById(elMap[key]).value = defMap[key];
+    requestModalUpdate();
+  }
+
+  let modalRenderPending = false;
+
+  function requestModalUpdate() {
+    if (!modalRenderPending) { modalRenderPending = true; requestAnimationFrame(renderModalFrame); }
+  }
+
+  function renderModalFrame() {
+    if (state.editingItemIndex === null) { modalRenderPending = false; return; }
+    const canvas = document.getElementById('modalCanvas');
+    if (canvas.width !== 1000) { canvas.width = 1000; canvas.height = 1000; }
+    const ctx = canvas.getContext('2d');
+    const color = document.getElementById('editItemColor').value;
+    const scale = parseInt(document.getElementById('editItemScale').value);
+    const yPos = parseInt(document.getElementById('editItemY').value);
+
+    if (!state.editShirtCanvas || state.editLastColor !== color) {
+      const bg = document.createElement('canvas');
+      bg.width = 1000; bg.height = 1000;
+      const bc = bg.getContext('2d');
+      const bi = state.baseImage;
+      const a = bi.naturalWidth / bi.naturalHeight;
+      let dw = 1000, dh = 1000/a;
+      if (dh > 1000) { dh = 1000; dw = 1000*a; }
+      const dx = (1000-dw)/2, dy = (1000-dh)/2;
+      bc.drawImage(bi, dx, dy, dw, dh);
+      if (color.toLowerCase() !== '#ffffff') {
+        bc.save();
+        bc.globalCompositeOperation = 'source-in';
+        bc.fillStyle = color;
+        bc.fillRect(0,0,1000,1000);
+        bc.globalCompositeOperation = 'multiply';
+        bc.drawImage(bi, dx, dy, dw, dh);
+        bc.restore();
+      }
+      state.editShirtCanvas = bg;
+      state.editLastColor = color;
+      state.editGeometry = { dx, dy, dw, dh };
+    }
+
+    ctx.clearRect(0, 0, 1000, 1000);
+    ctx.drawImage(state.editShirtCanvas, 0, 0);
+
+    if (state.editDesignImg && state.editGeometry) {
+      const { dx, dy, dw, dh } = state.editGeometry;
+      const model = MODELS[state.model];
+      const wp = model.designWidth * (scale / 100);
+      const di = state.editDesignImg;
+      const dW = dw * (wp / 100);
+      const dH = dW / (di.naturalWidth / di.naturalHeight);
+      const dX = (1000 - dW) / 2;
+      const effY = model.y + yPos;
+      const dY = dy + (dh * (effY / 100));
+      ctx.drawImage(di, dX, dY, dW, dH);
+    }
+    modalRenderPending = false;
+  }
+
+  function saveItemChanges() {
+    if (state.editingItemIndex === null) return;
+    const idx = state.editingItemIndex;
+    const item = state.items[idx];
+    const nc = document.getElementById('editItemColor').value;
+    const ns = parseInt(document.getElementById('editItemScale').value);
+    const ny = parseInt(document.getElementById('editItemY').value);
+    const np = document.getElementById('editItemPrice').value;
+    item.overrideColor = (nc === state.color) ? null : nc;
+    item.overrideScale = (ns === state.designScale) ? null : ns;
+    item.overrideY = (ny === state.designOffset) ? null : ny;
+    item.overridePrice = (np === '') ? null : np;
+    renderPreviewGrid();
+    closeEditModal();
+  }
+
+  // ─── PAGINATION ───
+  function prevPage() {
+    if (state.currentPage > 0) { state.currentPage--; renderPreviewGrid(); }
+  }
+  function nextPage() {
+    const max = Math.ceil(state.items.length / state.itemsPerPage) - 1;
+    if (state.currentPage < max) { state.currentPage++; renderPreviewGrid(); }
+  }
+
+  // ─── PDF ───
+  function getImageDataUrl(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => {
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth; c.height = img.naturalHeight;
+        c.getContext('2d').drawImage(img, 0, 0);
+        resolve(c.toDataURL('image/jpeg', 0.8));
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  async function generateMockupCanvas(baseImg, designUrl, hexColor, widthPercent, yPercent) {
+    const canvas = document.createElement('canvas');
+    const size = 1000;
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    const a = baseImg.naturalWidth / baseImg.naturalHeight;
+    let dw = size, dh = size/a;
+    if (dh > size) { dh = size; dw = size*a; }
+    const dx = (size-dw)/2, dy = (size-dh)/2;
+    ctx.drawImage(baseImg, dx, dy, dw, dh);
+    if (hexColor.toLowerCase() !== '#ffffff') {
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-in';
+      ctx.fillStyle = hexColor;
+      ctx.fillRect(0,0,size,size);
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.drawImage(baseImg, dx, dy, dw, dh);
+      ctx.restore();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    const di = new Image();
+    di.crossOrigin = 'Anonymous';
+    di.src = designUrl;
+    await new Promise(r => di.onload = r);
+    const dW = dw * (widthPercent/100);
+    const dH = dW / (di.naturalWidth / di.naturalHeight);
+    ctx.drawImage(di, (size-dW)/2, dy + (dh*(yPercent/100)), dW, dH);
+    return canvas.toDataURL('image/png', 0.8);
+  }
+
+  async function generatePDF() {
+    const overlay = document.getElementById('loadingOverlay');
+    const status = document.getElementById('loadingText');
+    overlay.style.display = 'flex';
+
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+      const pw = 210, ph = 297, m = 10, hH = 30, fH = 15;
+      const gW = pw-(m*2), gH = ph-hH-fH-(m*2);
+      const cW = gW/3, cH = gH/3;
+
+      let bgData = null;
+      if (state.bgType === 'image' && state.bgValue) {
+        try { bgData = await getImageDataUrl(state.bgValue); } catch(e) {}
+      }
+
+      const model = MODELS[state.model];
+      const bi = new Image();
+      bi.crossOrigin = 'Anonymous';
+      bi.src = model[state.view];
+      await new Promise(r => bi.onload = r);
+
+      const ipp = state.itemsPerPage;
+      const totalPages = Math.ceil(state.items.length / ipp);
+      const cmap = { 'MXN':'$','USD':'$','EUR':'€','CAD':'$','ARS':'$','BOB':'Bs','BRL':'R$','CLP':'$','COP':'$','CRC':'₡','DOP':'RD$','GTQ':'Q','HNL':'L','NIO':'C$','PEN':'S/','PYG':'₲','UYU':'$','VES':'Bs' };
+      const symbol = cmap[state.currency] || '$';
+
+      for (let page = 0; page < totalPages; page++) {
+        status.textContent = `Generando página ${page+1} de ${totalPages}...`;
+        if (page > 0) doc.addPage();
+
+        if (state.bgType === 'color') {
+          doc.setFillColor(state.bgValue);
+          doc.rect(0, 0, pw, ph, 'F');
+        } else if (bgData) {
+          doc.addImage(bgData, 'JPEG', 0, 0, pw, ph);
+        }
+
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(state.titleColor);
+        doc.text(state.title, pw/2, 20, { align: 'center' });
+
+        const si = page * ipp;
+        const ei = Math.min(si + ipp, state.items.length);
+
+        for (let i = si; i < ei; i++) {
+          const item = state.items[i];
+          const li = i - si;
+          const row = Math.floor(li/3), col = li%3;
+          const x = m + col*cW, y = m + hH + row*cH;
+          const fc = item.overrideColor || state.color;
+          const fs = item.overrideScale || state.designScale;
+          const fy = item.overrideY || state.designOffset;
+          const fp = item.overridePrice || state.price;
+          const ep = model.designWidth * (fs/100);
+          const ey = model.y + parseInt(fy);
+          const priceText = fp ? `${symbol}${fp} ${state.currency}` : '';
+          const mu = await generateMockupCanvas(bi, item.url, fc, ep, ey);
+          const pad = 2, iaH = cH-(fp?8:0);
+          const bW = cW-(pad*2), bH = iaH-(pad*2);
+          const dim = Math.min(bW, bH);
+          doc.addImage(mu, 'PNG', x+(cW-dim)/2, y+pad+(bH-dim)/2, dim, dim, undefined, 'FAST');
+          if (fp) {
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(state.priceColor);
+            doc.text(priceText, x+(cW/2), y+cH-4, { align: 'center' });
+          }
+        }
+
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(state.footerColor);
+        doc.text(`${state.watermark} — Página ${page+1}/${totalPages}`, pw/2, ph-8, { align: 'center' });
+        await new Promise(r => setTimeout(r, 10));
+      }
+
+      doc.save(`Catalogo_${state.title.replace(/\s+/g,'_')}.pdf`);
+    } catch (e) {
+      console.error(e);
+      alert('Error al generar el PDF. Revisa la consola.');
+    } finally {
+      overlay.style.display = 'none';
+    }
+  }
+</script>
+</body>
+</html>
