@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Plantillas de Canva — Chechena Shirts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream-0: #fdf8f0; --cream-1: #f9f1e4; --cream-2: #f2e8d6;
+      --cream-3: #e8d9c2; --cream-4: #d9c8ad; --sand: #c4a882;
+      --taupe: #9a7e60; --brown: #5a3e28;
+      --text-main: #3b2a1a; --text-muted: #7a6550; --text-light: #a89278;
+      --white: #fffdf9;
+      --shadow-sm: 0 2px 12px rgba(90,62,40,0.07);
+      --shadow-md: 0 6px 28px rgba(90,62,40,0.10);
+      --shadow-lg: 0 14px 48px rgba(90,62,40,0.12);
+      --radius-md: 14px; --radius-lg: 20px;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--cream-0); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
+    /* SALE POPUP */
+    .sale-popup {
+      position: fixed; bottom: 24px; left: 20px; background: var(--white);
+      border: 1px solid var(--cream-3); padding: 12px 16px; border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 500; color: var(--text-main);
+      opacity: 0; transform: translateX(-110%);
+      transition: all 0.5s cubic-bezier(.34,1.56,.64,1); z-index: 9999; max-width: 280px;
+    }
+    .sale-popup.show { opacity: 1; transform: translateX(0); }
+    .sale-popup img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--cream-3); object-fit: cover; }
+    .sale-popup .close-popup { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 16px; }
+
+    /* HEADER */
+    .header-bar { background: var(--cream-1); border-bottom: 1px solid var(--cream-3); position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1320px; margin: 0 auto; padding: 0 clamp(16px,3vw,32px); display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-family: var(--font-display); font-size: 1.65rem; font-weight: 700; color: var(--brown); text-decoration: none; letter-spacing: .02em; }
+    .logo span { color: var(--taupe); font-style: italic; font-weight: 400; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 13.5px; font-weight: 500; letter-spacing: .04em; transition: color .2s; }
+    .nav-links a:hover { color: var(--brown); }
+    .header-icons { display: flex; gap: 16px; align-items: center; }
+    .header-icons button, .header-icons a { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 18px; padding: 4px; text-decoration: none; transition: color .2s; }
+    .header-icons button:hover, .header-icons a:hover { color: var(--brown); }
+    .cart-icon { position: relative; }
+    .cart-badge { position: absolute; top: -3px; right: -3px; background: var(--brown); color: var(--white); font-size: 9px; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* BREADCRUMB */
+    .breadcrumb { max-width: 1320px; margin: 0 auto; padding: 14px clamp(16px,3vw,32px); font-size: 12px; color: var(--text-light); display: flex; gap: 6px; align-items: center; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--brown); }
+    .breadcrumb .sep { color: var(--cream-4); }
+
+    /* MAIN */
+    .page-main { max-width: 1320px; margin: 0 auto; padding: clamp(24px,4vw,48px) clamp(16px,3vw,32px); }
+
+    /* HERO */
+    .templates-hero { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 8px; }
+    .templates-hero h1 { font-family: var(--font-display); font-size: clamp(28px,5vw,46px); font-weight: 700; color: var(--brown); line-height: 1.15; letter-spacing: -.01em; }
+    .templates-hero h1 em { font-style: italic; color: var(--taupe); }
+    .templates-sub { color: var(--text-muted); font-size: 15px; margin-top: 8px; max-width: 640px; line-height: 1.65; }
+    .badge-dtf { display: inline-flex; align-items: center; gap: 6px; background: var(--cream-2); border: 1px solid var(--cream-4); color: var(--taupe); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; align-self: flex-start; margin-top: 6px; }
+    .badge-dtf::before { content: '✦'; font-size: 10px; }
+
+    /* DIVIDER */
+    .section-divider { height: 1px; background: linear-gradient(to right, transparent, var(--cream-3), transparent); margin: 28px 0; }
+
+    /* TEMPLATE GRID */
+    .templates-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    @media (max-width: 900px) { .templates-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 560px) { .templates-grid { grid-template-columns: 1fr; } }
+
+    .template-card { background: var(--white); border: 1px solid var(--cream-3); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .3s, transform .3s; animation: fadeUp .5s ease both; }
+    .template-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .template-card:nth-child(2) { animation-delay:.08s; }
+    .template-card:nth-child(3) { animation-delay:.16s; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+
+    .card-thumb { position: relative; overflow: hidden; background: var(--cream-1); aspect-ratio: 3/4; }
+    .card-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; cursor: pointer; transition: transform .35s cubic-bezier(.34,1.56,.64,1); background: var(--white); }
+    .card-thumb:hover img { transform: scale(1.04); }
+
+    .badge-new { position: absolute; top: 12px; left: 12px; background: var(--brown); color: var(--cream-1); font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 6px; text-transform: uppercase; letter-spacing: .7px; }
+
+    /* LOCK badge for premium cards */
+    .badge-lock { position: absolute; top: 12px; right: 12px; background: rgba(90,62,40,0.85); color: var(--cream-1); font-size: 16px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+
+    .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+    .card-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--brown); line-height: 1.25; }
+    .card-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+    .card-actions { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+    .btn-canva { flex: 1 1 auto; text-align: center; font-weight: 600; font-size: 13px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--brown); background: var(--brown); color: var(--cream-0); text-decoration: none; cursor: pointer; transition: background .2s, color .2s, transform .1s; letter-spacing: .02em; }
+    .btn-canva:hover { background: var(--taupe); border-color: var(--taupe); }
+    .btn-canva:active { transform: scale(.98); }
+    .btn-save { flex: 1 1 auto; text-align: center; font-weight: 600; font-size: 13px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--cream-3); background: transparent; color: var(--taupe); text-decoration: none; cursor: pointer; transition: border-color .2s, color .2s, background .2s; }
+    .btn-save:hover { border-color: var(--sand); background: var(--cream-1); color: var(--brown); }
+
+    /* ETIQUETAS SELECTOR */
+    .etiqueta-selector { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+    .etiqueta-selector label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: .05em; text-transform: uppercase; }
+    .etiqueta-btns { display: flex; gap: 6px; }
+    .btn-size { flex: 1; padding: 7px 6px; border-radius: 8px; border: 1.5px solid var(--cream-3); background: transparent; color: var(--taupe); font-family: var(--font-body); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
+    .btn-size.active, .btn-size:hover { border-color: var(--brown); background: var(--brown); color: var(--cream-0); }
+
+    /* PRODUCTS */
+    .section-heading { font-family: var(--font-display); font-size: clamp(22px,4vw,34px); font-weight: 700; color: var(--brown); letter-spacing: -.01em; margin-bottom: 24px; }
+    .section-heading em { font-style: italic; color: var(--taupe); }
+    .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    @media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 760px)  { .products-grid { grid-template-columns: repeat(2,1fr); } }
+
+    .product-card { background: var(--white); border: 1px solid var(--cream-3); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow .3s, transform .3s; cursor: pointer; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+    .product-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .prod-img-wrap { aspect-ratio: 1; overflow: hidden; background: var(--cream-1); position: relative; }
+    .prod-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+    .product-card:hover .prod-img-wrap img { transform: scale(1.06); }
+    .product-badge { position: absolute; top: 10px; left: 10px; background: var(--taupe); color: var(--white); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 5px; text-transform: uppercase; letter-spacing: .5px; }
+    .prod-info { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 5px; }
+    .prod-name { font-size: 13.5px; font-weight: 600; color: var(--text-main); line-height: 1.35; }
+    .prod-price { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+    .price-sale { font-weight: 700; color: var(--brown); font-size: 14px; }
+    .price-original { text-decoration: line-through; color: var(--text-light); font-size: 12px; }
+    .add-to-cart-row { padding: 0 14px 14px; margin-top: auto; }
+    .btn-add { width: 100%; padding: 9px; background: var(--cream-2); border: 1.5px solid var(--cream-3); color: var(--taupe); font-family: var(--font-body); font-size: 12.5px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background .2s, color .2s, border-color .2s; letter-spacing: .04em; }
+    .btn-add:hover { background: var(--brown); color: var(--cream-0); border-color: var(--brown); }
+
+    /* FOOTER */
+    footer { margin-top: 64px; background: var(--cream-1); border-top: 1px solid var(--cream-3); padding: 40px clamp(16px,3vw,32px); }
+    .footer-inner { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+    @media (max-width: 768px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand .logo { display: block; margin-bottom: 12px; }
+    .footer-tagline { font-size: 13px; color: var(--text-muted); line-height: 1.65; max-width: 240px; }
+    .footer-col h4 { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--brown); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .footer-col ul a { text-decoration: none; color: var(--text-muted); font-size: 13px; transition: color .2s; }
+    .footer-col ul a:hover { color: var(--brown); }
+    .footer-bottom { max-width: 1320px; margin: 28px auto 0; border-top: 1px solid var(--cream-3); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--text-light); }
+    .lang-selector { display: flex; gap: 8px; }
+    .lang-btn { background: none; border: 1px solid var(--cream-3); border-radius: 6px; padding: 3px 8px; font-size: 11px; color: var(--text-muted); cursor: pointer; transition: border-color .2s, color .2s; }
+    .lang-btn.active, .lang-btn:hover { border-color: var(--taupe); color: var(--brown); }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ============================================================
+       MODAL DE CONTRASEÑA (Plantillas Premium)
+    ============================================================ */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(59,42,26,0.55);
+      backdrop-filter: blur(6px); display: flex; align-items: center;
+      justify-content: center; z-index: 9998; opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--white); border: 1px solid var(--cream-3);
+      border-radius: var(--radius-lg); padding: 32px 28px; max-width: 380px; width: 90%;
+      box-shadow: var(--shadow-lg); text-align: center;
+      transform: scale(.94) translateY(16px); transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+    .modal-lock-icon { font-size: 40px; margin-bottom: 12px; line-height: 1; }
+    .modal-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--brown); margin-bottom: 6px; }
+    .modal-subtitle { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+    .modal-subtitle strong { color: var(--taupe); }
+    .modal-input-wrap { position: relative; margin-bottom: 12px; }
+    .modal-input {
+      width: 100%; padding: 11px 44px 11px 14px; border: 1.5px solid var(--cream-3);
+      border-radius: 10px; background: var(--cream-0); font-family: var(--font-body);
+      font-size: 14px; color: var(--text-main); outline: none;
+      transition: border-color .2s;
+    }
+    .modal-input:focus { border-color: var(--taupe); }
+    .modal-input.error { border-color: #c0392b; animation: shake .4s; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}
+      60%{transform:translateX(-4px)}80%{transform:translateX(4px)}
+    }
+    .modal-toggle-pw {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--text-light);
+      font-size: 16px; padding: 2px;
+    }
+    .modal-error { font-size: 12px; color: #c0392b; margin-bottom: 10px; min-height: 16px; }
+    .modal-btn-unlock {
+      width: 100%; padding: 12px; background: var(--brown); color: var(--cream-0);
+      border: none; border-radius: 10px; font-family: var(--font-body); font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: background .2s, transform .1s;
+      letter-spacing: .03em; margin-bottom: 14px;
+    }
+    .modal-btn-unlock:hover { background: var(--taupe); }
+    .modal-btn-unlock:active { transform: scale(.98); }
+    .modal-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .modal-divider::before, .modal-divider::after { content: ''; flex: 1; height: 1px; background: var(--cream-3); }
+    .modal-divider span { font-size: 11px; color: var(--text-light); white-space: nowrap; }
+    .modal-btn-wa {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 11px; background: #25D366; color: #fff;
+      border: none; border-radius: 10px; font-family: var(--font-body); font-size: 13.5px;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: background .2s, transform .1s; letter-spacing: .02em;
+    }
+    .modal-btn-wa:hover { background: #1eb954; }
+    .modal-btn-wa:active { transform: scale(.98); }
+    .modal-btn-wa svg { flex-shrink: 0; }
+    .modal-close-x {
+      position: absolute; top: 12px; right: 14px; background: none; border: none;
+      cursor: pointer; color: var(--text-light); font-size: 20px; line-height: 1;
+      padding: 4px;
+    }
+    .modal-close-x:hover { color: var(--brown); }
+  </style>
+</head>
+<body>
+
+
+
+<!-- MODAL CONTRASEÑA PREMIUM -->
+<div class="modal-overlay" id="premiumModal">
+  <div class="modal-box" style="position:relative;">
+    <button class="modal-close-x" onclick="closeModal()">×</button>
+    <div class="modal-lock-icon">🔒</div>
+    <div class="modal-title">Plantilla Exclusiva</div>
+    <div class="modal-subtitle">Esta plantilla es <strong>solo para clientes con Megapack</strong>.<br>Ingresa tu contraseña para acceder.</div>
+    <div class="modal-input-wrap">
+      <input class="modal-input" id="pwInput" type="password" placeholder="Contraseña de acceso" autocomplete="off">
+      <button class="modal-toggle-pw" type="button" onclick="togglePw()" title="Mostrar/ocultar">👁</button>
+    </div>
+    <div class="modal-error" id="pwError"></div>
+    <button class="modal-btn-unlock" id="modalUnlockBtn" onclick="checkPassword()">Desbloquear plantilla</button>
+    <div class="modal-divider"><span>¿No tienes contraseña?</span></div>
+    <a class="modal-btn-wa" href="https://wa.me/529212337930" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Pedir contraseña por WhatsApp
+    </a>
+  </div>
+</div>
+
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="#">Inicio</a>
+  <span class="sep">›</span>
+  <span>Plantillas de Canva</span>
+</div>
+
+<!-- MAIN -->
+<main class="page-main">
+
+  <section id="plantillas">
+    <div class="templates-hero">
+      <div>
+        <h1>Plantillas de Canva<br><em>Anime &amp; Álbum de Artistas</em></h1>
+        <p class="templates-sub">Previews verticales sin recortes. Haz clic en la imagen o en los botones para abrir en Canva. Recursos DTF • Chechena Shirts</p>
+      </div>
+      <span class="badge-dtf">Recursos DTF &bull; Chechena Shirts</span>
+    </div>
+    <div class="section-divider"></div>
+    <div class="templates-grid" id="templatesGrid"></div>
+  </section>
+
+  <section id="nuevos" style="margin-top:56px;" class="reveal">
+    <h2 class="section-heading">Nuevos <em>Lanzamientos</em></h2>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+
+</main>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- MEGAPACKS                                          -->
+<!-- ══════════════════════════════════════════════════ -->
+<style>
+  .mp-section {
+    background: #fdf8f0;
+    border-top: 1px solid #e8d9c2;
+    padding: clamp(40px,6vw,72px) clamp(16px,4vw,48px);
+    text-align: center;
+  }
+  .mp-header { margin-bottom: clamp(24px,4vw,42px); }
+  .mp-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--taupe); border: 1px solid var(--cream-4);
+    background: var(--cream-2); padding: 5px 14px; border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .mp-title {
+    font-family: var(--font-display);
+    font-size: clamp(24px,4vw,38px); font-weight: 700;
+    color: var(--brown); letter-spacing: -.01em; line-height: 1.15;
+  }
+  .mp-title em { font-style: italic; color: var(--taupe); }
+  .mp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px; max-width: 1100px; margin: 0 auto;
+  }
+  .mp-card {
+    background: var(--white); border: 1px solid var(--cream-3);
+    border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow .3s, transform .3s;
+    text-align: left;
+  }
+  .mp-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+  .mp-img-wrap { position: relative; aspect-ratio: 4/3; overflow: hidden; background: var(--cream-1); }
+  .mp-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; display: block; }
+  .mp-card:hover .mp-img-wrap img { transform: scale(1.04); }
+  .mp-badge-top {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--brown); color: var(--cream-0);
+    font-family: var(--font-body); font-size: 10px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 6px;
+  }
+  .mp-badge-offer {
+    position: absolute; top: 12px; right: 12px;
+    background: #c0392b; color: #fff;
+    font-family: var(--font-body); font-size: 10px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 6px;
+  }
+  .mp-info { padding: clamp(14px,2vw,20px); }
+  .mp-name {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(15px,2vw,18px); color: var(--brown);
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .mp-desc {
+    font-family: var(--font-body); font-size: 12px;
+    color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: .05em; margin-bottom: 12px; line-height: 1.5;
+  }
+  .mp-prices { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .mp-old { font-family: var(--font-body); font-size: 13px; color: var(--text-light); text-decoration: line-through; }
+  .mp-new { font-family: var(--font-body); font-weight: 700; font-size: 18px; color: var(--brown); }
+  .mp-btn {
+    display: block; width: 100%;
+    background: var(--brown); color: var(--cream-0);
+    font-family: var(--font-body); font-weight: 600; font-size: 13px;
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: 12px; text-align: center; text-decoration: none;
+    border: none; border-radius: 10px; cursor: pointer;
+    transition: background .2s, transform .1s;
+    position: relative; overflow: hidden;
+  }
+  .mp-btn:hover { background: var(--taupe); }
+  .mp-btn:active { transform: scale(.98); }
+  .mp-btn::before {
+    content:''; position:absolute; left:-120%; top:0;
+    width:60%; height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.18),transparent);
+    transition:.5s;
+  }
+  .mp-btn:hover::before { left:120%; }
+  @media (max-width:560px) { .mp-grid { grid-template-columns: 1fr; } }
+</style>
+
+<section class="mp-section">
+  <div class="mp-header">
+    <div class="mp-tag">⭐ Mejor valorado por nuestros clientes</div>
+    <h2 class="mp-title">Nuestros <em>Megapacks</em></h2>
+  </div>
+
+  <div class="mp-grid">
+
+    <!-- MEGAPACK CHECHENA -->
+    <div class="mp-card">
+      <div class="mp-img-wrap">
+        <span class="mp-badge-top">Más Vendido</span>
+        <img src="pack1.jpg" alt="Megapack Chechena">
+        <span class="mp-badge-offer">Oferta</span>
+      </div>
+      <div class="mp-info">
+        <h3 class="mp-name">Megapack Chechena</h3>
+        <p class="mp-desc">Sublimación, Serigrafía, DTF &amp; DTG</p>
+        <div class="mp-prices">
+          <span class="mp-old">$ 439 MXN</span>
+          <span class="mp-new">$ 250 MXN</span>
+        </div>
+        <a href="pack-chechena.html" class="mp-btn">Ver más</a>
+      </div>
+    </div>
+
+    <!-- MEGAPACK OJITO -->
+    <div class="mp-card">
+      <div class="mp-img-wrap">
+        <span class="mp-badge-top">Actualizado</span>
+        <img src="pack2.jpg" alt="Megapack Ojito">
+        <span class="mp-badge-offer">Oferta</span>
+      </div>
+      <div class="mp-info">
+        <h3 class="mp-name">Megapack Ojito</h3>
+        <p class="mp-desc">Diseños DTF &amp; DTG 2026</p>
+        <div class="mp-prices">
+          <span class="mp-old">$ 800 MXN</span>
+          <span class="mp-new">$ 400 MXN</span>
+        </div>
+        <a href="pack-ojito.html" class="mp-btn">Ver más</a>
+      </div>
+    </div>
+
+    <!-- PAQUETE EMPRENDEDOR -->
+    <div class="mp-card">
+      <div class="mp-img-wrap">
+        <span class="mp-badge-top">Envío Gratis</span>
+        <img src="em.png" alt="Paquete Emprendedor">
+        <span class="mp-badge-offer">Oferta</span>
+      </div>
+      <div class="mp-info">
+        <h3 class="mp-name">Paquete Emprendedor</h3>
+        <p class="mp-desc">8 playeras premium + etiqueta con tu marca. Envío gratis a todo México.</p>
+        <div class="mp-prices">
+          <span class="mp-old">$ 3,000 MXN</span>
+          <span class="mp-new">$ 2,000 MXN</span>
+        </div>
+        <a href="emprendedor.html" class="mp-btn">Ver más</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+
+/* ============================================================
+   PLANTILLAS — AGREGA O QUITA LAS QUE QUIERAS
+   Copia y pega este bloque para añadir más plantillas:
+
+    {
+      titulo: "NOMBRE DE LA PLANTILLA",
+      desc:   "Descripción corta de la plantilla.",
+      img:    "PON_URL_DE_IMAGEN_AQUI",
+      url:    "PON_URL_DE_CANVA_AQUI"
+    },
+
+    // Si es PREMIUM (con contraseña via Google Apps Script):
+    {
+      titulo: "NOMBRE",
+      desc:   "Descripción.",
+      img:    "URL_IMAGEN",
+      premiumId: "id_unico"   ← debe coincidir con el 'id' en el Apps Script
+    },
+
+    // Si tiene dos tamaños de etiqueta:
+    {
+      titulo: "NOMBRE",
+      desc:   "Descripción.",
+      img:    "URL_IMAGEN",
+      etiquetas: [
+        { label: "6×5 cm", url: "https://canva.link/..." },
+        { label: "8.5×5 cm", url: "https://canva.link/..." }
+      ]
+    },
+
+============================================================ */
+const TEMPLATES = [
+
+  {
+    titulo: "ETIQUETAS",
+    desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/N6wpfvxT/Captura-de-pantalla-2026-05-08-233052.png",
+    etiquetas: [
+      { label: "6×5 cm",   url: "https://canva.link/bchmove4db888cn" },
+      { label: "8.5×5 cm", url: "https://canva.link/36ond20n86vb8u3" }
+    ]
+  },
+
+  {
+    titulo: "30 Mascot Template",
+    desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/WN4X4F1p/Captura-de-pantalla-2026-05-08-233200.png",
+    premiumId: "mascot30"
+    // ↑ El URL real vive en el Apps Script, no aquí
+  },
+
+  {
+    titulo: "Plantilla de Anime • Personajes",
+    desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/1tMBTSDK/Captura-de-pantalla-2026-05-08-224813.png",
+    url:    "https://canva.link/bchmove4db888cn"
+  },
+
+  {
+    titulo: "Plantilla Álbum de Artistas",
+    desc:   "Estilo cover art para lanzar colecciones temáticas. Diseño editorial premium.",
+    img:    "https://i.ibb.co/N6BCHqvW/sssssaa.png",
+    url:    "https://canva.link/95p1ql40jdkmo7q"
+  },
+
+  {
+    titulo: "NAVIDAD",
+    desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/SXPFDLkf/Captura-de-pantalla-2026-05-08-233312.png",
+    url:    "https://canva.link/4jauarpqnw5ig86"
+  },
+
+  {
+    titulo: "ONLY YOU",
+    desc:   "Formato listo para personalizar con tus fotos, texto y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/hFfcGhJ5/Captura-de-pantalla-2026-05-08-233531.png",
+    url:    "https://canva.link/7iilm805zvu2oyc"
+  },
+
+  {
+    titulo: "JOB",
+    desc:   "Formato listo para personalizar con tus fotos, texto y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/B5wtd06x/Captura-de-pantalla-2026-05-08-233425.png",
+    url:    "https://canva.link/2z2ba337z3ozi0o"
+  },
+
+  {
+    titulo: "Plantilla Anime V2",
+    desc:   "Segunda versión con composición mejorada para DTF. Mayor resolución y detalle.",
+    img:    "https://i.ibb.co/CKynFHCJ/Captura-de-pantalla-2026-05-08-225646.png",
+    url:    "https://canva.link/528d64wklejsowv"
+  }
+
+];
+
+
+/* ============================================================
+   PRODUCTOS — AGREGA O QUITA LOS QUE QUIERAS
+   Copia y pega este bloque para añadir más productos:
+
+    {
+      name:     "NOMBRE DEL PRODUCTO",
+      img:      "PON_URL_DE_IMAGEN_AQUI",
+      price:    "$ 120.00 MXN",
+      original: "$ 150.00 MXN",   ← precio tachado, déjalo "" si no hay oferta
+      badge:    "Oferta",         ← etiqueta encima de la imagen, déjalo "" si no quieres
+      href:     "PON_URL_DEL_PRODUCTO_AQUI"
+    },
+
+
+
+/* ============================================================
+   NO TOQUES NADA DE AQUI PARA ABAJO
+============================================================ */
+
+  /* ---------- MODAL DE CONTRASEÑA — Google Apps Script ----------
+     ★ PON AQUI LA URL DE TU GOOGLE APPS SCRIPT DESPLEGADO ★
+     (la obtienes al hacer clic en "Implementar" en script.google.com)
+  ---------------------------------------------------------------- */
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-z_4qrX47fhnpnaCVONnaHuaYn2EyOzRGS3HnzpFjMYKh2AVMyjwEXZekTFL-3NWmnw/exec";
+  // ---------------------------------------------------------------
+
+  let pendingId = "";   // id de la plantilla premium (ej: "mascot30")
+
+  function openModal(premiumId) {
+    pendingId = premiumId;
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwError').textContent = '';
+    document.getElementById('pwInput').classList.remove('error');
+    document.getElementById('modalUnlockBtn').disabled = false;
+    document.getElementById('modalUnlockBtn').textContent = 'Desbloquear plantilla';
+    document.getElementById('premiumModal').classList.add('open');
+    setTimeout(() => document.getElementById('pwInput').focus(), 300);
+  }
+
+  function closeModal() {
+    document.getElementById('premiumModal').classList.remove('open');
+    pendingId = "";
+  }
+
+  function togglePw() {
+    const inp = document.getElementById('pwInput');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  async function checkPassword() {
+    const pw     = document.getElementById('pwInput').value.trim();
+    const errEl  = document.getElementById('pwError');
+    const btn    = document.getElementById('modalUnlockBtn');
+
+    if (!pw) {
+      errEl.textContent = 'Ingresa tu contraseña.';
+      document.getElementById('pwInput').classList.add('error');
+      setTimeout(() => document.getElementById('pwInput').classList.remove('error'), 500);
+      return;
+    }
+
+    // Mostrar estado de carga
+    btn.disabled = true;
+    btn.textContent = 'Verificando…';
+    errEl.textContent = '';
+
+    try {
+      const res  = await fetch(`${APPS_SCRIPT_URL}?id=${encodeURIComponent(pendingId)}&pw=${encodeURIComponent(pw)}`);
+      const data = await res.json();
+
+      if (data.ok) {
+        // ✅ Contraseña correcta — el URL llega del servidor, nunca estuvo en el HTML
+        closeModal();
+        window.open(data.url, '_blank', 'noopener');
+      } else {
+        errEl.textContent = data.error || 'Contraseña incorrecta. Pídela por WhatsApp.';
+        document.getElementById('pwInput').classList.add('error');
+        setTimeout(() => document.getElementById('pwInput').classList.remove('error'), 500);
+        btn.disabled = false;
+        btn.textContent = 'Desbloquear plantilla';
+      }
+    } catch (err) {
+      errEl.textContent = 'Error de conexión. Intenta de nuevo.';
+      btn.disabled = false;
+      btn.textContent = 'Desbloquear plantilla';
+    }
+  }
+
+  document.getElementById('pwInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPassword();
+  });
+
+  document.getElementById('premiumModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('premiumModal')) closeModal();
+  });
+
+  /* ---------- RENDER TEMPLATES ---------- */
+  const grid = document.getElementById('templatesGrid');
+  TEMPLATES.forEach((t, i) => {
+    const card = document.createElement('article');
+    card.className = 'template-card';
+    card.style.animationDelay = (i * 0.1) + 's';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'card-thumb';
+
+    const img = document.createElement('img');
+    img.src = t.img;
+    img.alt = t.titulo;
+    img.loading = 'lazy';
+    img.addEventListener('load', () => {
+      const w = img.naturalWidth, h = img.naturalHeight;
+      thumb.classList.remove('portrait','landscape','square');
+      if (w === h) thumb.classList.add('square');
+      else if (w > h) thumb.classList.add('landscape');
+      else thumb.classList.add('portrait');
+    });
+
+    // Si es premium, la imagen abre el modal; si no, abre el link directo
+    if (t.premiumId) {
+      img.addEventListener('click', () => openModal(t.premiumId));
+    } else if (t.url) {
+      img.addEventListener('click', () => window.open(t.url, '_blank', 'noopener'));
+    }
+
+    const badge = document.createElement('span');
+    badge.className = 'badge-new';
+    badge.textContent = 'Nuevo';
+
+    thumb.appendChild(img);
+    thumb.appendChild(badge);
+
+    // Candado en las premium
+    if (t.premiumId) {
+      const lock = document.createElement('span');
+      lock.className = 'badge-lock';
+      lock.textContent = '🔒';
+      thumb.appendChild(lock);
+    }
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+
+    const title = document.createElement('div');
+    title.className = 'card-title';
+    title.textContent = t.titulo;
+
+    const desc = document.createElement('div');
+    desc.className = 'card-desc';
+    desc.textContent = t.desc;
+
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+
+    // ---- Plantilla con SELECTOR DE ETIQUETAS ----
+    if (t.etiquetas && t.etiquetas.length > 0) {
+      const selector = document.createElement('div');
+      selector.className = 'etiqueta-selector';
+
+      const lbl = document.createElement('label');
+      lbl.textContent = 'Selecciona tamaño:';
+      selector.appendChild(lbl);
+
+      const btnWrap = document.createElement('div');
+      btnWrap.className = 'etiqueta-btns';
+
+      t.etiquetas.forEach((et, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-size' + (idx === 0 ? ' active' : '');
+        btn.textContent = et.label;
+        btn.dataset.url = et.url;
+        btn.addEventListener('click', () => {
+          btnWrap.querySelectorAll('.btn-size').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+        btnWrap.appendChild(btn);
+      });
+      selector.appendChild(btnWrap);
+      body.appendChild(title);
+      body.appendChild(desc);
+      body.appendChild(selector);
+
+      const openBtn = document.createElement('a');
+      openBtn.className = 'btn-canva';
+      openBtn.textContent = 'Abrir en Canva';
+      openBtn.href = '#';
+      openBtn.addEventListener('click', e => {
+        e.preventDefault();
+        const active = btnWrap.querySelector('.btn-size.active');
+        if (active) window.open(active.dataset.url, '_blank', 'noopener');
+      });
+
+      const saveBtn = document.createElement('a');
+      saveBtn.className = 'btn-save';
+      saveBtn.textContent = 'Guardar enlace';
+      saveBtn.href = '#';
+      saveBtn.addEventListener('click', e => {
+        e.preventDefault();
+        const active = btnWrap.querySelector('.btn-size.active');
+        if (active) {
+          navigator.clipboard.writeText(active.dataset.url).then(() => {
+            saveBtn.textContent = '✓ Copiado';
+            setTimeout(() => { saveBtn.textContent = 'Guardar enlace'; }, 1800);
+          });
+        }
+      });
+
+      const actWrap = document.createElement('div');
+      actWrap.className = 'card-actions';
+      actWrap.appendChild(openBtn);
+      actWrap.appendChild(saveBtn);
+      body.appendChild(actWrap);
+
+    // ---- Plantilla PREMIUM (contraseña via Apps Script) ----
+    } else if (t.premiumId) {
+      body.appendChild(title);
+      body.appendChild(desc);
+
+      const premNote = document.createElement('div');
+      premNote.style.cssText = 'font-size:11.5px;color:var(--taupe);font-weight:600;display:flex;align-items:center;gap:5px;margin-top:2px;';
+      premNote.innerHTML = '🔒 Solo para clientes con Megapack';
+      body.appendChild(premNote);
+
+      const btnOpen = document.createElement('button');
+      btnOpen.className = 'btn-canva';
+      btnOpen.textContent = 'Ir a plantilla';
+      btnOpen.addEventListener('click', () => openModal(t.premiumId));
+
+      const btnSave = document.createElement('button');
+      btnSave.className = 'btn-save';
+      btnSave.textContent = 'Guardar enlace';
+      btnSave.addEventListener('click', () => openModal(t.premiumId));
+
+      const actWrap = document.createElement('div');
+      actWrap.className = 'card-actions';
+      actWrap.appendChild(btnOpen);
+      actWrap.appendChild(btnSave);
+      body.appendChild(actWrap);
+
+    // ---- Plantilla NORMAL ----
+    } else {
+      body.appendChild(title);
+      body.appendChild(desc);
+
+      const btnOpen = document.createElement('a');
+      btnOpen.className = 'btn-canva';
+      btnOpen.textContent = 'Abrir en Canva';
+      btnOpen.href = t.url;
+      btnOpen.target = '_blank';
+      btnOpen.rel = 'noopener';
+
+      const btnSave = document.createElement('a');
+      btnSave.className = 'btn-save';
+      btnSave.textContent = 'Guardar enlace';
+      btnSave.href = '#';
+      btnSave.addEventListener('click', e => {
+        e.preventDefault();
+        navigator.clipboard.writeText(t.url).then(() => {
+          btnSave.textContent = '✓ Copiado';
+          setTimeout(() => { btnSave.textContent = 'Guardar enlace'; }, 1800);
+        });
+      });
+
+      const actWrap = document.createElement('div');
+      actWrap.className = 'card-actions';
+      actWrap.appendChild(btnOpen);
+      actWrap.appendChild(btnSave);
+      body.appendChild(actWrap);
+    }
+
+    card.appendChild(thumb);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+
+  /* RENDER PRODUCTS */
+  const prodGrid = document.getElementById('productsGrid');
+  PRODUCTS.forEach(p => {
+    const card = document.createElement('a');
+    card.className = 'product-card';
+    card.href = p.href;
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'prod-img-wrap';
+
+    const img = document.createElement('img');
+    img.src = p.img;
+    img.alt = p.name;
+    img.loading = 'lazy';
+    imgWrap.appendChild(img);
+
+    if (p.badge) {
+      const badge = document.createElement('span');
+      badge.className = 'product-badge';
+      badge.textContent = p.badge;
+      imgWrap.appendChild(badge);
+    }
+
+    const info = document.createElement('div');
+    info.className = 'prod-info';
+
+    const name = document.createElement('div');
+    name.className = 'prod-name';
+    name.textContent = p.name;
+
+    const priceRow = document.createElement('div');
+    priceRow.className = 'prod-price';
+    const sale = document.createElement('span');
+    sale.className = 'price-sale';
+    sale.textContent = p.price;
+    priceRow.appendChild(sale);
+    if (p.original) {
+      const orig = document.createElement('span');
+      orig.className = 'price-original';
+      orig.textContent = p.original;
+      priceRow.appendChild(orig);
+    }
+    info.appendChild(name);
+    info.appendChild(priceRow);
+
+    const addRow = document.createElement('div');
+    addRow.className = 'add-to-cart-row';
+    const btn = document.createElement('button');
+    btn.className = 'btn-add';
+    btn.textContent = 'Agregar al carrito';
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      btn.textContent = '✓ Agregado';
+      btn.style.background = 'var(--brown)';
+      btn.style.color = 'var(--cream-0)';
+      setTimeout(() => { btn.textContent = 'Agregar al carrito'; btn.style.background = ''; btn.style.color = ''; }, 1800);
+    });
+    addRow.appendChild(btn);
+
+    card.appendChild(imgWrap);
+    card.appendChild(info);
+    card.appendChild(addRow);
+    prodGrid.appendChild(card);
+  });
+
+  /* SCROLL REVEAL */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* SALE POPUP */
+  setTimeout(() => document.getElementById('salePopup').classList.add('show'), 2500);
+  setTimeout(() => document.getElementById('salePopup').classList.remove('show'), 7500);
+
+</script>
+</body>
+</html>
