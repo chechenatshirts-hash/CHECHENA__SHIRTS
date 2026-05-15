@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chechena Shirts | Calculadora Vasos & Tazas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --warm-white: #fdfaf4;
+      --tan: #e8dcc8;
+      --brown: #6b4c2a;
+      --dark-brown: #3d2b14;
+      --rust: #b85c2a;
+      --gold: #c8a84b;
+      --ink: #2a1f14;
+      --muted: #8a7a68;
+      --border: #c8b89a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--cream);
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8b89a' fill-opacity='0.18'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      color: var(--ink);
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* LANGUAGE BAR */
+    .lang-bar {
+      background: var(--ink);
+      display: flex;
+      justify-content: flex-end;
+      padding: 6px 16px;
+      gap: 6px;
+    }
+    .lang-btn {
+      background: transparent;
+      border: 1px solid rgba(200,168,75,0.4);
+      color: var(--tan);
+      font-family: 'Lato', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 4px 12px;
+      border-radius: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+    .lang-btn:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+
+    /* HEADER */
+    header {
+      background-color: var(--dark-brown);
+      background-image: repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(255,255,255,0.03) 28px,rgba(255,255,255,0.03) 29px);
+      padding: 36px 20px 28px;
+      text-align: center;
+      border-bottom: 4px solid var(--gold);
+    }
+    header::after { content:""; display:block; height:2px; background:var(--rust); margin:10px auto 0; width:80px; }
+    .header-badge {
+      display: inline-block;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      width: 52px; height: 52px;
+      line-height: 48px;
+      font-size: 22px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    header h1 { font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(24px,6vw,46px); color:var(--cream); letter-spacing:5px; text-transform:uppercase; }
+    header h1 span { color:var(--gold); }
+    header p { color:var(--tan); font-size:clamp(10px,2.5vw,13px); letter-spacing:2px; text-transform:uppercase; margin-top:8px; font-weight:300; }
+    .ornament { color:var(--gold); font-size:16px; letter-spacing:8px; margin-top:10px; opacity:0.7; }
+
+    /* LAYOUT */
+    .container { max-width:880px; margin:0 auto; padding:0 16px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px; }
+    @media(max-width:640px){ .grid{grid-template-columns:1fr;} }
+    .full-width { grid-column:1/-1; }
+
+    /* CARD */
+    .card {
+      background:var(--warm-white);
+      border:1px solid var(--border);
+      border-radius:4px;
+      padding:20px 18px;
+      position:relative;
+      box-shadow:2px 3px 12px rgba(60,30,10,0.07);
+    }
+    .card::before {
+      content:"";
+      position:absolute;
+      top:4px;left:4px;right:4px;bottom:4px;
+      border:1px solid rgba(200,168,75,0.22);
+      border-radius:3px;
+      pointer-events:none;
+    }
+    .card-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(13px,3vw,16px);
+      font-weight:700;
+      color:var(--dark-brown);
+      text-transform:uppercase;
+      letter-spacing:2px;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--border);
+      margin-bottom:14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    /* TIPO SELECTOR */
+    .tipo-btns { display:flex; gap:10px; margin-bottom:4px; flex-wrap:wrap; }
+    .tipo-btn {
+      flex:1; min-width:120px;
+      padding: 10px 8px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      background: var(--cream);
+      color: var(--brown);
+      font-family: 'Lato', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .tipo-btn .tipo-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+    .tipo-btn.active { border-color: var(--gold); background: var(--dark-brown); color: var(--gold); }
+    .tipo-btn:hover:not(.active) { border-color: var(--rust); color: var(--rust); }
+
+    /* FORM */
+    label { display:block; font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); font-weight:700; margin-top:13px; margin-bottom:4px; }
+    label:first-of-type { margin-top:0; }
+    input[type="number"], select {
+      width:100%; padding:9px 12px;
+      border:1px solid var(--border); border-radius:3px;
+      background:var(--cream); color:var(--ink);
+      font-family:'Lato',sans-serif; font-size:14px;
+      transition:border-color 0.2s,box-shadow 0.2s;
+      -webkit-appearance:none; appearance:none;
+    }
+    input[type="number"]:focus, select:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,168,75,0.15); background:#fff; }
+    select {
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b4c2a'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 12px center; padding-right:32px;
+    }
+    .currency-note { margin-top:8px; font-size:11px; color:var(--muted); font-style:italic; text-align:right; }
+
+    /* INFO BOX */
+    .info-box {
+      background: rgba(200,168,75,0.08);
+      border: 1px solid rgba(200,168,75,0.35);
+      border-radius: 3px;
+      padding: 10px 14px;
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .info-box strong { color: var(--brown); }
+
+    /* CANTIDAD ITEMS */
+    .qty-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media(max-width:420px){ .qty-grid{grid-template-columns:1fr;} }
+
+    /* BUTTONS */
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:10px 18px; border:none; border-radius:3px; font-family:'Lato',sans-serif; font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; }
+    .btn-primary { background:var(--dark-brown); color:var(--cream); width:100%; margin-top:14px; padding:12px; }
+    .btn-primary:hover { background:var(--rust); transform:translateY(-1px); box-shadow:0 4px 12px rgba(107,76,42,0.25); }
+
+    /* RESULT */
+    .result-card { background:var(--dark-brown); border:1px solid var(--gold); color:var(--cream); margin-top:24px; }
+    .result-card::before { border-color:rgba(200,168,75,0.2); }
+    .result-card .card-title { color:var(--gold); border-color:rgba(200,168,75,0.3); }
+    .result-row { display:flex; justify-content:space-between; align-items:baseline; padding:8px 0; border-bottom:1px solid rgba(200,168,75,0.15); font-size:13px; }
+    .result-row:last-child { border-bottom:none; }
+    .result-row .rlabel { color:var(--tan); font-size:10px; text-transform:uppercase; letter-spacing:1px; font-weight:700; }
+    .result-row .rvalue { font-family:'Playfair Display',serif; font-size:15px; color:var(--cream); }
+    .precio-final { margin-top:18px; padding:16px; background:rgba(200,168,75,0.12); border:1px solid var(--gold); border-radius:3px; text-align:center; }
+    .precio-final .precio-label { font-size:10px; text-transform:uppercase; letter-spacing:3px; color:var(--gold); font-weight:700; margin-bottom:6px; }
+    .precio-final .precio-valor { font-family:'Playfair Display',serif; font-size:clamp(28px,7vw,42px); font-weight:900; color:var(--gold); line-height:1; }
+    .precio-unit { font-family:'Playfair Display',serif; font-size:clamp(14px,3vw,18px); color:rgba(200,168,75,0.7); margin-top:4px; }
+
+    /* FOOTER */
+    footer { text-align:center; padding:30px 20px 10px; color:var(--muted); font-size:11px; letter-spacing:2px; text-transform:uppercase; }
+    footer .divider { width:60px; height:1px; background:var(--border); margin:0 auto 12px; }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('es')" id="btn-es">🇲🇽 Español</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">🇺🇸 English</button>
+</div>
+
+<header>
+  <div class="header-badge">☕</div>
+  <h1>CHECHENA <span>SHIRTS</span></h1>
+  <p id="hdr-sub">Calculadora de Precio — Vasos & Tazas</p>
+  <div class="ornament">— ✦ —</div>
+</header>
+
+<div class="container">
+  <div class="grid" style="margin-top:24px;">
+
+    <!-- MONEDA -->
+    <div class="card full-width">
+      <div class="card-title"><span>💱</span> <span id="t-moneda">Moneda</span></div>
+      <label id="t-sel-moneda">Selecciona la moneda</label>
+      <select id="moneda" onchange="calcular()">
+        <optgroup label="── América ──">
+          <option value="MXN">🇲🇽 Peso Mexicano — MXN ($)</option>
+          <option value="USD">🇺🇸 Dólar Americano — USD ($)</option>
+          <option value="CAD">🇨🇦 Dólar Canadiense — CAD ($)</option>
+          <option value="GTQ">🇬🇹 Quetzal Guatemalteco — GTQ (Q)</option>
+          <option value="CRC">🇨🇷 Colón Costarricense — CRC (₡)</option>
+          <option value="COP">🇨🇴 Peso Colombiano — COP ($)</option>
+          <option value="PEN">🇵🇪 Sol Peruano — PEN (S/)</option>
+          <option value="CLP">🇨🇱 Peso Chileno — CLP ($)</option>
+          <option value="ARS">🇦🇷 Peso Argentino — ARS ($)</option>
+          <option value="BRL">🇧🇷 Real Brasileño — BRL (R$)</option>
+          <option value="VES">🇻🇪 Bolívar Venezolano — VES (Bs)</option>
+          <option value="BOB">🇧🇴 Boliviano — BOB (Bs)</option>
+          <option value="PYG">🇵🇾 Guaraní Paraguayo — PYG (₲)</option>
+          <option value="UYU">🇺🇾 Peso Uruguayo — UYU ($)</option>
+          <option value="DOP">🇩🇴 Peso Dominicano — DOP ($)</option>
+          <option value="HNL">🇭🇳 Lempira Hondureño — HNL (L)</option>
+          <option value="NIO">🇳🇮 Córdoba Nicaragüense — NIO (C$)</option>
+          <option value="PAB">🇵🇦 Balboa Panameño — PAB (B/.)</option>
+        </optgroup>
+        <optgroup label="── Europa ──">
+          <option value="EUR">🇪🇺 Euro — EUR (€)</option>
+          <option value="GBP">🇬🇧 Libra Esterlina — GBP (£)</option>
+          <option value="CHF">🇨🇭 Franco Suizo — CHF (Fr)</option>
+        </optgroup>
+        <optgroup label="── Asia / Oceanía ──">
+          <option value="JPY">🇯🇵 Yen Japonés — JPY (¥)</option>
+          <option value="CNY">🇨🇳 Yuan Chino — CNY (¥)</option>
+          <option value="AUD">🇦🇺 Dólar Australiano — AUD ($)</option>
+        </optgroup>
+      </select>
+      <div class="currency-note" id="currency-note"></div>
+    </div>
+
+    <!-- TIPO DE PRODUCTO -->
+    <div class="card full-width">
+      <div class="card-title"><span>🎯</span> <span id="t-tipo-title">Tipo de Producto</span></div>
+      <div class="tipo-btns">
+        <button class="tipo-btn active" id="tipo-vaso" onclick="setTipo('vaso')">
+          <span class="tipo-icon">🥤</span>
+          <span id="t-tipo-vaso">Vaso</span>
+        </button>
+        <button class="tipo-btn" id="tipo-taza" onclick="setTipo('taza')">
+          <span class="tipo-icon">☕</span>
+          <span id="t-tipo-taza">Taza</span>
+        </button>
+        <button class="tipo-btn" id="tipo-termo" onclick="setTipo('termo')">
+          <span class="tipo-icon">🧊</span>
+          <span id="t-tipo-termo">Termo / Tumbler</span>
+        </button>
+      </div>
+      <div class="info-box" id="info-box">
+        <strong id="info-title">Vaso estándar:</strong> <span id="info-desc">Área de impresión aprox. 20×9 cm (wrap completo). Ajusta según el tamaño real de tu diseño.</span>
+      </div>
+    </div>
+
+    <!-- COSTOS DE IMPRESIÓN -->
+    <div class="card">
+      <div class="card-title"><span>🖨️</span> <span id="t-imp-title">Costos de Impresión</span></div>
+      <label id="t-tecnica-label">Técnica de impresión</label>
+      <select id="tecnica" onchange="calcular()">
+        <option value="sublimacion" id="opt-sub">Sublimación</option>
+        <option value="dtf" id="opt-dtf">DTF (Transfer)</option>
+        <option value="uv" id="opt-uv">UV Directo</option>
+        <option value="vinil" id="opt-vinil">Vinil / Plotter</option>
+      </select>
+
+      <div id="bloque-pliego">
+        <label id="t-precio-pliego">Precio del pliego / lámina</label>
+        <input type="number" id="precioPliego" value="200" min="0" oninput="calcular()">
+        <label id="t-ancho-pliego">Ancho del pliego (cm)</label>
+        <input type="number" id="anchoPliego" value="58" min="1" oninput="calcular()">
+        <label id="t-alto-pliego">Alto del pliego (cm)</label>
+        <input type="number" id="altoPliego" value="100" min="1" oninput="calcular()">
+      </div>
+
+      <label id="t-ancho-dis">Ancho del diseño (cm)</label>
+      <input type="number" id="anchoDis" value="20" min="0" oninput="calcular()">
+      <label id="t-alto-dis">Alto del diseño (cm)</label>
+      <input type="number" id="altoDis" value="9" min="0" oninput="calcular()">
+
+      <label id="t-mano-obra">Mano de obra / aplicación</label>
+      <input type="number" id="manoObra" value="20" min="0" oninput="calcular()">
+    </div>
+
+    <!-- COSTOS DEL PRODUCTO -->
+    <div class="card">
+      <div class="card-title"><span>📦</span> <span id="t-otros-title">Costos del Producto</span></div>
+      <label id="t-costo-pieza">Costo del vaso / taza (pieza)</label>
+      <input type="number" id="costoPieza" value="35" min="0" oninput="calcular()">
+      <label id="t-cantidad">Cantidad de piezas</label>
+      <input type="number" id="cantidad" value="1" min="1" oninput="calcular()">
+      <label id="t-materiales">Otros materiales (caja, bolsa, etc.)</label>
+      <input type="number" id="materiales" value="0" min="0" oninput="calcular()">
+      <label id="t-transporte">Transporte / Envío</label>
+      <input type="number" id="transporte" value="0" min="0" oninput="calcular()">
+      <label id="t-otros-gastos">Otros gastos (luz, empaque)</label>
+      <input type="number" id="otrosGastos" value="0" min="0" oninput="calcular()">
+      <label id="t-margen">Margen de ganancia (%)</label>
+      <input type="number" id="margen" value="35" min="0" oninput="calcular()">
+    </div>
+
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="card result-card">
+    <div class="card-title"><span>✦</span> <span id="t-result-title">Resultado del Cálculo</span></div>
+    <div id="resultado"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="divider"></div>
+  Chechena Shirts © 2026
+</footer>
+
+<script>
+  let lang = 'es';
+  let tipoActual = 'vaso';
+
+  const tipoInfo = {
+    vaso:  { es: { title:'Vaso estándar:', desc:'Área de impresión aprox. 20×9 cm (wrap completo). Ajusta según el tamaño real de tu diseño.' }, en: { title:'Standard cup:', desc:'Print area approx. 20×9 cm (full wrap). Adjust to your actual design size.' }, anchoD:20, altoD:9, costoPieza:35 },
+    taza:  { es: { title:'Taza de cerámica:', desc:'Área de impresión aprox. 20×8 cm. Ideal para sublimación. Ajusta si usas tazas mágicas u otras medidas.' }, en: { title:'Ceramic mug:', desc:'Print area approx. 20×8 cm. Ideal for sublimation. Adjust for magic mugs or other sizes.' }, anchoD:20, altoD:8, costoPieza:45 },
+    termo: { es: { title:'Termo / Tumbler:', desc:'Área de impresión aprox. 22×12 cm. Verifica compatibilidad con tu técnica de impresión.' }, en: { title:'Tumbler / Thermos:', desc:'Print area approx. 22×12 cm. Verify compatibility with your print technique.' }, anchoD:22, altoD:12, costoPieza:80 },
+  };
+
+  const currencies = {
+    MXN: { sym:'$',    locale:'es-MX', es:'Pesos Mexicanos',          en:'Mexican Pesos' },
+    USD: { sym:'$',    locale:'en-US', es:'Dólares Americanos',        en:'US Dollars' },
+    CAD: { sym:'$',    locale:'en-CA', es:'Dólares Canadienses',       en:'Canadian Dollars' },
+    GTQ: { sym:'Q',    locale:'es-GT', es:'Quetzales Guatemaltecos',   en:'Guatemalan Quetzales' },
+    CRC: { sym:'₡',    locale:'es-CR', es:'Colones Costarricenses',    en:'Costa Rican Colones' },
+    COP: { sym:'$',    locale:'es-CO', es:'Pesos Colombianos',         en:'Colombian Pesos' },
+    PEN: { sym:'S/',   locale:'es-PE', es:'Soles Peruanos',            en:'Peruvian Soles' },
+    CLP: { sym:'$',    locale:'es-CL', es:'Pesos Chilenos',            en:'Chilean Pesos' },
+    ARS: { sym:'$',    locale:'es-AR', es:'Pesos Argentinos',          en:'Argentine Pesos' },
+    BRL: { sym:'R$',   locale:'pt-BR', es:'Reales Brasileños',         en:'Brazilian Reais' },
+    VES: { sym:'Bs',   locale:'es-VE', es:'Bolívares Venezolanos',     en:'Venezuelan Bolívares' },
+    BOB: { sym:'Bs',   locale:'es-BO', es:'Bolivianos',                en:'Bolivian Bolivianos' },
+    PYG: { sym:'₲',    locale:'es-PY', es:'Guaraníes Paraguayos',      en:'Paraguayan Guaraní' },
+    UYU: { sym:'$',    locale:'es-UY', es:'Pesos Uruguayos',           en:'Uruguayan Pesos' },
+    DOP: { sym:'$',    locale:'es-DO', es:'Pesos Dominicanos',         en:'Dominican Pesos' },
+    HNL: { sym:'L',    locale:'es-HN', es:'Lempiras Hondureños',       en:'Honduran Lempiras' },
+    NIO: { sym:'C$',   locale:'es-NI', es:'Córdobas Nicaragüenses',    en:'Nicaraguan Córdobas' },
+    PAB: { sym:'B/.',  locale:'es-PA', es:'Balboas Panameños',         en:'Panamanian Balboas' },
+    EUR: { sym:'€',    locale:'es-ES', es:'Euros',                     en:'Euros' },
+    GBP: { sym:'£',    locale:'en-GB', es:'Libras Esterlinas',         en:'British Pounds' },
+    CHF: { sym:'Fr',   locale:'de-CH', es:'Francos Suizos',            en:'Swiss Francs' },
+    JPY: { sym:'¥',    locale:'ja-JP', es:'Yenes Japoneses',           en:'Japanese Yen' },
+    CNY: { sym:'¥',    locale:'zh-CN', es:'Yuanes Chinos',             en:'Chinese Yuan' },
+    AUD: { sym:'$',    locale:'en-AU', es:'Dólares Australianos',      en:'Australian Dollars' },
+  };
+
+  const T = {
+    es: {
+      sub: 'Calculadora de Precio — Vasos & Tazas',
+      moneda: 'Moneda', selMoneda: 'Selecciona la moneda',
+      tipoTitle: 'Tipo de Producto',
+      tipoVaso: 'Vaso', tipoTaza: 'Taza', tipoTermo: 'Termo / Tumbler',
+      impTitle: 'Costos de Impresión',
+      tecnicaLabel: 'Técnica de impresión',
+      precioPliego: 'Precio del pliego / lámina',
+      anchoPliego: 'Ancho del pliego (cm)', altoPliego: 'Alto del pliego (cm)',
+      anchoDis: 'Ancho del diseño (cm)', altoDis: 'Alto del diseño (cm)',
+      manoObra: 'Mano de obra / aplicación',
+      otrosTitle: 'Costos del Producto',
+      costoPieza: 'Costo del vaso / taza (pieza)',
+      cantidad: 'Cantidad de piezas',
+      materiales: 'Otros materiales (caja, bolsa, etc.)',
+      transporte: 'Transporte / Envío',
+      otrosGastos: 'Otros gastos (luz, empaque)',
+      margen: 'Margen de ganancia (%)',
+      resultTitle: 'Resultado del Cálculo',
+      currNote: (name, sym) => `Moneda activa: ${name} (${sym})`,
+      rArea: 'Área del diseño',
+      rCostImp: 'Costo de impresión',
+      rManoObra: 'Mano de obra',
+      rCostoPieza: 'Costo de pieza(s)',
+      rOther: 'Otros costos',
+      rSub: 'Subtotal',
+      rProfit: 'Ganancia',
+      rTotal: 'Total lote',
+      rSuggested: 'Precio sugerido por pieza',
+      optSub: 'Sublimación', optDtf: 'DTF (Transfer)', optUv: 'UV Directo', optVinil: 'Vinil / Plotter',
+    },
+    en: {
+      sub: 'Price Calculator — Cups & Mugs',
+      moneda: 'Currency', selMoneda: 'Select currency',
+      tipoTitle: 'Product Type',
+      tipoVaso: 'Cup', tipoTaza: 'Mug', tipoTermo: 'Tumbler / Thermos',
+      impTitle: 'Print Costs',
+      tecnicaLabel: 'Print technique',
+      precioPliego: 'Sheet / film price',
+      anchoPliego: 'Sheet width (cm)', altoPliego: 'Sheet height (cm)',
+      anchoDis: 'Design width (cm)', altoDis: 'Design height (cm)',
+      manoObra: 'Labor / application cost',
+      otrosTitle: 'Product Costs',
+      costoPieza: 'Cup / mug cost (each)',
+      cantidad: 'Number of pieces',
+      materiales: 'Other materials (box, bag, etc.)',
+      transporte: 'Shipping / Transport',
+      otrosGastos: 'Other expenses (utilities, packaging)',
+      margen: 'Profit margin (%)',
+      resultTitle: 'Calculation Result',
+      currNote: (name, sym) => `Active currency: ${name} (${sym})`,
+      rArea: 'Design area',
+      rCostImp: 'Print cost',
+      rManoObra: 'Labor cost',
+      rCostoPieza: 'Piece cost(s)',
+      rOther: 'Other costs',
+      rSub: 'Subtotal',
+      rProfit: 'Profit',
+      rTotal: 'Batch total',
+      rSuggested: 'Suggested price per piece',
+      optSub: 'Sublimation', optDtf: 'DTF Transfer', optUv: 'UV Direct', optVinil: 'Vinyl / Plotter',
+    }
+  };
+
+  function setLang(l) {
+    lang = l;
+    document.getElementById('btn-es').classList.toggle('active', l==='es');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+    const t = T[l];
+    document.getElementById('hdr-sub').textContent         = t.sub;
+    document.getElementById('t-moneda').textContent        = t.moneda;
+    document.getElementById('t-sel-moneda').textContent    = t.selMoneda;
+    document.getElementById('t-tipo-title').textContent    = t.tipoTitle;
+    document.getElementById('t-tipo-vaso').textContent     = t.tipoVaso;
+    document.getElementById('t-tipo-taza').textContent     = t.tipoTaza;
+    document.getElementById('t-tipo-termo').textContent    = t.tipoTermo;
+    document.getElementById('t-imp-title').textContent     = t.impTitle;
+    document.getElementById('t-tecnica-label').textContent = t.tecnicaLabel;
+    document.getElementById('t-precio-pliego').textContent = t.precioPliego;
+    document.getElementById('t-ancho-pliego').textContent  = t.anchoPliego;
+    document.getElementById('t-alto-pliego').textContent   = t.altoPliego;
+    document.getElementById('t-ancho-dis').textContent     = t.anchoDis;
+    document.getElementById('t-alto-dis').textContent      = t.altoDis;
+    document.getElementById('t-mano-obra').textContent     = t.manoObra;
+    document.getElementById('t-otros-title').textContent   = t.otrosTitle;
+    document.getElementById('t-costo-pieza').textContent   = t.costoPieza;
+    document.getElementById('t-cantidad').textContent      = t.cantidad;
+    document.getElementById('t-materiales').textContent    = t.materiales;
+    document.getElementById('t-transporte').textContent    = t.transporte;
+    document.getElementById('t-otros-gastos').textContent  = t.otrosGastos;
+    document.getElementById('t-margen').textContent        = t.margen;
+    document.getElementById('t-result-title').textContent  = t.resultTitle;
+    document.getElementById('opt-sub').textContent         = t.optSub;
+    document.getElementById('opt-dtf').textContent         = t.optDtf;
+    document.getElementById('opt-uv').textContent          = t.optUv;
+    document.getElementById('opt-vinil').textContent       = t.optVinil;
+    updateInfoBox();
+    calcular();
+  }
+
+  function setTipo(tipo) {
+    tipoActual = tipo;
+    ['vaso','taza','termo'].forEach(t => {
+      document.getElementById('tipo-'+t).classList.toggle('active', t===tipo);
+    });
+    const info = tipoInfo[tipo];
+    document.getElementById('anchoDis').value = info.anchoD;
+    document.getElementById('altoDis').value  = info.altoD;
+    document.getElementById('costoPieza').value = info.costoPieza;
+    updateInfoBox();
+    calcular();
+  }
+
+  function updateInfoBox() {
+    const info = tipoInfo[tipoActual][lang];
+    document.getElementById('info-title').textContent = info.title;
+    document.getElementById('info-desc').textContent  = info.desc;
+  }
+
+  function fmt(val, code) {
+    const c = currencies[code] || currencies['MXN'];
+    const formatted = val.toLocaleString(c.locale, { minimumFractionDigits:2, maximumFractionDigits:2 });
+    return `${c.sym}${formatted}`;
+  }
+
+  function calcular() {
+    const code = document.getElementById("moneda").value;
+    const c    = currencies[code] || currencies['MXN'];
+    const t    = T[lang];
+    const tecnica = document.getElementById("tecnica").value;
+
+    document.getElementById('currency-note').textContent =
+      t.currNote(lang==='es' ? c.es : c.en, c.sym);
+
+    // Mostrar/ocultar bloque pliego según técnica
+    const usaPliego = (tecnica === 'sublimacion' || tecnica === 'dtf');
+    document.getElementById('bloque-pliego').style.display = usaPliego ? '' : 'none';
+
+    const precioPliego = +document.getElementById("precioPliego").value;
+    const anchoPliego  = +document.getElementById("anchoPliego").value;
+    const altoPliego   = +document.getElementById("altoPliego").value;
+    const anchoDis     = +document.getElementById("anchoDis").value;
+    const altoDis      = +document.getElementById("altoDis").value;
+    const manoObra     = +document.getElementById("manoObra").value;
+    const costoPieza   = +document.getElementById("costoPieza").value;
+    const cantidad     = Math.max(1, +document.getElementById("cantidad").value || 1);
+    const materiales   = +document.getElementById("materiales").value;
+    const transporte   = +document.getElementById("transporte").value;
+    const otrosGastos  = +document.getElementById("otrosGastos").value;
+    const margen       = +document.getElementById("margen").value;
+
+    const areaDiseno  = anchoDis * altoDis;
+    const areaPliego  = anchoPliego * altoPliego;
+
+    let costoImpPorPieza = 0;
+    if (usaPliego) {
+      costoImpPorPieza = areaPliego > 0 ? (areaDiseno / areaPliego) * precioPliego : 0;
+    }
+
+    const costoManoPorPieza   = manoObra;
+    const costoPiezaTotal     = costoPieza * cantidad;
+    const costoImpTotal       = costoImpPorPieza * cantidad;
+    const costoManoTotal      = costoManoPorPieza * cantidad;
+    const otrosCostos         = materiales + transporte + otrosGastos;
+    const subtotal            = costoImpTotal + costoManoTotal + costoPiezaTotal + otrosCostos;
+    const ganancia            = subtotal * (margen / 100);
+    const totalLote           = subtotal + ganancia;
+    const precioPorPieza      = totalLote / cantidad;
+
+    document.getElementById("resultado").innerHTML = `
+      <div class="result-row">
+        <span class="rlabel">${t.rArea}</span>
+        <span class="rvalue">${areaDiseno.toFixed(2)} cm²</span>
+      </div>
+      ${usaPliego ? `
+      <div class="result-row">
+        <span class="rlabel">${t.rCostImp} ×${cantidad}</span>
+        <span class="rvalue">${fmt(costoImpTotal, code)}</span>
+      </div>` : ''}
+      <div class="result-row">
+        <span class="rlabel">${t.rManoObra} ×${cantidad}</span>
+        <span class="rvalue">${fmt(costoManoTotal, code)}</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">${t.rCostoPieza} ×${cantidad}</span>
+        <span class="rvalue">${fmt(costoPiezaTotal, code)}</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">${t.rOther}</span>
+        <span class="rvalue">${fmt(otrosCostos, code)}</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">${t.rSub}</span>
+        <span class="rvalue">${fmt(subtotal, code)}</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">${t.rProfit} (${margen}%)</span>
+        <span class="rvalue">${fmt(ganancia, code)}</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">${t.rTotal}</span>
+        <span class="rvalue">${fmt(totalLote, code)}</span>
+      </div>
+      <div class="precio-final">
+        <div class="precio-label">${t.rSuggested}</div>
+        <div class="precio-valor">${fmt(precioPorPieza, code)}</div>
+        ${cantidad > 1 ? `<div class="precio-unit">${t.rTotal}: ${fmt(totalLote, code)}</div>` : ''}
+      </div>
+    `;
+  }
+
+  calcular();
+</script>
+</body>
+</html>
