@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevos Diseños | Chechena Shirts | Actualizaciones del Megapack</title>
+    <meta name="description" content="Todos los nuevos diseños que añado semanalmente a los Megapacks. Contenido actualizado para DTF, sublimación y serigrafía.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Inter', sans-serif;
+            background: #ffffff;
+            color: #111;
+            line-height: 1.5;
+        }
+
+        /* ========== HEADER / MENÚ ========== */
+        .header {
+            background: #0a0a0a;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #ff3b3b;
+        }
+
+        /* ========== CONTENEDOR PRINCIPAL ========== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Encabezado de la página */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #111, #ff3b3b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .update-badge {
+            display: inline-block;
+            background: #ff3b3b20;
+            color: #ff3b3b;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* ========== FILTROS POR MEGAPACK ========== */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .filter-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background: #ff3b3b;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background: #ddd;
+        }
+
+        /* ========== GRID DE DISEÑOS ========== */
+        .disenos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+        }
+
+        .card-diseno {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .card-diseno:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            aspect-ratio: 1 / 1;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .card-diseno:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .fecha {
+            font-size: 0.7rem;
+            color: #ff3b3b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-info p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .badge-pack {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .badge-pack.chechena { background: #ff3b3b20; color: #ff3b3b; }
+        .badge-pack.ojito { background: #ff8c0020; color: #ff8c00; }
+
+        .btn-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25D366;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-wa:hover {
+            background: #128C7E;
+            transform: scale(1.02);
+        }
+
+        /* Mensaje de "sin resultados" */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+            display: none;
+        }
+
+        /* ========== BOTÓN FLOTANTE WHATSAPP ========== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #25D366;
+            border-radius: 50px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 100;
+            transition: all 0.2s;
+        }
+
+        .whatsapp-float:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: #0a0a0a;
+            color: #888;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            font-size: 0.8rem;
+        }
+
+        .footer a {
+            color: #ff3b3b;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .disenos-grid {
+                gap: 1.2rem;
+            }
+            .whatsapp-float span {
+                display: none;
+            }
+            .whatsapp-float {
+                padding: 12px;
+                border-radius: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+        <a href="index.html" class="logo">⚡ CHECHENA SHIRTS</a>
+        <div class="nav-links">
+            <a href="index.html">INICIO</a>
+            <a href="nuevos-disenos.html" style="color: #ff3b3b;">✨ NUEVOS DISEÑOS</a>
+            <a href="index.html#megapacks">MEGAPACKS</a>
+            <a href="index.html#contacto">CONTACTO</a>
+        </div>
+    </header>
+
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main class="container">
+        <div class="page-header">
+            <h1>✨ NUEVOS DISEÑOS ✨</h1>
+            <p>Diseños frescos que voy añadiendo a los Megapacks cada semana.<br>Contenido exclusivo para DTF, sublimación y serigrafía.</p>
+            <div class="update-badge">📅 ACTUALIZADO: MAYO 2026</div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="todos">🔥 TODOS</button>
+            <button class="filter-btn" data-filter="chechena">⚡ MEGAPACK CHECHENA</button>
+            <button class="filter-btn" data-filter="ojito">🎁 MEGAPACK OJITO</button>
+        </div>
+
+        <!-- GRID DE DISEÑOS -->
+        <div class="disenos-grid" id="disenosGrid">
+            
+            <!-- ========================================== -->
+            <!-- 🟢 AQUÍ VAN TODOS TUS DISEÑOS NUEVOS        -->
+            <!-- ========================================== -->
+            
+            <!-- TARJETA 1 - MEGAPACK CHECHENA -->
+            <div class="card-diseno" data-pack="ojito">
+                <div class="card-image">
+                    <!-- 🔽 CAMBIA ESTA URL por la imagen real de tu diseño -->
+                    <img src="ACT 1.png" alt="Diseño Dark Gym">
+                </div>
+                <div class="card-info">
+                    <div class="fecha">🔥 AÑADIDO MAYO 2026</div>
+                    <span class="badge-pack chechena">MEGAPACK OJITO</span>
+                    <h3>Diseño Dark Gym</h3>
+                    <p>DiseñoS en la carpeta de GYM MARCAS.</p>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
+                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
+                    </a>
+                </div>
+            </div>
+
+                    <!-- TARJETA 6 - MEGAPACK OJITO -->
+            <div class="card-diseno" data-pack="ojito">
+                <div class="card-image">
+                    <img src="ACT 4.png" alt="Diseño INRI">
+                </div>
+                <div class="card-info">
+                    <div class="fecha">🙏 AÑADIDO MAYO 2026</div>
+                    <span class="badge-pack ojito">MEGAPACK OJITO</span>
+                    <h3>GYM ANIMADO V1</h3>
+                    <p>DiseñoS en la carpeta de GYM MARCAS.</p>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
+                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- TARJETA 2 - MEGAPACK CHECHENA -->
+            <div class="card-diseno" data-pack="chechena">
+                <div class="card-image">
+                    <img src="ACT 2.png" alt="Diseño Youngla x Demon Slayer">
+                </div>
+                <div class="card-info">
+                    <div class="fecha">⚡ AÑADIDO MAYO 2026</div>
+                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
+                    <h3>DRAKE ICEMAN</h3>
+                    <p>DISEÑOS EN PNG.</p>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
+                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- TARJETA 3 - MEGAPACK CHECHENA -->
+            <div class="card-diseno" data-pack="chechena">
+                <div class="card-image">
+                    <img src="ACT 3.png" alt="Diseño Calaveras Urbanas">
+                </div>
+                <div class="card-info">
+                    <div class="fecha">🚀 AÑADIDO MAYO 2026</div>
+                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
+                    <h3>THE BOYS 2</h3>
+                    <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
+                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- ========================================== -->
+            <!-- 🔵 COPIA ESTE BLOQUE para añadir más diseños -->
+            <!-- ========================================== -->
+            
+        </div>
+
+        <!-- MENSAJE SIN RESULTADOS (lo muestra el filtro si no hay) -->
+        <div class="no-results" id="noResults">
+            🔍 No hay diseños en esta categoría. ¡Pronto añadiremos más!
+        </div>
+
+        <!-- BANNER FINAL -->
+        <div style="text-align: center; margin: 3rem 0 1rem; padding: 2rem; background: #f8f8f8; border-radius: 30px;">
+            <h3 style="margin-bottom: 0.5rem;">🔥 ¿Quieres tener acceso a TODOS estos diseños?</h3>
+            <p style="margin-bottom: 1.5rem;">Adquiere un Megapack y recibe actualizaciones constantes SIN costo extra.</p>
+            <a href="index.html" style="background: #111; color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600;">← VER MEGAPACKS EN INICIO</a>
+        </div>
+    </main>
+
+    <!-- WHATSAPP FLOTANTE -->
+    <a href="https://wa.me/529212337934?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20de%20NUEVOS%20DISE%C3%91OS" class="whatsapp-float">
+        💬
+        <span>¿Dudas? Escríbenos</span>
+    </a>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2026 Chechena Shirts</p>
+        <p style="margin-top: 0.5rem;">📧 <a href="mailto:contacto@chechenashirts.com">PURO CHECHENA SHIRTS</a> | 💬 Respuesta rápida por WhatsApp</p>
+    </footer>
+
+    <!-- SCRIPT PARA FILTROS -->
+    <script>
+        // Selecciona todos los elementos
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.card-diseno');
+        const noResultsDiv = document.getElementById('noResults');
+
+        function filterCards(pack) {
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const cardPack = card.getAttribute('data-pack');
+                if (pack === 'todos' || cardPack === pack) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Muestra u oculta el mensaje de "sin resultados"
+            if (visibleCount === 0) {
+                noResultsDiv.style.display = 'block';
+            } else {
+                noResultsDiv.style.display = 'none';
+            }
+        }
+
+        // Agrega evento a cada botón de filtro
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Quita la clase 'active' de todos los botones
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Añade la clase 'active' al botón clickeado
+                btn.classList.add('active');
+                
+                const pack = btn.getAttribute('data-filter');
+                filterCards(pack);
+            });
+        });
+    </script>
+</body>
+</html>
