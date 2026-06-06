@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Plantillas de Canva — Chechena Shirts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream-0: #fdf8f0;
+      --cream-1: #f9f1e4;
+      --cream-2: #f2e8d6;
+      --cream-3: #e8d9c2;
+      --cream-4: #d9c8ad;
+      --sand:    #c4a882;
+      --taupe:   #9a7e60;
+      --brown:   #5a3e28;
+      --text-main: #3b2a1a;
+      --text-muted: #7a6550;
+      --text-light: #a89278;
+      --accent:  #c4a882;
+      --accent-dark: #9a7e60;
+      --white: #fffdf9;
+      --shadow-sm: 0 2px 12px rgba(90,62,40,0.07);
+      --shadow-md: 0 6px 28px rgba(90,62,40,0.10);
+      --shadow-lg: 0 14px 48px rgba(90,62,40,0.12);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--cream-0);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── SALE POPUP ── */
+    .sale-popup {
+      position: fixed;
+      bottom: 24px;
+      left: 20px;
+      background: var(--white);
+      border: 1px solid var(--cream-3);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      opacity: 0;
+      transform: translateX(-110%);
+      transition: all 0.5s cubic-bezier(.34,1.56,.64,1);
+      z-index: 9999;
+      max-width: 280px;
+    }
+    .sale-popup.show { opacity: 1; transform: translateX(0); }
+    .sale-popup img {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--cream-3);
+      object-fit: cover;
+    }
+    .sale-popup .close-popup {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1;
+      padding: 2px 4px;
+    }
+
+    /* ── HEADER ── */
+    .header-bar {
+      background: var(--cream-1);
+      border-bottom: 1px solid var(--cream-3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+    .header-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 3vw, 32px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--brown);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .logo span {
+      color: var(--taupe);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--brown); }
+    .header-icons {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .header-icons button, .header-icons a {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 18px;
+      padding: 4px;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .header-icons button:hover, .header-icons a:hover { color: var(--brown); }
+    .cart-icon { position: relative; }
+    .cart-badge {
+      position: absolute;
+      top: -3px; right: -3px;
+      background: var(--brown);
+      color: var(--white);
+      font-size: 9px;
+      font-weight: 700;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 14px clamp(16px, 3vw, 32px);
+      font-size: 12px;
+      color: var(--text-light);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--brown); }
+    .breadcrumb .sep { color: var(--cream-4); }
+
+    /* ── PAGE SECTION ── */
+    .page-main {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 32px);
+    }
+
+    /* ── HERO ── */
+    .templates-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .templates-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 700;
+      color: var(--brown);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+    .templates-hero h1 em {
+      font-style: italic;
+      color: var(--taupe);
+    }
+    .templates-sub {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-top: 8px;
+      max-width: 640px;
+      line-height: 1.65;
+    }
+    .badge-dtf {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--cream-2);
+      border: 1px solid var(--cream-4);
+      color: var(--taupe);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      align-self: flex-start;
+      margin-top: 6px;
+    }
+    .badge-dtf::before {
+      content: '✦';
+      font-size: 10px;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--cream-3), transparent);
+      margin: 28px 0;
+    }
+
+    /* ── TEMPLATE GRID ── */
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 900px) { .templates-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .templates-grid { grid-template-columns: 1fr; } }
+
+    .template-card {
+      background: var(--white);
+      border: 1px solid var(--cream-3);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow .3s, transform .3s;
+      animation: fadeUp .5s ease both;
+    }
+    .template-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .template-card:nth-child(2) { animation-delay: .08s; }
+    .template-card:nth-child(3) { animation-delay: .16s; }
+
+    .card-thumb {
+      position: relative;
+      overflow: hidden;
+      background: var(--cream-1);
+    }
+    .card-thumb.portrait { aspect-ratio: 3/4; }
+    .card-thumb.landscape { aspect-ratio: 16/9; }
+    .card-thumb.square { aspect-ratio: 1; }
+    .card-thumb img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      display: block;
+      cursor: pointer;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+      background: var(--white);
+    }
+    .card-thumb:hover img { transform: scale(1.04); }
+
+    .badge-new {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: var(--brown);
+      color: var(--cream-1);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+
+    .card-body {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      flex: 1;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--brown);
+      line-height: 1.25;
+    }
+    .card-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-canva {
+      flex: 1 1 auto;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--brown);
+      background: var(--brown);
+      color: var(--cream-0);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .2s, color .2s, transform .1s;
+      letter-spacing: .02em;
+    }
+    .btn-canva:hover { background: var(--taupe); border-color: var(--taupe); }
+    .btn-canva:active { transform: scale(.98); }
+    .btn-save {
+      flex: 1 1 auto;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--cream-3);
+      background: transparent;
+      color: var(--taupe);
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-save:hover { border-color: var(--sand); background: var(--cream-1); color: var(--brown); }
+
+    /* ── SECTION HEADING ── */
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 700;
+      color: var(--brown);
+      letter-spacing: -0.01em;
+      margin-bottom: 24px;
+    }
+    .section-heading em {
+      font-style: italic;
+      color: var(--taupe);
+    }
+
+    /* ── PRODUCTS GRID (Nuevos Lanzamientos) ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 760px)  { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .product-card {
+      background: var(--white);
+      border: 1px solid var(--cream-3);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .3s, transform .3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .product-card .prod-img-wrap {
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--cream-1);
+      position: relative;
+    }
+    .product-card .prod-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .35s ease;
+    }
+    .product-card:hover .prod-img-wrap img { transform: scale(1.06); }
+    .product-badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: var(--taupe);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .prod-info {
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .prod-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .prod-price {
+      display: flex;
+      gap: 6px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+    .price-sale { font-weight: 700; color: var(--brown); font-size: 14px; }
+    .price-original { text-decoration: line-through; color: var(--text-light); font-size: 12px; }
+    .add-to-cart-row {
+      padding: 0 14px 14px;
+      margin-top: auto;
+    }
+    .btn-add {
+      width: 100%;
+      padding: 9px;
+      background: var(--cream-2);
+      border: 1.5px solid var(--cream-3);
+      color: var(--taupe);
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s, color .2s, border-color .2s;
+      letter-spacing: .04em;
+    }
+    .btn-add:hover { background: var(--brown); color: var(--cream-0); border-color: var(--brown); }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 64px;
+      background: var(--cream-1);
+      border-top: 1px solid var(--cream-3);
+      padding: 40px clamp(16px, 3vw, 32px);
+    }
+    .footer-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 768px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+    .footer-brand .logo { display: block; margin-bottom: 12px; }
+    .footer-tagline {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 240px;
+    }
+    .footer-col h4 {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brown);
+      margin-bottom: 12px;
+      letter-spacing: .01em;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .footer-col ul a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      transition: color .2s;
+    }
+    .footer-col ul a:hover { color: var(--brown); }
+    .footer-bottom {
+      max-width: 1320px;
+      margin: 28px auto 0;
+      border-top: 1px solid var(--cream-3);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .footer-bottom a { color: var(--text-muted); text-decoration: none; }
+    .lang-selector {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .lang-btn {
+      background: none; border: 1px solid var(--cream-3); border-radius: 6px;
+      padding: 3px 8px; font-size: 11px; color: var(--text-muted);
+      cursor: pointer; transition: border-color .2s, color .2s;
+    }
+    .lang-btn.active, .lang-btn:hover { border-color: var(--taupe); color: var(--brown); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- SALE POPUP -->
+<div class="sale-popup" id="salePopup">
+  <img src="https://cdn.shopify.com/s/files/1/0686/6658/9357/files/limited-nobleco-p1-opt.jpg?v=1772876122" alt="producto">
+  <div>
+    <div style="font-size:11px;color:var(--text-light);margin-bottom:2px;">Alguien en México acaba de comprar</div>
+    <div>Pack NOBLECO Gym PNG</div>
+  </div>
+  <button class="close-popup" onclick="document.getElementById('salePopup').classList.remove('show')">×</button>
+</div>
+
+<!-- HEADER -->
+<header class="header-bar">
+  <div class="header-inner">
+    <a class="logo" href="#">Chechena <span>Shirts</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Catálogo</a></li>
+        <li><a href="#">Recursos DTF</a></li>
+        <li><a href="#">Plantillas</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </nav>
+    <div class="header-icons">
+      <button aria-label="Buscar">
+        <svg width="18" height="18" viewBox="0 0 18 19" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M11.03 11.68A5.784 5.784 0 1 1 2.85 3.5a5.784 5.784 0 0 1 8.18 8.18m.26 1.12a6.78 6.78 0 1 1 .72-.7l5.4 5.4a.5.5 0 1 1-.71.7z" clip-rule="evenodd"/></svg>
+      </button>
+      <button aria-label="Cuenta">
+        <svg width="18" height="18" viewBox="0 0 18 19" fill="none"><path fill="currentColor" d="M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-6 7a6 6 0 0 1 12 0H3Z"/></svg>
+      </button>
+      <div class="cart-icon">
+        <button aria-label="Carrito">
+          <svg width="18" height="18" viewBox="0 0 18 19" fill="none"><path fill="currentColor" d="M1 1h2.5l1.6 7.5h9l1.5-5H5M7 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm7 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+        </button>
+        <span class="cart-badge">2</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="#">Inicio</a>
+  <span class="sep">›</span>
+  <span>Plantillas de Canva</span>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="page-main">
+
+  <!-- TEMPLATES SECTION -->
+  <section id="plantillas">
+    <div class="templates-hero">
+      <div>
+        <h1>Plantillas de Canva<br><em>Anime &amp; Álbum de Artistas</em></h1>
+        <p class="templates-sub">Previews verticales sin recortes. Haz clic en la imagen o en los botones para abrir en Canva. Recursos DTF • Chechena Shirts</p>
+      </div>
+      <span class="badge-dtf">Recursos DTF &bull; Chechena Shirts</span>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="templates-grid" id="templatesGrid"></div>
+  </section>
+
+  <!-- NUEVOS LANZAMIENTOS -->
+  <section id="nuevos" style="margin-top: 56px;" class="reveal">
+    <h2 class="section-heading">Nuevos <em>Lanzamientos</em></h2>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a class="logo" href="#">Chechena <span>Shirts</span></a>
+      <p class="footer-tagline">Diseños DTF de alta calidad para personalización de playeras. Arte que habla por ti.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tienda</h4>
+      <ul>
+        <li><a href="#">Catálogo</a></li>
+        <li><a href="#">Nuevos Diseños</a></li>
+        <li><a href="#">Packs DTF</a></li>
+        <li><a href="#">Plantillas Canva</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Información</h4>
+      <ul>
+        <li><a href="#">Sobre Nosotros</a></li>
+        <li><a href="#">Política de Envío</a></li>
+        <li><a href="#">Devoluciones</a></li>
+        <li><a href="#">Términos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Correo</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Chechena Shirts. Todos los derechos reservados.</span>
+    <div class="lang-selector">
+      <button class="lang-btn active">Español</button>
+      <button class="lang-btn">English</button>
+    </div>
+    <span>MXN $</span>
+  </div>
+</footer>
+
+<script>
+  /* ── TEMPLATES DATA ── */
+  const TEMPLATES = [
+    {
+      titulo: "Plantilla de Anime • Personajes",
+      desc: "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
+      img: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Plantilla_Anime_LimitedPlayerasMX_1.png?v=1757883061",
+      url: "https://canva.link/bchmove4db888cn"
+    },
+    {
+      titulo: "Plantilla Álbum de Artistas",
+      desc: "Estilo "cover art" para lanzar colecciones temáticas. Diseño editorial premium.",
+      img: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Plantilla_Albumes_Limitedplayerasmx.png?v=1757883060",
+      url: "https://canva.link/95p1ql40jdkmo7q"
+    },
+    {
+      titulo: "Plantilla Anime V2",
+      desc: "Segunda versión con composición mejorada para DTF. Mayor resolución y detalle.",
+      img: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Plantilla_Anime_LimitedPlayerasMX_2_V2.png?v=1757883061",
+      url: "https://www.canva.com/design/DAGsbOpA8Kw/hpPxSQ5_9r6GPIn-K_vxbA/view?mode=preview"
+    }
+  ];
+
+  const PRODUCTS = [
+    {
+      name: "Pack Gym Dark V2 +40 Diseños PNG Streetwear & Gym",
+      img: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/limited-gym-dark-v2-p1-hq.png?v=1774246816&width=533",
+      price: "$ 120.00 MXN",
+      original: "$ 150.00 MXN",
+      badge: "Oferta",
+      href: "/products/gym-dark-v2-disenos-png-dtf-gym-streetwear"
+    },
+    {
+      name: "Pack NOBLECO Gym +50 diseños PNG 300 DPI para DTF",
+      img: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/limited-nobleco-p1-opt.jpg?v=1772876122&width=533",
+      price: "$ 130.00 MXN",
+      original: "$ 160.00 MXN",
+      badge: "Nuevo",
+      href: "#"
+    },
+    {
+      name: "Pack Anime Classics +35 diseños PNG DTF Premium",
+      img: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Plantilla_Anime_LimitedPlayerasMX_1.png?v=1757883061",
+      price: "$ 110.00 MXN",
+      original: "",
+      badge: "",
+      href: "#"
+    },
+    {
+      name: "Plantilla Álbum Artistas — Pack Editable Canva",
+      img: "https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Plantilla_Albumes_Limitedplayerasmx.png?v=1757883060",
+      price: "$ 80.00 MXN",
+      original: "$ 100.00 MXN",
+      badge: "Oferta",
+      href: "#"
+    }
+  ];
+
+  /* ── RENDER TEMPLATES ── */
+  const grid = document.getElementById('templatesGrid');
+  TEMPLATES.forEach((t, i) => {
+    const card = document.createElement('article');
+    card.className = 'template-card';
+    card.style.animationDelay = (i * 0.1) + 's';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'card-thumb portrait';
+
+    const img = document.createElement('img');
+    img.src = t.img;
+    img.alt = 'Vista previa: ' + t.titulo;
+    img.loading = 'lazy';
+    img.addEventListener('load', () => {
+      const w = img.naturalWidth, h = img.naturalHeight;
+      thumb.classList.remove('portrait','landscape','square');
+      if (w === h) thumb.classList.add('square');
+      else if (w > h) thumb.classList.add('landscape');
+      else thumb.classList.add('portrait');
+    });
+    img.addEventListener('click', () => window.open(t.url, '_blank', 'noopener'));
+
+    const badge = document.createElement('span');
+    badge.className = 'badge-new';
+    badge.textContent = 'Nuevo';
+
+    thumb.appendChild(img);
+    thumb.appendChild(badge);
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+
+    const title = document.createElement('div');
+    title.className = 'card-title';
+    title.textContent = t.titulo;
+
+    const desc = document.createElement('div');
+    desc.className = 'card-desc';
+    desc.textContent = t.desc;
+
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+
+    const btnOpen = document.createElement('a');
+    btnOpen.className = 'btn-canva';
+    btnOpen.textContent = 'Abrir en Canva';
+    btnOpen.href = t.url;
+    btnOpen.target = '_blank';
+    btnOpen.rel = 'noopener';
+
+    const btnSave = document.createElement('a');
+    btnSave.className = 'btn-save';
+    btnSave.textContent = 'Guardar enlace';
+    btnSave.href = t.url;
+
+    actions.appendChild(btnOpen);
+    actions.appendChild(btnSave);
+    body.appendChild(title);
+    body.appendChild(desc);
+    body.appendChild(actions);
+    card.appendChild(thumb);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+
+  /* ── RENDER PRODUCTS ── */
+  const prodGrid = document.getElementById('productsGrid');
+  PRODUCTS.forEach(p => {
+    const card = document.createElement('a');
+    card.className = 'product-card';
+    card.href = p.href;
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'prod-img-wrap';
+    const img = document.createElement('img');
+    img.src = p.img; img.alt = p.name; img.loading = 'lazy';
+    imgWrap.appendChild(img);
+
+    if (p.badge) {
+      const badge = document.createElement('span');
+      badge.className = 'product-badge';
+      badge.textContent = p.badge;
+      imgWrap.appendChild(badge);
+    }
+
+    const info = document.createElement('div');
+    info.className = 'prod-info';
+    const name = document.createElement('div');
+    name.className = 'prod-name';
+    name.textContent = p.name;
+    const priceRow = document.createElement('div');
+    priceRow.className = 'prod-price';
+    const sale = document.createElement('span');
+    sale.className = 'price-sale';
+    sale.textContent = p.price;
+    priceRow.appendChild(sale);
+    if (p.original) {
+      const orig = document.createElement('span');
+      orig.className = 'price-original';
+      orig.textContent = p.original;
+      priceRow.appendChild(orig);
+    }
+    info.appendChild(name);
+    info.appendChild(priceRow);
+
+    const addRow = document.createElement('div');
+    addRow.className = 'add-to-cart-row';
+    const btn = document.createElement('button');
+    btn.className = 'btn-add';
+    btn.textContent = 'Agregar al carrito';
+    btn.addEventListener('click', e => { e.preventDefault(); btn.textContent = '✓ Agregado'; btn.style.background = 'var(--brown)'; btn.style.color = 'var(--cream-0)'; setTimeout(()=>{ btn.textContent = 'Agregar al carrito'; btn.style.background=''; btn.style.color=''; }, 1800); });
+    addRow.appendChild(btn);
+
+    card.appendChild(imgWrap);
+    card.appendChild(info);
+    card.appendChild(addRow);
+    prodGrid.appendChild(card);
+  });
+
+  /* ── SCROLL REVEAL ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ── SALE POPUP ── */
+  setTimeout(() => document.getElementById('salePopup').classList.add('show'), 2500);
+  setTimeout(() => document.getElementById('salePopup').classList.remove('show'), 7500);
+</script>
+</body>
+</html>
