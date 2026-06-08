@@ -80,8 +80,6 @@
 
     .template-card { background: var(--white); border: 1px solid var(--cream-3); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .3s, transform .3s; animation: fadeUp .5s ease both; }
     .template-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
-    .template-card:nth-child(2) { animation-delay:.08s; }
-    .template-card:nth-child(3) { animation-delay:.16s; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
 
     .card-thumb { position: relative; overflow: hidden; background: var(--cream-1); aspect-ratio: 3/4; }
@@ -89,8 +87,6 @@
     .card-thumb:hover img { transform: scale(1.04); }
 
     .badge-new { position: absolute; top: 12px; left: 12px; background: var(--brown); color: var(--cream-1); font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 6px; text-transform: uppercase; letter-spacing: .7px; }
-
-    /* LOCK badge for premium cards */
     .badge-lock { position: absolute; top: 12px; right: 12px; background: rgba(90,62,40,0.85); color: var(--cream-1); font-size: 16px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
 
     .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
@@ -109,6 +105,47 @@
     .etiqueta-btns { display: flex; gap: 6px; }
     .btn-size { flex: 1; padding: 7px 6px; border-radius: 8px; border: 1.5px solid var(--cream-3); background: transparent; color: var(--taupe); font-family: var(--font-body); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
     .btn-size.active, .btn-size:hover { border-color: var(--brown); background: var(--brown); color: var(--cream-0); }
+
+    /* ── SECCIÓN MUNDIAL ─────────────────────────────────── */
+    .mundial-section {
+      max-width: 1320px; margin: 56px auto 0;
+      padding: 0 clamp(16px,3vw,32px);
+    }
+    .mundial-header {
+      display: flex; align-items: center; gap: 16px;
+      flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .mundial-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg,#006847,#ce1126);
+      color: #fff; padding: 6px 16px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .mundial-title {
+      font-family: var(--font-display);
+      font-size: clamp(26px,5vw,44px); font-weight: 700;
+      color: var(--brown); letter-spacing: -.01em; line-height: 1.1;
+    }
+    .mundial-title em { font-style: italic; color: var(--taupe); }
+    .mundial-sub {
+      color: var(--text-muted); font-size: 14px; margin-top: 4px; line-height: 1.6;
+    }
+    /* Banda de colores del mundial debajo del título */
+    .mundial-stripe {
+      height: 4px; width: 80px; margin-bottom: 28px;
+      background: linear-gradient(to right, #006847 33%, #fff 33% 66%, #ce1126 66%);
+      border-radius: 2px;
+    }
+    /* Badge especial para tarjetas del mundial */
+    .badge-mundial {
+      position: absolute; top: 12px; left: 12px;
+      background: linear-gradient(135deg,#006847,#ce1126);
+      color: #fff; font-size: 10px; font-weight: 700;
+      padding: 4px 9px; border-radius: 6px;
+      text-transform: uppercase; letter-spacing: .7px;
+    }
+    /* ─────────────────────────────────────────────────────── */
 
     /* PRODUCTS */
     .section-heading { font-family: var(--font-display); font-size: clamp(22px,4vw,34px); font-weight: 700; color: var(--brown); letter-spacing: -.01em; margin-bottom: 24px; }
@@ -144,17 +181,12 @@
     .footer-col ul a { text-decoration: none; color: var(--text-muted); font-size: 13px; transition: color .2s; }
     .footer-col ul a:hover { color: var(--brown); }
     .footer-bottom { max-width: 1320px; margin: 28px auto 0; border-top: 1px solid var(--cream-3); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--text-light); }
-    .lang-selector { display: flex; gap: 8px; }
-    .lang-btn { background: none; border: 1px solid var(--cream-3); border-radius: 6px; padding: 3px 8px; font-size: 11px; color: var(--text-muted); cursor: pointer; transition: border-color .2s, color .2s; }
-    .lang-btn.active, .lang-btn:hover { border-color: var(--taupe); color: var(--brown); }
 
     /* SCROLL REVEAL */
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
     .reveal.visible { opacity: 1; transform: none; }
 
-    /* ============================================================
-       MODAL DE CONTRASEÑA (Plantillas Premium)
-    ============================================================ */
+    /* MODAL */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(59,42,26,0.55);
       backdrop-filter: blur(6px); display: flex; align-items: center;
@@ -174,56 +206,25 @@
     .modal-subtitle { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
     .modal-subtitle strong { color: var(--taupe); }
     .modal-input-wrap { position: relative; margin-bottom: 12px; }
-    .modal-input {
-      width: 100%; padding: 11px 44px 11px 14px; border: 1.5px solid var(--cream-3);
-      border-radius: 10px; background: var(--cream-0); font-family: var(--font-body);
-      font-size: 14px; color: var(--text-main); outline: none;
-      transition: border-color .2s;
-    }
+    .modal-input { width: 100%; padding: 11px 44px 11px 14px; border: 1.5px solid var(--cream-3); border-radius: 10px; background: var(--cream-0); font-family: var(--font-body); font-size: 14px; color: var(--text-main); outline: none; transition: border-color .2s; }
     .modal-input:focus { border-color: var(--taupe); }
     .modal-input.error { border-color: #c0392b; animation: shake .4s; }
-    @keyframes shake {
-      0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}
-      60%{transform:translateX(-4px)}80%{transform:translateX(4px)}
-    }
-    .modal-toggle-pw {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; color: var(--text-light);
-      font-size: 16px; padding: 2px;
-    }
+    @keyframes shake { 0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)} }
+    .modal-toggle-pw { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-light); font-size: 16px; padding: 2px; }
     .modal-error { font-size: 12px; color: #c0392b; margin-bottom: 10px; min-height: 16px; }
-    .modal-btn-unlock {
-      width: 100%; padding: 12px; background: var(--brown); color: var(--cream-0);
-      border: none; border-radius: 10px; font-family: var(--font-body); font-size: 14px;
-      font-weight: 600; cursor: pointer; transition: background .2s, transform .1s;
-      letter-spacing: .03em; margin-bottom: 14px;
-    }
+    .modal-btn-unlock { width: 100%; padding: 12px; background: var(--brown); color: var(--cream-0); border: none; border-radius: 10px; font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; transition: background .2s, transform .1s; letter-spacing: .03em; margin-bottom: 14px; }
     .modal-btn-unlock:hover { background: var(--taupe); }
     .modal-btn-unlock:active { transform: scale(.98); }
     .modal-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
     .modal-divider::before, .modal-divider::after { content: ''; flex: 1; height: 1px; background: var(--cream-3); }
     .modal-divider span { font-size: 11px; color: var(--text-light); white-space: nowrap; }
-    .modal-btn-wa {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      width: 100%; padding: 11px; background: #25D366; color: #fff;
-      border: none; border-radius: 10px; font-family: var(--font-body); font-size: 13.5px;
-      font-weight: 600; cursor: pointer; text-decoration: none;
-      transition: background .2s, transform .1s; letter-spacing: .02em;
-    }
+    .modal-btn-wa { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 11px; background: #25D366; color: #fff; border: none; border-radius: 10px; font-family: var(--font-body); font-size: 13.5px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s, transform .1s; letter-spacing: .02em; }
     .modal-btn-wa:hover { background: #1eb954; }
-    .modal-btn-wa:active { transform: scale(.98); }
-    .modal-btn-wa svg { flex-shrink: 0; }
-    .modal-close-x {
-      position: absolute; top: 12px; right: 14px; background: none; border: none;
-      cursor: pointer; color: var(--text-light); font-size: 20px; line-height: 1;
-      padding: 4px;
-    }
+    .modal-close-x { position: absolute; top: 12px; right: 14px; background: none; border: none; cursor: pointer; color: var(--text-light); font-size: 20px; line-height: 1; padding: 4px; }
     .modal-close-x:hover { color: var(--brown); }
   </style>
 </head>
 <body>
-
-
 
 <!-- MODAL CONTRASEÑA PREMIUM -->
 <div class="modal-overlay" id="premiumModal">
@@ -246,7 +247,6 @@
   </div>
 </div>
 
-
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
   <a href="#">Inicio</a>
@@ -257,6 +257,7 @@
 <!-- MAIN -->
 <main class="page-main">
 
+  <!-- PLANTILLAS NORMALES -->
   <section id="plantillas">
     <div class="templates-hero">
       <div>
@@ -269,6 +270,22 @@
     <div class="templates-grid" id="templatesGrid"></div>
   </section>
 
+  <!-- ══════════════════════════════════════════════
+       SECCIÓN MUNDIAL
+  ══════════════════════════════════════════════ -->
+  <section id="mundial" class="mundial-section reveal">
+    <div class="mundial-header">
+      <div>
+        <span class="mundial-badge">⚽ Mundial 2026</span>
+        <h2 class="mundial-title" style="margin-top:10px;">Plantillas <em>Mundial</em></h2>
+        <p class="mundial-sub">Diseños exclusivos para el Mundial 2026. Personaliza con tu equipo favorito. Ideal para DTF.</p>
+      </div>
+    </div>
+    <div class="mundial-stripe"></div>
+    <div class="templates-grid" id="mundialGrid"></div>
+  </section>
+
+  <!-- NUEVOS LANZAMIENTOS -->
   <section id="nuevos" style="margin-top:56px;" class="reveal">
     <h2 class="section-heading">Nuevos <em>Lanzamientos</em></h2>
     <div class="products-grid" id="productsGrid"></div>
@@ -281,90 +298,28 @@
 <!-- MEGAPACKS                                          -->
 <!-- ══════════════════════════════════════════════════ -->
 <style>
-  .mp-section {
-    background: #fdf8f0;
-    border-top: 1px solid #e8d9c2;
-    padding: clamp(40px,6vw,72px) clamp(16px,4vw,48px);
-    text-align: center;
-  }
+  .mp-section { background: #fdf8f0; border-top: 1px solid #e8d9c2; padding: clamp(40px,6vw,72px) clamp(16px,4vw,48px); text-align: center; }
   .mp-header { margin-bottom: clamp(24px,4vw,42px); }
-  .mp-tag {
-    display: inline-block;
-    font-family: var(--font-body);
-    font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--taupe); border: 1px solid var(--cream-4);
-    background: var(--cream-2); padding: 5px 14px; border-radius: 999px;
-    margin-bottom: 12px;
-  }
-  .mp-title {
-    font-family: var(--font-display);
-    font-size: clamp(24px,4vw,38px); font-weight: 700;
-    color: var(--brown); letter-spacing: -.01em; line-height: 1.15;
-  }
+  .mp-tag { display: inline-block; font-family: var(--font-body); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--taupe); border: 1px solid var(--cream-4); background: var(--cream-2); padding: 5px 14px; border-radius: 999px; margin-bottom: 12px; }
+  .mp-title { font-family: var(--font-display); font-size: clamp(24px,4vw,38px); font-weight: 700; color: var(--brown); letter-spacing: -.01em; line-height: 1.15; }
   .mp-title em { font-style: italic; color: var(--taupe); }
-  .mp-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px; max-width: 1100px; margin: 0 auto;
-  }
-  .mp-card {
-    background: var(--white); border: 1px solid var(--cream-3);
-    border-radius: var(--radius-lg); overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow .3s, transform .3s;
-    text-align: left;
-  }
+  .mp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+  .mp-card { background: var(--white); border: 1px solid var(--cream-3); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow .3s, transform .3s; text-align: left; }
   .mp-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
   .mp-img-wrap { position: relative; aspect-ratio: 4/3; overflow: hidden; background: var(--cream-1); }
   .mp-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; display: block; }
   .mp-card:hover .mp-img-wrap img { transform: scale(1.04); }
-  .mp-badge-top {
-    position: absolute; top: 12px; left: 12px;
-    background: var(--brown); color: var(--cream-0);
-    font-family: var(--font-body); font-size: 10px; font-weight: 700;
-    letter-spacing: .08em; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 6px;
-  }
-  .mp-badge-offer {
-    position: absolute; top: 12px; right: 12px;
-    background: #c0392b; color: #fff;
-    font-family: var(--font-body); font-size: 10px; font-weight: 700;
-    letter-spacing: .08em; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 6px;
-  }
+  .mp-badge-top { position: absolute; top: 12px; left: 12px; background: var(--brown); color: var(--cream-0); font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }
+  .mp-badge-offer { position: absolute; top: 12px; right: 12px; background: #c0392b; color: #fff; font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }
   .mp-info { padding: clamp(14px,2vw,20px); }
-  .mp-name {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: clamp(15px,2vw,18px); color: var(--brown);
-    text-transform: uppercase; margin-bottom: 4px;
-  }
-  .mp-desc {
-    font-family: var(--font-body); font-size: 12px;
-    color: var(--text-muted); text-transform: uppercase;
-    letter-spacing: .05em; margin-bottom: 12px; line-height: 1.5;
-  }
+  .mp-name { font-family: var(--font-display); font-weight: 700; font-size: clamp(15px,2vw,18px); color: var(--brown); text-transform: uppercase; margin-bottom: 4px; }
+  .mp-desc { font-family: var(--font-body); font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; line-height: 1.5; }
   .mp-prices { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .mp-old { font-family: var(--font-body); font-size: 13px; color: var(--text-light); text-decoration: line-through; }
   .mp-new { font-family: var(--font-body); font-weight: 700; font-size: 18px; color: var(--brown); }
-  .mp-btn {
-    display: block; width: 100%;
-    background: var(--brown); color: var(--cream-0);
-    font-family: var(--font-body); font-weight: 600; font-size: 13px;
-    letter-spacing: .1em; text-transform: uppercase;
-    padding: 12px; text-align: center; text-decoration: none;
-    border: none; border-radius: 10px; cursor: pointer;
-    transition: background .2s, transform .1s;
-    position: relative; overflow: hidden;
-  }
+  .mp-btn { display: block; width: 100%; background: var(--brown); color: var(--cream-0); font-family: var(--font-body); font-weight: 600; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; padding: 12px; text-align: center; text-decoration: none; border: none; border-radius: 10px; cursor: pointer; transition: background .2s, transform .1s; }
   .mp-btn:hover { background: var(--taupe); }
   .mp-btn:active { transform: scale(.98); }
-  .mp-btn::before {
-    content:''; position:absolute; left:-120%; top:0;
-    width:60%; height:100%;
-    background:linear-gradient(120deg,transparent,rgba(255,255,255,.18),transparent);
-    transition:.5s;
-  }
-  .mp-btn:hover::before { left:120%; }
   @media (max-width:560px) { .mp-grid { grid-template-columns: 1fr; } }
 </style>
 
@@ -373,10 +328,7 @@
     <div class="mp-tag">⭐ Mejor valorado por nuestros clientes</div>
     <h2 class="mp-title">Nuestros <em>Megapacks</em></h2>
   </div>
-
   <div class="mp-grid">
-
-    <!-- MEGAPACK CHECHENA -->
     <div class="mp-card">
       <div class="mp-img-wrap">
         <span class="mp-badge-top">Más Vendido</span>
@@ -386,15 +338,10 @@
       <div class="mp-info">
         <h3 class="mp-name">Megapack Chechena</h3>
         <p class="mp-desc">Sublimación, Serigrafía, DTF &amp; DTG</p>
-        <div class="mp-prices">
-          <span class="mp-old">$ 439 MXN</span>
-          <span class="mp-new">$ 250 MXN</span>
-        </div>
+        <div class="mp-prices"><span class="mp-old">$ 439 MXN</span><span class="mp-new">$ 250 MXN</span></div>
         <a href="pack-chechena.html" class="mp-btn">Ver más</a>
       </div>
     </div>
-
-    <!-- MEGAPACK OJITO -->
     <div class="mp-card">
       <div class="mp-img-wrap">
         <span class="mp-badge-top">Actualizado</span>
@@ -404,15 +351,10 @@
       <div class="mp-info">
         <h3 class="mp-name">Megapack Ojito</h3>
         <p class="mp-desc">Diseños DTF &amp; DTG 2026</p>
-        <div class="mp-prices">
-          <span class="mp-old">$ 800 MXN</span>
-          <span class="mp-new">$ 400 MXN</span>
-        </div>
+        <div class="mp-prices"><span class="mp-old">$ 800 MXN</span><span class="mp-new">$ 400 MXN</span></div>
         <a href="pack-ojito.html" class="mp-btn">Ver más</a>
       </div>
     </div>
-
-    <!-- PAQUETE EMPRENDEDOR -->
     <div class="mp-card">
       <div class="mp-img-wrap">
         <span class="mp-badge-top">Envío Gratis</span>
@@ -422,14 +364,10 @@
       <div class="mp-info">
         <h3 class="mp-name">Paquete Emprendedor</h3>
         <p class="mp-desc">8 playeras premium + etiqueta con tu marca. Envío gratis a todo México.</p>
-        <div class="mp-prices">
-          <span class="mp-old">$ 3,000 MXN</span>
-          <span class="mp-new">$ 2,000 MXN</span>
-        </div>
+        <div class="mp-prices"><span class="mp-old">$ 3,000 MXN</span><span class="mp-new">$ 2,000 MXN</span></div>
         <a href="emprendedor.html" class="mp-btn">Ver más</a>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -437,38 +375,9 @@
 <script>
 
 /* ============================================================
-   PLANTILLAS — AGREGA O QUITA LAS QUE QUIERAS
-   Copia y pega este bloque para añadir más plantillas:
-
-    {
-      titulo: "NOMBRE DE LA PLANTILLA",
-      desc:   "Descripción corta de la plantilla.",
-      img:    "PON_URL_DE_IMAGEN_AQUI",
-      url:    "PON_URL_DE_CANVA_AQUI"
-    },
-
-    // Si es PREMIUM (con contraseña via Google Apps Script):
-    {
-      titulo: "NOMBRE",
-      desc:   "Descripción.",
-      img:    "URL_IMAGEN",
-      premiumId: "id_unico"   ← debe coincidir con el 'id' en el Apps Script
-    },
-
-    // Si tiene dos tamaños de etiqueta:
-    {
-      titulo: "NOMBRE",
-      desc:   "Descripción.",
-      img:    "URL_IMAGEN",
-      etiquetas: [
-        { label: "6×5 cm", url: "https://canva.link/..." },
-        { label: "8.5×5 cm", url: "https://canva.link/..." }
-      ]
-    },
-
+   PLANTILLAS NORMALES — agrega o quita aquí
 ============================================================ */
 const TEMPLATES = [
-
   {
     titulo: "ETIQUETAS",
     desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
@@ -478,169 +387,210 @@ const TEMPLATES = [
       { label: "8.5×5 cm", url: "https://canva.link/36ond20n86vb8u3" }
     ]
   },
-
   {
     titulo: "30 Mascot Template",
     desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
     img:    "https://i.ibb.co/WN4X4F1p/Captura-de-pantalla-2026-05-08-233200.png",
     premiumId: "mascot30"
-    // ↑ El URL real vive en el Apps Script, no aquí
   },
-
   {
     titulo: "Plantilla de Anime • Personajes",
     desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
     img:    "https://i.ibb.co/1tMBTSDK/Captura-de-pantalla-2026-05-08-224813.png",
     url:    "https://canva.link/bchmove4db888cn"
   },
-
   {
     titulo: "Plantilla Álbum de Artistas",
     desc:   "Estilo cover art para lanzar colecciones temáticas. Diseño editorial premium.",
     img:    "https://i.ibb.co/N6BCHqvW/sssssaa.png",
     url:    "https://canva.link/95p1ql40jdkmo7q"
   },
-
   {
     titulo: "NAVIDAD",
     desc:   "Formato listo para personalizar con tu personaje, texto y colores. Ideal para DTF.",
     img:    "https://i.ibb.co/SXPFDLkf/Captura-de-pantalla-2026-05-08-233312.png",
     url:    "https://canva.link/4jauarpqnw5ig86"
   },
-
   {
     titulo: "ONLY YOU",
     desc:   "Formato listo para personalizar con tus fotos, texto y colores. Ideal para DTF.",
     img:    "https://i.ibb.co/hFfcGhJ5/Captura-de-pantalla-2026-05-08-233531.png",
     url:    "https://canva.link/7iilm805zvu2oyc"
   },
-
-    {
+  {
     titulo: "Dia del padre",
     desc:   "Formato listo para personalizar con tus fotos, texto y colores. Ideal para DTF.",
     img:    "https://i.ibb.co/PGd9nj82/Captura-de-pantalla-2026-06-05-203657.png",
     url:    "https://canva.link/3a4tk7tyabtqgrd"
   },
-
   {
     titulo: "JOB",
     desc:   "Formato listo para personalizar con tus fotos, texto y colores. Ideal para DTF.",
     img:    "https://i.ibb.co/B5wtd06x/Captura-de-pantalla-2026-05-08-233425.png",
     url:    "https://canva.link/2z2ba337z3ozi0o"
   },
-
+    {
+    titulo: "GRADUACIÓN",
+    desc:   "Formato listo para personalizar con tus fotos, texto y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/dw261TmH/Captura-de-pantalla-2026-06-07-210031.png",
+    url:    "https://canva.link/m7y610iwj1plfy6"
+  },
   {
     titulo: "Plantilla Anime V2",
     desc:   "Segunda versión con composición mejorada para DTF. Mayor resolución y detalle.",
     img:    "https://i.ibb.co/CKynFHCJ/Captura-de-pantalla-2026-05-08-225646.png",
     url:    "https://canva.link/528d64wklejsowv"
   }
+];
+
+
+/* ============================================================
+   PLANTILLAS MUNDIAL — AGREGA TUS PLANTILLAS AQUÍ ABAJO
+   Copia y pega este bloque para cada plantilla que tengas:
+
+    {
+      titulo: "NOMBRE DE LA PLANTILLA",
+      desc:   "Descripción corta.",
+      img:    "https://URL-DE-TU-IMAGEN.png",
+      url:    "https://canva.link/TU-LINK"
+    },
+
+============================================================ */
+const TEMPLATES_MUNDIAL = [
+
+  {
+    titulo: "MESSI CUADRO Mundial",
+    desc:   "Formato listo para personalizar y enmarcar. Un diseño único para coleccionistas y aficionados del fútbol.",
+    img:    "https://i.ibb.co/YFRnq33v/MESSI-C.png",
+    url:    "https://canva.link/2z9lu55vit4vk5b"
+  },
+
+  {
+    titulo: "CRISTIANO RONALDO CUADRO Mundial",
+    desc:   "Formato listo para personalizar y enmarcar. Un diseño único para coleccionistas y aficionados del fútbol.",
+    img:    "https://i.ibb.co/VcyvdRrd/CR7-C.png",
+    url:    "https://canva.link/gl1otlwl2cto5x6"
+  },
+
+  {
+    titulo: "NEYMAR CUADRO Mundial",
+    desc:   "Formato listo para personalizar y enmarcar. Un diseño único para coleccionistas y aficionados del fútbol.",
+    img:    "https://i.ibb.co/V0BqJvvq/NEYMAR-C.png",
+    url:    "https://canva.link/mpsis2wrd3cmy0c"
+  },
+
+  {
+    titulo: "MESSI PALYERA NEGRA Y BLANCA",
+    desc:   "Formato listo para personalizar con tu equipo y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/MDG8jBtv/Captura-de-pantalla-2026-06-07-200902.png",
+    url:    "https://canva.link/zlt26htf0d48la9"
+  },
+
+  {
+    titulo: "CRISTIANO RONALDO PLAYERA",
+    desc:   "Formato listo para personalizar con tu equipo y colores. Ideal para DTF.",
+    img:    "https://i.ibb.co/v4Vm01z5/Captura-de-pantalla-2026-06-07-201123.png",
+    url:    "https://canva.link/cojkcv7mgpboyaa"
+  },
+
+  /* ← Agrega más aquí con el mismo formato */
 
 ];
 
 
 /* ============================================================
-   PRODUCTOS — AGREGA O QUITA LOS QUE QUIERAS
-   Copia y pega este bloque para añadir más productos:
-
-    {
-      name:     "NOMBRE DEL PRODUCTO",
-      img:      "PON_URL_DE_IMAGEN_AQUI",
-      price:    "$ 120.00 MXN",
-      original: "$ 150.00 MXN",   ← precio tachado, déjalo "" si no hay oferta
-      badge:    "Oferta",         ← etiqueta encima de la imagen, déjalo "" si no quieres
-      href:     "PON_URL_DEL_PRODUCTO_AQUI"
-    },
-
+   PRODUCTOS — agrega o quita aquí
+============================================================ */
+const PRODUCTS = [
+  /* Ejemplo — reemplaza con tus productos reales:
+  {
+    name:     "Playera Anime DTF",
+    img:      "https://URL-IMAGEN.jpg",
+    price:    "$ 120.00 MXN",
+    original: "$ 150.00 MXN",
+    badge:    "Oferta",
+    href:     "#"
+  },
+  */
+];
 
 
 /* ============================================================
-   NO TOQUES NADA DE AQUI PARA ABAJO
+   NO TOQUES NADA DE AQUÍ PARA ABAJO
 ============================================================ */
 
-  /* ---------- MODAL DE CONTRASEÑA — Google Apps Script ----------
-     ★ PON AQUI LA URL DE TU GOOGLE APPS SCRIPT DESPLEGADO ★
-     (la obtienes al hacer clic en "Implementar" en script.google.com)
-  ---------------------------------------------------------------- */
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-z_4qrX47fhnpnaCVONnaHuaYn2EyOzRGS3HnzpFjMYKh2AVMyjwEXZekTFL-3NWmnw/exec";
-  // ---------------------------------------------------------------
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-z_4qrX47fhnpnaCVONnaHuaYn2EyOzRGS3HnzpFjMYKh2AVMyjwEXZekTFL-3NWmnw/exec";
 
-  let pendingId = "";   // id de la plantilla premium (ej: "mascot30")
+let pendingId = "";
 
-  function openModal(premiumId) {
-    pendingId = premiumId;
-    document.getElementById('pwInput').value = '';
-    document.getElementById('pwError').textContent = '';
-    document.getElementById('pwInput').classList.remove('error');
-    document.getElementById('modalUnlockBtn').disabled = false;
-    document.getElementById('modalUnlockBtn').textContent = 'Desbloquear plantilla';
-    document.getElementById('premiumModal').classList.add('open');
-    setTimeout(() => document.getElementById('pwInput').focus(), 300);
+function openModal(premiumId) {
+  pendingId = premiumId;
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').textContent = '';
+  document.getElementById('pwInput').classList.remove('error');
+  document.getElementById('modalUnlockBtn').disabled = false;
+  document.getElementById('modalUnlockBtn').textContent = 'Desbloquear plantilla';
+  document.getElementById('premiumModal').classList.add('open');
+  setTimeout(() => document.getElementById('pwInput').focus(), 300);
+}
+
+function closeModal() {
+  document.getElementById('premiumModal').classList.remove('open');
+  pendingId = "";
+}
+
+function togglePw() {
+  const inp = document.getElementById('pwInput');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function checkPassword() {
+  const pw    = document.getElementById('pwInput').value.trim();
+  const errEl = document.getElementById('pwError');
+  const btn   = document.getElementById('modalUnlockBtn');
+  if (!pw) {
+    errEl.textContent = 'Ingresa tu contraseña.';
+    document.getElementById('pwInput').classList.add('error');
+    setTimeout(() => document.getElementById('pwInput').classList.remove('error'), 500);
+    return;
   }
-
-  function closeModal() {
-    document.getElementById('premiumModal').classList.remove('open');
-    pendingId = "";
-  }
-
-  function togglePw() {
-    const inp = document.getElementById('pwInput');
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-  }
-
-  async function checkPassword() {
-    const pw     = document.getElementById('pwInput').value.trim();
-    const errEl  = document.getElementById('pwError');
-    const btn    = document.getElementById('modalUnlockBtn');
-
-    if (!pw) {
-      errEl.textContent = 'Ingresa tu contraseña.';
+  btn.disabled = true;
+  btn.textContent = 'Verificando…';
+  errEl.textContent = '';
+  try {
+    const res  = await fetch(`${APPS_SCRIPT_URL}?id=${encodeURIComponent(pendingId)}&pw=${encodeURIComponent(pw)}`);
+    const data = await res.json();
+    if (data.ok) {
+      closeModal();
+      window.open(data.url, '_blank', 'noopener');
+    } else {
+      errEl.textContent = data.error || 'Contraseña incorrecta. Pídela por WhatsApp.';
       document.getElementById('pwInput').classList.add('error');
       setTimeout(() => document.getElementById('pwInput').classList.remove('error'), 500);
-      return;
-    }
-
-    // Mostrar estado de carga
-    btn.disabled = true;
-    btn.textContent = 'Verificando…';
-    errEl.textContent = '';
-
-    try {
-      const res  = await fetch(`${APPS_SCRIPT_URL}?id=${encodeURIComponent(pendingId)}&pw=${encodeURIComponent(pw)}`);
-      const data = await res.json();
-
-      if (data.ok) {
-        // ✅ Contraseña correcta — el URL llega del servidor, nunca estuvo en el HTML
-        closeModal();
-        window.open(data.url, '_blank', 'noopener');
-      } else {
-        errEl.textContent = data.error || 'Contraseña incorrecta. Pídela por WhatsApp.';
-        document.getElementById('pwInput').classList.add('error');
-        setTimeout(() => document.getElementById('pwInput').classList.remove('error'), 500);
-        btn.disabled = false;
-        btn.textContent = 'Desbloquear plantilla';
-      }
-    } catch (err) {
-      errEl.textContent = 'Error de conexión. Intenta de nuevo.';
       btn.disabled = false;
       btn.textContent = 'Desbloquear plantilla';
     }
+  } catch (err) {
+    errEl.textContent = 'Error de conexión. Intenta de nuevo.';
+    btn.disabled = false;
+    btn.textContent = 'Desbloquear plantilla';
   }
+}
 
-  document.getElementById('pwInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') checkPassword();
-  });
+document.getElementById('pwInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkPassword();
+});
+document.getElementById('premiumModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('premiumModal')) closeModal();
+});
 
-  document.getElementById('premiumModal').addEventListener('click', e => {
-    if (e.target === document.getElementById('premiumModal')) closeModal();
-  });
-
-  /* ---------- RENDER TEMPLATES ---------- */
-  const grid = document.getElementById('templatesGrid');
-  TEMPLATES.forEach((t, i) => {
+/* ---------- FUNCIÓN REUTILIZABLE PARA RENDERIZAR TARJETAS ---------- */
+function renderTemplates(list, containerId, isMundial = false) {
+  const grid = document.getElementById(containerId);
+  list.forEach((t, i) => {
     const card = document.createElement('article');
     card.className = 'template-card';
-    card.style.animationDelay = (i * 0.1) + 's';
+    card.style.animationDelay = (i * 0.08) + 's';
 
     const thumb = document.createElement('div');
     thumb.className = 'card-thumb';
@@ -649,29 +599,24 @@ const TEMPLATES = [
     img.src = t.img;
     img.alt = t.titulo;
     img.loading = 'lazy';
-    img.addEventListener('load', () => {
-      const w = img.naturalWidth, h = img.naturalHeight;
-      thumb.classList.remove('portrait','landscape','square');
-      if (w === h) thumb.classList.add('square');
-      else if (w > h) thumb.classList.add('landscape');
-      else thumb.classList.add('portrait');
-    });
 
-    // Si es premium, la imagen abre el modal; si no, abre el link directo
     if (t.premiumId) {
       img.addEventListener('click', () => openModal(t.premiumId));
     } else if (t.url) {
       img.addEventListener('click', () => window.open(t.url, '_blank', 'noopener'));
+    } else if (t.etiquetas) {
+      /* click en imagen abre el primer link de etiqueta */
+      img.addEventListener('click', () => window.open(t.etiquetas[0].url, '_blank', 'noopener'));
     }
 
-    const badge = document.createElement('span');
-    badge.className = 'badge-new';
-    badge.textContent = 'Nuevo';
-
     thumb.appendChild(img);
+
+    /* Badge */
+    const badge = document.createElement('span');
+    badge.className = isMundial ? 'badge-mundial' : 'badge-new';
+    badge.textContent = isMundial ? '⚽ Mundial' : 'Nuevo';
     thumb.appendChild(badge);
 
-    // Candado en las premium
     if (t.premiumId) {
       const lock = document.createElement('span');
       lock.className = 'badge-lock';
@@ -690,21 +635,15 @@ const TEMPLATES = [
     desc.className = 'card-desc';
     desc.textContent = t.desc;
 
-    const actions = document.createElement('div');
-    actions.className = 'card-actions';
-
-    // ---- Plantilla con SELECTOR DE ETIQUETAS ----
+    /* ---- ETIQUETAS ---- */
     if (t.etiquetas && t.etiquetas.length > 0) {
       const selector = document.createElement('div');
       selector.className = 'etiqueta-selector';
-
       const lbl = document.createElement('label');
       lbl.textContent = 'Selecciona tamaño:';
       selector.appendChild(lbl);
-
       const btnWrap = document.createElement('div');
       btnWrap.className = 'etiqueta-btns';
-
       t.etiquetas.forEach((et, idx) => {
         const btn = document.createElement('button');
         btn.className = 'btn-size' + (idx === 0 ? ' active' : '');
@@ -717,83 +656,55 @@ const TEMPLATES = [
         btnWrap.appendChild(btn);
       });
       selector.appendChild(btnWrap);
-      body.appendChild(title);
-      body.appendChild(desc);
-      body.appendChild(selector);
-
+      body.appendChild(title); body.appendChild(desc); body.appendChild(selector);
       const openBtn = document.createElement('a');
-      openBtn.className = 'btn-canva';
-      openBtn.textContent = 'Abrir en Canva';
-      openBtn.href = '#';
+      openBtn.className = 'btn-canva'; openBtn.textContent = 'Abrir en Canva'; openBtn.href = '#';
       openBtn.addEventListener('click', e => {
         e.preventDefault();
         const active = btnWrap.querySelector('.btn-size.active');
         if (active) window.open(active.dataset.url, '_blank', 'noopener');
       });
-
       const saveBtn = document.createElement('a');
-      saveBtn.className = 'btn-save';
-      saveBtn.textContent = 'Guardar enlace';
-      saveBtn.href = '#';
+      saveBtn.className = 'btn-save'; saveBtn.textContent = 'Guardar enlace'; saveBtn.href = '#';
       saveBtn.addEventListener('click', e => {
         e.preventDefault();
         const active = btnWrap.querySelector('.btn-size.active');
-        if (active) {
-          navigator.clipboard.writeText(active.dataset.url).then(() => {
-            saveBtn.textContent = '✓ Copiado';
-            setTimeout(() => { saveBtn.textContent = 'Guardar enlace'; }, 1800);
-          });
-        }
+        if (active) navigator.clipboard.writeText(active.dataset.url).then(() => {
+          saveBtn.textContent = '✓ Copiado';
+          setTimeout(() => { saveBtn.textContent = 'Guardar enlace'; }, 1800);
+        });
       });
-
       const actWrap = document.createElement('div');
       actWrap.className = 'card-actions';
-      actWrap.appendChild(openBtn);
-      actWrap.appendChild(saveBtn);
+      actWrap.appendChild(openBtn); actWrap.appendChild(saveBtn);
       body.appendChild(actWrap);
 
-    // ---- Plantilla PREMIUM (contraseña via Apps Script) ----
+    /* ---- PREMIUM ---- */
     } else if (t.premiumId) {
-      body.appendChild(title);
-      body.appendChild(desc);
-
+      body.appendChild(title); body.appendChild(desc);
       const premNote = document.createElement('div');
       premNote.style.cssText = 'font-size:11.5px;color:var(--taupe);font-weight:600;display:flex;align-items:center;gap:5px;margin-top:2px;';
       premNote.innerHTML = '🔒 Solo para clientes con Megapack';
       body.appendChild(premNote);
-
       const btnOpen = document.createElement('button');
-      btnOpen.className = 'btn-canva';
-      btnOpen.textContent = 'Ir a plantilla';
+      btnOpen.className = 'btn-canva'; btnOpen.textContent = 'Ir a plantilla';
       btnOpen.addEventListener('click', () => openModal(t.premiumId));
-
       const btnSave = document.createElement('button');
-      btnSave.className = 'btn-save';
-      btnSave.textContent = 'Guardar enlace';
+      btnSave.className = 'btn-save'; btnSave.textContent = 'Guardar enlace';
       btnSave.addEventListener('click', () => openModal(t.premiumId));
-
       const actWrap = document.createElement('div');
       actWrap.className = 'card-actions';
-      actWrap.appendChild(btnOpen);
-      actWrap.appendChild(btnSave);
+      actWrap.appendChild(btnOpen); actWrap.appendChild(btnSave);
       body.appendChild(actWrap);
 
-    // ---- Plantilla NORMAL ----
+    /* ---- NORMAL ---- */
     } else {
-      body.appendChild(title);
-      body.appendChild(desc);
-
+      body.appendChild(title); body.appendChild(desc);
       const btnOpen = document.createElement('a');
-      btnOpen.className = 'btn-canva';
-      btnOpen.textContent = 'Abrir en Canva';
-      btnOpen.href = t.url;
-      btnOpen.target = '_blank';
-      btnOpen.rel = 'noopener';
-
+      btnOpen.className = 'btn-canva'; btnOpen.textContent = 'Abrir en Canva';
+      btnOpen.href = t.url; btnOpen.target = '_blank'; btnOpen.rel = 'noopener';
       const btnSave = document.createElement('a');
-      btnSave.className = 'btn-save';
-      btnSave.textContent = 'Guardar enlace';
-      btnSave.href = '#';
+      btnSave.className = 'btn-save'; btnSave.textContent = 'Guardar enlace'; btnSave.href = '#';
       btnSave.addEventListener('click', e => {
         e.preventDefault();
         navigator.clipboard.writeText(t.url).then(() => {
@@ -801,11 +712,9 @@ const TEMPLATES = [
           setTimeout(() => { btnSave.textContent = 'Guardar enlace'; }, 1800);
         });
       });
-
       const actWrap = document.createElement('div');
       actWrap.className = 'card-actions';
-      actWrap.appendChild(btnOpen);
-      actWrap.appendChild(btnSave);
+      actWrap.appendChild(btnOpen); actWrap.appendChild(btnSave);
       body.appendChild(actWrap);
     }
 
@@ -813,81 +722,62 @@ const TEMPLATES = [
     card.appendChild(body);
     grid.appendChild(card);
   });
+}
 
-  /* RENDER PRODUCTS */
-  const prodGrid = document.getElementById('productsGrid');
-  PRODUCTS.forEach(p => {
-    const card = document.createElement('a');
-    card.className = 'product-card';
-    card.href = p.href;
+/* ---------- RENDER ---------- */
+renderTemplates(TEMPLATES, 'templatesGrid', false);
+renderTemplates(TEMPLATES_MUNDIAL, 'mundialGrid', true);
 
-    const imgWrap = document.createElement('div');
-    imgWrap.className = 'prod-img-wrap';
-
-    const img = document.createElement('img');
-    img.src = p.img;
-    img.alt = p.name;
-    img.loading = 'lazy';
-    imgWrap.appendChild(img);
-
-    if (p.badge) {
-      const badge = document.createElement('span');
-      badge.className = 'product-badge';
-      badge.textContent = p.badge;
-      imgWrap.appendChild(badge);
-    }
-
-    const info = document.createElement('div');
-    info.className = 'prod-info';
-
-    const name = document.createElement('div');
-    name.className = 'prod-name';
-    name.textContent = p.name;
-
-    const priceRow = document.createElement('div');
-    priceRow.className = 'prod-price';
-    const sale = document.createElement('span');
-    sale.className = 'price-sale';
-    sale.textContent = p.price;
-    priceRow.appendChild(sale);
-    if (p.original) {
-      const orig = document.createElement('span');
-      orig.className = 'price-original';
-      orig.textContent = p.original;
-      priceRow.appendChild(orig);
-    }
-    info.appendChild(name);
-    info.appendChild(priceRow);
-
-    const addRow = document.createElement('div');
-    addRow.className = 'add-to-cart-row';
-    const btn = document.createElement('button');
-    btn.className = 'btn-add';
-    btn.textContent = 'Agregar al carrito';
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      btn.textContent = '✓ Agregado';
-      btn.style.background = 'var(--brown)';
-      btn.style.color = 'var(--cream-0)';
-      setTimeout(() => { btn.textContent = 'Agregar al carrito'; btn.style.background = ''; btn.style.color = ''; }, 1800);
-    });
-    addRow.appendChild(btn);
-
-    card.appendChild(imgWrap);
-    card.appendChild(info);
-    card.appendChild(addRow);
-    prodGrid.appendChild(card);
+/* RENDER PRODUCTS */
+const prodGrid = document.getElementById('productsGrid');
+PRODUCTS.forEach(p => {
+  const card = document.createElement('a');
+  card.className = 'product-card'; card.href = p.href;
+  const imgWrap = document.createElement('div');
+  imgWrap.className = 'prod-img-wrap';
+  const img = document.createElement('img');
+  img.src = p.img; img.alt = p.name; img.loading = 'lazy';
+  imgWrap.appendChild(img);
+  if (p.badge) {
+    const badge = document.createElement('span');
+    badge.className = 'product-badge'; badge.textContent = p.badge;
+    imgWrap.appendChild(badge);
+  }
+  const info = document.createElement('div');
+  info.className = 'prod-info';
+  const name = document.createElement('div');
+  name.className = 'prod-name'; name.textContent = p.name;
+  const priceRow = document.createElement('div');
+  priceRow.className = 'prod-price';
+  const sale = document.createElement('span');
+  sale.className = 'price-sale'; sale.textContent = p.price;
+  priceRow.appendChild(sale);
+  if (p.original) {
+    const orig = document.createElement('span');
+    orig.className = 'price-original'; orig.textContent = p.original;
+    priceRow.appendChild(orig);
+  }
+  info.appendChild(name); info.appendChild(priceRow);
+  const addRow = document.createElement('div');
+  addRow.className = 'add-to-cart-row';
+  const btn = document.createElement('button');
+  btn.className = 'btn-add'; btn.textContent = 'Agregar al carrito';
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    btn.textContent = '✓ Agregado';
+    btn.style.background = 'var(--brown)'; btn.style.color = 'var(--cream-0)';
+    setTimeout(() => { btn.textContent = 'Agregar al carrito'; btn.style.background = ''; btn.style.color = ''; }, 1800);
   });
+  addRow.appendChild(btn);
+  card.appendChild(imgWrap); card.appendChild(info); card.appendChild(addRow);
+  prodGrid.appendChild(card);
+});
 
-  /* SCROLL REVEAL */
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  /* SALE POPUP */
-  setTimeout(() => document.getElementById('salePopup').classList.add('show'), 2500);
-  setTimeout(() => document.getElementById('salePopup').classList.remove('show'), 7500);
+/* SCROLL REVEAL */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 </script>
 </body>
