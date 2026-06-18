@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Escáner DTF — Chechena Shirts</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* ── CHECHENA SHIRTS · PALETA CLARA ── */
+  --bg:#f5f0eb;           /* crema cálida — fondo principal */
+  --panel:#ffffff;        /* blanco puro — paneles */
+  --panel2:#faf7f4;       /* crema muy tenue — sub-paneles */
+  --border:#e8e0d6;       /* arena tenue — bordes */
+  --border-soft:#f0ebe4;  /* borde extra suave */
+  --accent:#c0392b;       /* rojo tinta apagado — acento marca */
+  --accent-dim:rgba(192,57,43,0.08);
+  --accent-mid:rgba(192,57,43,0.15);
+  --text:#2c2420;         /* café oscuro — texto principal */
+  --text-muted:#8c7b72;   /* arena oscura — texto muted */
+  --ok:#2d7a4f;           /* verde bosque */
+  --ok-bg:#edf7f1;
+  --warn:#a06a00;         /* ámbar oscuro */
+  --warn-bg:#fef8ec;
+  --err:#b83232;          /* rojo */
+  --err-bg:#fdf1f1;
+  --radius:12px;
+  --shadow:0 1px 4px rgba(44,36,32,0.06), 0 4px 16px rgba(44,36,32,0.04);
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.5}
+.mono{font-family:'DM Mono',monospace}
+
+/* ── APP WRAPPER ── */
+.app{max-width:1280px;margin:0 auto;padding:20px 16px 40px}
+
+/* ── HEADER ── */
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 28px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.header-brand{display:flex;align-items:center;gap:16px}
+.header-logo{width:42px;height:42px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(192,57,43,0.2)}
+.header-logo svg{display:block}
+.header h1{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--text);letter-spacing:-0.01em}
+.header h1 .accent{color:var(--accent)}
+.header-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
+.header-badge{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.12em;color:var(--accent);border:1.5px solid var(--accent);border-radius:999px;padding:5px 14px;white-space:nowrap;background:var(--accent-dim)}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+
+/* ── LEFT ── */
+.left{display:flex;flex-direction:column;gap:14px}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone{border:1.5px dashed #d4c9c0;border-radius:var(--radius);background:var(--panel);cursor:pointer;transition:border-color .2s,background .2s;min-height:160px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--accent-dim)}
+.upload-inner{text-align:center;padding:32px 20px}
+.upload-icon-svg{display:block;margin:0 auto 12px}
+.upload-text{font-weight:600;font-size:15px;color:var(--text);margin-bottom:4px}
+.upload-sub{font-size:13px;color:var(--text-muted)}
+.upload-link{color:var(--accent);cursor:pointer;text-decoration:underline}
+.upload-hint{font-size:11px;color:var(--text-muted);margin-top:8px;font-family:'DM Mono',monospace}
+
+/* ── INFO BLOCK ── */
+.block{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.block-title{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.info-grid{display:flex;flex-direction:column;gap:8px}
+.info-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border-soft)}
+.info-row:last-child{border-bottom:none}
+.info-label{color:var(--text-muted)}
+.info-val{font-weight:600;color:var(--text);text-align:right;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'DM Mono',monospace;font-size:12px}
+
+/* ── CHECK MODULES ── */
+.check-module{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;transition:border-color .2s,background .2s}
+.check-module.has-issue{border-color:rgba(184,50,50,0.35);background:#fef9f9}
+.check-module.ok{border-color:rgba(45,122,79,0.25);background:#f6fbf8}
+.mod-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.mod-name-row{display:flex;align-items:center;gap:10px}
+.mod-number{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);background:var(--border);border-radius:4px;padding:2px 7px;font-weight:500}
+.mod-name{font-weight:600;font-size:14px;color:var(--text)}
+.mod-badge{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:3px 9px;border-radius:999px;background:var(--border);color:var(--text-muted)}
+.mod-badge.ok{background:var(--ok-bg);color:var(--ok);border:1px solid rgba(45,122,79,0.2)}
+.mod-badge.warn{background:var(--warn-bg);color:var(--warn);border:1px solid rgba(160,106,0,0.2)}
+.mod-badge.err{background:var(--err-bg);color:var(--err);border:1px solid rgba(184,50,50,0.2)}
+.mod-msg{font-size:12.5px;color:var(--text-muted);margin-bottom:0}
+.mod-controls{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.ctrl-row{display:flex;flex-direction:column;gap:4px}
+.ctrl-label{font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between}
+.ctrl-val{color:var(--accent);font-family:'DM Mono',monospace}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 2px 6px rgba(192,57,43,0.3)}
+.ctrl-select{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-size:13px;cursor:pointer;outline:none}
+.ctrl-select:focus{border-color:var(--accent)}
+.bg-auto-desc{font-size:12px;color:var(--text-muted);line-height:1.6}
+.dpi-toggle-group{display:flex;gap:6px}
+.btn-dpi-tog{flex:1;padding:7px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text-muted);font-size:12px;font-family:'DM Mono',monospace;cursor:pointer;transition:all .15s}
+.btn-dpi-tog.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.btn-fix{width:100%;padding:9px;background:var(--accent);color:#fff;font-weight:600;font-size:12.5px;font-family:'DM Sans',sans-serif;border:none;border-radius:6px;cursor:pointer;transition:opacity .15s;letter-spacing:0.01em}
+.btn-fix:hover{opacity:.88}
+.ctrl-divider{text-align:center;position:relative;font-size:11px;color:var(--text-muted)}
+.ctrl-divider::before,.ctrl-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
+.ctrl-divider::before{left:0}.ctrl-divider::after{right:0}
+.ctrl-divider span{position:relative;background:var(--panel2);padding:0 8px}
+
+/* ── ANALIZAR BUTTON ── */
+.btn-analizar{width:100%;padding:13px;background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;border:none;border-radius:8px;cursor:pointer;display:none;align-items:center;justify-content:center;gap:8px;transition:opacity .15s,transform .1s;box-shadow:0 4px 16px rgba(192,57,43,0.3);letter-spacing:0.01em}
+.btn-analizar:hover{opacity:.9;transform:translateY(-1px)}
+.btn-analizar:active{transform:translateY(0)}
+.btn-analizar-icon{font-size:17px}
+
+/* ── SCAN ANIMATION ── */
+.scan-overlay{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden;display:none}
+.scan-line{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),rgba(192,57,43,0.6),transparent);box-shadow:0 0 12px rgba(192,57,43,0.8),0 0 4px rgba(192,57,43,0.6);animation:scanMove 1.6s linear infinite}
+@keyframes scanMove{0%{top:-3px}100%{top:100%}}
+.scan-glow{position:absolute;left:0;right:0;height:60px;background:linear-gradient(to bottom,rgba(192,57,43,0.08),transparent);animation:scanGlow 1.6s linear infinite}
+@keyframes scanGlow{0%{top:-60px}100%{top:100%}}
+
+/* ── STEP ANALYSIS EFFECT ── */
+.check-module{transition:border-color .3s,background .3s,opacity .3s,transform .3s}
+.check-module.scanning{opacity:0.5;transform:scale(0.99)}
+.check-module.scan-done{animation:popIn .35s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes popIn{0%{transform:scale(0.97);opacity:.6}100%{transform:scale(1);opacity:1}}
+
+/* ── ANALYZING STATE ── */
+.analyzing-state{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 16px}
+.analyzing-steps{display:flex;flex-direction:column;gap:6px;width:100%}
+.analyzing-step{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);opacity:0;transition:opacity .3s,color .3s}
+.analyzing-step.active{opacity:1;color:var(--accent);font-weight:600}
+.analyzing-step.done{opacity:1;color:var(--ok)}
+.step-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.analyzing-title{font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:4px}
+.analyzing-state{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;color:var(--text-muted);font-size:13px}
+.analyzing-spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.btn-fix-all{width:100%;padding:14px;background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;box-shadow:0 4px 16px rgba(192,57,43,0.25)}
+.btn-fix-all:hover{opacity:.88}
+.fix-all-icon{font-size:16px}
+.btn-reset{width:100%;padding:10px;background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;transition:border-color .2s,color .2s;margin-top:4px}
+.btn-reset:hover{border-color:var(--text-muted);color:var(--text)}
+
+/* ── RIGHT / PREVIEW ── */
+.right{position:sticky;top:16px}
+.empty-state{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);min-height:480px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+.empty-inner{text-align:center;color:var(--text-muted)}
+.empty-inner svg{margin-bottom:14px;opacity:.25}
+.empty-text{font-size:15px;font-weight:600;color:var(--text-muted);margin-bottom:4px}
+.empty-sub{font-size:12px}
+.preview-area{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--panel2)}
+.toolbar-label{font-size:11px;color:var(--text-muted);font-family:'DM Mono',monospace;margin-right:4px}
+.bg-selector{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.btn-bg{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--panel);color:var(--text-muted);font-size:11px;cursor:pointer;transition:all .15s}
+.btn-bg.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.zoom-controls{display:flex;align-items:center;gap:6px}
+.btn-zoom{width:26px;height:26px;border-radius:5px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s}
+.btn-zoom:hover{border-color:var(--accent)}
+.zoom-level{font-size:11px;min-width:36px;text-align:center;color:var(--text-muted);font-family:'DM Mono',monospace}
+.btn-zoom-fit{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--panel);color:var(--text-muted);font-size:11px;cursor:pointer;transition:all .15s}
+.btn-zoom-fit:hover{border-color:var(--accent);color:var(--accent)}
+.canvas-wrapper{position:relative;background:#f0ebe4;min-height:380px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+canvas{display:block;max-width:100%;cursor:grab}
+canvas:active{cursor:grabbing}
+/* checkerboard bg */
+.bg-checker{background-image:linear-gradient(45deg,#ddd5cb 25%,transparent 25%),linear-gradient(-45deg,#ddd5cb 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ddd5cb 75%),linear-gradient(-45deg,transparent 75%,#ddd5cb 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;background-color:#ede8e2}
+.bg-white{background:#fff}
+.bg-black{background:#1a1210}
+.bg-gray{background:#b0a8a0}
+.processing-overlay{position:absolute;inset:0;background:rgba(245,240,235,0.85);display:flex;align-items:center;justify-content:center;z-index:10;backdrop-filter:blur(2px)}
+.processing-inner{text-align:center}
+.processing-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px}
+.processing-text{font-size:13px;color:var(--text);font-family:'DM Mono',monospace}
+.score-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--border);background:var(--panel2)}
+.score-label{font-size:11px;color:var(--text-muted);font-family:'DM Mono',monospace;white-space:nowrap}
+.score-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s ease}
+.score-val{font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);min-width:40px;text-align:right}
+.action-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--border);flex-wrap:wrap;background:var(--panel)}
+.btn-action{padding:7px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text-muted);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap}
+.btn-action:hover{border-color:var(--text-muted);color:var(--text)}
+.btn-action.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;margin-left:auto;box-shadow:0 2px 10px rgba(192,57,43,0.2)}
+.btn-action.primary:hover{opacity:.88}
+.btn-action.secondary{border-color:rgba(192,57,43,0.4);color:var(--accent)}
+.btn-action.secondary:hover{background:var(--accent-dim)}
+.print-ready-legend{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ok);font-family:'DM Mono',monospace}
+.dpi-export-group{display:flex;align-items:center;gap:4px}
+.export-label{font-size:11px;color:var(--text-muted);margin-right:2px;font-family:'DM Mono',monospace}
+.btn-dpi-export{padding:5px 9px;border-radius:5px;border:1px solid var(--border);background:var(--panel);color:var(--text-muted);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;transition:all .15s}
+.btn-dpi-export.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+/* ── CLEANUP SLIDER BLOCK ── */
+.cleanup-block{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);display:none}
+.cleanup-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cleanup-title{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.cleanup-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--accent)}
+.cleanup-desc{font-size:11.5px;color:var(--text-muted);margin-top:6px;line-height:1.5}
+
+/* ── CM INPUTS ── */
+.cm-block{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);display:none}
+.cm-title{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.cm-row{display:flex;gap:10px;align-items:flex-end}
+.cm-field{flex:1;display:flex;flex-direction:column;gap:4px}
+.cm-label{font-size:11.5px;color:var(--text-muted)}
+.cm-input{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Mono',monospace;background:var(--panel2);color:var(--text);outline:none;transition:border-color .2s}
+.cm-input:focus{border-color:var(--accent)}
+.cm-btn{padding:7px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.cm-btn:hover{opacity:.88}
+.cm-note{font-size:11px;color:var(--text-muted);margin-top:6px}
+
+/* ── MAGNIFIER LENS ── */
+.magnifier-lens{position:absolute;width:140px;height:140px;border-radius:50%;border:2px solid var(--accent);overflow:hidden;pointer-events:none;display:none;z-index:20;box-shadow:0 4px 20px rgba(44,36,32,0.25);background:#000}
+.magnifier-canvas{position:absolute;image-rendering:pixelated}
+.magnifier-cross{position:absolute;inset:0;pointer-events:none}
+.magnifier-cross::before,.magnifier-cross::after{content:'';position:absolute;background:rgba(192,57,43,0.6)}
+.magnifier-cross::before{width:1px;height:100%;left:50%;transform:translateX(-50%)}
+.magnifier-cross::after{height:1px;width:100%;top:50%;transform:translateY(-50%)}
+.magnifier-label{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.85);white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.8)}
+.btn-mag{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--panel);color:var(--text-muted);font-size:11px;cursor:pointer;transition:all .15s}
+.btn-mag.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#f5f0eb;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:1000;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.green{background:var(--ok)}
+.toast.err{background:var(--err)}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="header-logo">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+          <path d="M6 6h20v5H6V6zM6 13h13v5H6v-5zM6 20h15v5H6v-5z" fill="#fff"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Escáner DTF <span class="accent">Chechena</span> <span style="font-style:italic;">Shirts</span></h1>
+        <p class="header-sub">Analiza, diagnostica y corrige tus archivos PNG para impresión DTF profesional</p>
+      </div>
+    </div>
+    <div class="header-badge">PRO TOOL</div>
+  </header>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- LEFT -->
+    <div class="left">
+      <!-- Upload -->
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/png" hidden>
+        <div class="upload-inner">
+          <svg class="upload-icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="23" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+            <path d="M24 32V18M24 18l-5 5M24 18l5 5" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 35h16" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+          </svg>
+          <div class="upload-text">Arrastra tu PNG aquí</div>
+          <div class="upload-sub">o <span class="upload-link" id="uploadLink">haz clic para seleccionar</span></div>
+          <div class="upload-hint mono">Solo archivos PNG · Sin límite de tamaño</div>
+        </div>
+      </div>
+
+      <!-- Cleanup slider (visible siempre) -->
+      <div class="cleanup-block" id="cleanupBlock">
+        <div class="cleanup-header">
+          <span class="cleanup-title">🧹 Limpieza de bloques</span>
+          <span class="cleanup-val" id="cleanupVal">5</span>
+        </div>
+        <input type="range" id="cleanupRange" min="0" max="10" step="1" value="5">
+        <div class="cleanup-desc">Controla el umbral mínimo de elementos a eliminar (en px). Valor 0 = sin limpieza. Se aplica automáticamente al analizar.</div>
+      </div>
+
+      <!-- Dimensiones físicas cm -->
+      <div class="cm-block" id="cmBlock">
+        <div class="cm-title">📐 Tamaño físico (opcional)</div>
+        <div class="cm-row">
+          <div class="cm-field">
+            <label class="cm-label">Ancho (cm)</label>
+            <input class="cm-input" id="cmW" type="number" step="0.1" min="0.1" placeholder="ej. 10.5">
+          </div>
+          <div class="cm-field">
+            <label class="cm-label">Alto (cm)</label>
+            <input class="cm-input" id="cmH" type="number" step="0.1" min="0.1" placeholder="ej. 8.0">
+          </div>
+          <button class="cm-btn" id="cmApply">Aplicar</button>
+        </div>
+        <div class="cm-note" id="cmNote">Si ingresas las dimensiones reales, el DPI se recalculará con precisión.</div>
+      </div>
+
+      <!-- File info -->
+      <div class="block" id="fileInfoBlock" style="display:none">
+        <div class="block-title">◉ Información del archivo</div>
+        <div class="info-grid">
+          <div class="info-row"><span class="info-label">Nombre</span><span class="info-val mono" id="infoName">—</span></div>
+          <div class="info-row"><span class="info-label">Formato</span><span class="info-val" id="infoFormat">—</span></div>
+          <div class="info-row"><span class="info-label">Peso</span><span class="info-val mono" id="infoSize">—</span></div>
+          <div class="info-row"><span class="info-label">Dimensiones</span><span class="info-val mono" id="infoDimPx">—</span></div>
+          <div class="info-row"><span class="info-label">Tamaño físico</span><span class="info-val mono" id="infoDimCm">—</span></div>
+          <div class="info-row"><span class="info-label">DPI detectado</span><span class="info-val mono" id="infoDPI">—</span></div>
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="block" id="checklistBlock" style="display:none">
+        <div class="block-title">◈ Diagnóstico DTF</div>
+
+        <!-- BOTÓN ANALIZAR -->
+        <button class="btn-analizar" id="btnAnalizar">
+          <span class="btn-analizar-icon">🔍</span> Analizar archivo
+        </button>
+        <div class="check-module" id="mod-semi" style="margin-bottom:10px">
+          <div class="mod-header">
+            <div class="mod-name-row">
+              <div class="mod-number">01</div>
+              <div class="mod-name">Semitransparencias</div>
+            </div>
+            <div class="mod-badge" id="badge-semi">—</div>
+          </div>
+          <div class="mod-msg" id="msg-semi">Esperando análisis...</div>
+          <div class="mod-controls" id="ctrl-semi" style="display:none">
+            <div class="ctrl-row">
+              <label class="ctrl-label">Umbral <span class="ctrl-val" id="semi-thresh-val">25</span></label>
+              <input type="range" id="semi-thresh" min="1" max="128" value="25">
+            </div>
+            <div class="ctrl-row">
+              <label class="ctrl-label">Modo</label>
+              <select id="semi-mode" class="ctrl-select">
+                <option value="moderate">Moderado</option>
+                <option value="aggressive">Agresivo</option>
+              </select>
+            </div>
+            <button class="btn-fix" id="fix-semi">Corregir semitransparencias</button>
+          </div>
+        </div>
+
+        <!-- 02 Fondo -->
+        <div class="check-module" id="mod-bg" style="margin-bottom:10px">
+          <div class="mod-header">
+            <div class="mod-name-row">
+              <div class="mod-number">02</div>
+              <div class="mod-name">Fondo</div>
+            </div>
+            <div class="mod-badge" id="badge-bg">—</div>
+          </div>
+          <div class="mod-msg" id="msg-bg">Esperando análisis...</div>
+          <div class="mod-controls" id="ctrl-bg" style="display:none">
+            <div class="bg-auto-desc">Detección y eliminación automática del color de fondo dominante, incluso dentro del diseño y semitonos.</div>
+            <button class="btn-fix" id="fix-bg">Eliminar fondo automáticamente</button>
+          </div>
+        </div>
+
+        <!-- 03 Resolución -->
+        <div class="check-module" id="mod-res" style="margin-bottom:10px">
+          <div class="mod-header">
+            <div class="mod-name-row">
+              <div class="mod-number">03</div>
+              <div class="mod-name">Resolución / DPI</div>
+            </div>
+            <div class="mod-badge" id="badge-res">—</div>
+          </div>
+          <div class="mod-msg" id="msg-res">Esperando análisis...</div>
+          <div class="mod-controls" id="ctrl-res" style="display:none">
+            <div class="ctrl-row">
+              <label class="ctrl-label">DPI objetivo para exportar</label>
+              <div class="dpi-toggle-group">
+                <button class="btn-dpi-tog active" data-dpi="300" id="dpiBtn300">300 DPI</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 Bordes -->
+        <div class="check-module" id="mod-bor" style="margin-bottom:16px">
+          <div class="mod-header">
+            <div class="mod-name-row">
+              <div class="mod-number">04</div>
+              <div class="mod-name">Bordes / Limpieza</div>
+            </div>
+            <div class="mod-badge" id="badge-bor">—</div>
+          </div>
+          <div class="mod-msg" id="msg-bor">Esperando análisis...</div>
+          <div class="mod-controls" id="ctrl-bor" style="display:none">
+            <div class="ctrl-row">
+              <label class="ctrl-label">Contracción <span class="ctrl-val" id="contract-val">1</span>px</label>
+              <input type="range" id="contract-px" min="1" max="3" value="1">
+            </div>
+            <button class="btn-fix" id="fix-bor">Limpiar bordes</button>
+          </div>
+        </div>
+
+        <!-- 05 Elementos Pequeños -->
+        <div class="check-module" id="mod-sml" style="margin-bottom:16px">
+          <div class="mod-header">
+            <div class="mod-name-row">
+              <div class="mod-number">05</div>
+              <div class="mod-name">Elementos pequeños</div>
+            </div>
+            <div class="mod-badge" id="badge-sml">—</div>
+          </div>
+          <div class="mod-msg" id="msg-sml">Esperando análisis...</div>
+          <div class="mod-controls" id="ctrl-sml" style="display:none">
+            <div class="ctrl-row">
+              <label class="ctrl-label">Umbral mínimo <span class="ctrl-val" id="sml-thresh-val">4</span> px</label>
+              <input type="range" id="sml-thresh" min="1" max="20" value="4">
+            </div>
+            <div class="bg-auto-desc" style="margin-bottom:2px">Elimina componentes opacos cuyo tamaño máximo (ancho o alto) sea menor al umbral. Útil para remover puntos sueltos, detalles imperceptibles o ruido de fondo.</div>
+            <button class="btn-fix" id="fix-sml">Eliminar elementos pequeños</button>
+          </div>
+        </div>
+
+        <!-- 06 Trazos finos -->
+        <div class="check-module" id="mod-thin" style="margin-bottom:16px">
+          <div class="mod-header">
+            <div class="mod-name-row">
+              <div class="mod-number">06</div>
+              <div class="mod-name">Trazos finos</div>
+            </div>
+            <div class="mod-badge" id="badge-thin">—</div>
+          </div>
+          <div class="mod-msg" id="msg-thin">Esperando análisis...</div>
+          <div class="mod-controls" id="ctrl-thin" style="display:none">
+            <div class="bg-auto-desc">Trazos menores a <strong>4 px</strong> pueden desaparecer o verse cortados al imprimir en DTF. Se recomienda engrosar manualmente en el diseño original, o usar el engrosador automático.</div>
+            <div class="ctrl-row" style="margin-top:4px">
+              <label class="ctrl-label">Engrosamiento <span class="ctrl-val" id="thin-px-val">2</span> px</label>
+              <input type="range" id="thin-px" min="1" max="6" value="2">
+            </div>
+            <button class="btn-fix" id="fix-thin">Engrosar trazos finos</button>
+          </div>
+        </div>
+
+        <!-- Analyzing (pasos animados) -->
+        <div class="analyzing-state" id="analyzingState" style="display:none">
+          <div class="analyzing-spinner"></div>
+          <div class="analyzing-title">Analizando archivo...</div>
+          <div class="analyzing-steps">
+            <div class="analyzing-step" id="step-semi"><span class="step-dot"></span>Semitransparencias</div>
+            <div class="analyzing-step" id="step-bg"><span class="step-dot"></span>Fondo</div>
+            <div class="analyzing-step" id="step-res"><span class="step-dot"></span>Resolución</div>
+            <div class="analyzing-step" id="step-bor"><span class="step-dot"></span>Bordes</div>
+            <div class="analyzing-step" id="step-sml"><span class="step-dot"></span>Elementos pequeños</div>
+            <div class="analyzing-step" id="step-thin"><span class="step-dot"></span>Trazos finos</div>
+          </div>
+        </div>
+
+        <button class="btn-fix-all" id="btnFixAll" style="display:none">
+          <span class="fix-all-icon">⚡</span> Corregir todo automáticamente
+        </button>
+
+        <button class="btn-reset" id="btnReset">Cargar otra imagen</button>
+      </div>
+    </div><!-- /left -->
+
+    <!-- RIGHT -->
+    <div class="right">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-inner">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <rect x="12" y="8" width="40" height="48" rx="6" stroke="#8c7b72" stroke-width="2"/>
+            <rect x="18" y="18" width="18" height="18" rx="3" stroke="#8c7b72" stroke-width="1.5"/>
+            <line x1="18" y1="42" x2="46" y2="42" stroke="#8c7b72" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="18" y1="48" x2="38" y2="48" stroke="#8c7b72" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div class="empty-text">Sube un PNG para comenzar</div>
+          <div class="empty-sub">El análisis automático se ejecutará al instante</div>
+        </div>
+      </div>
+
+      <div class="preview-area" id="previewArea" style="display:none">
+        <div class="preview-toolbar">
+          <div class="bg-selector">
+            <span class="toolbar-label">Fondo</span>
+            <button class="btn-bg active" data-bg="checker">Checker</button>
+            <button class="btn-bg" data-bg="white">Blanco</button>
+            <button class="btn-bg" data-bg="black">Negro</button>
+            <button class="btn-bg" data-bg="gray">Gris</button>
+          </div>
+          <div class="zoom-controls">
+            <button class="btn-zoom" id="btnZoomOut">−</button>
+            <span class="zoom-level mono" id="zoomLevel">100%</span>
+            <button class="btn-zoom" id="btnZoomIn">+</button>
+            <button class="btn-zoom-fit" id="btnZoomFit">Ajustar</button>
+            <button class="btn-mag" id="btnMag" title="Lupa de zoom">🔍 Lupa</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrapper bg-checker" id="canvasWrapper">
+          <canvas id="previewCanvas"></canvas>
+          <div class="scan-overlay" id="scanOverlay">
+            <div class="scan-glow"></div>
+            <div class="scan-line"></div>
+          </div>
+          <div class="magnifier-lens" id="magnifierLens">
+            <canvas class="magnifier-canvas" id="magnifierCanvas"></canvas>
+            <div class="magnifier-cross"></div>
+            <span class="magnifier-label" id="magnifierLabel"></span>
+          </div>
+          <div class="processing-overlay" id="processingOverlay" style="display:none">
+            <div class="processing-inner">
+              <div class="processing-spinner"></div>
+              <div class="processing-text" id="processingText">Procesando...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="score-bar" id="scoreBar" style="display:none">
+          <span class="score-label">Puntuación DTF</span>
+          <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+          <span class="score-val mono" id="scoreVal">—</span>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn-action" id="btnCompare">⇄ Comparar</button>
+          <button class="btn-action" id="btnRestore">↺ Restaurar</button>
+          <div class="print-ready-legend" id="printReadyLegend" style="display:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Lista para impresión
+          </div>
+          <div class="dpi-export-group">
+            <span class="export-label">Exportar</span>
+            <button class="btn-dpi-export active" data-dpi="300" id="exportBtn300">300 DPI</button>
+          </div>
+          <button class="btn-action primary" id="btnDownload">↓ Descargar PNG</button>
+          <button class="btn-action secondary" id="btnDownloadPdf">PDF sin fondo</button>
+        </div>
+      </div>
+    </div><!-- /right -->
+
+  </div><!-- /layout -->
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<!-- pdf-lib for PDF export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let originalImageData = null;  // ImageData of original
+let currentImageData = null;   // ImageData of current (working)
+let originalFile = null;
+let imgW = 0, imgH = 0;
+let detectedDPI = 72;
+let exportDPI = 300;
+let zoomScale = 1;
+let isComparing = false;
+
+const canvas = document.getElementById('previewCanvas');
+const ctx = canvas.getContext('2d');
+
+// ═══════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(t._tid);
+  t._tid = setTimeout(()=>t.className='toast', 2600);
+}
+
+function showProcessing(text='Procesando...') {
+  document.getElementById('processingOverlay').style.display='flex';
+  document.getElementById('processingText').textContent = text;
+}
+function hideProcessing() {
+  document.getElementById('processingOverlay').style.display='none';
+}
+
+function setBadge(id, label, type) {
+  const b = document.getElementById(id);
+  b.textContent = label;
+  b.className = 'mod-badge ' + type;
+}
+
+function setMsg(id, text) {
+  document.getElementById(id).textContent = text;
+}
+
+function renderCanvas() {
+  if (!currentImageData) return;
+  canvas.width = imgW;
+  canvas.height = imgH;
+  ctx.putImageData(currentImageData, 0, 0);
+  applyZoom();
+}
+
+function applyZoom() {
+  canvas.style.width  = Math.round(imgW * zoomScale) + 'px';
+  canvas.style.height = Math.round(imgH * zoomScale) + 'px';
+  document.getElementById('zoomLevel').textContent = Math.round(zoomScale*100) + '%';
+}
+
+function fitZoom() {
+  const wrap = document.getElementById('canvasWrapper');
+  const maxW = wrap.clientWidth - 32;
+  const maxH = 500;
+  const scale = Math.min(maxW / imgW, maxH / imgH, 1);
+  zoomScale = Math.round(scale * 100) / 100;
+  applyZoom();
+}
+
+function cloneImageData(src) {
+  const dst = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
+  return dst;
+}
+
+function formatBytes(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+  return (b/1048576).toFixed(2) + ' MB';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UPLOAD HANDLING
+// ═══════════════════════════════════════════════════════════
+const uploadZone = document.getElementById('uploadZone');
+const fileInput  = document.getElementById('fileInput');
+
+document.getElementById('uploadLink').onclick = () => fileInput.click();
+uploadZone.onclick = (e) => { if (e.target !== document.getElementById('uploadLink')) fileInput.click(); };
+
+uploadZone.ondragover = (e) => { e.preventDefault(); uploadZone.classList.add('drag'); };
+uploadZone.ondragleave = () => uploadZone.classList.remove('drag');
+uploadZone.ondrop = (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+};
+
+fileInput.onchange = () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); };
+
+function handleFile(file) {
+  if (file.type !== 'image/png') { showToast('Solo se aceptan archivos PNG', 'err'); return; }
+  originalFile = file;
+  const reader = new FileReader();
+  reader.onload = (e) => loadImage(e.target.result, file);
+  reader.readAsDataURL(file);
+}
+
+function loadImage(src, file) {
+  const img = new Image();
+  img.onload = () => {
+    imgW = img.naturalWidth;
+    imgH = img.naturalHeight;
+
+    // Draw to off-screen canvas to get ImageData
+    const tmp = document.createElement('canvas');
+    tmp.width = imgW; tmp.height = imgH;
+    const tc = tmp.getContext('2d');
+    tc.drawImage(img, 0, 0);
+    originalImageData = tc.getImageData(0, 0, imgW, imgH);
+    currentImageData  = cloneImageData(originalImageData);
+
+    // Heuristic DPI from file size vs pixel count
+    detectedDPI = estimateDPI(file.size, imgW, imgH);
+
+    // Populate info
+    document.getElementById('infoName').textContent    = file.name;
+    document.getElementById('infoFormat').textContent  = 'PNG';
+    document.getElementById('infoSize').textContent    = formatBytes(file.size);
+    document.getElementById('infoDimPx').textContent   = imgW + ' × ' + imgH + ' px';
+    const cmW = (imgW / detectedDPI * 2.54).toFixed(1);
+    const cmH = (imgH / detectedDPI * 2.54).toFixed(1);
+    document.getElementById('infoDimCm').textContent   = cmW + ' × ' + cmH + ' cm';
+    document.getElementById('infoDPI').textContent     = detectedDPI + ' DPI';
+
+    // Show UI
+    document.getElementById('fileInfoBlock').style.display  = 'block';
+    document.getElementById('checklistBlock').style.display = 'block';
+    document.getElementById('emptyState').style.display     = 'none';
+    document.getElementById('previewArea').style.display    = 'block';
+    document.getElementById('cleanupBlock').style.display   = 'block';
+    document.getElementById('cmBlock').style.display        = 'block';
+
+    // Mostrar botón analizar — no analizar automáticamente
+    const btnA = document.getElementById('btnAnalizar');
+    btnA.style.display = 'flex';
+    btnA.style.marginBottom = '14px';
+
+    renderCanvas();
+    fitZoom();
+    // NO llamar runAnalysis() aquí — el usuario presiona el botón
+  };
+  img.src = src;
+}
+
+function estimateDPI(bytes, w, h) {
+  // PNG is compressed; a rough heuristic
+  const megapixels = (w * h) / 1e6;
+  if (megapixels >= 25) return 300;
+  if (megapixels >= 6) return 150;
+  return 72;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ANALYSIS
+// ═══════════════════════════════════════════════════════════
+function stepActive(id)  { const el=document.getElementById('step-'+id); if(el){el.className='analyzing-step active';} }
+function stepDone(id)    { const el=document.getElementById('step-'+id); if(el){el.className='analyzing-step done'; el.querySelector('.step-dot').textContent='';} }
+function modScanDone(id) { const m=document.getElementById('mod-'+id); if(m){m.classList.remove('scanning');m.classList.add('scan-done');} }
+
+function runAnalysis() {
+  if (!originalImageData) return;
+
+  // Reset modules to scanning state
+  ['semi','bg','res','bor','sml','thin'].forEach(k => {
+    const m = document.getElementById('mod-'+k);
+    if (m) { m.className = 'check-module scanning'; }
+    const ctrl = document.getElementById('ctrl-'+k);
+    if (ctrl) ctrl.style.display = 'none';
+    setBadge('badge-'+k, '—', '');
+    setMsg('msg-'+k, 'Analizando...');
+    const step = document.getElementById('step-'+k);
+    if (step) step.className = 'analyzing-step';
+  });
+
+  document.getElementById('analyzingState').style.display = 'flex';
+  document.getElementById('btnFixAll').style.display = 'none';
+  document.getElementById('scoreBar').style.display = 'none';
+  document.getElementById('btnAnalizar').style.display = 'none';
+
+  // Start scan animation on canvas
+  const scanOverlay = document.getElementById('scanOverlay');
+  scanOverlay.style.display = 'block';
+
+  const d = originalImageData.data;
+  const total = d.length / 4;
+
+  // ── Run each check with a staggered delay for visual effect ──
+  const STEP = 420; // ms between steps
+
+  // Step 1 — Semitransparencias
+  setTimeout(() => {
+    stepActive('semi');
+    let semiCount = 0;
+    for (let i = 0; i < d.length; i += 4) { const a=d[i+3]; if(a>0&&a<255) semiCount++; }
+    window._analysis = window._analysis || {};
+    window._analysis.semiCount = semiCount;
+    window._analysis.semiPct   = (semiCount / total * 100).toFixed(1);
+    const pct = window._analysis.semiPct;
+    if (semiCount === 0) {
+      setBadge('badge-semi','✓ OK','ok'); setMsg('msg-semi','Sin semitransparencias detectadas.');
+      document.getElementById('mod-semi').className='check-module ok';
+    } else {
+      setBadge('badge-semi', pct+'% afectado', pct>10?'err':'warn');
+      setMsg('msg-semi', semiCount.toLocaleString()+' píxeles con alfa parcial ('+pct+'%). Pueden verse como manchas en la impresión DTF.');
+      document.getElementById('ctrl-semi').style.display='flex';
+      document.getElementById('mod-semi').className='check-module has-issue';
+    }
+    stepDone('semi'); modScanDone('semi');
+  }, STEP * 1);
+
+  // Step 2 — Fondo
+  setTimeout(() => {
+    stepActive('bg');
+    const bgColor = detectBackground(d, imgW, imgH);
+    window._analysis.bgColor = bgColor;
+    if (bgColor) {
+      setBadge('badge-bg','⚠ Fondo detectado','warn');
+      setMsg('msg-bg',`Fondo sólido: rgb(${bgColor[0]},${bgColor[1]},${bgColor[2]}). Se recomienda eliminarlo para DTF.`);
+      document.getElementById('ctrl-bg').style.display='flex';
+      document.getElementById('mod-bg').className='check-module has-issue';
+    } else {
+      setBadge('badge-bg','✓ OK','ok'); setMsg('msg-bg','Sin fondo sólido detectado. Transparencia adecuada.');
+      document.getElementById('mod-bg').className='check-module ok';
+    }
+    stepDone('bg'); modScanDone('bg');
+  }, STEP * 2);
+
+  // Step 3 — Resolución
+  setTimeout(() => {
+    stepActive('res');
+    if (detectedDPI >= 300) {
+      setBadge('badge-res', detectedDPI+' DPI ✓','ok');
+      setMsg('msg-res','Resolución adecuada para DTF. Más de 300 DPI garantiza calidad de impresión.');
+      document.getElementById('mod-res').className='check-module ok';
+    } else {
+      setBadge('badge-res', detectedDPI+' DPI — bajo','warn');
+      setMsg('msg-res','Resolución detectada: '+detectedDPI+' DPI. Para DTF se recomienda mínimo 300 DPI.');
+      document.getElementById('mod-res').className='check-module has-issue';
+    }
+    document.getElementById('ctrl-res').style.display='flex';
+    stepDone('res'); modScanDone('res');
+  }, STEP * 3);
+
+  // Step 4 — Bordes
+  setTimeout(() => {
+    stepActive('bor');
+    const edgeArtifacts = detectEdgeArtifacts(d, imgW, imgH);
+    window._analysis.edgeArtifacts = edgeArtifacts;
+    if (edgeArtifacts > 0.5) {
+      setBadge('badge-bor','Artefactos','warn');
+      setMsg('msg-bor','Se detectaron artefactos en los bordes. Se recomienda limpiar para evitar halos al imprimir.');
+      document.getElementById('ctrl-bor').style.display='flex';
+      document.getElementById('mod-bor').className='check-module has-issue';
+    } else {
+      setBadge('badge-bor','✓ Bordes limpios','ok'); setMsg('msg-bor','Bordes limpios. Sin artefactos significativos.');
+      document.getElementById('mod-bor').className='check-module ok';
+    }
+    stepDone('bor'); modScanDone('bor');
+  }, STEP * 4);
+
+  // Step 5 — Elementos pequeños
+  setTimeout(() => {
+    stepActive('sml');
+    const smlThresh = Math.max(1, parseInt(document.getElementById('cleanupRange').value) || parseInt(document.getElementById('sml-thresh').value));
+    document.getElementById('sml-thresh').value = smlThresh;
+    document.getElementById('sml-thresh-val').textContent = smlThresh;
+    const smallInfo = detectSmallElements(d, imgW, imgH, smlThresh);
+    window._analysis.smallInfo = smallInfo;
+    if (smallInfo.count > 0) {
+      setBadge('badge-sml', smallInfo.count+' elemento'+(smallInfo.count>1?'s':''),'warn');
+      setMsg('msg-sml','Se encontraron '+smallInfo.count+' componente'+(smallInfo.count>1?'s':'')+' menor'+(smallInfo.count>1?'es':'')+' a '+smlThresh+' px. Pueden perderse en impresión DTF.');
+      document.getElementById('ctrl-sml').style.display='flex';
+      document.getElementById('mod-sml').className='check-module has-issue';
+    } else {
+      setBadge('badge-sml','✓ OK','ok'); setMsg('msg-sml','Sin elementos menores a '+smlThresh+' px. Diseño limpio.');
+      document.getElementById('mod-sml').className='check-module ok';
+    }
+    stepDone('sml'); modScanDone('sml');
+  }, STEP * 5);
+
+  // Step 6 — Trazos finos + score final
+  setTimeout(() => {
+    stepActive('thin');
+    const thinInfo = detectThinStrokes(d, imgW, imgH);
+    window._analysis.thinInfo = thinInfo;
+    if (thinInfo.minThickness < 4 && thinInfo.count > 0) {
+      setBadge('badge-thin','Grosor mín: '+thinInfo.minThickness+' px','err');
+      setMsg('msg-thin','Grosor mínimo detectado: '+thinInfo.minThickness+' px ❌ — '+thinInfo.count+' segmento'+(thinInfo.count>1?'s':'')+' de trazo con grosor real < 4 px. Pueden perderse en impresión DTF.');
+      document.getElementById('ctrl-thin').style.display='flex';
+      document.getElementById('mod-thin').className='check-module has-issue';
+    } else if (thinInfo.minThickness < 6 && thinInfo.count > 0) {
+      setBadge('badge-thin','Grosor mín: '+thinInfo.minThickness+' px','warn');
+      setMsg('msg-thin','Grosor mínimo: '+thinInfo.minThickness+' px ⚠ — '+thinInfo.count+' segmento'+(thinInfo.count>1?'s':'')+' cerca del límite recomendado (≥ 6 px para DTF seguro).');
+      document.getElementById('ctrl-thin').style.display='flex';
+      document.getElementById('mod-thin').className='check-module has-issue';
+    } else {
+      setBadge('badge-thin','✓ '+thinInfo.minThickness+' px mín','ok');
+      setMsg('msg-thin','Grosor mínimo: '+thinInfo.minThickness+' px ✓ — Trazos con grosor suficiente para DTF.');
+      document.getElementById('mod-thin').className='check-module ok';
+    }
+    stepDone('thin'); modScanDone('thin');
+
+    // ── Score ──
+    const a = window._analysis;
+    let score = 100;
+    if (a.semiCount > 0)            score -= (a.semiPct > 10 ? 25 : 10);
+    if (a.bgColor)                  score -= 20;
+    if (a.edgeArtifacts > 0.5)      score -= 15;
+    if (a.smallInfo.count > 0)      score -= Math.min(20, a.smallInfo.count * 5);
+    if (a.thinInfo.minThickness < 4 && a.thinInfo.count > 0)      score -= 20;
+    else if (a.thinInfo.minThickness < 6 && a.thinInfo.count > 0) score -= 10;
+    score = Math.max(0, score);
+
+    // ── Finalizar ──
+    setTimeout(() => {
+      scanOverlay.style.display = 'none';
+      document.getElementById('analyzingState').style.display = 'none';
+      document.getElementById('btnFixAll').style.display = 'flex';
+      updateScore(score);
+    }, 300);
+
+  }, STEP * 6);
+}
+
+function updateScore(score) {
+  document.getElementById('scoreBar').style.display = 'flex';
+  setTimeout(() => {
+    document.getElementById('scoreFill').style.width = score + '%';
+    document.getElementById('scoreVal').textContent = score + '/100';
+  }, 100);
+  if (score >= 80) {
+    document.getElementById('printReadyLegend').style.display = 'flex';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ANALYSIS HELPERS
+// ═══════════════════════════════════════════════════════════
+function detectBackground(data, w, h) {
+  // Sample corners & edges
+  const samples = [];
+  const addSample = (x, y) => {
+    const i = (y * w + x) * 4;
+    if (data[i+3] > 200) samples.push([data[i], data[i+1], data[i+2]]);
+  };
+  for (let x = 0; x < Math.min(w, 20); x++) { addSample(x, 0); addSample(x, h-1); }
+  for (let y = 0; y < Math.min(h, 20); y++) { addSample(0, y); addSample(w-1, y); }
+
+  if (samples.length < 5) return null;
+
+  // Find most common color cluster
+  const [r0, g0, b0] = samples[0];
+  let similar = samples.filter(([r,g,b]) => Math.abs(r-r0)+Math.abs(g-g0)+Math.abs(b-b0) < 60);
+  if (similar.length / samples.length > 0.6) {
+    // Check if this color is solid across multiple corners
+    const avgR = similar.reduce((s,[r])=>s+r,0)/similar.length|0;
+    const avgG = similar.reduce((s,[,g])=>s+g,0)/similar.length|0;
+    const avgB = similar.reduce((s,[,,b])=>s+b,0)/similar.length|0;
+    return [avgR, avgG, avgB];
+  }
+  return null;
+}
+
+function detectEdgeArtifacts(data, w, h) {
+  let artifacts = 0, checked = 0;
+  // Check pixels near opaque/transparent boundaries
+  for (let y = 1; y < h-1; y += 3) {
+    for (let x = 1; x < w-1; x += 3) {
+      const i = (y*w+x)*4;
+      const a = data[i+3];
+      if (a > 10 && a < 250) {
+        // Check neighbors
+        const neighbors = [
+          data[((y-1)*w+x)*4+3], data[((y+1)*w+x)*4+3],
+          data[(y*w+x-1)*4+3],   data[(y*w+x+1)*4+3]
+        ];
+        const hasOpaque = neighbors.some(n => n > 240);
+        const hasTransp = neighbors.some(n => n < 10);
+        if (hasOpaque && hasTransp) artifacts++;
+        checked++;
+      }
+    }
+  }
+  return checked ? artifacts/checked*100 : 0;
+}
+
+// ── Detectar grosor mínimo de trazos (transformada de distancia + medial axis) ──
+// Solo cuenta píxeles que son centros locales de trazo (máximos locales de dt),
+// evitando contar millones de píxeles de borde como "trazos finos".
+function detectThinStrokes(data, w, h) {
+  // Build binary opacity mask
+  const opaque = new Uint8Array(w * h);
+  for (let i = 0; i < data.length; i += 4) {
+    if (data[i+3] >= 128) opaque[i>>2] = 1;
+  }
+
+  // Distance transform (L∞ / Chebyshev — fast)
+  // dt[idx] = distancia al borde transparente más cercano
+  const dt = new Float32Array(w * h);
+
+  // Forward pass
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const idx = y * w + x;
+      if (!opaque[idx]) { dt[idx] = 0; continue; }
+      const top  = y > 0 ? dt[(y-1)*w+x] + 1 : 1;
+      const left = x > 0 ? dt[y*w+x-1]   + 1 : 1;
+      dt[idx] = Math.min(top, left);
+    }
+  }
+  // Backward pass
+  for (let y = h-1; y >= 0; y--) {
+    for (let x = w-1; x >= 0; x--) {
+      const idx = y * w + x;
+      if (!opaque[idx]) continue;
+      const bot   = y < h-1 ? dt[(y+1)*w+x] + 1 : dt[idx];
+      const right = x < w-1 ? dt[y*w+x+1]   + 1 : dt[idx];
+      dt[idx] = Math.min(dt[idx], bot, right);
+    }
+  }
+
+  // Solo analizar píxeles que son máximos locales (centros de trazo = medial axis).
+  // Un píxel es centro de trazo si su dt >= todos sus vecinos en 4-conectividad.
+  // El grosor real ≈ 2 * dt[idx] - 1 (diámetro del círculo inscrito).
+  let minThick = 9999;
+  let thinCount = 0;       // cantidad de trazos delgados (segmentos únicos)
+  const THRESH_DT = 2;     // dt < 2 → grosor < 4 px → problema DTF
+
+  // Muestrear cada 2 px para velocidad; suficiente para el diagnóstico
+  for (let y = 1; y < h-1; y += 2) {
+    for (let x = 1; x < w-1; x += 2) {
+      const idx = y * w + x;
+      const v = dt[idx];
+      if (v === 0) continue; // transparente
+
+      // ¿Es máximo local en 4-vecindad? (centro de trazo)
+      const isCenter = (v >= dt[(y-1)*w+x]) && (v >= dt[(y+1)*w+x]) &&
+                       (v >= dt[y*w+x-1])   && (v >= dt[y*w+x+1]);
+      if (!isCenter) continue;
+
+      const thick = Math.round(2 * v - 1); // grosor en px del trazo
+      if (thick < minThick) minThick = thick;
+      if (v < THRESH_DT) thinCount++;       // centro de trazo delgado
+    }
+  }
+
+  if (minThick === 9999) minThick = 0; // sin píxeles opacos
+  return { minThickness: minThick, count: thinCount };
+}
+
+// ── Engrosar trazos: dilación morfológica del canal alfa ──
+function thickenStrokes(imageData, w, h, px) {
+  const data = imageData.data;
+  const orig = new Uint8ClampedArray(data);
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4;
+      if (orig[i+3] >= 128) continue; // ya opaco, skip
+      // Check if any neighbor within px radius is opaque
+      let found = false;
+      outer: for (let dy = -px; dy <= px; dy++) {
+        for (let dx = -px; dx <= px; dx++) {
+          if (dx*dx + dy*dy > px*px) continue; // circular
+          const ny = y+dy, nx = x+dx;
+          if (ny<0||ny>=h||nx<0||nx>=w) continue;
+          if (orig[(ny*w+nx)*4+3] >= 128) { found = true; break outer; }
+        }
+      }
+      if (found) {
+        // Copy color from nearest opaque neighbor
+        let bestDist = Infinity, br = 0, bg = 0, bb = 0;
+        for (let dy = -px; dy <= px; dy++) {
+          for (let dx = -px; dx <= px; dx++) {
+            const ny = y+dy, nx = x+dx;
+            if (ny<0||ny>=h||nx<0||nx>=w) continue;
+            const ni = (ny*w+nx)*4;
+            if (orig[ni+3] >= 128) {
+              const d2 = dx*dx+dy*dy;
+              if (d2 < bestDist) { bestDist=d2; br=orig[ni]; bg=orig[ni+1]; bb=orig[ni+2]; }
+            }
+          }
+        }
+        data[i]=br; data[i+1]=bg; data[i+2]=bb; data[i+3]=255;
+      }
+    }
+  }
+}
+function detectSmallElements(data, w, h, threshPx) {
+  const alpha = new Uint8Array(w * h);
+  for (let i = 0; i < data.length; i += 4) alpha[i>>2] = data[i+3];
+
+  const visited = new Uint8Array(w * h);
+  let count = 0;
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const idx = y * w + x;
+      if (visited[idx] || alpha[idx] < 128) continue;
+
+      // BFS flood fill
+      const queue = [idx];
+      visited[idx] = 1;
+      let minX = x, maxX = x, minY = y, maxY = y;
+      let head = 0;
+
+      while (head < queue.length) {
+        const cur = queue[head++];
+        const cx = cur % w, cy = (cur / w) | 0;
+        if (cx < minX) minX = cx; if (cx > maxX) maxX = cx;
+        if (cy < minY) minY = cy; if (cy > maxY) maxY = cy;
+
+        const neighbors4 = [cur-1, cur+1, cur-w, cur+w];
+        for (const nb of neighbors4) {
+          if (nb < 0 || nb >= w*h) continue;
+          const nx = nb % w;
+          // Avoid wrap-around
+          if (Math.abs(nx - (cur%w)) > 1) continue;
+          if (!visited[nb] && alpha[nb] >= 128) { visited[nb] = 1; queue.push(nb); }
+        }
+      }
+
+      const bboxW = maxX - minX + 1;
+      const bboxH = maxY - minY + 1;
+      if (Math.max(bboxW, bboxH) < threshPx) count++;
+    }
+  }
+  return { count };
+}
+
+// ── Eliminar componentes opacos pequeños ──
+function removeSmallElements(imageData, w, h, threshPx) {
+  const data = imageData.data;
+  const alpha = new Uint8Array(w * h);
+  for (let i = 0; i < data.length; i += 4) alpha[i>>2] = data[i+3];
+
+  const visited = new Uint8Array(w * h);
+  let removed = 0;
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const idx = y * w + x;
+      if (visited[idx] || alpha[idx] < 128) continue;
+
+      // BFS
+      const component = [idx];
+      visited[idx] = 1;
+      let minX = x, maxX = x, minY = y, maxY = y;
+      let head = 0;
+
+      while (head < component.length) {
+        const cur = component[head++];
+        const cx = cur % w, cy = (cur / w) | 0;
+        if (cx < minX) minX = cx; if (cx > maxX) maxX = cx;
+        if (cy < minY) minY = cy; if (cy > maxY) maxY = cy;
+
+        const neighbors4 = [cur-1, cur+1, cur-w, cur+w];
+        for (const nb of neighbors4) {
+          if (nb < 0 || nb >= w*h) continue;
+          if (Math.abs((nb%w) - (cur%w)) > 1) continue;
+          if (!visited[nb] && alpha[nb] >= 128) { visited[nb] = 1; component.push(nb); }
+        }
+      }
+
+      const bboxW = maxX - minX + 1;
+      const bboxH = maxY - minY + 1;
+      if (Math.max(bboxW, bboxH) < threshPx) {
+        for (const idx2 of component) data[(idx2<<2)+3] = 0;
+        removed++;
+      }
+    }
+  }
+  return removed;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PROCESSORS
+// ═══════════════════════════════════════════════════════════
+
+// Fix semitransparencies
+document.getElementById('semi-thresh').oninput = function() {
+  document.getElementById('semi-thresh-val').textContent = this.value;
+};
+
+document.getElementById('fix-semi').onclick = () => {
+  showProcessing('Corrigiendo semitransparencias...');
+  setTimeout(() => {
+    const thresh = parseInt(document.getElementById('semi-thresh').value);
+    const mode = document.getElementById('semi-mode').value;
+    const data = cloneImageData(currentImageData);
+    const d = data.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const a = d[i+3];
+      if (a === 0 || a === 255) continue;
+      if (mode === 'aggressive') {
+        d[i+3] = a > 127 ? 255 : 0;
+      } else {
+        d[i+3] = a >= thresh ? 255 : 0;
+      }
+    }
+    currentImageData = data;
+    renderCanvas();
+    hideProcessing();
+    showToast('Semitransparencias corregidas', 'green');
+    setBadge('badge-semi', '✓ Corregido', 'ok');
+    document.getElementById('mod-semi').className = 'check-module ok';
+  }, 60);
+};
+
+// Remove background
+document.getElementById('fix-bg').onclick = () => {
+  showProcessing('Eliminando fondo...');
+  setTimeout(() => {
+    const data = cloneImageData(currentImageData);
+    const d = data.data;
+    const bgColor = detectBackground(d, imgW, imgH);
+    if (!bgColor) { hideProcessing(); showToast('No se encontró fondo para eliminar'); return; }
+    const [br, bg, bb] = bgColor;
+    const tolerance = 40;
+    for (let i = 0; i < d.length; i += 4) {
+      const dr = Math.abs(d[i]-br), dg = Math.abs(d[i+1]-bg), db = Math.abs(d[i+2]-bb);
+      if (dr+dg+db < tolerance*3) d[i+3] = 0;
+    }
+    currentImageData = data;
+    renderCanvas();
+    hideProcessing();
+    showToast('Fondo eliminado', 'green');
+    setBadge('badge-bg', '✓ Eliminado', 'ok');
+    document.getElementById('mod-bg').className = 'check-module ok';
+  }, 60);
+};
+
+// Fix borders
+document.getElementById('contract-px').oninput = function() {
+  document.getElementById('contract-val').textContent = this.value;
+};
+
+document.getElementById('fix-bor').onclick = () => {
+  showProcessing('Limpiando bordes...');
+  setTimeout(() => {
+    const px = parseInt(document.getElementById('contract-px').value);
+    const data = cloneImageData(currentImageData);
+    const d = data.data;
+    const orig = new Uint8ClampedArray(d);
+    // Erode alpha channel
+    for (let y = 0; y < imgH; y++) {
+      for (let x = 0; x < imgW; x++) {
+        const i = (y*imgW+x)*4;
+        if (orig[i+3] === 0) continue;
+        // Check neighborhood
+        let minA = 255;
+        for (let dy = -px; dy <= px; dy++) {
+          for (let dx = -px; dx <= px; dx++) {
+            const ny = y+dy, nx = x+dx;
+            if (ny<0||ny>=imgH||nx<0||nx>=imgW) { minA=0; continue; }
+            minA = Math.min(minA, orig[(ny*imgW+nx)*4+3]);
+          }
+        }
+        d[i+3] = minA;
+      }
+    }
+    currentImageData = data;
+    renderCanvas();
+    hideProcessing();
+    showToast('Bordes limpiados', 'green');
+    setBadge('badge-bor', '✓ Limpios', 'ok');
+    document.getElementById('mod-bor').className = 'check-module ok';
+  }, 60);
+};
+
+// Fix small elements
+document.getElementById('sml-thresh').oninput = function() {
+  document.getElementById('sml-thresh-val').textContent = this.value;
+};
+
+document.getElementById('fix-sml').onclick = () => {
+  showProcessing('Eliminando elementos pequeños...');
+  setTimeout(() => {
+    const thresh = parseInt(document.getElementById('sml-thresh').value);
+    const data = cloneImageData(currentImageData);
+    const removed = removeSmallElements(data, imgW, imgH, thresh);
+    currentImageData = data;
+    renderCanvas();
+    hideProcessing();
+    if (removed > 0) {
+      showToast(removed + ' elemento' + (removed>1?'s':'') + ' eliminado' + (removed>1?'s':''), 'green');
+      setBadge('badge-sml', '✓ Limpiado', 'ok');
+      document.getElementById('mod-sml').className = 'check-module ok';
+      setMsg('msg-sml', 'Se eliminaron ' + removed + ' componente' + (removed>1?'s':'') + ' menores a ' + thresh + ' px.');
+    } else {
+      showToast('No se encontraron elementos para eliminar');
+    }
+  }, 80);
+};
+
+// Fix thin strokes
+document.getElementById('thin-px').oninput = function() {
+  document.getElementById('thin-px-val').textContent = this.value;
+};
+
+document.getElementById('fix-thin').onclick = () => {
+  showProcessing('Engrosando trazos finos...');
+  setTimeout(() => {
+    const px = parseInt(document.getElementById('thin-px').value);
+    const data = cloneImageData(currentImageData);
+    thickenStrokes(data, imgW, imgH, px);
+    currentImageData = data;
+    renderCanvas();
+    hideProcessing();
+    showToast('Trazos engrosados +' + px + ' px', 'green');
+    setBadge('badge-thin', '✓ Engrosado', 'ok');
+    document.getElementById('mod-thin').className = 'check-module ok';
+    setMsg('msg-thin', 'Trazos engrosados +' + px + ' px. Recomendamos verificar visualmente el resultado.');
+  }, 80);
+};
+document.getElementById('btnFixAll').onclick = () => {
+  showProcessing('Aplicando todas las correcciones...');
+  setTimeout(() => {
+    // Run all fixes sequentially on cloned data
+    const data = cloneImageData(originalImageData);
+    const d = data.data;
+    const thresh = 25;
+
+    // 1. Semi
+    for (let i = 0; i < d.length; i += 4) {
+      const a = d[i+3];
+      if (a>0 && a<255) d[i+3] = a >= thresh ? 255 : 0;
+    }
+    // 2. BG
+    const bgColor = detectBackground(d, imgW, imgH);
+    if (bgColor) {
+      const [br,bg,bb] = bgColor;
+      for (let i = 0; i < d.length; i += 4) {
+        if (Math.abs(d[i]-br)+Math.abs(d[i+1]-bg)+Math.abs(d[i+2]-bb) < 120) d[i+3]=0;
+      }
+    }
+    // 3. Borders (colores NO se tocan — sección independiente)
+    const orig2=new Uint8ClampedArray(d);
+    for(let y=0;y<imgH;y++){for(let x=0;x<imgW;x++){const i=(y*imgW+x)*4;if(orig2[i+3]===0)continue;let mn=255;for(let dy=-1;dy<=1;dy++){for(let dx=-1;dx<=1;dx++){const ny=y+dy,nx=x+dx;if(ny<0||ny>=imgH||nx<0||nx>=imgW){mn=0;continue;}mn=Math.min(mn,orig2[(ny*imgW+nx)*4+3]);}}d[i+3]=mn;}}
+
+    // 4. Small elements
+    removeSmallElements(data, imgW, imgH, 4);
+
+    // 5. Thicken thin strokes (only if needed)
+    thickenStrokes(data, imgW, imgH, 2);
+
+    currentImageData = data;
+    renderCanvas();
+    hideProcessing();
+    showToast('¡Todo corregido automáticamente!', 'green');
+
+    ['semi','bg','bor','sml','thin'].forEach(k=>{ setBadge('badge-'+k,'✓ Corregido','ok'); document.getElementById('mod-'+k).className='check-module ok'; });
+    if (detectedDPI>=300) setBadge('badge-res',detectedDPI+' DPI ✓','ok');
+    updateScore(95);
+  }, 80);
+};
+
+// ═══════════════════════════════════════════════════════════
+//  DPI TOGGLES
+// ═══════════════════════════════════════════════════════════
+document.querySelectorAll('.btn-dpi-tog').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.btn-dpi-tog').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+});
+document.querySelectorAll('.btn-dpi-export').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.btn-dpi-export').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    exportDPI = parseInt(btn.dataset.dpi);
+  };
+});
+
+// ═══════════════════════════════════════════════════════════
+//  ZOOM
+// ═══════════════════════════════════════════════════════════
+document.getElementById('btnZoomIn').onclick  = () => { zoomScale = Math.min(4, +(zoomScale+0.25).toFixed(2)); applyZoom(); };
+document.getElementById('btnZoomOut').onclick = () => { zoomScale = Math.max(0.1, +(zoomScale-0.25).toFixed(2)); applyZoom(); };
+document.getElementById('btnZoomFit').onclick = () => fitZoom();
+
+// ═══════════════════════════════════════════════════════════
+//  BACKGROUND SELECTOR
+// ═══════════════════════════════════════════════════════════
+document.querySelectorAll('.btn-bg').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.btn-bg').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const wrap = document.getElementById('canvasWrapper');
+    wrap.className = 'canvas-wrapper bg-' + btn.dataset.bg;
+  };
+});
+
+// ═══════════════════════════════════════════════════════════
+//  COMPARE / RESTORE
+// ═══════════════════════════════════════════════════════════
+document.getElementById('btnCompare').onclick = () => {
+  if (!originalImageData) return;
+  isComparing = !isComparing;
+  if (isComparing) {
+    canvas.width = imgW; canvas.height = imgH;
+    ctx.putImageData(originalImageData, 0, 0);
+    document.getElementById('btnCompare').textContent = '⇄ Ver resultado';
+    showToast('Mostrando original');
+  } else {
+    renderCanvas();
+    document.getElementById('btnCompare').textContent = '⇄ Comparar';
+    showToast('Mostrando resultado actual');
+  }
+};
+
+document.getElementById('btnRestore').onclick = () => {
+  if (!originalImageData) return;
+  currentImageData = cloneImageData(originalImageData);
+  renderCanvas();
+  isComparing = false;
+  document.getElementById('btnCompare').textContent = '⇄ Comparar';
+  showToast('Imagen restaurada al original');
+  // re-run analysis
+  runAnalysis();
+};
+
+// ═══════════════════════════════════════════════════════════
+//  RESET
+// ═══════════════════════════════════════════════════════════
+document.getElementById('btnReset').onclick = () => {
+  originalImageData = currentImageData = originalFile = null;
+  document.getElementById('fileInfoBlock').style.display = 'none';
+  document.getElementById('checklistBlock').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'flex';
+  document.getElementById('previewArea').style.display = 'none';
+  document.getElementById('scoreBar').style.display = 'none';
+  document.getElementById('printReadyLegend').style.display = 'none';
+  document.getElementById('cleanupBlock').style.display = 'none';
+  document.getElementById('cmBlock').style.display = 'none';
+  document.getElementById('cmW').value = '';
+  document.getElementById('cmH').value = '';
+  document.getElementById('cmNote').textContent = 'Si ingresas las dimensiones reales, el DPI se recalculará con precisión.';
+  magnifierLens.style.display = 'none';
+  fileInput.value = '';
+  // Reset badges
+  ['semi','bg','res','bor','sml','thin'].forEach(k=>{
+    setBadge('badge-'+k,'—','');
+    setMsg('msg-'+k,'Esperando análisis...');
+    const ctrl = document.getElementById('ctrl-'+k);
+    if (ctrl) ctrl.style.display='none';
+    document.getElementById('mod-'+k).className='check-module';
+  });
+  document.getElementById('btnFixAll').style.display = 'none';
+};
+
+// ═══════════════════════════════════════════════════════════
+//  DOWNLOAD PNG
+// ═══════════════════════════════════════════════════════════
+document.getElementById('btnDownload').onclick = () => {
+  if (!currentImageData) return;
+  const exp = document.createElement('canvas');
+  const targetDPI = exportDPI;
+
+  // Scale to target DPI based on physical size
+  const physW_cm = imgW / detectedDPI * 2.54;
+  const physH_cm = imgH / detectedDPI * 2.54;
+  const newW = Math.round(physW_cm / 2.54 * targetDPI);
+  const newH = Math.round(physH_cm / 2.54 * targetDPI);
+
+  exp.width = newW; exp.height = newH;
+  const ec = exp.getContext('2d');
+
+  // Draw current image scaled
+  const tmp = document.createElement('canvas');
+  tmp.width = imgW; tmp.height = imgH;
+  tmp.getContext('2d').putImageData(currentImageData, 0, 0);
+  ec.drawImage(tmp, 0, 0, newW, newH);
+
+  exp.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const name = (originalFile?.name || 'dtf-export').replace('.png','');
+    a.download = name + '_' + targetDPI + 'dpi.png';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('PNG descargado (' + targetDPI + ' DPI)', 'green');
+  }, 'image/png');
+};
+
+// ═══════════════════════════════════════════════════════════
+//  DOWNLOAD PDF
+// ═══════════════════════════════════════════════════════════
+document.getElementById('btnDownloadPdf').onclick = async () => {
+  if (!currentImageData || typeof PDFLib === 'undefined') {
+    showToast('pdf-lib no disponible', 'err'); return;
+  }
+  showProcessing('Generando PDF...');
+  try {
+    const { PDFDocument } = PDFLib;
+    const pdfDoc = await PDFDocument.create();
+
+    const tmp = document.createElement('canvas');
+    tmp.width = imgW; tmp.height = imgH;
+    tmp.getContext('2d').putImageData(currentImageData, 0, 0);
+
+    const blob = await new Promise(r => tmp.toBlob(r, 'image/png'));
+    const arrayBuffer = await blob.arrayBuffer();
+    const pngImage = await pdfDoc.embedPng(arrayBuffer);
+
+    const ptW = imgW / detectedDPI * 72;
+    const ptH = imgH / detectedDPI * 72;
+    const page = pdfDoc.addPage([ptW, ptH]);
+    page.drawImage(pngImage, { x:0, y:0, width:ptW, height:ptH });
+
+    const pdfBytes = await pdfDoc.save();
+    const url = URL.createObjectURL(new Blob([pdfBytes], {type:'application/pdf'}));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (originalFile?.name || 'dtf').replace('.png','') + '_sin-fondo.pdf';
+    a.click();
+    URL.revokeObjectURL(url);
+    hideProcessing();
+    showToast('PDF descargado', 'green');
+  } catch(e) {
+    hideProcessing();
+    showToast('Error al generar PDF: ' + e.message, 'err');
+  }
+};
+// ═══════════════════════════════════════════════════════════
+//  BOTÓN ANALIZAR
+// ═══════════════════════════════════════════════════════════
+document.getElementById('btnAnalizar').onclick = () => {
+  document.getElementById('btnAnalizar').style.display = 'none';
+  runAnalysis();
+};
+// ═══════════════════════════════════════════════════════════
+document.getElementById('cleanupRange').oninput = function() {
+  document.getElementById('cleanupVal').textContent = this.value;
+  document.getElementById('sml-thresh').value = this.value;
+  document.getElementById('sml-thresh-val').textContent = this.value;
+};
+
+// ═══════════════════════════════════════════════════════════
+//  CM INPUTS — recalcular DPI desde dimensiones reales
+// ═══════════════════════════════════════════════════════════
+document.getElementById('cmApply').onclick = () => {
+  const wCm = parseFloat(document.getElementById('cmW').value);
+  const hCm = parseFloat(document.getElementById('cmH').value);
+  if (!imgW || !wCm || !hCm || isNaN(wCm) || isNaN(hCm) || wCm <= 0 || hCm <= 0) {
+    showToast('Ingresa dimensiones válidas', 'err'); return;
+  }
+  // Recalculate DPI from physical size
+  const dpiFromW = Math.round(imgW / (wCm / 2.54));
+  const dpiFromH = Math.round(imgH / (hCm / 2.54));
+  detectedDPI = Math.round((dpiFromW + dpiFromH) / 2);
+  document.getElementById('infoDimCm').textContent = wCm.toFixed(1) + ' × ' + hCm.toFixed(1) + ' cm';
+  document.getElementById('infoDPI').textContent   = detectedDPI + ' DPI (manual)';
+  document.getElementById('cmNote').textContent    = '✓ DPI recalculado: ' + detectedDPI + ' DPI desde ' + wCm + ' × ' + hCm + ' cm';
+  showToast('DPI actualizado: ' + detectedDPI + ' DPI', 'green');
+  // Re-run analysis with new DPI
+  runAnalysis();
+};
+
+// ═══════════════════════════════════════════════════════════
+//  MAGNIFIER LENS
+// ═══════════════════════════════════════════════════════════
+let magActive = false;
+const LENS_SIZE = 140;
+const MAG_FACTOR = 4;
+
+const btnMag = document.getElementById('btnMag');
+const magnifierLens = document.getElementById('magnifierLens');
+const magnifierCanvas = document.getElementById('magnifierCanvas');
+magnifierCanvas.width  = LENS_SIZE;
+magnifierCanvas.height = LENS_SIZE;
+const magCtx = magnifierCanvas.getContext('2d');
+magCtx.imageSmoothingEnabled = false;
+
+btnMag.onclick = () => {
+  magActive = !magActive;
+  btnMag.classList.toggle('active', magActive);
+  if (!magActive) { magnifierLens.style.display = 'none'; canvas.style.cursor = 'grab'; }
+  else { canvas.style.cursor = 'crosshair'; }
+};
+
+const canvasWrapper = document.getElementById('canvasWrapper');
+
+canvasWrapper.addEventListener('mousemove', (e) => {
+  if (!magActive || !currentImageData) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const wrapRect = canvasWrapper.getBoundingClientRect();
+
+  // Mouse position relative to canvas (in screen pixels)
+  const screenX = e.clientX - rect.left;
+  const screenY = e.clientY - rect.top;
+
+  // Skip if outside canvas
+  if (screenX < 0 || screenY < 0 || screenX > rect.width || screenY > rect.height) {
+    magnifierLens.style.display = 'none'; return;
+  }
+
+  // Map to image pixels
+  const imgX = Math.round(screenX / zoomScale);
+  const imgY = Math.round(screenY / zoomScale);
+
+  // Draw magnified region
+  const srcSize = Math.round(LENS_SIZE / MAG_FACTOR);
+  const srcX = imgX - srcSize / 2;
+  const srcY = imgY - srcSize / 2;
+
+  magCtx.clearRect(0, 0, LENS_SIZE, LENS_SIZE);
+  // Draw from main canvas (has current imagedata at actual resolution)
+  magCtx.drawImage(canvas, srcX, srcY, srcSize, srcSize, 0, 0, LENS_SIZE, LENS_SIZE);
+
+  // Pixel color label
+  const px = Math.max(0, Math.min(imgW-1, imgX));
+  const py = Math.max(0, Math.min(imgH-1, imgY));
+  const di = (py * imgW + px) * 4;
+  const d  = currentImageData.data;
+  const r = d[di], g = d[di+1], b = d[di+2], a = d[di+3];
+  document.getElementById('magnifierLabel').textContent =
+    px + ',' + py + '  rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+
+  // Position lens near cursor, offset so it doesn't cover the area being inspected
+  const lensX = (e.clientX - wrapRect.left) + 20;
+  const lensY = (e.clientY - wrapRect.top)  - LENS_SIZE - 20;
+  // Clamp inside wrapper
+  const clampedX = Math.max(4, Math.min(wrapRect.width  - LENS_SIZE - 4, lensX));
+  const clampedY = Math.max(4, Math.min(wrapRect.height - LENS_SIZE - 4, lensY));
+
+  magnifierLens.style.left    = clampedX + 'px';
+  magnifierLens.style.top     = clampedY + 'px';
+  magnifierLens.style.display = 'block';
+});
+
+canvasWrapper.addEventListener('mouseleave', () => {
+  if (magActive) magnifierLens.style.display = 'none';
+});
+
+</script>
