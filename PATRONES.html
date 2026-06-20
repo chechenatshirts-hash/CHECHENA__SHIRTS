@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chechena Shirts — Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #c9a07a;
+    --primary-hover: #b8865a;
+    --primary-dim: rgba(201,160,122,0.28);
+    --primary-light: rgba(201,160,122,0.10);
+    --bg-app: #f5ede2;
+    --bg-side: #fdf8f2;
+    --border: #e8d9c8;
+    --text: #3d2c1e;
+    --text-muted: #8c6f58;
+    --text-light: #b8a090;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: var(--bg-app); user-select: none; }
+
+  /* LAYOUT */
+  #app { display: flex; height: 100vh; width: 100vw; }
+
+  /* SIDEBAR */
+  aside {
+    width: 380px; min-width: 320px; background: var(--bg-side); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; z-index: 20; box-shadow: 4px 0 24px rgba(0,0,0,0.05); flex-shrink: 0;
+  }
+  .aside-header {
+    padding: 18px 20px 16px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+  }
+  .app-title { font-size: 16px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .app-title span.accent { color: var(--primary); }
+  .app-subtitle { font-size: 10px; font-weight: 700; color: var(--text-light); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+  .logo-icon { width: 22px; height: 22px; color: var(--primary); }
+
+  .aside-body { flex: 1; overflow-y: auto; padding: 18px 20px 24px; }
+  .aside-body::-webkit-scrollbar { width: 4px; }
+  .aside-body::-webkit-scrollbar-track { background: transparent; }
+  .aside-body::-webkit-scrollbar-thumb { background: #d9c4b0; border-radius: 4px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin: 18px 0 8px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border: 2px dashed #d9c4b0; border-radius: 12px; padding: 24px 16px;
+    text-align: center; cursor: pointer; background: #fdf3e7; transition: 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .drop-zone:hover, .drop-zone.dragover { border-color: var(--primary); background: var(--primary-light); }
+  .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .drop-icon { width: 32px; height: 32px; color: #d9c4b0; margin: 0 auto 8px; }
+  .drop-label { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .drop-sub { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+  #file-info { display: none; align-items: center; justify-content: center; gap: 10px; }
+  #file-info img { width: 36px; height: 36px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border); }
+  #file-name { font-size: 12px; font-weight: 700; color: var(--primary); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* TABS */
+  .mode-tabs { display: flex; background: #ede0d0; padding: 4px; border-radius: 10px; gap: 4px; margin-bottom: 4px; }
+  .mode-tab {
+    flex: 1; text-align: center; padding: 8px 4px; font-size: 11px; font-weight: 800;
+    color: var(--text-muted); cursor: pointer; border-radius: 7px; transition: 0.18s; letter-spacing: 0.02em;
+  }
+  .mode-tab.active { background: #fdf8f2; color: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.07); }
+
+  /* SLIDERS */
+  .control-row { margin-bottom: 16px; }
+  .control-head { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; }
+  .control-head span.val { color: var(--primary); }
+  input[type="range"] {
+    -webkit-appearance: none; width: 100%; height: 5px; border-radius: 5px;
+    background: #e8d9c8; outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--primary); border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+
+  /* COLOR ROW */
+  .color-row { display: flex; gap: 8px; align-items: center; }
+  input[type="color"] { height: 36px; flex: 1; border-radius: 8px; border: 1px solid var(--border); padding: 3px; cursor: pointer; }
+  .btn-transparent {
+    width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; border: 1px solid var(--border);
+    background: #fdf8f2; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); transition: 0.18s;
+  }
+  .btn-transparent:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* CANVAS SIZE */
+  .canvas-size-row { display: flex; gap: 8px; margin-bottom: 4px; }
+  .canvas-size-row input[type="number"] {
+    flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+    font-size: 13px; font-weight: 600; color: var(--text); background: #fdf3e7; outline: none; transition: 0.18s;
+  }
+  .canvas-size-row input[type="number"]:focus { border-color: var(--primary); background: white; }
+
+  /* DOWNLOAD BTN */
+  .btn-download {
+    width: 100%; padding: 13px; border-radius: 10px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #c9a07a 0%, #b8865a 100%);
+    color: #fdf8f2; font-weight: 800; font-size: 14px; letter-spacing: 0.02em;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 14px var(--primary-dim); transition: 0.18s;
+    margin-top: 8px;
+  }
+  .btn-download:hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .btn-download:active { transform: translateY(0); }
+
+  /* MAIN CANVAS AREA */
+  main {
+    flex: 1; position: relative; overflow: hidden; background: #ddd0c0;
+    display: flex; align-items: center; justify-content: center; cursor: grab;
+  }
+  main.grabbing { cursor: grabbing; }
+  #canvas-wrapper {
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2); transform-origin: center center; transition: none;
+    background: #fdf8f2; position: relative;
+  }
+  #canvas-wrapper.checkers {
+    background-image: linear-gradient(45deg,#e8d9c8 25%,transparent 25%),
+      linear-gradient(-45deg,#e8d9c8 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#e8d9c8 75%),
+      linear-gradient(-45deg,transparent 75%,#e8d9c8 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  }
+  #patternCanvas { display: block; }
+
+  /* ZOOM PANEL */
+  .zoom-panel {
+    position: absolute; bottom: 28px; right: 28px; background: #fdf8f2;
+    padding: 6px; border-radius: 12px; display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12); z-index: 50;
+  }
+  .zoom-btn {
+    width: 34px; height: 34px; border-radius: 8px; background: #f5ede2; color: var(--text-muted);
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.15s;
+  }
+  .zoom-btn:hover { background: #e8d9c8; color: var(--text); }
+  .zoom-label { font-size: 11px; font-weight: 700; font-family: monospace; color: var(--text-muted); padding: 0 6px; min-width: 44px; text-align: center; }
+
+  /* EMPTY STATE */
+  #empty-state {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; pointer-events: none; gap: 12px;
+  }
+  #empty-state svg { opacity: 0.25; }
+  #empty-state p { font-size: 13px; font-weight: 700; color: #b8a090; }
+
+  /* TOOLTIP */
+  .tooltip { position: relative; }
+  .tooltip-tip {
+    position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+    background: #3d2c1e; color: #fdf8f2; font-size: 11px; font-weight: 600; padding: 5px 9px;
+    border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: 0.15s;
+  }
+  .tooltip:hover .tooltip-tip { opacity: 1; }
+
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: #3d2c1e; color: #fdf8f2; padding: 10px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; z-index: 9999;
+    display: flex; align-items: center; gap: 8px;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    aside { width: 100%; min-width: unset; position: absolute; bottom: 0; z-index: 30; max-height: 50vh; border-right: none; border-top: 1px solid var(--border); }
+    main { width: 100%; height: 50vh; }
+    #app { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside>
+    <div class="aside-header">
+      <div>
+        <div class="app-title">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          CHECHENA <span class="accent">&nbsp;SHIRTS</span>
+        </div>
+        <div class="app-subtitle">Pattern Generator Studio</div>
+      </div>
+    </div>
+
+    <div class="aside-body">
+
+      <!-- 1. UPLOAD -->
+      <div class="section-label">1. Subir elemento</div>
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="imgUpload" accept="image/png,image/jpeg,image/svg+xml,image/webp">
+        <div id="upload-content">
+          <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12l4-4 4 4"/>
+          </svg>
+          <div class="drop-label">Click para subir imagen</div>
+          <div class="drop-sub">PNG, JPG, SVG, WEBP</div>
+        </div>
+        <div id="file-info">
+          <img id="thumb" src="" alt="thumb">
+          <span id="file-name"></span>
+        </div>
+      </div>
+
+      <!-- 2. PATTERN TYPE -->
+      <div class="section-label">2. Tipo de patrón</div>
+      <div class="mode-tabs">
+        <div class="mode-tab active" data-mode="grid">Cuadrícula</div>
+        <div class="mode-tab" data-mode="brick">Ladrillo</div>
+        <div class="mode-tab" data-mode="random">Aleatorio</div>
+      </div>
+
+      <!-- 3. CONFIG -->
+      <div class="section-label">3. Configuración</div>
+
+      <div class="section-label" style="margin-top:4px; font-size:9px; color:#94a3b8;">Tamaño del lienzo</div>
+      <div class="canvas-size-row">
+        <input type="number" id="canvasW" value="2000" min="100" max="8000" title="Ancho (px)">
+        <input type="number" id="canvasH" value="2000" min="100" max="8000" title="Alto (px)">
+      </div>
+
+      <div class="control-row" style="margin-top:12px;">
+        <div class="control-head"><span>Tamaño del elemento</span><span class="val" id="sizeVal">100px</span></div>
+        <input type="range" id="sizeSlider" min="10" max="500" value="100">
+      </div>
+
+      <div class="control-row" id="gapControl">
+        <div class="control-head"><span>Espaciado (gap)</span><span class="val" id="gapVal">50px</span></div>
+        <input type="range" id="gapSlider" min="0" max="300" value="50">
+      </div>
+
+      <div class="control-row hidden" id="densControl">
+        <div class="control-head"><span>Densidad</span><span class="val" id="densVal">50</span></div>
+        <input type="range" id="densSlider" min="5" max="200" value="50">
+      </div>
+
+      <div class="control-row">
+        <div class="control-head"><span>Rotación base</span><span class="val" id="rotVal">0°</span></div>
+        <input type="range" id="rotSlider" min="0" max="360" value="0">
+      </div>
+
+      <!-- 4. VARIATION -->
+      <div class="section-label">4. Variación (caos)</div>
+
+      <div class="control-row">
+        <div class="control-head"><span>Rotación aleatoria</span><span class="val" id="jitRotVal">0%</span></div>
+        <input type="range" id="jitRotSlider" min="0" max="100" value="0">
+      </div>
+
+      <div class="control-row">
+        <div class="control-head"><span>Tamaño aleatorio</span><span class="val" id="jitSzVal">0%</span></div>
+        <input type="range" id="jitSzSlider" min="0" max="100" value="0">
+      </div>
+
+      <div class="control-row">
+        <div class="control-head"><span>Opacidad aleatoria</span><span class="val" id="jitOpVal">0%</span></div>
+        <input type="range" id="jitOpSlider" min="0" max="100" value="0">
+      </div>
+
+      <!-- 5. BACKGROUND -->
+      <div class="section-label">5. Color de fondo</div>
+      <div class="color-row" style="margin-bottom:20px;">
+        <input type="color" id="bgColor" value="#ffffff" title="Color de fondo">
+        <div class="tooltip">
+          <button class="btn-transparent" id="btnTransparent" title="Fondo transparente">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+            </svg>
+          </button>
+          <span class="tooltip-tip">Transparente</span>
+        </div>
+      </div>
+
+      <!-- DOWNLOAD -->
+      <button class="btn-download" id="btnDownload">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar patrón PNG
+      </button>
+
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CANVAS AREA ===== -->
+  <main id="viewport">
+    <div id="canvas-wrapper" class="checkers">
+      <canvas id="patternCanvas"></canvas>
+    </div>
+
+    <div id="empty-state">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#c9a07a" stroke-width="1.5">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      <p>Sube una imagen para empezar</p>
+    </div>
+
+    <div class="zoom-panel">
+      <button class="zoom-btn" id="btnZoomOut" title="Alejar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <button class="zoom-btn" id="btnFit" title="Ajustar a pantalla">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
+      <button class="zoom-btn" id="btnZoomIn" title="Acercar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <div class="zoom-label" id="zoomLabel">FIT</div>
+    </div>
+  </main>
+</div>
+
+<!-- TOAST -->
+<div id="toast">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Descargado</span>
+</div>
+
+<script>
+/* ============================================================
+   PATTERN PRO — lógica completa en frontend puro
+   Canvas API + File API + No dependencias externas
+   ============================================================ */
+
+const canvas = document.getElementById('patternCanvas');
+const ctx = canvas.getContext('2d');
+const viewport = document.getElementById('viewport');
+const wrapper = document.getElementById('canvas-wrapper');
+const emptyState = document.getElementById('empty-state');
+
+// STATE
+let userImage = null;
+let mode = 'grid';
+let isTransparent = false;
+let zoom = 1;
+let panX = 0, panY = 0;
+let isPanning = false, startX = 0, startY = 0;
+let lastPanX = 0, lastPanY = 0;
+let rng = null; // seeded random for reproducibility
+
+// Seeded PRNG (mulberry32)
+function makePRNG(seed) {
+  let s = seed >>> 0 || 1;
+  return function() {
+    s = Math.imul(s ^ (s >>> 15), s | 1);
+    s ^= s + Math.imul(s ^ (s >>> 7), s | 61);
+    return ((s ^ (s >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---- HELPERS ----
+function v(id) { return document.getElementById(id); }
+function slider(id) { return parseInt(v(id).value, 10); }
+function setLabel(id, txt) { v(id).textContent = txt; }
+
+function showToast(msg) {
+  const t = v('toast');
+  v('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ---- FILE UPLOAD ----
+v('imgUpload').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) loadImageFile(file);
+});
+
+// Drag & Drop
+const dz = v('dropZone');
+['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('dragover'); }));
+['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('dragover'); }));
+dz.addEventListener('drop', e => {
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) loadImageFile(file);
+});
+
+function loadImageFile(file) {
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    userImage = img;
+    v('upload-content').style.display = 'none';
+    const fi = v('file-info'); fi.style.display = 'flex';
+    v('thumb').src = url;
+    v('file-name').textContent = file.name;
+    emptyState.style.display = 'none';
+    drawPattern();
+    fitScreen();
+  };
+  img.src = url;
+}
+
+// ---- MODE TABS ----
+document.querySelectorAll('.mode-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    mode = tab.dataset.mode;
+    const isRandom = mode === 'random';
+    v('gapControl').style.display = isRandom ? 'none' : 'block';
+    v('densControl').style.display = isRandom ? 'block' : 'none';
+    drawPattern();
+  });
+});
+
+// ---- SLIDERS ----
+const sliders = ['sizeSlider','gapSlider','densSlider','rotSlider','jitRotSlider','jitSzSlider','jitOpSlider'];
+const labelMap = {
+  sizeSlider: ['sizeVal', v => v + 'px'],
+  gapSlider:  ['gapVal',  v => v + 'px'],
+  densSlider: ['densVal', v => v],
+  rotSlider:  ['rotVal',  v => v + '°'],
+  jitRotSlider: ['jitRotVal', v => v + '%'],
+  jitSzSlider:  ['jitSzVal',  v => v + '%'],
+  jitOpSlider:  ['jitOpVal',  v => v + '%'],
+};
+sliders.forEach(id => {
+  v(id).addEventListener('input', () => {
+    const [lblId, fmt] = labelMap[id];
+    setLabel(lblId, fmt(v(id).value));
+    drawPattern();
+  });
+});
+
+// canvas size inputs
+[v('canvasW'), v('canvasH')].forEach(inp => inp.addEventListener('change', drawPattern));
+
+// color
+v('bgColor').addEventListener('input', () => { isTransparent = false; drawPattern(); });
+v('btnTransparent').addEventListener('click', () => { isTransparent = true; drawPattern(); });
+
+// ---- DRAW ENGINE ----
+function drawPattern() {
+  if (!userImage) return;
+
+  const W = Math.max(100, parseInt(v('canvasW').value) || 2000);
+  const H = Math.max(100, parseInt(v('canvasH').value) || 2000);
+  canvas.width  = W;
+  canvas.height = H;
+
+  // background
+  ctx.clearRect(0, 0, W, H);
+  if (!isTransparent) {
+    ctx.fillStyle = v('bgColor').value;
+    ctx.fillRect(0, 0, W, H);
+    wrapper.classList.remove('checkers');
+  } else {
+    wrapper.classList.add('checkers');
+  }
+
+  const size    = slider('sizeSlider');
+  const gap     = slider('gapSlider');
+  const rot     = slider('rotSlider') * Math.PI / 180;
+  const jitRot  = slider('jitRotSlider') / 100;
+  const jitSz   = slider('jitSzSlider') / 100;
+  const jitOp   = slider('jitOpSlider') / 100;
+  const density = slider('densSlider');
+
+  // Use seeded RNG so pattern stays stable on same settings
+  rng = makePRNG(42);
+
+  if (mode === 'grid') {
+    drawGrid(W, H, size, gap, rot, jitRot, jitSz, jitOp);
+  } else if (mode === 'brick') {
+    drawBrick(W, H, size, gap, rot, jitRot, jitSz, jitOp);
+  } else {
+    drawRandom(W, H, size, density, rot, jitRot, jitSz, jitOp);
+  }
+}
+
+function placeElement(cx, cy, size, rot, opacity) {
+  ctx.save();
+  ctx.globalAlpha = Math.max(0.05, Math.min(1, opacity));
+  ctx.translate(cx, cy);
+  ctx.rotate(rot);
+  ctx.drawImage(userImage, -size/2, -size/2, size, size);
+  ctx.restore();
+}
+
+function drawGrid(W, H, size, gap, baseRot, jitRot, jitSz, jitOp) {
+  const step = size + gap;
+  if (step <= 0) return;
+  const cols = Math.ceil(W / step) + 2;
+  const rows = Math.ceil(H / step) + 2;
+  for (let r = -1; r < rows; r++) {
+    for (let c = -1; c < cols; c++) {
+      const cx = c * step + size/2;
+      const cy = r * step + size/2;
+      const r_ = baseRot + (rng() - 0.5) * Math.PI * 2 * jitRot;
+      const s_ = size * (1 + (rng() - 0.5) * jitSz);
+      const o_ = 1 - rng() * jitOp;
+      placeElement(cx, cy, s_, r_, o_);
+    }
+  }
+}
+
+function drawBrick(W, H, size, gap, baseRot, jitRot, jitSz, jitOp) {
+  const stepX = size + gap;
+  const stepY = size + gap;
+  if (stepX <= 0 || stepY <= 0) return;
+  const cols = Math.ceil(W / stepX) + 2;
+  const rows = Math.ceil(H / stepY) + 2;
+  for (let r = -1; r < rows; r++) {
+    const offset = (r % 2 === 0) ? 0 : stepX / 2;
+    for (let c = -1; c < cols; c++) {
+      const cx = c * stepX + size/2 + offset;
+      const cy = r * stepY + size/2;
+      const r_ = baseRot + (rng() - 0.5) * Math.PI * 2 * jitRot;
+      const s_ = size * (1 + (rng() - 0.5) * jitSz);
+      const o_ = 1 - rng() * jitOp;
+      placeElement(cx, cy, s_, r_, o_);
+    }
+  }
+}
+
+function drawRandom(W, H, size, density, baseRot, jitRot, jitSz, jitOp) {
+  const count = density;
+  for (let i = 0; i < count; i++) {
+    const cx = rng() * W;
+    const cy = rng() * H;
+    const r_ = baseRot + (rng() - 0.5) * Math.PI * 2 * jitRot;
+    const s_ = size * (0.5 + rng() * (1 + jitSz));
+    const o_ = 1 - rng() * jitOp;
+    placeElement(cx, cy, s_, r_, o_);
+  }
+}
+
+// ---- ZOOM & PAN ----
+function applyTransform() {
+  wrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+  const pct = Math.round(zoom * 100);
+  v('zoomLabel').textContent = pct + '%';
+}
+
+function fitScreen() {
+  if (!canvas.width || !canvas.height) return;
+  const vw = viewport.clientWidth  - 80;
+  const vh = viewport.clientHeight - 80;
+  zoom = Math.min(vw / canvas.width, vh / canvas.height, 1);
+  panX = 0; panY = 0;
+  applyTransform();
+  v('zoomLabel').textContent = 'FIT';
+}
+
+v('btnZoomIn').addEventListener('click', () => { zoom = Math.min(zoom * 1.25, 8); applyTransform(); });
+v('btnZoomOut').addEventListener('click', () => { zoom = Math.max(zoom * 0.8, 0.05); applyTransform(); });
+v('btnFit').addEventListener('click', fitScreen);
+
+// Mouse wheel zoom
+viewport.addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 1.1 : 0.9;
+  zoom = Math.min(Math.max(zoom * delta, 0.05), 10);
+  applyTransform();
+}, { passive: false });
+
+// Pan
+viewport.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  isPanning = true;
+  startX = e.clientX - panX;
+  startY = e.clientY - panY;
+  viewport.classList.add('grabbing');
+});
+window.addEventListener('mousemove', e => {
+  if (!isPanning) return;
+  panX = e.clientX - startX;
+  panY = e.clientY - startY;
+  wrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+});
+window.addEventListener('mouseup', () => {
+  isPanning = false;
+  viewport.classList.remove('grabbing');
+});
+
+// Touch pan
+viewport.addEventListener('touchstart', e => {
+  if (e.touches.length !== 1) return;
+  isPanning = true;
+  startX = e.touches[0].clientX - panX;
+  startY = e.touches[0].clientY - panY;
+}, { passive: true });
+viewport.addEventListener('touchmove', e => {
+  if (!isPanning || e.touches.length !== 1) return;
+  panX = e.touches[0].clientX - startX;
+  panY = e.touches[0].clientY - startY;
+  wrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+}, { passive: true });
+viewport.addEventListener('touchend', () => { isPanning = false; });
+
+// ---- DOWNLOAD ----
+v('btnDownload').addEventListener('click', () => {
+  if (!userImage) { showToast('⚠ Sube una imagen primero'); return; }
+  const link = document.createElement('a');
+  link.download = 'patron-pro.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  showToast('Patrón descargado ✓');
+});
+
+// Init label values
+setLabel('sizeVal', '100px');
+setLabel('gapVal', '50px');
+setLabel('densVal', '50');
+setLabel('rotVal', '0°');
+setLabel('jitRotVal', '0%');
+setLabel('jitSzVal', '0%');
+setLabel('jitOpVal', '0%');
+
+// Show empty state initially
+emptyState.style.display = 'flex';
+canvas.width = 1; canvas.height = 1;
+</script>
+</body>
+</html>

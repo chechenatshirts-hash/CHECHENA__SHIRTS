@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Conversor de Archivos – Chechena Shirts</title>
+<link rel="icon" href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ───────────────────────── RESET & TOKENS ───────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #FBF3E7;
+  --surface:     #FFFAF2;
+  --card:        #FFFFFF;
+  --border:      #ECDCC4;
+  --accent:      #E0916F;
+  --accent-hov:  #C97950;
+  --accent-2:    #A9C3A0;
+  --muted:       #D8C6AC;
+  --text:        #4A3B30;
+  --subtext:     #93816E;
+  --radius:      14px;
+  --mono:        'Fredoka', sans-serif;
+  --sans:        'DM Sans', sans-serif;
+  --header-h:    64px;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ───────────────────────── BACKGROUND FIXED ───────────────────────── */
+.brand-bg-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 8%,  #F7DCC2 0%, transparent 42%),
+    radial-gradient(circle at 90% 18%, #E7EFD9 0%, transparent 38%),
+    radial-gradient(circle at 80% 92%, #F2D9D2 0%, transparent 40%),
+    radial-gradient(circle at 10% 90%, #FCEFD9 0%, transparent 40%),
+    var(--bg);
+}
+
+/* ───────────────────────── ANNOUNCEMENT BAR ───────────────────────── */
+.announce-bar {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(90deg, #F6E6D2, #E0916F, #F6E6D2);
+  background-size: 200% 100%;
+  animation: bar-grad 6s ease infinite;
+  overflow: hidden;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+@keyframes bar-grad {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.announce-track {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 40s linear infinite;
+}
+.announce-track span {
+  padding: 0 40px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: #4A3B30;
+  letter-spacing: 0.5px;
+}
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ───────────────────────── HEADER ───────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-h);
+  background: rgba(255,250,242,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 3rem;
+  gap: 24px;
+}
+
+.header-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px;
+}
+@media (max-width: 989px) {
+  .header-menu-toggle { display: flex; }
+}
+
+.header-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+.header-logo img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+.logo-text {
+  font-family: var(--mono);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+.logo-text span { color: var(--accent); }
+
+.header-nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.header-nav a {
+  text-decoration: none;
+  color: var(--subtext);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+.header-nav a:hover {
+  color: var(--text);
+  background: rgba(74,59,48,0.06);
+}
+@media (max-width: 989px) {
+  .header-nav { display: none; }
+  .header-nav.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: rgba(255,250,242,0.98);
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+  }
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.header-shop-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 9px 16px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.header-shop-btn:hover { background: var(--accent-hov); transform: translateY(-1px); }
+.header-icons svg { width: 18px; height: 18px; }
+
+@media (max-width: 640px) {
+  .site-header { padding: 0 14px; gap: 10px; }
+  .logo-text { font-size: 15px; }
+  .header-logo img { height: 30px; }
+  .header-shop-btn span.shop-label { display: none; }
+  .header-shop-btn { padding: 9px 10px; }
+}
+
+/* ───────────────────────── MAIN LAYOUT ───────────────────────── */
+.page-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+/* ───────────────────────── APP (CONVERTER) ───────────────────────── */
+.app-grid-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at center, rgba(224,145,111,0.05) 0%, transparent 60%),
+    linear-gradient(rgba(74,59,48,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,59,48,0.035) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.app-layout {
+  position: relative;
+  z-index: 2;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 32px;
+  align-items: start;
+  min-height: calc(100vh - var(--header-h) - 36px);
+}
+@media (max-width: 900px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 16px;
+  }
+}
+
+/* SIDEBAR */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+  max-height: calc(100vh - var(--header-h) - 64px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* PANEL */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-shadow: 0 2px 14px rgba(74,59,48,0.05);
+}
+
+/* HEADER PANEL */
+.header-panel {
+  background: linear-gradient(135deg, #FCEFE2, #FBF3E7);
+  border-color: var(--border);
+}
+.header-panel h1 {
+  font-family: var(--mono);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+.header-panel h1 span { color: var(--accent); }
+.header-panel p {
+  font-size: 12px;
+  color: var(--subtext);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.badge {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent-hov);
+  border: 1px solid rgba(224,145,111,0.35);
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(224,145,111,0.10);
+}
+
+/* DROPZONE */
+.dropzone-panel {
+  text-align: center;
+  align-items: center;
+  border: 1.5px dashed var(--border);
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.dropzone-panel:hover,
+.dropzone-panel.drag-over {
+  border-color: var(--accent);
+  background: rgba(224,145,111,0.04);
+}
+.drop-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(224,145,111,0.12);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}
+.drop-icon svg { width: 24px; height: 24px; color: var(--accent); }
+.dropzone-panel h2 {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.dropzone-panel > p {
+  font-size: 12px;
+  color: var(--subtext);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+.btn-upload {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 14px 20px;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+.btn-upload:hover { background: var(--accent-hov); transform: translateY(-1px); }
+#fileInput { display: none; }
+
+.btn-clear {
+  background: rgba(74,59,48,0.04);
+  color: var(--subtext);
+  border: 1px solid rgba(74,59,48,0.12);
+  width: 100%;
+  padding: 11px 16px;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.btn-clear:hover { color: #c4584a; border-color: rgba(196,88,74,0.35); background: rgba(196,88,74,0.08); }
+.btn-clear.compact { margin-top: 0; padding: 10px 12px; }
+
+/* PILL SELECTORS */
+.pill-group {
+  display: flex;
+  background: rgba(74,59,48,0.05);
+  border: 1px solid rgba(74,59,48,0.10);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  width: 100%;
+}
+.pill-btn {
+  flex: 1;
+  padding: 7px 6px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--subtext);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  text-align: center;
+}
+.pill-btn:hover:not(.active) {
+  color: var(--text);
+  background: rgba(74,59,48,0.07);
+}
+.pill-btn.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 1px 8px rgba(224,145,111,0.35);
+}
+.pill-group-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+.pill-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* FILE LIST PANEL */
+.files-panel { padding: 16px 20px; }
+.panel-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.file-count {
+  background: rgba(224,145,111,0.15);
+  color: var(--accent-hov);
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-family: var(--mono);
+}
+.files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.files-list::-webkit-scrollbar { width: 3px; }
+.files-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* FILE ITEM */
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  background: rgba(74,59,48,0.025);
+  position: relative;
+  overflow: hidden;
+}
+.file-item:hover { background: rgba(74,59,48,0.05); border-color: rgba(74,59,48,0.10); }
+.file-item.active { background: rgba(224,145,111,0.10); border-color: rgba(224,145,111,0.35); }
+.file-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+/* THUMBNAIL */
+.file-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgba(74,59,48,0.05);
+  border: 1px solid rgba(74,59,48,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.file-thumb canvas,
+.file-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.file-thumb-placeholder {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--subtext);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.file-thumb.transparent-bg {
+  background-image:
+    linear-gradient(45deg, #d8cdbd 25%, transparent 25%),
+    linear-gradient(-45deg, #d8cdbd 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d8cdbd 75%),
+    linear-gradient(-45deg, transparent 75%, #d8cdbd 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+  background-color: #f1e8d9;
+}
+.file-type-tag {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(74,59,48,0.80);
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 700;
+  color: #FCEFE2;
+  padding: 1px 3px;
+  border-radius: 2px 0 0 0;
+  line-height: 1.4;
+}
+.file-info { flex: 1; min-width: 0; }
+.file-info-name {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+  max-width: 160px;
+}
+.file-info-meta { font-size: 10px; color: var(--subtext); }
+.file-remove {
+  background: none; border: none; color: var(--subtext); cursor: pointer;
+  padding: 4px; border-radius: 3px; display: grid; place-items: center;
+  opacity: 0; transition: opacity 0.15s, color 0.15s; flex-shrink: 0;
+}
+.file-item:hover .file-remove { opacity: 1; }
+.file-remove:hover { color: #c4584a; }
+.file-remove svg { width: 12px; height: 12px; }
+
+/* ACTIVE FILE CONTROLS */
+#active-controls { display: flex; flex-direction: column; gap: 12px; }
+.dl-panel { padding: 16px 20px; }
+.page-indicator {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--subtext);
+  text-align: center;
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-dl {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(74,59,48,0.04);
+  border: 1px solid rgba(74,59,48,0.14);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 11px 0;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-dl.highlight {
+  color: var(--accent-hov);
+  border-color: rgba(224,145,111,0.35);
+  background: rgba(224,145,111,0.08);
+}
+.btn-dl.highlight:hover { border-color: var(--accent); background: rgba(224,145,111,0.14); }
+.btn-dl:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* BATCH PANEL */
+.batch-panel { padding: 16px 20px; }
+.batch-hint { font-size: 10px; color: var(--subtext); text-align: center; line-height: 1.4; margin-top: 8px; }
+
+/* SKIP NOTICE */
+.skip-notice {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: #a06600;
+  background: rgba(255,170,0,0.10);
+  border: 1px solid rgba(255,170,0,0.25);
+  border-radius: 4px;
+  padding: 6px 8px;
+  line-height: 1.5;
+  margin-top: 8px;
+  display: none;
+}
+
+/* PREVIEW COLUMN */
+.main-preview {
+  --preview-bg-color: #ffffff;
+  --preview-checker-a: #dfdfdf;
+  --preview-checker-b: transparent;
+  --preview-bg-image:
+    linear-gradient(45deg, var(--preview-checker-a) 25%, var(--preview-checker-b) 25%),
+    linear-gradient(-45deg, var(--preview-checker-a) 25%, var(--preview-checker-b) 25%),
+    linear-gradient(45deg, var(--preview-checker-b) 75%, var(--preview-checker-a) 75%),
+    linear-gradient(-45deg, var(--preview-checker-b) 75%, var(--preview-checker-a) 75%);
+  background-image: var(--preview-bg-image);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+  background-color: var(--preview-bg-color);
+  border-radius: var(--radius);
+  min-height: calc(100vh - var(--header-h) - 36px - 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  gap: 40px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+  max-height: calc(100vh - var(--header-h) - 64px);
+  overflow-y: auto;
+}
+.main-preview::-webkit-scrollbar { width: 6px; }
+.main-preview::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+.main-preview::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+
+.preview-bg-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: -24px;
+  background: rgba(74,56,44,0.85);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(74,59,48,0.20);
+  backdrop-filter: blur(10px);
+}
+.preview-bg-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: #F3E5D2;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding-left: 4px;
+}
+.preview-bg-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.preview-bg-btn:hover,
+.preview-bg-btn.active {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(224,145,111,0.35);
+}
+.preview-bg-btn.checker {
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #cfcfcf 25%, transparent 25%),
+    linear-gradient(-45deg, #cfcfcf 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #cfcfcf 75%),
+    linear-gradient(-45deg, transparent 75%, #cfcfcf 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.preview-bg-btn.white { background: #ffffff; }
+.preview-bg-btn.dark  { background: #2b231d; }
+.preview-bg-btn.neon  { background: var(--accent); }
+.preview-bg-btn.gray  { background: #9a8c7a; }
+.preview-bg-color {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: transparent;
+  border-radius: 999px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.canvas-wrapper { position: relative; max-width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+.canvas-wrapper canvas { display: block; max-width: 100%; height: auto; }
+
+.preview-file-group { display: none; flex-direction: column; align-items: center; gap: 40px; width: 100%; }
+.preview-file-group.active { display: flex; }
+
+.empty-preview {
+  margin: auto;
+  color: #999;
+  font-family: var(--mono);
+  font-size: 14px;
+  text-align: center;
+  background: rgba(255,255,255,0.8);
+  padding: 16px 24px;
+  border-radius: 8px;
+}
+
+/* SPINNER */
+.spinner {
+  width: 12px; height: 12px;
+  border: 2px solid rgba(74,59,48,0.25);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* BATCH PROGRESS OVERLAY */
+.batch-progress {
+  position: fixed; inset: 0;
+  background: rgba(40,31,24,0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  gap: 16px;
+}
+.batch-progress-title { font-family: var(--mono); font-size: 16px; font-weight: 600; color: #F0B89B; }
+.batch-progress-sub { font-family: var(--mono); font-size: 12px; color: #E5D7C5; text-align: center; }
+.progress-bar-wrap { width: 320px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+
+/* FOOTER */
+.site-footer {
+  position: relative;
+  z-index: 2;
+  background: #F4E6D2;
+  border-top: 1px solid var(--border);
+  padding: 40px 3rem 24px;
+  color: rgba(74,59,48,0.65);
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-brand .logo-text { font-size: 18px; }
+.footer-brand p { font-size: 12px; line-height: 1.5; max-width: 280px; }
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-links h3 {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.footer-links a {
+  text-decoration: none;
+  color: rgba(74,59,48,0.6);
+  font-size: 13px;
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--accent-hov); }
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+.footer-socials a {
+  color: rgba(74,59,48,0.55);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-socials a:hover { color: var(--accent-hov); }
+.footer-socials svg { width: 18px; height: 18px; }
+.footer-bottom {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  text-align: center;
+  color: rgba(74,59,48,0.45);
+  font-family: var(--mono);
+}
+
+/* WHATSAPP BUTTON */
+.wa-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #10c379;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(16,195,121,0.4);
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: wa-pulse 2.5s ease-in-out infinite;
+}
+.wa-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px rgba(16,195,121,0.55);
+}
+.wa-btn svg { width: 28px; height: 28px; fill: #fff; }
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(16,195,121,0.4); }
+  50%       { box-shadow: 0 4px 32px rgba(16,195,121,0.7); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── BACKGROUND ── -->
+<div class="brand-bg-layer" aria-hidden="true"></div>
+
+<!-- ── ANNOUNCEMENT BAR ── -->
+<div class="announce-bar" onclick="window.open('https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/#megapacks','_blank')" style="position:relative;z-index:10;">
+  <div class="announce-track">
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+    <span>🎁 MEGAPACK CHECHENA · MÁS DE 40,000 DISEÑOS LISTOS PARA IMPRIMIR ✨</span>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <button class="header-menu-toggle" id="menuToggle" aria-label="Menú" onclick="document.getElementById('headerNav').classList.toggle('open')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/" class="header-logo" title="Chechena Shirts" target="_blank" rel="noopener">
+    <img src="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/logo.png" alt="Chechena Shirts" />
+    <span class="logo-text">Chechena<span> Shirts</span></span>
+  </a>
+
+  <nav class="header-nav" id="headerNav">
+    <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/" target="_blank" rel="noopener">Inicio</a>
+    <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/#megapacks" target="_blank" rel="noopener">Megapacks</a>
+    <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/herramientas.html" target="_blank" rel="noopener">Herramientas</a>
+    <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/#contacto" target="_blank" rel="noopener">Contacto</a>
+  </nav>
+
+  <div class="header-icons">
+    <a class="header-shop-btn" href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 40 40" fill="none"><path fill="currentColor" d="M9.822 10.667c0-.575.456-1.042 1.018-1.042s1.017.467 1.017 1.042v1.458h16.295l-2.12 9.458H13.07l-2.23-9.916v-.542zm2.035 2.5 1.638 7.292h10.97l1.637-7.292H11.857zm.96 11.666a1.875 1.875 0 1 1 0 3.75 1.875 1.875 0 0 1 0-3.75zm10.417 0a1.875 1.875 0 1 1 0 3.75 1.875 1.875 0 0 1 0-3.75z"/></svg>
+      <span class="shop-label">Ir a la tienda</span>
+    </a>
+  </div>
+</header>
+
+<!-- ── MAIN APP ── -->
+<div class="page-wrapper app-grid-bg">
+<div class="app-layout">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+
+    <!-- Header Panel -->
+    <div class="panel header-panel">
+      <h1>Conversor <span>Universal</span></h1>
+      <p>Procesa PDFs, SVGs, PNGs o JPGs de forma cruzada. Todo el procesamiento se realiza en tu navegador de forma segura.</p>
+      <div class="badge">PNG sin fondo · PDF · SVG · Raster · Lotes</div>
+    </div>
+
+    <!-- Dropzone -->
+    <div class="panel dropzone-panel" id="dropzone">
+      <div class="drop-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <polyline points="9,15 12,12 15,15"/>
+        </svg>
+      </div>
+      <h2>Cargar Archivos</h2>
+      <p>Arrastra PDF, SVG, PNG o JPG aquí.</p>
+      <button class="btn-upload" onclick="document.getElementById('fileInput').click()">Explorar</button>
+      <input type="file" id="fileInput" accept=".pdf,.svg,.png,.jpg,.jpeg,image/png,image/jpeg,image/svg+xml,application/pdf" multiple />
+      <button class="btn-clear" onclick="clearAllFiles()">Limpiar todo</button>
+    </div>
+
+    <!-- Files list -->
+    <div class="panel files-panel" id="files-panel" style="display:none;">
+      <div class="panel-title">
+        <span>Archivos</span>
+        <span class="file-count" id="file-count">0</span>
+      </div>
+      <div class="files-list" id="files-list"></div>
+    </div>
+
+    <!-- Active file controls (injected by JS) -->
+    <div id="active-controls"></div>
+
+    <!-- Batch Panel -->
+    <div class="panel batch-panel" id="batch-panel" style="display:none;">
+      <div class="panel-title">Conversión Masiva</div>
+
+      <div class="pill-row">
+        <div class="pill-group-label">Formato de salida</div>
+        <div class="pill-group" id="batch-format-group">
+          <button class="pill-btn active" data-value="png" onclick="setPillActive('batch-format-group', this)">PNG</button>
+          <button class="pill-btn" data-value="jpg"  onclick="setPillActive('batch-format-group', this)">JPG</button>
+          <button class="pill-btn" data-value="pdf"  onclick="setPillActive('batch-format-group', this)">PDF</button>
+        </div>
+
+        <div class="pill-group-label">Calidad / DPI</div>
+        <div class="pill-group" id="batch-dpi-group">
+          <button class="pill-btn"        data-value="72"  onclick="setPillActive('batch-dpi-group', this)">72</button>
+          <button class="pill-btn active" data-value="300" onclick="setPillActive('batch-dpi-group', this)">300</button>
+          <button class="pill-btn"        data-value="600" onclick="setPillActive('batch-dpi-group', this)">600</button>
+        </div>
+      </div>
+
+      <button class="btn-dl highlight" id="btn-batch" onclick="batchDownload()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7,10 12,15 17,10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Convertir Todos
+      </button>
+      <div class="batch-hint" id="batch-hint">0 archivos</div>
+      <div class="skip-notice" id="skip-notice"></div>
+    </div>
+
+  </aside>
+
+  <!-- ─── PREVIEW AREA ─── -->
+  <main class="main-preview" id="preview-container">
+    <div class="preview-bg-toolbar" aria-label="Cambiar color de fondo de previsualización">
+      <span class="preview-bg-label">Fondo</span>
+      <button class="preview-bg-btn checker active" type="button" title="Cuadros transparentes" onclick="setPreviewBackground('checker', this)"></button>
+      <button class="preview-bg-btn white"   type="button" title="Blanco"  onclick="setPreviewBackground('white', this)"></button>
+      <button class="preview-bg-btn dark"    type="button" title="Oscuro"  onclick="setPreviewBackground('dark', this)"></button>
+      <button class="preview-bg-btn neon"    type="button" title="Marca"  onclick="setPreviewBackground('neon', this)"></button>
+      <button class="preview-bg-btn gray"    type="button" title="Gris"    onclick="setPreviewBackground('gray', this)"></button>
+      <input class="preview-bg-color" type="color" value="#ffffff" title="Color personalizado" oninput="setPreviewBackground(this.value, this)" />
+    </div>
+    <div class="empty-preview" id="empty-state">
+      El lienzo está vacío. Esperando archivos…
+    </div>
+  </main>
+
+</div><!-- /app-layout -->
+</div><!-- /page-wrapper -->
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-text">Chechena<span style="color:var(--accent)"> Shirts</span></span>
+      <p>Diseños digitales para DTF y Sublimación. Descarga inmediata, calidad profesional, actualizaciones semanales. 🎨</p>
+      <div class="footer-socials">
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/chechena_shirts" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@chechena_shirts" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </a>
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/1GyQAhvMFY/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.128 22 16.991 22 12z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h3>Tienda</h3>
+      <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/" target="_blank" rel="noopener">Inicio</a>
+      <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/#megapacks" target="_blank" rel="noopener">Megapacks</a>
+      <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/herramientas.html" target="_blank" rel="noopener">Más herramientas</a>
+    </div>
+    <div class="footer-links">
+      <h3>Soporte</h3>
+      <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/#preguntas-frecuentes" target="_blank" rel="noopener">Preguntas frecuentes</a>
+      <a href="https://chechenatshirts-hash.github.io/CHECHENA__SHIRTS/#contacto" target="_blank" rel="noopener">Contacto</a>
+      <a href="https://wa.me/529212337934" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2025 Chechena Shirts · Hecho con ♥ en México
+  </div>
+</footer>
+
+<!-- ── WHATSAPP ── -->
+<a class="wa-btn" href="https://wa.me/529212337934?text=Hola%2C%20tengo%20una%20duda.%20%C2%BFMe%20puedes%20ayudar%3F" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+</a>
+
+<!-- ═══════════════════════════════════════════════
+     CONVERTER JAVASCRIPT
+═══════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const { jsPDF } = window.jspdf;
+
+  const dropzone        = document.getElementById('dropzone');
+  const fileInput       = document.getElementById('fileInput');
+  const previewContainer = document.getElementById('preview-container');
+  const emptyState      = document.getElementById('empty-state');
+  const filesPanel      = document.getElementById('files-panel');
+  const filesList       = document.getElementById('files-list');
+  const activeControls  = document.getElementById('active-controls');
+  const batchPanel      = document.getElementById('batch-panel');
+  const fileCountBadge  = document.getElementById('file-count');
+  const batchHint       = document.getElementById('batch-hint');
+  const skipNotice      = document.getElementById('skip-notice');
+
+  /* ── Preview background ── */
+  window.setPreviewBackground = function (value, el) {
+    if (!previewContainer) return;
+    document.querySelectorAll('.preview-bg-btn').forEach(btn => btn.classList.remove('active'));
+    if (el && el.classList && el.classList.contains('preview-bg-btn')) el.classList.add('active');
+
+    const checker =
+      'linear-gradient(45deg, var(--preview-checker-a) 25%, var(--preview-checker-b) 25%),' +
+      'linear-gradient(-45deg, var(--preview-checker-a) 25%, var(--preview-checker-b) 25%),' +
+      'linear-gradient(45deg, var(--preview-checker-b) 75%, var(--preview-checker-a) 75%),' +
+      'linear-gradient(-45deg, var(--preview-checker-b) 75%, var(--preview-checker-a) 75%)';
+
+    if (value === 'checker') {
+      previewContainer.style.setProperty('--preview-bg-color',   '#ffffff');
+      previewContainer.style.setProperty('--preview-checker-a',  '#dfdfdf');
+      previewContainer.style.setProperty('--preview-checker-b',  'transparent');
+      previewContainer.style.setProperty('--preview-bg-image',   checker);
+    } else {
+      const colors = { white: '#ffffff', dark: '#2b231d', neon: '#e0916f', gray: '#9a8c7a' };
+      const color = colors[value] || value || '#ffffff';
+      previewContainer.style.setProperty('--preview-bg-color',  color);
+      previewContainer.style.setProperty('--preview-bg-image',  'none');
+    }
+  };
+
+  let fileCards = {};
+  let fileOrder = [];
+  let activeId  = null;
+
+  /* ── Pill selector helper ── */
+  window.setPillActive = function (groupId, btn) {
+    document.querySelectorAll(`#${groupId} .pill-btn`).forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+
+  function getPillValue(groupId) {
+    const active = document.querySelector(`#${groupId} .pill-btn.active`);
+    return active ? active.dataset.value : null;
+  }
+
+  /* ── Drag & Drop ── */
+  dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.classList.remove('drag-over');
+    handleFiles([...e.dataTransfer.files]);
+  });
+  fileInput.addEventListener('change', () => {
+    handleFiles([...fileInput.files]);
+    fileInput.value = '';
+  });
+
+  function handleFiles(files) {
+    const valid = files.filter(f =>
+      f.name.match(/\.(pdf|svg|png|jpe?g)$/i) || f.type.match(/(pdf|svg|png|jpeg)/i)
+    );
+    if (valid.length === 0) return;
+    if (emptyState) emptyState.style.display = 'none';
+    valid.forEach(processFile);
+  }
+
+  function getFileType(file) {
+    if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') return 'pdf';
+    if (file.name.toLowerCase().endsWith('.svg') || file.type.includes('svg')) return 'svg';
+    return 'image';
+  }
+
+  function getSourceExt(file) {
+    const m = file.name.match(/\.([a-z]+)$/i);
+    return m ? m[1].toLowerCase() : '';
+  }
+
+  /* ── Process file ── */
+  function processFile(file) {
+    const id = 'f' + Date.now() + Math.random().toString(36).slice(2, 6);
+    const rawName = file.name.replace(/\.[^.]+$/, '');
+    const displayName = rawName.length > 32 ? rawName.slice(0, 30) + '…' : rawName;
+    const baseName = rawName.replace(/[^a-zA-Z0-9_\-\.]/g, '-');
+    const type = getFileType(file);
+    const srcExt = getSourceExt(file);
+
+    fileCards[id] = { id, file, baseName, displayName, type, srcExt, numPages: 1 };
+    fileOrder.push(id);
+    addFileListItem(id, displayName, type, srcExt);
+
+    const reader = new FileReader();
+    reader.onload = async ev => {
+      try {
+        if (type === 'pdf') {
+          const pdfDoc = await pdfjsLib.getDocument({ data: ev.target.result }).promise;
+          fileCards[id].pdfDoc = pdfDoc;
+          fileCards[id].numPages = pdfDoc.numPages;
+          buildPreviewGroup(id, pdfDoc.numPages);
+          updateFileListItem(id, `${pdfDoc.numPages} pág(s)`);
+          await generatePdfThumbnail(id, pdfDoc);
+        } else {
+          const img = new Image();
+          await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = ev.target.result; });
+          fileCards[id].imgElement = img;
+          fileCards[id].width  = img.naturalWidth  || 800;
+          fileCards[id].height = img.naturalHeight || 800;
+          fileCards[id].dataUrl = ev.target.result;
+          buildPreviewGroup(id, 1);
+          updateFileListItem(id, `${fileCards[id].width}×${fileCards[id].height}px`);
+          generateImageThumbnail(id, img, type === 'image');
+        }
+        updateBatchHint();
+        if (fileOrder.length === 1) setActiveFile(id);
+        else if (activeId === id) renderLivePreview(id);
+      } catch (e) {
+        console.error(e);
+        removeFile(id);
+        alert('Error al leer: ' + file.name);
+      }
+    };
+    if (type === 'pdf') reader.readAsArrayBuffer(file);
+    else reader.readAsDataURL(file);
+  }
+
+  /* ── Thumbnails ── */
+  async function generatePdfThumbnail(id, pdfDoc) {
+    const thumbEl = document.getElementById(`thumb-${id}`);
+    if (!thumbEl) return;
+    try {
+      const page = await pdfDoc.getPage(1);
+      const vp = page.getViewport({ scale: 0.15 });
+      const tc = document.createElement('canvas');
+      tc.width = vp.width; tc.height = vp.height;
+      const ctx = tc.getContext('2d', { alpha: true });
+      ctx.clearRect(0, 0, tc.width, tc.height);
+      await page.render({ canvasContext: ctx, viewport: vp, background: 'rgba(0,0,0,0)' }).promise;
+      const img = document.createElement('img');
+      img.src = tc.toDataURL();
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      thumbEl.innerHTML = '';
+      thumbEl.appendChild(img);
+      const tag = document.createElement('div');
+      tag.className = 'file-type-tag';
+      tag.textContent = 'PDF';
+      thumbEl.appendChild(tag);
+    } catch (e) { console.warn('thumb pdf fail', e); }
+  }
+
+  function generateImageThumbnail(id, img, isRaster) {
+    const thumbEl = document.getElementById(`thumb-${id}`);
+    if (!thumbEl) return;
+    try {
+      const tc = document.createElement('canvas');
+      const SIZE = 80;
+      const ratio = img.naturalWidth / img.naturalHeight;
+      if (ratio >= 1) { tc.width = SIZE; tc.height = Math.round(SIZE / ratio); }
+      else { tc.height = SIZE; tc.width = Math.round(SIZE * ratio); }
+      const ctx = tc.getContext('2d');
+      ctx.drawImage(img, 0, 0, tc.width, tc.height);
+      const miniImg = document.createElement('img');
+      miniImg.src = tc.toDataURL();
+      miniImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      thumbEl.innerHTML = '';
+      if (isRaster) thumbEl.classList.add('transparent-bg');
+      thumbEl.appendChild(miniImg);
+      const tag = document.createElement('div');
+      tag.className = 'file-type-tag';
+      tag.textContent = fileCards[id].srcExt.toUpperCase();
+      thumbEl.appendChild(tag);
+    } catch (e) { console.warn('thumb img fail', e); }
+  }
+
+  /* ── File list UI ── */
+  function addFileListItem(id, fileName, type, srcExt) {
+    filesPanel.style.display = '';
+    batchPanel.style.display = '';
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.id = `fi-${id}`;
+    item.innerHTML = `
+      <div class="file-thumb" id="thumb-${id}">
+        <div class="file-thumb-placeholder">${srcExt || type}</div>
+      </div>
+      <div class="file-info">
+        <div class="file-info-name" title="${fileName}">${fileName}</div>
+        <div class="file-info-meta" id="fi-meta-${id}">Procesando…</div>
+      </div>
+      <button class="file-remove" onclick="event.stopPropagation(); removeFile('${id}')" title="Eliminar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>`;
+    item.addEventListener('click', () => setActiveFile(id));
+    filesList.appendChild(item);
+    fileCountBadge.textContent = fileOrder.length;
+  }
+
+  function updateFileListItem(id, metaText) {
+    const meta = document.getElementById(`fi-meta-${id}`);
+    if (meta) meta.textContent = metaText;
+  }
+
+  /* ── Activate and render ── */
+  function setActiveFile(id) {
+    activeId = id;
+    document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
+    document.getElementById(`fi-${id}`).classList.add('active');
+    document.querySelectorAll('.preview-file-group').forEach(g => g.classList.remove('active'));
+    document.getElementById(`pg-${id}`).classList.add('active');
+    buildActiveControls(id);
+    renderLivePreview(id);
+  }
+
+  function buildPreviewGroup(id, pages) {
+    const group = document.createElement('div');
+    group.className = 'preview-file-group';
+    group.id = `pg-${id}`;
+    for (let i = 1; i <= pages; i++) {
+      group.innerHTML += `<div class="canvas-wrapper"><canvas id="canvas-${id}-${i}"></canvas></div>`;
+    }
+    previewContainer.appendChild(group);
+  }
+
+  async function renderLivePreview(id) {
+    const card = fileCards[id];
+    if (card.type === 'pdf' && card.pdfDoc) {
+      for (let p = 1; p <= card.numPages; p++) {
+        const canvas = document.getElementById(`canvas-${id}-${p}`);
+        if (!canvas) continue;
+        const page = await card.pdfDoc.getPage(p);
+        const vp = page.getViewport({ scale: 1.5 });
+        canvas.width = vp.width; canvas.height = vp.height;
+        const ctx = canvas.getContext('2d', { alpha: true });
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        await page.render({ canvasContext: ctx, viewport: vp, background: 'rgba(0,0,0,0)' }).promise;
+      }
+    } else if (card.imgElement) {
+      const canvas = document.getElementById(`canvas-${id}-1`);
+      if (!canvas) return;
+      canvas.width = card.width; canvas.height = card.height;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(card.imgElement, 0, 0);
+    }
+  }
+
+  /* ── Per-file controls ── */
+  function buildActiveControls(id) {
+    activeControls.innerHTML = '';
+    const card = fileCards[id];
+
+    const clearPanel = document.createElement('div');
+    clearPanel.className = 'panel dl-panel';
+    clearPanel.innerHTML = `<button class="btn-clear compact" onclick="removeFile('${id}')">Limpiar archivo actual</button>`;
+    activeControls.appendChild(clearPanel);
+
+    let formatBtns = '';
+    if (card.type === 'pdf') {
+      formatBtns = `
+        <button class="pill-btn active" data-value="png" onclick="setPillActive('fmt-${id}-1', this)">PNG</button>
+        <button class="pill-btn"        data-value="jpg" onclick="setPillActive('fmt-${id}-1', this)">JPG</button>`;
+    } else if (card.type === 'svg') {
+      formatBtns = `
+        <button class="pill-btn active" data-value="png" onclick="setPillActive('fmt-${id}-1', this)">PNG</button>
+        <button class="pill-btn"        data-value="jpg" onclick="setPillActive('fmt-${id}-1', this)">JPG</button>
+        <button class="pill-btn"        data-value="pdf" onclick="setPillActive('fmt-${id}-1', this)">PDF</button>`;
+    } else {
+      formatBtns = `
+        <button class="pill-btn active" data-value="pdf" onclick="setPillActive('fmt-${id}-1', this)">PDF</button>
+        <button class="pill-btn"        data-value="png" onclick="setPillActive('fmt-${id}-1', this)">PNG</button>
+        <button class="pill-btn"        data-value="jpg" onclick="setPillActive('fmt-${id}-1', this)">JPG</button>
+        <button class="pill-btn"        data-value="svg" onclick="setPillActive('fmt-${id}-1', this)">SVG</button>`;
+    }
+
+    for (let p = 1; p <= card.numPages; p++) {
+      const fmtGroup = `fmt-${id}-${p}`;
+      const dpiGroup = `dpi-${id}-${p}`;
+      const pageFmtBtns = formatBtns.replace(new RegExp(`fmt-${id}-1`, 'g'), fmtGroup);
+      const panel = document.createElement('div');
+      panel.className = 'panel dl-panel';
+      panel.innerHTML = `
+        <div class="page-indicator">${card.displayName}${card.type === 'pdf' ? ` · Pág ${p}` : ''}</div>
+        <div class="pill-row">
+          <div class="pill-group-label">Formato de salida</div>
+          <div class="pill-group" id="${fmtGroup}">${pageFmtBtns}</div>
+          <div class="pill-group-label">Calidad / DPI</div>
+          <div class="pill-group" id="${dpiGroup}">
+            <button class="pill-btn"        data-value="72"  onclick="setPillActive('${dpiGroup}', this)">72</button>
+            <button class="pill-btn active" data-value="300" onclick="setPillActive('${dpiGroup}', this)">300</button>
+            <button class="pill-btn"        data-value="600" onclick="setPillActive('${dpiGroup}', this)">600</button>
+          </div>
+        </div>
+        <button class="btn-dl highlight" id="btnconv-${id}-${p}" onclick="triggerConvert('${id}', ${p})">
+          Convertir y Descargar
+        </button>`;
+      activeControls.appendChild(panel);
+    }
+  }
+
+  /* ── Conversion engine ── */
+  window.triggerConvert = async function (id, p) {
+    const fmtGroup = `fmt-${id}-${p}`;
+    const dpiGroup = `dpi-${id}-${p}`;
+    const format = getPillValue(fmtGroup);
+    const dpi    = parseInt(getPillValue(dpiGroup));
+    const btn    = document.getElementById(`btnconv-${id}-${p}`);
+    const orig   = btn.innerHTML;
+    btn.innerHTML = `<span class="spinner"></span> Procesando…`;
+    btn.disabled = true;
+    try { await performConversion(id, p, format, dpi); }
+    catch (e) { console.error(e); alert('Error en conversión.'); }
+    finally { btn.innerHTML = orig; btn.disabled = false; }
+  };
+
+  async function performConversion(id, pageNum, format, dpi) {
+    const card      = fileCards[id];
+    const offCanvas = await renderSourceToCanvas(card, pageNum, dpi);
+
+    if (format === 'png') removeAutoBackground(offCanvas);
+
+    const suffix    = card.type === 'pdf' ? `-pag${pageNum}` : '';
+    const finalName = `${card.baseName}${suffix}-${dpi}dpi.${format}`;
+
+    if (format === 'png') {
+      const blob = await canvasToBlob(offCanvas, 'image/png', 1.0);
+      forceDownload(URL.createObjectURL(blob), finalName);
+    } else if (format === 'jpg') {
+      const flat = flattenCanvas(offCanvas, '#ffffff');
+      const blob = await canvasToBlob(flat, 'image/jpeg', 1.0);
+      forceDownload(URL.createObjectURL(blob), finalName);
+    } else if (format === 'pdf') {
+      const flat   = flattenCanvas(offCanvas, '#ffffff');
+      const orient = flat.width > flat.height ? 'l' : 'p';
+      const doc    = new jsPDF({ orientation: orient, unit: 'px', format: [flat.width, flat.height] });
+      doc.addImage(flat.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, flat.width, flat.height);
+      doc.save(finalName);
+    } else if (format === 'svg') {
+      removeAutoBackground(offCanvas);
+      const imgData = offCanvas.toDataURL('image/png');
+      const svgCode = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${offCanvas.width} ${offCanvas.height}" width="${offCanvas.width}" height="${offCanvas.height}"><image href="${imgData}" width="100%" height="100%"/></svg>`;
+      const blob = new Blob([svgCode], { type: 'image/svg+xml' });
+      forceDownload(URL.createObjectURL(blob), finalName);
+    }
+  }
+
+  async function renderSourceToCanvas(card, pageNum, dpi) {
+    const scale    = dpi / 72;
+    const offCanvas = document.createElement('canvas');
+
+    if (card.type === 'pdf') {
+      const page = await card.pdfDoc.getPage(pageNum);
+      const vp   = page.getViewport({ scale });
+      offCanvas.width  = Math.ceil(vp.width);
+      offCanvas.height = Math.ceil(vp.height);
+      const ctx = offCanvas.getContext('2d', { alpha: true });
+      ctx.clearRect(0, 0, offCanvas.width, offCanvas.height);
+      await page.render({ canvasContext: ctx, viewport: vp, background: 'rgba(0,0,0,0)' }).promise;
+    } else {
+      offCanvas.width  = Math.max(1, Math.round(card.width  * scale));
+      offCanvas.height = Math.max(1, Math.round(card.height * scale));
+      const ctx = offCanvas.getContext('2d', { alpha: true });
+      ctx.clearRect(0, 0, offCanvas.width, offCanvas.height);
+      ctx.drawImage(card.imgElement, 0, 0, offCanvas.width, offCanvas.height);
+    }
+    return offCanvas;
+  }
+
+  function canvasToBlob(canvas, mime, quality) {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (!blob) reject(new Error('El navegador no pudo generar el archivo. Prueba con menor DPI.'));
+        else resolve(blob);
+      }, mime, quality);
+    });
+  }
+
+  function flattenCanvas(sourceCanvas, bgColor) {
+    const flat = document.createElement('canvas');
+    flat.width  = sourceCanvas.width;
+    flat.height = sourceCanvas.height;
+    const ctx   = flat.getContext('2d');
+    ctx.fillStyle = bgColor || '#ffffff';
+    ctx.fillRect(0, 0, flat.width, flat.height);
+    ctx.drawImage(sourceCanvas, 0, 0);
+    return flat;
+  }
+
+  /* ── Auto background removal (flood-fill from edges) ── */
+  function removeAutoBackground(canvas) {
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const w = canvas.width, h = canvas.height;
+    if (!w || !h) return;
+
+    let img;
+    try { img = ctx.getImageData(0, 0, w, h); }
+    catch (e) { console.warn('No se pudo leer el canvas:', e); return; }
+
+    const d    = img.data;
+    const samples = [];
+    const step = Math.max(1, Math.floor(Math.min(w, h) / 80));
+
+    for (let x = 0; x < w; x += step) { pushSample(x, 0); pushSample(x, h - 1); }
+    for (let y = 0; y < h; y += step) { pushSample(0, y); pushSample(w - 1, y); }
+
+    function pushSample(x, y) {
+      const i = (y * w + x) * 4;
+      if (d[i + 3] > 20) samples.push([d[i], d[i + 1], d[i + 2]]);
+    }
+    if (!samples.length) return;
+
+    let r = 0, g = 0, b = 0;
+    samples.forEach(s => { r += s[0]; g += s[1]; b += s[2]; });
+    r = Math.round(r / samples.length);
+    g = Math.round(g / samples.length);
+    b = Math.round(b / samples.length);
+
+    const brightness  = (r + g + b) / 3;
+    const colorSpread = Math.max(r, g, b) - Math.min(r, g, b);
+    const threshold   = brightness > 215 && colorSpread < 34 ? 72 : 48;
+    const softRange   = 26;
+    const visited     = new Uint8Array(w * h);
+    const stack       = [];
+
+    for (let x = 0; x < w; x++) { stack.push(x, 0, x, h - 1); }
+    for (let y = 0; y < h; y++) { stack.push(0, y, w - 1, y); }
+
+    while (stack.length) {
+      const y = stack.pop(), x = stack.pop();
+      if (x < 0 || y < 0 || x >= w || y >= h) continue;
+      const p = y * w + x;
+      if (visited[p]) continue;
+      visited[p] = 1;
+
+      const i = p * 4;
+      const a = d[i + 3];
+      if (a === 0) continue;
+
+      const dist = Math.abs(d[i] - r) + Math.abs(d[i + 1] - g) + Math.abs(d[i + 2] - b);
+      if (dist > threshold + softRange) continue;
+
+      if (dist <= threshold) d[i + 3] = 0;
+      else d[i + 3] = Math.round(d[i + 3] * ((dist - threshold) / softRange));
+
+      stack.push(x + 1, y, x - 1, y, x, y + 1, x, y - 1);
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  /* ── Batch download ── */
+  window.batchDownload = async function () {
+    const format = getPillValue('batch-format-group');
+    const dpi    = parseInt(getPillValue('batch-dpi-group'));
+
+    const readyFiles = fileOrder.filter(id => fileCards[id].pdfDoc || fileCards[id].imgElement);
+    if (readyFiles.length === 0) {
+      alert('Aún no hay archivos listos. Espera a que terminen de cargar.');
+      return;
+    }
+
+    const skipped   = [];
+    const toProcess = [];
+
+    readyFiles.forEach(id => {
+      const card = fileCards[id];
+      const src  = card.srcExt;
+      const isSame = format !== 'png' && (
+        (src === format) || (src === 'jpeg' && format === 'jpg') || (src === 'jpg' && format === 'jpeg')
+      );
+      if (isSame) skipped.push(card.displayName);
+      else toProcess.push(id);
+    });
+
+    if (skipped.length > 0) {
+      skipNotice.style.display = 'block';
+      skipNotice.textContent = `⚠ Omitidos (ya son ${format.toUpperCase()}): ${skipped.join(', ')}`;
+    } else {
+      skipNotice.style.display = 'none';
+    }
+
+    if (toProcess.length === 0) {
+      alert(`Todos los archivos ya son ${format.toUpperCase()}. No hay nada que convertir.`);
+      return;
+    }
+
+    let totalItems = 0;
+    toProcess.forEach(id => { totalItems += fileCards[id].numPages; });
+
+    const overlay = document.createElement('div');
+    overlay.className = 'batch-progress';
+    overlay.innerHTML = `
+      <div class="batch-progress-title">Procesando ${totalItems} elementos</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pb-fill" style="width:0%"></div></div>
+      <div class="batch-progress-sub" id="pb-sub">0 / ${totalItems}</div>`;
+    document.body.appendChild(overlay);
+
+    let done = 0, errores = 0;
+    for (const id of toProcess) {
+      for (let p = 1; p <= fileCards[id].numPages; p++) {
+        try { await performConversion(id, p, format, dpi); }
+        catch (err) { console.error(`Fallo en ${fileCards[id].baseName}:`, err); errores++; }
+        done++;
+        document.getElementById('pb-fill').style.width = Math.round((done / totalItems) * 100) + '%';
+        document.getElementById('pb-sub').textContent  = `${done} / ${totalItems}`;
+        await new Promise(r => setTimeout(r, 80));
+      }
+    }
+    document.body.removeChild(overlay);
+    if (errores > 0) alert(`Completado con ${errores} error(es). Revisa la consola (F12).`);
+  };
+
+  /* ── Utilities ── */
+  function forceDownload(url, name) {
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+
+  window.removeFile = function (id) {
+    const fi = document.getElementById(`fi-${id}`); if (fi) fi.remove();
+    const pg = document.getElementById(`pg-${id}`); if (pg) pg.remove();
+    delete fileCards[id];
+    fileOrder = fileOrder.filter(x => x !== id);
+    fileCountBadge.textContent = fileOrder.length;
+    updateBatchHint();
+
+    if (fileOrder.length === 0) {
+      filesPanel.style.display = 'none';
+      batchPanel.style.display = 'none';
+      activeControls.innerHTML = '';
+      if (emptyState) emptyState.style.display = '';
+      activeId = null;
+      skipNotice.style.display = 'none';
+    } else if (activeId === id) {
+      setActiveFile(fileOrder[fileOrder.length - 1]);
+    }
+  };
+
+  window.clearAllFiles = function () {
+    Object.keys(fileCards).forEach(id => {
+      const fi = document.getElementById(`fi-${id}`); if (fi) fi.remove();
+      const pg = document.getElementById(`pg-${id}`); if (pg) pg.remove();
+    });
+    fileCards = {};
+    fileOrder = [];
+    activeId  = null;
+    fileCountBadge.textContent = '0';
+    activeControls.innerHTML   = '';
+    filesPanel.style.display   = 'none';
+    batchPanel.style.display   = 'none';
+    skipNotice.style.display   = 'none';
+    if (emptyState) emptyState.style.display = '';
+    updateBatchHint();
+  };
+
+  function updateBatchHint() {
+    let p = 0;
+    fileOrder.forEach(id => { p += fileCards[id].numPages; });
+    batchHint.textContent = `${fileOrder.length} archivos · ${p} ítem(s)`;
+  }
+
+})();
+</script>
+</body>
+</html>
