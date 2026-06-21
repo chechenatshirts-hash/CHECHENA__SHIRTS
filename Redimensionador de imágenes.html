@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CHECHENA SHIRTS — Redimensionador de Imágenes</title>
+<meta name="description" content="Herramienta exclusiva de CHECHENA SHIRTS para redimensionar imágenes con control de DPI y unidades profesionales." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream-50:#FDFBF4;
+    --cream-100:#F7F1E4;
+    --cream-200:#EDE3CC;
+    --cream-300:#D9C9A3;
+    --sand:#C9B48A;
+    --earth:#8B6F47;
+    --bark:#4A3A24;
+    --ink:#2B2218;
+    --accent:#A67C4E;
+    --shadow-sm:0 2px 8px rgba(74,58,36,.06);
+    --shadow-md:0 8px 30px rgba(74,58,36,.10);
+    --shadow-lg:0 20px 60px rgba(74,58,36,.14);
+    --radius-sm:10px;
+    --radius-md:18px;
+    --radius-lg:28px;
+    --transition:cubic-bezier(.4,0,.2,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(166,124,78,.08), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(201,180,138,.12), transparent 55%),
+      linear-gradient(180deg,var(--cream-50) 0%,var(--cream-100) 100%);
+    color:var(--ink);
+    min-height:100vh;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ===== HEADER ===== */
+  .cs-header{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    background:rgba(253,251,244,.78);
+    border-bottom:1px solid rgba(139,111,71,.12);
+  }
+  .cs-header-inner{
+    max-width:1320px;margin:0 auto;
+    padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:24px;
+  }
+  .cs-brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink)}
+  .cs-logo-mark{
+    width:44px;height:44px;border-radius:12px;
+    background:linear-gradient(135deg,var(--bark) 0%,var(--earth) 100%);
+    display:grid;place-items:center;
+    color:var(--cream-50);
+    font-family:'Cormorant Garamond',serif;
+    font-weight:700;font-size:22px;
+    box-shadow:var(--shadow-sm);
+    letter-spacing:-1px;
+  }
+  .cs-brand-text{display:flex;flex-direction:column;line-height:1.05}
+  .cs-brand-name{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;font-size:22px;letter-spacing:.02em;
+    color:var(--ink);
+  }
+  .cs-brand-tag{
+    font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--earth);font-weight:500;
+  }
+  .cs-nav{display:flex;gap:28px;align-items:center}
+  .cs-nav a{
+    text-decoration:none;color:var(--bark);
+    font-size:14px;font-weight:500;
+    position:relative;transition:color .25s var(--transition);
+  }
+  .cs-nav a:hover{color:var(--accent)}
+  .cs-nav a::after{
+    content:"";position:absolute;left:0;bottom:-6px;
+    width:0;height:1.5px;background:var(--earth);
+    transition:width .3s var(--transition);
+  }
+  .cs-nav a:hover::after{width:100%}
+  .cs-cta-mini{
+    padding:10px 20px;border-radius:999px;
+    background:var(--ink);color:var(--cream-50);
+    font-size:13px;font-weight:500;letter-spacing:.02em;
+    text-decoration:none;transition:all .25s var(--transition);
+    border:1px solid transparent;
+  }
+  .cs-cta-mini:hover{background:var(--bark);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+  @media(max-width:820px){.cs-nav{display:none}}
+
+  /* ===== HERO ===== */
+  .cs-hero{
+    max-width:1100px;margin:0 auto;
+    padding:72px 32px 32px;
+    text-align:center;
+  }
+  .cs-eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 18px;border-radius:999px;
+    background:rgba(139,111,71,.08);
+    border:1px solid rgba(139,111,71,.18);
+    font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--earth);font-weight:600;
+    margin-bottom:28px;
+  }
+  .cs-eyebrow-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--earth);
+    box-shadow:0 0 0 4px rgba(139,111,71,.15);
+  }
+  .cs-hero h1{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    font-size:clamp(2.4rem,5.5vw,4.2rem);
+    line-height:1.05;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:22px;
+  }
+  .cs-hero h1 em{
+    font-style:italic;font-weight:500;
+    color:var(--earth);
+    position:relative;
+  }
+  .cs-hero h1 em::after{
+    content:"";position:absolute;left:0;right:0;bottom:.08em;
+    height:6px;background:rgba(201,180,138,.45);
+    z-index:-1;border-radius:3px;
+  }
+  .cs-hero p{
+    max-width:640px;margin:0 auto;
+    font-size:1.08rem;color:var(--bark);
+    font-weight:400;line-height:1.65;
+  }
+
+  /* ===== CONTAINER ===== */
+  .cs-container{
+    max-width:1100px;margin:0 auto;
+    padding:24px 32px 80px;
+  }
+  .cs-card{
+    background:var(--cream-50);
+    border:1px solid rgba(139,111,71,.12);
+    border-radius:var(--radius-lg);
+    padding:48px;
+    box-shadow:var(--shadow-md);
+    position:relative;
+    overflow:hidden;
+  }
+  .cs-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);
+  }
+
+  /* ===== UPLOAD AREA ===== */
+  .upload-area{
+    border:2px dashed rgba(139,111,71,.35);
+    background:
+      radial-gradient(600px 300px at 50% 50%, rgba(201,180,138,.12), transparent 70%),
+      var(--cream-100);
+    padding:72px 32px;
+    border-radius:var(--radius-md);
+    cursor:pointer;
+    transition:all .35s var(--transition);
+    text-align:center;
+    position:relative;
+  }
+  .upload-area:hover,
+  .upload-area.highlight{
+    background:
+      radial-gradient(600px 300px at 50% 50%, rgba(166,124,78,.18), transparent 70%),
+      var(--cream-100);
+    border-color:var(--earth);
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-sm);
+  }
+  .upload-icon{
+    width:64px;height:64px;margin:0 auto 20px;
+    border-radius:20px;
+    background:linear-gradient(135deg,var(--earth),var(--bark));
+    display:grid;place-items:center;
+    color:var(--cream-50);
+    box-shadow:0 8px 24px rgba(139,111,71,.25);
+  }
+  .upload-area p{
+    font-size:1.1rem;color:var(--bark);
+    font-weight:400;
+  }
+  .upload-link{
+    color:var(--earth);
+    text-decoration:none;font-weight:600;
+    border-bottom:1px solid rgba(139,111,71,.3);
+    transition:all .2s var(--transition);
+  }
+  .upload-link:hover{color:var(--bark);border-color:var(--bark)}
+  .upload-hint{
+    display:block;margin-top:10px;
+    font-size:.85rem;color:var(--earth);opacity:.75;
+    letter-spacing:.02em;
+  }
+
+  /* ===== ERROR ===== */
+  .error-message{
+    color:#8B2A1A;
+    background:rgba(196,77,56,.08);
+    border:1px solid rgba(196,77,56,.25);
+    padding:16px 22px;
+    border-radius:var(--radius-sm);
+    margin:24px auto;
+    font-size:.95rem;
+    max-width:640px;
+    text-align:center;
+  }
+
+  /* ===== RESIZE AREA ===== */
+  #resizeArea{
+    background:var(--cream-100);
+    border:1px solid rgba(139,111,71,.15);
+    border-radius:var(--radius-md);
+    padding:36px;
+    margin-top:32px;
+  }
+  #resizeArea h3{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;
+    font-size:1.85rem;
+    color:var(--ink);
+    margin-bottom:8px;
+    letter-spacing:-.01em;
+  }
+  .resize-subtitle{
+    color:var(--earth);font-size:.92rem;
+    margin-bottom:28px;font-weight:400;
+  }
+
+  #resizePreview{
+    max-width:100%;max-height:340px;
+    width:auto;height:auto;
+    border-radius:var(--radius-sm);
+    margin:0 auto 28px;
+    display:none;
+    background:
+      repeating-conic-gradient(var(--cream-200) 0% 25%, var(--cream-300) 0% 50%) 0 0 / 18px 18px;
+    border:1px solid rgba(139,111,71,.2);
+    box-shadow:var(--shadow-sm);
+  }
+
+  .file-chip{
+    display:inline-flex;align-items:center;gap:10px;
+    margin:0 auto 28px;
+    padding:9px 18px;
+    border-radius:999px;
+    background:var(--cream-50);
+    border:1px solid rgba(139,111,71,.2);
+    color:var(--bark);
+    font-size:.85rem;font-weight:500;
+    cursor:pointer;
+    transition:all .2s var(--transition);
+  }
+  .file-chip:hover{
+    background:var(--cream-200);
+    border-color:var(--earth);
+  }
+  .file-chip svg{flex-shrink:0}
+
+  .resize-controls{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:18px;
+    margin-bottom:28px;
+    text-align:left;
+  }
+  .resize-group{display:flex;flex-direction:column;gap:8px}
+  .resize-group label{
+    color:var(--bark);
+    font-size:.78rem;font-weight:600;
+    padding-left:4px;
+    letter-spacing:.08em;text-transform:uppercase;
+  }
+  .resize-group input[type="number"],
+  .resize-group select{
+    background:var(--cream-50);
+    border:1.5px solid rgba(139,111,71,.22);
+    color:var(--ink);
+    padding:13px 16px;
+    border-radius:var(--radius-sm);
+    font-size:.98rem;
+    font-family:inherit;font-weight:500;
+    transition:all .25s var(--transition);
+    width:100%;
+    -moz-appearance:textfield;
+  }
+  .resize-group input[type="number"]::-webkit-outer-spin-button,
+  .resize-group input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;
+  }
+  .resize-group input[type="number"]:focus,
+  .resize-group select:focus{
+    border-color:var(--earth);
+    background:#fff;
+    outline:none;
+    box-shadow:0 0 0 4px rgba(139,111,71,.1);
+  }
+  .resize-group select{
+    appearance:none;-webkit-appearance:none;-moz-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%238B6F47' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:40px;
+    cursor:pointer;
+  }
+
+  .toggle-row{
+    display:flex;gap:24px;justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:24px;
+    padding:18px;
+    background:var(--cream-50);
+    border-radius:var(--radius-sm);
+    border:1px solid rgba(139,111,71,.12);
+  }
+  .aspect-ratio-toggle{
+    display:flex;align-items:center;gap:10px;
+    color:var(--bark);
+    font-size:.92rem;font-weight:500;
+    cursor:pointer;user-select:none;
+  }
+  .aspect-ratio-toggle label{cursor:pointer}
+  .aspect-ratio-toggle input[type="checkbox"]{
+    appearance:none;-webkit-appearance:none;
+    width:22px;height:22px;
+    background:var(--cream-50);
+    border:1.5px solid rgba(139,111,71,.35);
+    border-radius:6px;
+    cursor:pointer;
+    position:relative;
+    transition:all .2s var(--transition);
+    flex-shrink:0;
+  }
+  .aspect-ratio-toggle input[type="checkbox"]:hover{border-color:var(--earth)}
+  .aspect-ratio-toggle input[type="checkbox"]:checked{
+    background:var(--earth);
+    border-color:var(--earth);
+  }
+  .aspect-ratio-toggle input[type="checkbox"]:checked::after{
+    content:"";position:absolute;
+    color:var(--cream-50);font-weight:700;font-size:14px;
+    top:45%;left:50%;
+    transform:translate(-50%,-50%) rotate(-45deg);
+    width:6px;height:11px;
+    border:solid var(--cream-50);
+    border-width:0 2px 2px 0;
+  }
+
+  #resultBadge{
+    margin:20px auto 0;
+    max-width:780px;
+    padding:16px 22px;
+    border-radius:var(--radius-sm);
+    border:1px solid rgba(139,111,71,.2);
+    background:var(--cream-50);
+    color:var(--bark);
+    font-size:.95rem;
+    display:none;
+    text-align:center;
+    line-height:1.5;
+  }
+  #resultBadge strong{color:var(--earth);font-weight:600}
+
+  /* ===== BUTTON ===== */
+  .boton-descarga{
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:12px;
+    margin-top:28px;
+    padding:18px 44px;
+    background:linear-gradient(135deg,var(--bark) 0%,var(--earth) 100%);
+    color:var(--cream-50);
+    text-decoration:none;
+    border-radius:999px;
+    font-size:1rem;font-weight:600;
+    letter-spacing:.02em;
+    transition:all .3s var(--transition);
+    border:none;cursor:pointer;
+    box-shadow:0 10px 30px rgba(74,58,36,.25), inset 0 1px 0 rgba(255,255,255,.1);
+    position:relative;overflow:hidden;
+  }
+  .boton-descarga::before{
+    content:"";position:absolute;top:0;left:-100%;
+    width:60%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+    transform:skewX(-20deg);
+    transition:left .6s var(--transition);
+  }
+  .boton-descarga:hover::before{left:150%}
+  .boton-descarga:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:0 14px 40px rgba(74,58,36,.35), inset 0 1px 0 rgba(255,255,255,.15);
+  }
+  .boton-descarga:active:not(:disabled){transform:translateY(0)}
+  .boton-descarga:disabled{
+    background:var(--cream-200);
+    color:var(--earth);
+    cursor:not-allowed;
+    box-shadow:none;
+    transform:none;
+    opacity:.6;
+  }
+
+  .spinner{
+    width:18px;height:18px;
+    border:2.5px solid rgba(253,251,244,.3);
+    border-top-color:var(--cream-50);
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+    flex-shrink:0;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ===== FEATURES ===== */
+  .cs-features{
+    max-width:1100px;margin:0 auto;
+    padding:0 32px 80px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+  }
+  .cs-feature{
+    background:var(--cream-50);
+    border:1px solid rgba(139,111,71,.12);
+    border-radius:var(--radius-md);
+    padding:28px;
+    transition:all .3s var(--transition);
+  }
+  .cs-feature:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-md);
+    border-color:rgba(139,111,71,.25);
+  }
+  .cs-feature-icon{
+    width:44px;height:44px;border-radius:12px;
+    background:var(--cream-200);
+    display:grid;place-items:center;
+    color:var(--earth);
+    margin-bottom:16px;
+  }
+  .cs-feature h4{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;font-size:1.3rem;
+    color:var(--ink);
+    margin-bottom:8px;letter-spacing:-.01em;
+  }
+  .cs-feature p{
+    font-size:.9rem;color:var(--bark);
+    line-height:1.55;
+  }
+
+  /* ===== FOOTER ===== */
+  .cs-footer{
+    border-top:1px solid rgba(139,111,71,.15);
+    background:rgba(247,241,228,.6);
+    padding:40px 32px;
+    text-align:center;
+  }
+  .cs-footer-inner{
+    max-width:1100px;margin:0 auto;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+  }
+  .cs-footer-brand{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;font-size:1.4rem;
+    color:var(--ink);letter-spacing:.02em;
+  }
+  .cs-footer p{
+    font-size:.85rem;color:var(--earth);
+    letter-spacing:.02em;
+  }
+  .cs-footer-links{
+    display:flex;gap:24px;flex-wrap:wrap;justify-content:center;
+    margin-top:6px;
+  }
+  .cs-footer-links a{
+    font-size:.82rem;color:var(--bark);
+    text-decoration:none;transition:color .2s;
+  }
+  .cs-footer-links a:hover{color:var(--earth)}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:900px){
+    .cs-card{padding:32px 24px}
+    #resizeArea{padding:28px 22px}
+  }
+  @media(max-width:640px){
+    .cs-header-inner{padding:14px 20px}
+    .cs-hero{padding:48px 20px 20px}
+    .cs-container{padding:16px 16px 60px}
+    .cs-card{padding:24px 18px;border-radius:var(--radius-md)}
+    .upload-area{padding:52px 20px}
+    .upload-area p{font-size:1rem}
+    #resizeArea{padding:22px 16px}
+    #resizeArea h3{font-size:1.5rem}
+    .resize-controls{grid-template-columns:1fr;gap:14px}
+    .boton-descarga{width:100%;padding:16px 28px;font-size:.95rem}
+    .cs-features{padding:0 16px 60px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="cs-header">
+  <div class="cs-header-inner">
+    <a href="#" class="cs-brand">
+      <div class="cs-logo-mark">C</div>
+      <div class="cs-brand-text">
+        <span class="cs-brand-name">Chechena Shirts</span>
+        <span class="cs-brand-tag">Taller Creativo</span>
+      </div>
+    </a>
+    <nav class="cs-nav">
+      <a href="#">Inicio</a>
+      <a href="#">Taller</a>
+      <a href="#">Catálogo</a>
+      <a href="#">Contacto</a>
+      <a href="#" class="cs-cta-mini">Mi cuenta</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="cs-hero">
+  <div class="cs-eyebrow">
+    <span class="cs-eyebrow-dot"></span>
+    Herramienta del taller
+  </div>
+  <h1>Redimensionador de <em>imágenes</em></h1>
+  <p>Ajusta el tamaño y la resolución de tus diseños con precisión profesional. Control total de unidades, DPI y proporciones — listo para imprimir o publicar.</p>
+</section>
+
+<!-- ===== MAIN TOOL ===== -->
+<main class="cs-container">
+  <div class="cs-card">
+    <div id="dropArea" class="upload-area">
+      <input type="file" id="imagenInput" accept="image/*" style="display:none;" />
+      <div class="upload-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <p>Arrastra tu imagen aquí o <span class="upload-link">haz clic para seleccionarla</span></p>
+      <span class="upload-hint">JPG · PNG · WEBP · GIF — hasta 50 MB</span>
+    </div>
+
+    <div id="error-message" class="error-message" style="display:none;"></div>
+
+    <div id="resizeArea" style="display:none;">
+      <h3>Ajustar tamaño y resolución</h3>
+      <p class="resize-subtitle">Configura las dimensiones finales y la calidad de impresión.</p>
+
+      <img id="resizePreview" src="" alt="Previsualización" />
+
+      <div style="text-align:center">
+        <div id="fileChip" class="file-chip" title="Cargar otra imagen">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span id="fileChipName">imagen.png</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="resize-controls" style="margin-top:24px;">
+        <div class="resize-group">
+          <label for="resizeWidth">Ancho</label>
+          <input type="number" id="resizeWidth" min="1" />
+        </div>
+        <div class="resize-group">
+          <label for="resizeHeight">Alto</label>
+          <input type="number" id="resizeHeight" min="1" />
+        </div>
+        <div class="resize-group">
+          <label for="resizeUnits">Unidad</label>
+          <select id="resizeUnits">
+            <option value="px" selected>Píxeles (px)</option>
+            <option value="cm">Centímetros (cm)</option>
+            <option value="in">Pulgadas (in)</option>
+          </select>
+        </div>
+        <div class="resize-group">
+          <label for="resizeDPI">Resolución (DPI)</label>
+          <select id="resizeDPI">
+            <option value="72">72 DPI — Web</option>
+            <option value="96" selected>96 DPI — Pantalla</option>
+            <option value="150">150 DPI — Baja calidad</option>
+            <option value="300">300 DPI — Impresión</option>
+            <option value="600">600 DPI — Alta resolución</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="aspect-ratio-toggle">
+          <input type="checkbox" id="keepAspectRatio" checked />
+          <label for="keepAspectRatio">Mantener proporción</label>
+        </div>
+        <div class="aspect-ratio-toggle">
+          <input type="checkbox" id="removeSemiTransparency" />
+          <label for="removeSemiTransparency">Eliminar semitransparencias</label>
+        </div>
+      </div>
+
+      <div id="resultBadge"></div>
+
+      <div style="text-align:center">
+        <button id="resizeBtn" class="boton-descarga" style="margin-top:24px;">
+          Redimensionar y descargar
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ===== FEATURES ===== -->
+<section class="cs-features">
+  <div class="cs-feature">
+    <div class="cs-feature-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+    <h4>Procesamiento local</h4>
+    <p>Tu imagen nunca sale de tu dispositivo. Todo ocurre en el navegador, al instante.</p>
+  </div>
+  <div class="cs-feature">
+    <div class="cs-feature-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+      </svg>
+    </div>
+    <h4>DPI profesional</h4>
+    <p>De 72 a 600 DPI, con metadatos pHYs incrustados en el PNG para impresión perfecta.</p>
+  </div>
+  <div class="cs-feature">
+    <div class="cs-feature-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+    </div>
+    <h4>Unidades flexibles</h4>
+    <p>Trabaja en píxeles, centímetros o pulgadas según tu flujo de trabajo.</p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="cs-footer">
+  <div class="cs-footer-inner">
+    <div class="cs-footer-brand">Chechena Shirts</div>
+    <p>© 2026 Chechena Shirts · Taller creativo de personalizados</p>
+    <div class="cs-footer-links">
+      <a href="#">Términos</a>
+      <a href="#">Privacidad</a>
+      <a href="#">Contacto</a>
+      <a href="#">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+const dropArea       = document.getElementById('dropArea');
+const imagenInput    = document.getElementById('imagenInput');
+const errorMsg       = document.getElementById('error-message');
+const resizeArea     = document.getElementById('resizeArea');
+const resizeWidthEl  = document.getElementById('resizeWidth');
+const resizeHeightEl = document.getElementById('resizeHeight');
+const resizeUnitsEl  = document.getElementById('resizeUnits');
+const resizeDPIEl    = document.getElementById('resizeDPI');
+const keepAspectEl   = document.getElementById('keepAspectRatio');
+const resizePreview  = document.getElementById('resizePreview');
+const resizeBtn      = document.getElementById('resizeBtn');
+const resultBadge    = document.getElementById('resultBadge');
+const fileChip       = document.getElementById('fileChip');
+const fileChipName   = document.getElementById('fileChipName');
+let originalFile   = null;
+let originalImage  = new Image();
+let originalWidth  = 0;
+let originalHeight = 0;
+let targetWidthPx  = 0;
+let targetHeightPx = 0;
+let updatingInputs = false;
+
+dropArea.addEventListener('click', () => imagenInput.click());
+fileChip.addEventListener('click', () => imagenInput.click());
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev =>
+  dropArea.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); })
+);
+['dragenter', 'dragover'].forEach(ev =>
+  dropArea.addEventListener(ev, () => dropArea.classList.add('highlight'))
+);
+['dragleave', 'drop'].forEach(ev =>
+  dropArea.addEventListener(ev, () => dropArea.classList.remove('highlight'))
+);
+dropArea.addEventListener('drop', e => {
+  if (e.dataTransfer.files.length > 0) handleFileUpload(e.dataTransfer.files[0]);
+});
+imagenInput.addEventListener('change', e => {
+  if (e.target.files.length > 0) handleFileUpload(e.target.files[0]);
+  e.target.value = '';
+});
+
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorMsg.style.display = 'block';
+}
+function hideError() { errorMsg.style.display = 'none'; }
+
+function updateBadge() {
+  if (!targetWidthPx || !targetHeightPx) { resultBadge.style.display = 'none'; return; }
+  const unit = resizeUnitsEl.value;
+  const dpi  = parseInt(resizeDPIEl.value, 10);
+  if (unit === 'px') {
+    resultBadge.innerHTML =
+      `Resultado: <strong>${targetWidthPx} × ${targetHeightPx} px</strong> · <strong>${dpi} DPI</strong> incrustado en PNG`;
+  } else {
+    const wU = getValueInUnit(targetWidthPx, unit, dpi);
+    const hU = getValueInUnit(targetHeightPx, unit, dpi);
+    const label = unit === 'cm' ? 'cm' : 'in';
+    resultBadge.innerHTML =
+      `Resultado: <strong>${targetWidthPx} × ${targetHeightPx} px</strong> · ` +
+      `${wU} × ${hU} ${label} @ <strong>${dpi} DPI</strong> incrustado en PNG`;
+  }
+  resultBadge.style.display = 'block';
+}
+
+function handleFileUpload(file) {
+  if (!file.type.startsWith('image/')) {
+    showError('Por favor, sube un archivo de imagen válido (JPG, PNG, WEBP, GIF, etc.).');
+    return;
+  }
+  if (file.size > 50 * 1024 * 1024) {
+    showError('La imagen es demasiado grande. El tamaño máximo es 50 MB.');
+    return;
+  }
+  originalFile = file;
+  hideError();
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    originalImage = new Image();
+    originalImage.onload = () => {
+      originalWidth  = originalImage.naturalWidth;
+      originalHeight = originalImage.naturalHeight;
+      targetWidthPx  = originalWidth;
+      targetHeightPx = originalHeight;
+      resizeUnitsEl.value = 'px';
+      resizeDPIEl.value   = '96';
+      updateResizeInputs(targetWidthPx, targetHeightPx, 'px', 96);
+      resizePreview.src          = ev.target.result;
+      resizePreview.style.display = 'block';
+      resizeArea.style.display   = 'block';
+      dropArea.style.display     = 'none';
+      fileChipName.textContent = file.name.length > 40
+        ? file.name.slice(0, 37) + '…'
+        : file.name;
+      updateBadge();
+    };
+    originalImage.onerror = () => showError('No se pudo leer la imagen. Intenta con otro archivo.');
+    originalImage.src = ev.target.result;
+  };
+  reader.onerror = () => showError('Error al leer el archivo.');
+  reader.readAsDataURL(file);
+}
+
+function getPixels(value, unit, dpi) {
+  const v = parseFloat(value);
+  if (isNaN(v) || v <= 0) return 0;
+  if (unit === 'cm') return Math.round((v * dpi) / 2.54);
+  if (unit === 'in') return Math.round(v * dpi);
+  return Math.round(v);
+}
+function getValueInUnit(px, unit, dpi) {
+  if (px <= 0) return 0;
+  if (unit === 'cm') return parseFloat(((px * 2.54) / dpi).toFixed(2));
+  if (unit === 'in') return parseFloat((px / dpi).toFixed(2));
+  return Math.round(px);
+}
+function updateResizeInputs(pxW, pxH, unit, dpi) {
+  updatingInputs = true;
+  resizeWidthEl.value  = getValueInUnit(pxW, unit, dpi);
+  resizeHeightEl.value = getValueInUnit(pxH, unit, dpi);
+  updatingInputs = false;
+}
+
+resizeWidthEl.addEventListener('input', () => {
+  if (updatingInputs) return;
+  const unit = resizeUnitsEl.value;
+  const dpi  = parseInt(resizeDPIEl.value, 10);
+  const newPx = getPixels(resizeWidthEl.value, unit, dpi);
+  if (!newPx) return;
+  targetWidthPx = newPx;
+  if (keepAspectEl.checked && originalWidth > 0) {
+    targetHeightPx = Math.round((targetWidthPx / originalWidth) * originalHeight);
+    updatingInputs = true;
+    resizeHeightEl.value = getValueInUnit(targetHeightPx, unit, dpi);
+    updatingInputs = false;
+  }
+  updateBadge();
+});
+resizeHeightEl.addEventListener('input', () => {
+  if (updatingInputs) return;
+  const unit = resizeUnitsEl.value;
+  const dpi  = parseInt(resizeDPIEl.value, 10);
+  const newPx = getPixels(resizeHeightEl.value, unit, dpi);
+  if (!newPx) return;
+  targetHeightPx = newPx;
+  if (keepAspectEl.checked && originalHeight > 0) {
+    targetWidthPx = Math.round((targetHeightPx / originalHeight) * originalWidth);
+    updatingInputs = true;
+    resizeWidthEl.value = getValueInUnit(targetWidthPx, unit, dpi);
+    updatingInputs = false;
+  }
+  updateBadge();
+});
+resizeUnitsEl.addEventListener('change', () => {
+  updateResizeInputs(targetWidthPx, targetHeightPx, resizeUnitsEl.value, parseInt(resizeDPIEl.value, 10));
+  updateBadge();
+});
+resizeDPIEl.addEventListener('change', () => {
+  updateResizeInputs(targetWidthPx, targetHeightPx, resizeUnitsEl.value, parseInt(resizeDPIEl.value, 10));
+  updateBadge();
+});
+
+function uint8ArrayToBase64(bytes) {
+  let binary = '';
+  const CHUNK = 8192;
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  }
+  return btoa(binary);
+}
+function crc32(buf) {
+  let crc = 0xffffffff;
+  for (let i = 0; i < buf.length; i++) {
+    crc ^= buf[i];
+    for (let j = 0; j < 8; j++) {
+      crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1));
+    }
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+function buildChunk(type, data) {
+  const typeBytes = new TextEncoder().encode(type);
+  const len       = data.length;
+  const out       = new Uint8Array(4 + 4 + len + 4);
+  out[0] = (len >>> 24) & 0xff;
+  out[1] = (len >>> 16) & 0xff;
+  out[2] = (len >>>  8) & 0xff;
+  out[3] =  len         & 0xff;
+  out.set(typeBytes, 4);
+  out.set(data, 8);
+  const crcVal = crc32(out.subarray(4, 8 + len));
+  out[8 + len]     = (crcVal >>> 24) & 0xff;
+  out[8 + len + 1] = (crcVal >>> 16) & 0xff;
+  out[8 + len + 2] = (crcVal >>>  8) & 0xff;
+  out[8 + len + 3] =  crcVal         & 0xff;
+  return out;
+}
+function parsePngChunks(pngBytes) {
+  const chunks = [];
+  let offset = 8;
+  while (offset < pngBytes.length) {
+    const len  = (pngBytes[offset] << 24 | pngBytes[offset+1] << 16 |
+                  pngBytes[offset+2] << 8  | pngBytes[offset+3]) >>> 0;
+    const type = String.fromCharCode(
+      pngBytes[offset+4], pngBytes[offset+5],
+      pngBytes[offset+6], pngBytes[offset+7]
+    );
+    const data = pngBytes.slice(offset + 8, offset + 8 + len);
+    chunks.push({ type, data });
+    offset += 4 + 4 + len + 4;
+    if (type === 'IEND') break;
+  }
+  return chunks;
+}
+function setPngDPI(pngDataUrl, dpi) {
+  const base64   = pngDataUrl.split(',')[1];
+  const pngBytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+  const PNG_SIG = [137, 80, 78, 71, 13, 10, 26, 10];
+  for (let i = 0; i < 8; i++) {
+    if (pngBytes[i] !== PNG_SIG[i]) throw new Error('El archivo no es un PNG válido.');
+  }
+  const chunks = parsePngChunks(pngBytes).filter(c => c.type !== 'pHYs');
+  const ppm      = Math.round(dpi * 39.3701);
+  const physData = new Uint8Array(9);
+  physData[0] = (ppm >>> 24) & 0xff;
+  physData[1] = (ppm >>> 16) & 0xff;
+  physData[2] = (ppm >>>  8) & 0xff;
+  physData[3] =  ppm         & 0xff;
+  physData[4] = (ppm >>> 24) & 0xff;
+  physData[5] = (ppm >>> 16) & 0xff;
+  physData[6] = (ppm >>>  8) & 0xff;
+  physData[7] =  ppm         & 0xff;
+  physData[8] = 1;
+  const ihdrIdx = chunks.findIndex(c => c.type === 'IHDR');
+  if (ihdrIdx === -1) throw new Error('PNG sin chunk IHDR.');
+  chunks.splice(ihdrIdx + 1, 0, { type: 'pHYs', data: physData });
+  const PNG_SIGNATURE = new Uint8Array(PNG_SIG);
+  const serialized    = chunks.map(c => buildChunk(c.type, c.data));
+  const totalLen      = PNG_SIGNATURE.length + serialized.reduce((s, c) => s + c.length, 0);
+  const out           = new Uint8Array(totalLen);
+  let pos = 0;
+  out.set(PNG_SIGNATURE, pos); pos += PNG_SIGNATURE.length;
+  for (const chunk of serialized) { out.set(chunk, pos); pos += chunk.length; }
+  return 'data:image/png;base64,' + uint8ArrayToBase64(out);
+}
+
+function setButtonState(loading) {
+  if (loading) {
+    resizeBtn.disabled = true;
+    resizeBtn.innerHTML = '<div class="spinner"></div> Procesando...';
+  } else {
+    resizeBtn.disabled = false;
+    resizeBtn.innerHTML = 'Redimensionar y descargar';
+  }
+}
+
+resizeBtn.addEventListener('click', () => {
+  hideError();
+  if (!originalFile || !originalImage.src) {
+    showError('No hay ninguna imagen cargada.');
+    return;
+  }
+  if (targetWidthPx <= 0 || targetHeightPx <= 0) {
+    showError('Dimensiones inválidas. El ancho y alto deben ser mayores a 0.');
+    return;
+  }
+  if (targetWidthPx > 20000 || targetHeightPx > 20000) {
+    showError('Las dimensiones máximas permitidas son 20 000 × 20 000 px.');
+    return;
+  }
+  setButtonState(true);
+  setTimeout(() => {
+    try {
+      const dpi    = parseInt(resizeDPIEl.value, 10);
+      const canvas = document.createElement('canvas');
+      canvas.width  = targetWidthPx;
+      canvas.height = targetHeightPx;
+      const ctx = canvas.getContext('2d', { willReadFrequently: false, alpha: true });
+      ctx.imageSmoothingEnabled  = true;
+      ctx.imageSmoothingQuality  = 'high';
+      ctx.drawImage(originalImage, 0, 0, targetWidthPx, targetHeightPx);
+      const removeSemi = document.getElementById('removeSemiTransparency');
+      if (removeSemi && removeSemi.checked) {
+        const ctxClean = canvas.getContext('2d', { willReadFrequently: true });
+        const id = ctxClean.getImageData(0, 0, targetWidthPx, targetHeightPx);
+        const d  = id.data;
+        for (let i = 3; i < d.length; i += 4) {
+          const a = d[i];
+          if (a > 0 && a < 255) {
+            d[i] = a < 25 ? 0 : 255;
+          }
+        }
+        ctxClean.putImageData(id, 0, 0);
+      }
+      const pngDataUrl   = canvas.toDataURL('image/png');
+      const fixedDataUrl = setPngDPI(pngDataUrl, dpi);
+      const baseName = (originalFile.name.split('.').slice(0, -1).join('.') || 'imagen')
+        .replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+      const semiLabel = (removeSemi && removeSemi.checked) ? 'Sin-Semitransparencias' : 'Con-Semitransparencias';
+      const filename  = `${baseName}_${targetWidthPx}x${targetHeightPx}_${dpi}dpi_${semiLabel}_ChechenaShirts.png`;
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href     = fixedDataUrl;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setButtonState(false);
+    } catch (err) {
+      console.error('Error al redimensionar:', err);
+      showError('Hubo un error al procesar la imagen: ' + err.message);
+      setButtonState(false);
+    }
+  }, 50);
+});
+});
+</script>
+
+</body>
+</html>

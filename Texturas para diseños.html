@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHECHENA SHIRTS · Estudio de Texturas</title>
+<meta name="description" content="Aplica texturas grunge a tus diseños para impresión DTF. Herramienta profesional de CHECHENA SHIRTS.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<style>
+:root {
+    /* Paleta Crema CHECHENA SHIRTS */
+    --cream-50: #FDFBF7;
+    --cream-100: #FAF6EE;
+    --cream-200: #F3EBD9;
+    --cream-300: #E8DCC0;
+    --cream-400: #D4C4A0;
+    --cream-500: #B8A47E;
+    
+    /* Acentos tierra/cacao */
+    --cacao-600: #8B6F47;
+    --cacao-700: #6B5435;
+    --cacao-800: #4A3A25;
+    --cacao-900: #2E2416;
+    
+    /* Texto */
+    --ink: #2E2416;
+    --ink-soft: #5C4A33;
+    --ink-muted: #8B7A5E;
+    
+    /* UI */
+    --border: rgba(139, 111, 71, 0.18);
+    --border-strong: rgba(139, 111, 71, 0.35);
+    --shadow-sm: 0 1px 2px rgba(46, 36, 22, 0.06);
+    --shadow-md: 0 4px 12px rgba(46, 36, 22, 0.08);
+    --shadow-lg: 0 12px 32px rgba(46, 36, 22, 0.12);
+    --shadow-xl: 0 24px 64px rgba(46, 36, 22, 0.16);
+    
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+    
+    --accent: var(--cacao-600);
+    --accent-dark: var(--cacao-700);
+    --accent-light: var(--cacao-800);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior-y: none;
+    background: var(--cream-100);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ LAYOUT PRINCIPAL ============ */
+.dtf-section-container {
+    width: 100%;
+    height: 100vh;
+    background: var(--cream-100);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* ============ TOPBAR / HEADER ============ */
+.brand-topbar {
+    background: var(--cream-50);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+}
+
+.brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-monogram {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cacao-700), var(--cacao-900));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream-100);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-md);
+}
+
+.brand-text h1 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    margin: 0;
+    color: var(--ink);
+    line-height: 1;
+}
+
+.brand-text p {
+    font-size: 0.7rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 4px 0 0 0;
+    font-weight: 500;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.topbar-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    background: var(--cream-200);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.topbar-pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.2);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.topbar-link {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.topbar-link:hover { color: var(--accent); }
+
+/* ============ APP INTERFACE ============ */
+.dtf-app-interface {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+}
+
+/* ============ SIDEBAR ============ */
+.dtf-sidebar {
+    width: 400px;
+    min-width: 400px;
+    background: var(--cream-50);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.sidebar-header {
+    padding: 24px 28px 18px 28px;
+    flex-shrink: 0;
+    background: var(--cream-50);
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 500;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+}
+
+.sidebar-header h2 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.sidebar-header p {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    margin: 8px 0 0 0;
+    line-height: 1.5;
+}
+
+.sidebar-scroll-wrapper {
+    flex: 1 1 auto;
+    padding: 0 28px 120px 28px;
+    overflow-y: auto;
+    height: 0;
+}
+
+.sidebar-scroll-wrapper::-webkit-scrollbar { width: 6px; }
+.sidebar-scroll-wrapper::-webkit-scrollbar-track { background: transparent; }
+.sidebar-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--cream-400); border-radius: 3px; }
+.sidebar-scroll-wrapper::-webkit-scrollbar-thumb:hover { background: var(--cacao-600); }
+
+/* ============ ACCORDION ============ */
+.accordion-item {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+}
+
+.accordion-item:first-child { padding-top: 8px; }
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.accordion-header:hover { opacity: 0.75; }
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.section-title .num {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+.acc-icon {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+    font-weight: 700;
+}
+
+.accordion-item.active .acc-icon { transform: rotate(180deg); color: var(--accent); }
+
+.accordion-body {
+    display: none;
+    padding-top: 18px;
+    animation: slideDown 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-item.active .accordion-body { display: block; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ BOTONES ============ */
+.btn-black {
+    background: var(--cacao-900);
+    color: var(--cream-100);
+    border: 1px solid var(--cacao-900);
+    padding: 14px 20px;
+    width: 100%;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-black:hover {
+    background: var(--cacao-700);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-black:active { transform: translateY(0); }
+
+.btn-picker {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border-strong);
+    background: var(--cream-50);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: all 0.2s;
+    margin-bottom: 10px;
+}
+
+.btn-picker:hover {
+    background: var(--cream-200);
+    border-color: var(--accent);
+    color: var(--ink);
+}
+
+.btn-picker.active {
+    background: var(--cacao-900);
+    border-color: var(--cacao-900);
+    color: var(--cream-100);
+}
+
+/* ============ LABELS & CONTROLS ============ */
+.ctrl-label-row {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin: 18px 0 10px 0;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.ctrl-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.ctrl-value {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+.range-slider {
+    width: 100%;
+    cursor: pointer;
+    height: 4px;
+    margin: 8px 0;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--cream-300);
+    border-radius: 100px;
+    outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--cream-50);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s;
+}
+
+.range-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+.range-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--cream-50);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.highlight-box {
+    background: var(--cream-200);
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-top: 14px;
+}
+
+.brush-box {
+    background: var(--cream-200);
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-top: 12px;
+}
+
+/* ============ FILE INPUT ROW ============ */
+.file-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+    margin-top: 14px;
+}
+
+.file-row input[type="text"] {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--ink);
+    background: var(--cream-50);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.file-row input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.12);
+}
+
+.file-row button {
+    width: auto;
+    padding: 0 18px;
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+.resolution-info {
+    display: none;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    font-weight: 600;
+    background: var(--cream-200);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    text-align: center;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ============ FRAMES GRID ============ */
+.frames-grid-wrapper {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 6px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    background: var(--cream-100);
+}
+
+.frames-grid-wrapper::-webkit-scrollbar { width: 6px; }
+.frames-grid-wrapper::-webkit-scrollbar-track { background: transparent; }
+.frames-grid-wrapper::-webkit-scrollbar-thumb { background: var(--cream-400); border-radius: 3px; }
+
+.frames-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+.frame-item {
+    border: 2px solid var(--border);
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 8px;
+    background: var(--cream-50);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    overflow: hidden;
+}
+
+.frame-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.frame-item.active {
+    border-color: var(--accent) !important;
+    border-width: 2.5px !important;
+    box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.15);
+}
+
+.frame-item img {
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+}
+
+.frame-item span {
+    font-weight: 700;
+    color: var(--ink);
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* ============ BACKGROUND SELECTOR ============ */
+.bg-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--cream-200);
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-top: 18px;
+}
+
+.bg-label {
+    font-weight: 700;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.bg-selector-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.bg-swatch {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--border-strong);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bg-swatch:hover { transform: scale(1.1); }
+
+.bg-swatch.active {
+    border: 2.5px solid var(--accent);
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.18);
+}
+
+.bg-swatch.transparent {
+    background-image: conic-gradient(var(--cream-300) 90deg, var(--cream-50) 90deg 180deg, var(--cream-300) 180deg 270deg, var(--cream-50) 270deg);
+    background-size: 12px 12px;
+}
+
+.bg-swatch.black { background: #1a1a1a; }
+.bg-swatch.white { background: #fff; }
+.bg-swatch.grey { background: #888; }
+
+.row-buttons { display: flex; gap: 10px; }
+
+.btn-blue {
+    background: var(--cacao-900);
+    color: var(--cream-100);
+    border: none;
+    padding: 14px;
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--cacao-700), var(--shadow-md);
+    transition: all 0.15s;
+    flex: 1;
+}
+
+.btn-blue:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--cacao-700);
+}
+
+.btn-blue:hover {
+    background: var(--cacao-700);
+    box-shadow: 0 4px 0 var(--cacao-900), var(--shadow-lg);
+}
+
+.mini-checklist {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    background: var(--cream-200);
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* ============ EDITOR AREA ============ */
+.dtf-editor-area {
+    flex: 1;
+    background: var(--cream-200);
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(139, 111, 71, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139, 111, 71, 0.04) 0%, transparent 50%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.canvas-scroll-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    cursor: grab;
+}
+
+.canvas-scroll-container:active { cursor: grabbing; }
+.canvas-scroll-container.picking { cursor: crosshair !important; }
+
+.canvas-empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--ink);
+    text-align: center;
+    pointer-events: auto;
+    cursor: pointer;
+    border: 2px dashed var(--border-strong);
+    padding: 60px 80px;
+    border-radius: 16px;
+    background: var(--cream-50);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s;
+    max-width: 90%;
+}
+
+.canvas-empty-state:hover {
+    border-color: var(--accent);
+    background: var(--cream-100);
+    transform: translate(-50%, -50%) scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+.canvas-empty-state h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.canvas-empty-state h3 em {
+    font-style: italic;
+    color: var(--accent);
+}
+
+.canvas-empty-state p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+
+.canvas-viewport {
+    position: absolute;
+    left: 0;
+    top: 0;
+    box-shadow: var(--shadow-xl);
+    line-height: 0;
+    transform-origin: 0 0;
+    background-color: var(--cream-50);
+    border: 1px solid var(--border-strong);
+    will-change: transform;
+}
+
+#preview-canvas { background: transparent; max-width: none; }
+
+/* ============ CONTROL PANEL ============ */
+.control-panel-wrapper {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.panel-group {
+    background: var(--cream-50);
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    gap: 4px;
+    border: 1px solid var(--border);
+}
+
+.nav-dpad {
+    display: grid;
+    grid-template-columns: 35px 35px 35px;
+    grid-template-rows: 35px 35px;
+    gap: 4px;
+    justify-items: center;
+    align-items: center;
+    padding: 8px !important;
+}
+
+.nav-dpad .up { grid-column: 2; grid-row: 1; }
+.nav-dpad .left { grid-column: 1; grid-row: 2; }
+.nav-dpad .right { grid-column: 3; grid-row: 2; }
+.nav-dpad .down { grid-column: 2; grid-row: 2; }
+
+.ctrl-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid var(--border);
+    background: var(--cream-50);
+    color: var(--ink);
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    transition: all 0.15s;
+}
+
+.ctrl-btn:hover {
+    background: var(--cream-200);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.preview-badge {
+    background: var(--cacao-900);
+    color: var(--cream-100);
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    pointer-events: none;
+    box-shadow: var(--shadow-md);
+}
+
+/* ============ FRAME EDIT BOX ============ */
+#frame-edit-box {
+    display: none;
+    position: absolute;
+    box-sizing: border-box;
+    border: 1.5px solid var(--accent);
+    box-shadow: 0 0 0 1px var(--cream-50), 0 0 0 2px var(--accent);
+    cursor: move;
+    z-index: 10;
+    touch-action: none;
+}
+
+.f-handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--cream-50);
+    border: 2px solid var(--accent);
+    border-radius: 2px;
+    box-shadow: var(--shadow-sm);
+    touch-action: none;
+    transform-origin: center center;
+}
+
+.f-handle.nw { top: -7px; left: -7px; cursor: nwse-resize; }
+.f-handle.n { top: -7px; left: calc(50% - 6px); cursor: ns-resize; }
+.f-handle.ne { top: -7px; right: -7px; cursor: nesw-resize; }
+.f-handle.w { top: calc(50% - 6px); left: -7px; cursor: ew-resize; }
+.f-handle.e { top: calc(50% - 6px); right: -7px; cursor: ew-resize; }
+.f-handle.sw { bottom: -7px; left: -7px; cursor: nesw-resize; }
+.f-handle.s { bottom: -7px; left: calc(50% - 6px); cursor: ns-resize; }
+.f-handle.se { bottom: -7px; right: -7px; cursor: nwse-resize; }
+
+/* ============ LOADING OVERLAY ============ */
+#loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(46, 36, 22, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    color: var(--cream-100);
+    flex-direction: column;
+    text-align: center;
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.spinner {
+    width: 56px;
+    height: 56px;
+    border: 3px solid rgba(250, 246, 238, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--cream-100);
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#loading-text {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+#loading-sub {
+    font-size: 0.85rem;
+    color: var(--cream-300);
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* ============ CROP MODAL ============ */
+#crop-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(46, 36, 22, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 999999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#crop-modal > div {
+    background: var(--cream-50);
+    padding: 30px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    width: 95vw;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+#crop-modal h3 {
+    margin: 0 0 8px 0;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--ink);
+    font-weight: 500;
+}
+
+#crop-modal p {
+    margin: 0 0 18px 0;
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+}
+
+#crop-container {
+    width: 100%;
+    height: 50vh;
+    background: var(--cream-200);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+    html, body {
+        height: auto;
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        touch-action: auto;
+    }
+    
+    .dtf-section-container { height: auto; min-height: 100vh; overflow: visible; }
+    
+    .brand-topbar { padding: 12px 18px; }
+    .brand-text h1 { font-size: 1.1rem; letter-spacing: 2px; }
+    .brand-text p { font-size: 0.6rem; letter-spacing: 2px; }
+    .topbar-pill { display: none; }
+    
+    .dtf-app-interface { flex-direction: column-reverse; display: flex; height: auto; }
+    
+    .dtf-sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        overflow: visible;
+    }
+    
+    .sidebar-scroll-wrapper { overflow: visible; height: auto; padding-bottom: 20px; }
+    
+    .dtf-editor-area {
+        height: 60vh;
+        width: 100%;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .canvas-scroll-container { cursor: default; touch-action: pan-y; }
+    .canvas-scroll-container:active { cursor: default; }
+    
+    .control-panel-wrapper {
+        transform: scale(0.75);
+        transform-origin: top right;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .canvas-empty-state { padding: 40px 30px; }
+    .canvas-empty-state h3 { font-size: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="dtf-section-container">
+    
+    <!-- TOPBAR -->
+    <div class="brand-topbar">
+        <div class="brand-mark">
+            <div class="brand-monogram">CS</div>
+            <div class="brand-text">
+                <h1>CHECHENA SHIRTS</h1>
+                <p>Estudio de Texturas · DTF</p>
+            </div>
+        </div>
+        <div class="topbar-actions">
+            <span class="topbar-pill"><span class="dot"></span>En línea</span>
+            <a href="#" class="topbar-link">Catálogo</a>
+            <a href="#" class="topbar-link">Contacto</a>
+        </div>
+    </div>
+    
+    <!-- APP -->
+    <div class="dtf-app-interface">
+        
+        <!-- SIDEBAR -->
+        <aside class="dtf-sidebar">
+            <div class="sidebar-header">
+                <h2>Texturas para <em>diseños</em></h2>
+                <p>Aplica texturas grunge a tus diseños para impresión en DTF con calidad profesional.</p>
+            </div>
+            
+            <div class="sidebar-scroll-wrapper">
+                
+                <!-- 01. ARCHIVO -->
+                <div class="accordion-item active">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h2 class="section-title"><span class="num">01</span>Archivo</h2>
+                        <span class="acc-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">
+                        <input type="file" id="file-upload" accept="image/*" hidden>
+                        <button class="btn-black" onclick="document.getElementById('file-upload').click()">+ Seleccionar imagen</button>
+                        <div class="file-row">
+                            <input type="text" id="file-name-input" value="Sin archivo">
+                            <button class="btn-black" onclick="openCropModal()" title="Recortar Imagen">Recortar</button>
+                        </div>
+                        <div class="resolution-info" id="image-resolution-info">
+                            <span id="res-px">0 × 0 px</span> · <span id="res-cm">0.0 × 0.0 cm</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 02. TEXTURAS -->
+                <div class="accordion-item active">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h2 class="section-title"><span class="num">02</span>Texturas</h2>
+                        <span class="acc-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">
+                        <label class="ctrl-label-row">Selecciona una textura</label>
+                        <div class="frames-grid-wrapper">
+                            <div class="frames-grid">
+                                <div class="frame-item active" onclick="selectFrame(null, this)">
+                                    <span>Sin textura</span>
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0001_Umbral-1-copia.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0001_Umbral-1-copia.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0011_Umbral-1-copia-11.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0011_Umbral-1-copia-11.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0015_Umbral-1-copia-15.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0015_Umbral-1-copia-15.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0006_Umbral-1-copia-6.png?v=1777969285', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0006_Umbral-1-copia-6.png?v=1777969285">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0033_Umbral-1-copia-33.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0033_Umbral-1-copia-33.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0039_Umbral-1-copia-39.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0039_Umbral-1-copia-39.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0010_Umbral-1-copia-10.png?v=1777969287', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0010_Umbral-1-copia-10.png?v=1777969287">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0023_Umbral-1-copia-23.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0023_Umbral-1-copia-23.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0031_Umbral-1-copia-31.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0031_Umbral-1-copia-31.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0013_Umbral-1-copia-13.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0013_Umbral-1-copia-13.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0000_Umbral-1.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0000_Umbral-1.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0018_Umbral-1-copia-18.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0018_Umbral-1-copia-18.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0027_Umbral-1-copia-27.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0027_Umbral-1-copia-27.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0007_Umbral-1-copia-7.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0007_Umbral-1-copia-7.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0002_Umbral-1-copia-2.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0002_Umbral-1-copia-2.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0038_Umbral-1-copia-38.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0038_Umbral-1-copia-38.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0014_Umbral-1-copia-14.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0014_Umbral-1-copia-14.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0030_Umbral-1-copia-30.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0030_Umbral-1-copia-30.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0017_Umbral-1-copia-17.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0017_Umbral-1-copia-17.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0009_Umbral-1-copia-9.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0009_Umbral-1-copia-9.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0032_Umbral-1-copia-32.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0032_Umbral-1-copia-32.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0012_Umbral-1-copia-12.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0012_Umbral-1-copia-12.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0040_Umbral-2.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0040_Umbral-2.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0036_Umbral-1-copia-36.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0036_Umbral-1-copia-36.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0003_Umbral-1-copia-3.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0003_Umbral-1-copia-3.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0028_Umbral-1-copia-28.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0028_Umbral-1-copia-28.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0034_Umbral-1-copia-34.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0034_Umbral-1-copia-34.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0035_Umbral-1-copia-35.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0035_Umbral-1-copia-35.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0016_Umbral-1-copia-16.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0016_Umbral-1-copia-16.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0008_Umbral-1-copia-8.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0008_Umbral-1-copia-8.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0005_Umbral-1-copia-5.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0005_Umbral-1-copia-5.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0025_Umbral-1-copia-25.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0025_Umbral-1-copia-25.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0029_Umbral-1-copia-29.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0029_Umbral-1-copia-29.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0037_Umbral-1-copia-37.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0037_Umbral-1-copia-37.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0004_Umbral-1-copia-4.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0004_Umbral-1-copia-4.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0019_Umbral-1-copia-19.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0019_Umbral-1-copia-19.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0024_Umbral-1-copia-24.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0024_Umbral-1-copia-24.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0022_Umbral-1-copia-22.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0022_Umbral-1-copia-22.png?v=1777969286">
+                                </div>
+                                <div class="frame-item" onclick="selectFrame('https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0026_Umbral-1-copia-26.png?v=1777969286', this)">
+                                    <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/Textura-_0026_Umbral-1-copia-26.png?v=1777969286">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FUERZA DE TEXTURA -->
+                        <div class="highlight-box">
+                            <div class="slider-header">
+                                <span class="ctrl-label">Fuerza de textura</span>
+                                <span class="ctrl-value" id="val-frame-force">0%</span>
+                            </div>
+                            <input type="range" id="cfg-frame-force" min="0" max="100" value="0" step="1" class="range-slider">
+                        </div>
+                        
+                        <label class="ctrl-label-row">Herramientas de edición</label>
+                        <button id="btn-edit-frame" class="btn-picker" style="display:none;" onclick="toggleEditFrame()">Editar textura (tamaño y posición)</button>
+                        <div class="row-buttons">
+                            <button id="btn-eraser" class="btn-picker" onclick="toggleEraser()">Goma</button>
+                            <button id="btn-restore" class="btn-picker" onclick="toggleRestore()">Recuperar</button>
+                        </div>
+                        
+                        <div class="brush-box" id="eraser-controls" style="display:none;">
+                            <div class="slider-header">
+                                <span class="ctrl-label">Tamaño del pincel</span>
+                                <span class="ctrl-value" id="val-eraser-size">20px</span>
+                            </div>
+                            <input type="range" id="cfg-eraser-size" min="1" max="200" value="20" step="1" class="range-slider">
+                        </div>
+                        
+                        <div class="bg-row">
+                            <span class="bg-label">Vista previa del fondo</span>
+                            <div class="bg-selector-group">
+                                <button class="bg-swatch transparent active" onclick="setPreviewBg('transparent', this)" title="Transparente"></button>
+                                <button class="bg-swatch black" onclick="setPreviewBg('black', this)" title="Negro"></button>
+                                <button class="bg-swatch grey" onclick="setPreviewBg('grey', this)" title="Gris"></button>
+                                <button class="bg-swatch white" onclick="setPreviewBg('white', this)" title="Blanco"></button>
+                                <div style="position: relative; display: inline-block; width: 38px; height: 38px;">
+                                    <input type="color" id="custom-bg-color" value="#8B6F47" style="opacity:0; position:absolute; left:0; top:0; width:100%; height:100%; cursor:pointer; z-index: 2;" oninput="setCustomBg(this.value)">
+                                    <button class="bg-swatch" id="custom-bg-btn" title="Color personalizado" style="background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); position:absolute; left:0; top:0; z-index: 1;"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 03. EXPORTAR -->
+                <div class="accordion-item active">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h2 class="section-title"><span class="num">03</span>Exportar</h2>
+                        <span class="acc-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="mini-checklist">Textura aplicada · 300 DPI automático</div>
+                        <div class="row-buttons">
+                            <button class="btn-blue btn-png" onclick="exportFinal('png')">PNG</button>
+                            <button class="btn-blue btn-pdf" onclick="exportFinal('pdf')">PDF</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="height: 40px;"></div>
+            </div>
+        </aside>
+        
+        <!-- EDITOR -->
+        <main class="dtf-editor-area">
+            <div class="control-panel-wrapper">
+                <div class="panel-group zoom-group">
+                    <button class="ctrl-btn" onclick="undoAction()" title="Deshacer (Ctrl+Z)">↶</button>
+                    <div style="width: 1px; background: var(--border); margin: 4px 2px;"></div>
+                    <button class="ctrl-btn" onclick="adjustZoom(-0.1)" title="Alejar">−</button>
+                    <button class="ctrl-btn" onclick="resetView()" title="Centrar lienzo">◎</button>
+                    <button class="ctrl-btn" onclick="adjustZoom(0.1)" title="Acercar">+</button>
+                </div>
+                <div class="panel-group nav-dpad">
+                    <button class="ctrl-btn up" onclick="panCanvas(0, 50)" title="Arriba">↑</button>
+                    <button class="ctrl-btn left" onclick="panCanvas(50, 0)" title="Izquierda">←</button>
+                    <button class="ctrl-btn right" onclick="panCanvas(-50, 0)" title="Derecha">→</button>
+                    <button class="ctrl-btn down" onclick="panCanvas(0, -50)" title="Abajo">↓</button>
+                </div>
+                <div class="preview-badge" id="mode-badge">Modo escritorio</div>
+            </div>
+            
+            <div class="canvas-scroll-container" id="scrollable-container">
+                <div id="canvas-placeholder" class="canvas-empty-state" onclick="document.getElementById('file-upload').click()">
+                    <h3>Sube tu archivo o <em>pégalo aquí</em></h3>
+                    <p>Haz clic o presiona CTRL + V para comenzar</p>
+                </div>
+                <div class="canvas-viewport" id="viewport-container" style="display: none;">
+                    <canvas id="preview-canvas"></canvas>
+                    <div id="frame-edit-box">
+                        <img id="frame-preview-img" src="" style="width: 100%; height: 100%; opacity: 0.6; display: none; pointer-events: none; position: absolute; top:0; left:0; object-fit: fill;">
+                        <div class="f-handle nw" data-dir="nw"></div>
+                        <div class="f-handle n" data-dir="n"></div>
+                        <div class="f-handle ne" data-dir="ne"></div>
+                        <div class="f-handle w" data-dir="w"></div>
+                        <div class="f-handle e" data-dir="e"></div>
+                        <div class="f-handle sw" data-dir="sw"></div>
+                        <div class="f-handle s" data-dir="s"></div>
+                        <div class="f-handle se" data-dir="se"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading-overlay">
+    <div class="loader-content">
+        <div class="spinner"></div>
+        <p id="loading-text">Procesando</p>
+        <small id="loading-sub">Cargando imagen</small>
+    </div>
+</div>
+
+<!-- CROP MODAL -->
+<div id="crop-modal">
+    <div>
+        <h3>Recortar imagen</h3>
+        <p>Ajusta el área de recorte arrastrando las esquinas.</p>
+        <div id="crop-container">
+            <img id="crop-image" src="" style="max-width: 100%; max-height: 100%; display: block;">
+        </div>
+        <div style="margin-top: 20px; display: flex; justify-content: center; gap: 12px; width: 100%;">
+            <button class="btn-black" style="width: auto; padding: 12px 28px;" onclick="closeCrop()">Cancelar</button>
+            <button class="btn-black" style="width: auto; padding: 12px 28px;" onclick="applyCrop()">Aplicar recorte</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let originalImgObject = null;
+    let debounceTimer;
+    let currentZoom = 0.5;
+    let panX = 0, panY = 0;
+    let isDragging = false;
+    let startDragX = 0, startDragY = 0;
+    let isPickerActive = false;
+    window.isEraserActive = false;
+    window.isRestoreActive = false;
+    window.eraserSize = 20;
+    let isErasing = false;
+    let lastEx = 0, lastEy = 0;
+    window.editedCanvas = null;
+    window.editedCtx = null;
+    window.restoreCanvas = null;
+    window.restoreCtx = null;
+    window.eraserMaskCanvas = null;
+    window.eraserMaskCtx = null;
+    window.historyStack = [];
+    window.isAltPressed = false;
+    window.pScale = 1;
+    
+    window.currentFrameUrl = null;
+    window.currentFrameImg = null;
+    window.frameX = 0, window.frameY = 0, window.frameW = 0, window.frameH = 0;
+    window.isEditingFrame = false;
+    window.frameForce = 0;
+    
+    let config = { ppi: 300 };
+    
+    const previewCanvas = document.getElementById('preview-canvas');
+    const previewCtx = previewCanvas.getContext('2d', { willReadFrequently: true });
+    const viewport = document.getElementById('viewport-container');
+    const scrollContainer = document.getElementById('scrollable-container');
+    const loader = document.getElementById('loading-overlay');
+    const fileInput = document.getElementById('file-upload');
+    const badge = document.getElementById('mode-badge');
+    const canvasPlaceholder = document.getElementById('canvas-placeholder');
+    const fileNameInput = document.getElementById('file-name-input');
+    const frameEditBox = document.getElementById('frame-edit-box');
+    const isMobile = window.innerWidth <= 900;
+    
+    badge.innerText = isMobile ? "MODO MÓVIL" : "MODO ESCRITORIO";
+    
+    document.getElementById('cfg-frame-force').addEventListener('input', (e) => {
+        document.getElementById('val-frame-force').innerText = e.target.value + '%';
+        window.frameForce = parseInt(e.target.value);
+    });
+    document.getElementById('cfg-frame-force').addEventListener('change', requestPreviewUpdate);
+    
+    window.selectFrame = function(url, el) {
+        pushHistory();
+        window.frameForce = 0;
+        document.getElementById('cfg-frame-force').value = 0;
+        document.getElementById('val-frame-force').innerText = '0%';
+        document.querySelectorAll('.frame-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        if (el) el.classList.add('active');
+        window.currentFrameUrl = url;
+        if (url) {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => {
+                window.currentFrameImg = img;
+                if (originalImgObject) {
+                    window.frameX = 0; window.frameY = 0;
+                    window.frameW = originalImgObject.width;
+                    window.frameH = originalImgObject.height;
+                }
+                document.getElementById('btn-edit-frame').style.display = 'block';
+                updateFrameEditBox();
+                requestPreviewUpdate();
+            };
+            img.src = url;
+        } else {
+            window.currentFrameImg = null;
+            document.getElementById('btn-edit-frame').style.display = 'none';
+            if (window.isEditingFrame) toggleEditFrame();
+            requestPreviewUpdate();
+        }
+    };
+    
+    window.toggleEditFrame = function() {
+        window.isEditingFrame = !window.isEditingFrame;
+        const btn = document.getElementById('btn-edit-frame');
+        if (window.isEraserActive) toggleEraser();
+        if (window.isRestoreActive) toggleRestore();
+        if (window.isEditingFrame) {
+            btn.classList.add('active');
+            btn.innerText = "Terminar edición";
+            frameEditBox.style.display = 'block';
+            updateFrameEditBox();
+        } else {
+            btn.classList.remove('active');
+            btn.innerText = "Editar textura (tamaño y posición)";
+            frameEditBox.style.display = 'none';
+        }
+    };
+    
+    window.updateFrameEditBox = function() {
+        if (!frameEditBox) return;
+        frameEditBox.style.left = (window.frameX * window.pScale) + 'px';
+        frameEditBox.style.top = (window.frameY * window.pScale) + 'px';
+        frameEditBox.style.width = (window.frameW * window.pScale) + 'px';
+        frameEditBox.style.height = (window.frameH * window.pScale) + 'px';
+        const invScale = 1 / currentZoom;
+        document.querySelectorAll('.f-handle').forEach(h => {
+            h.style.transform = `scale(${invScale})`;
+        });
+    };
+    
+    let activeHandle = null;
+    let startBoxX, startBoxY, startBoxW, startBoxH;
+    let startMouseX, startMouseY;
+    
+    function initFrameDrag(e) {
+        if (!window.isEditingFrame) return;
+        e.stopPropagation();
+        pushHistory();
+        let clientX = e.clientX, clientY = e.clientY;
+        if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        }
+        startMouseX = clientX; startMouseY = clientY;
+        startBoxX = window.frameX; startBoxY = window.frameY;
+        startBoxW = window.frameW; startBoxH = window.frameH;
+        if (e.target.classList.contains('f-handle')) {
+            activeHandle = e.target.dataset.dir;
+        } else {
+            activeHandle = 'move';
+        }
+        const previewImg = document.getElementById('frame-preview-img');
+        if (window.currentFrameUrl) {
+            previewImg.src = window.currentFrameUrl;
+            previewImg.style.display = 'block';
+        }
+        window.addEventListener('mousemove', onFrameDrag);
+        window.addEventListener('mouseup', onFrameDragEnd);
+        window.addEventListener('touchmove', onFrameDrag, {passive: false});
+        window.addEventListener('touchend', onFrameDragEnd);
+    }
+    
+    frameEditBox.addEventListener('mousedown', initFrameDrag);
+    frameEditBox.addEventListener('touchstart', initFrameDrag, {passive: false});
+    
+    function onFrameDrag(e) {
+        e.preventDefault();
+        let clientX = e.clientX, clientY = e.clientY;
+        if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        }
+        const dx = (clientX - startMouseX) / (currentZoom * window.pScale);
+        const dy = (clientY - startMouseY) / (currentZoom * window.pScale);
+        let newX = startBoxX, newY = startBoxY;
+        let newW = startBoxW, newH = startBoxH;
+        if (activeHandle === 'move') {
+            newX = startBoxX + dx; newY = startBoxY + dy;
+        } else {
+            if (activeHandle.includes('e')) newW = startBoxW + dx;
+            if (activeHandle.includes('w')) { newW = startBoxW - dx; newX = startBoxX + dx; }
+            if (activeHandle.includes('s')) newH = startBoxH + dy;
+            if (activeHandle.includes('n')) { newH = startBoxH - dy; newY = startBoxY + dy; }
+        }
+        if (newW < 20) { newW = 20; if (activeHandle.includes('w')) newX = startBoxX + startBoxW - 20; }
+        if (newH < 20) { newH = 20; if (activeHandle.includes('n')) newY = startBoxY + startBoxH - 20; }
+        window.frameX = newX; window.frameY = newY;
+        window.frameW = newW; window.frameH = newH;
+        updateFrameEditBox();
+    }
+    
+    function onFrameDragEnd() {
+        window.removeEventListener('mousemove', onFrameDrag);
+        window.removeEventListener('mouseup', onFrameDragEnd);
+        window.removeEventListener('touchmove', onFrameDrag);
+        window.removeEventListener('touchend', onFrameDragEnd);
+        activeHandle = null;
+        document.getElementById('frame-preview-img').style.display = 'none';
+        requestPreviewUpdate();
+    }
+    
+    window.applyFrameMask = function(targetCtx, w, h, renderScale = 1) {
+        if (!window.currentFrameImg) return;
+        const targetData = targetCtx.getImageData(0, 0, w, h);
+        const tData = targetData.data;
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = w; tempCanvas.height = h;
+        const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+        tempCtx.clearRect(0, 0, w, h);
+        if (window.frameForce > 0) {
+            const blurAmt = (window.frameForce / 100) * 30 * renderScale;
+            tempCtx.filter = `blur(${blurAmt}px)`;
+        }
+        tempCtx.drawImage(window.currentFrameImg, window.frameX * renderScale, window.frameY * renderScale, window.frameW * renderScale, window.frameH * renderScale);
+        tempCtx.filter = 'none';
+        const frameData = tempCtx.getImageData(0, 0, w, h).data;
+        const threshold = 127 + (window.frameForce * 0.8);
+        for (let i = 0; i < tData.length; i += 4) {
+            const fr = frameData[i], fg = frameData[i+1], fb = frameData[i+2];
+            const fAlpha = frameData[i+3];
+            let luma = 0;
+            if (fAlpha > 0) {
+                luma = (fr * 0.299 + fg * 0.587 + fb * 0.114);
+                if (window.frameForce > 0) luma = luma > threshold ? 255 : 0;
+            }
+            tData[i+3] = Math.min(tData[i+3], luma);
+        }
+        targetCtx.putImageData(targetData, 0, 0);
+    };
+    
+    window.updateResolutionInfo = function(w, h) {
+        const resInfo = document.getElementById('image-resolution-info');
+        if (!resInfo) return;
+        resInfo.style.display = 'block';
+        const ppi = config.ppi || 300;
+        const cmW = ((w / ppi) * 2.54).toFixed(1);
+        const cmH = ((h / ppi) * 2.54).toFixed(1);
+        document.getElementById('res-px').innerText = `${w} × ${h} px`;
+        document.getElementById('res-cm').innerText = `${cmW} × ${cmH} cm`;
+    };
+    
+    window.toggleAccordion = function(header) {
+        const item = header.parentElement;
+        item.classList.toggle('active');
+    };
+    
+    window.setPreviewBg = function(type, btn) {
+        document.querySelectorAll('.bg-swatch').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        if (type === 'transparent') {
+            viewport.style.backgroundColor = '#E8DCC0';
+            viewport.style.backgroundImage = "conic-gradient(#E8DCC0 90deg, #FAF6EE 90deg 180deg, #E8DCC0 180deg 270deg, #FAF6EE 270deg)";
+            viewport.style.backgroundSize = "20px 20px";
+        } else if (type === 'black') {
+            viewport.style.backgroundColor = '#1a1a1a';
+            viewport.style.backgroundImage = 'none';
+        } else if (type === 'white') {
+            viewport.style.backgroundColor = '#fff';
+            viewport.style.backgroundImage = 'none';
+        } else if (type === 'grey') {
+            viewport.style.backgroundColor = '#888';
+            viewport.style.backgroundImage = 'none';
+        }
+    };
+    setPreviewBg('transparent', document.querySelector('.bg-swatch.transparent'));
+    
+    window.setCustomBg = function(hex) {
+        document.querySelectorAll('.bg-swatch').forEach(b => b.classList.remove('active'));
+        const customBtn = document.getElementById('custom-bg-btn');
+        customBtn.classList.add('active');
+        customBtn.style.background = hex;
+        viewport.style.backgroundColor = hex;
+        viewport.style.backgroundImage = 'none';
+    };
+    
+    fileInput.addEventListener('change', loadFile);
+    
+    document.getElementById('cfg-eraser-size').addEventListener('input', (e) => {
+        document.getElementById('val-eraser-size').innerText = e.target.value + 'px';
+        window.eraserSize = parseInt(e.target.value);
+        if (!window.isAltPressed) updateBrushCursor();
+    });
+    
+    window.addEventListener('paste', (e) => {
+        if (e.clipboardData && e.clipboardData.items) {
+            for (let i = 0; i < e.clipboardData.items.length; i++) {
+                if (e.clipboardData.items[i].type.indexOf('image') !== -1) {
+                    const file = e.clipboardData.items[i].getAsFile();
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+                    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    break;
+                }
+            }
+        }
+    });
+    
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Alt') {
+            e.preventDefault();
+            window.isAltPressed = true;
+            scrollContainer.style.cursor = 'grab';
+        }
+        if (e.ctrlKey && e.key.toLowerCase() === 'z') {
+            e.preventDefault();
+            window.undoAction();
+        }
+    });
+    
+    window.addEventListener('keyup', (e) => {
+        if (e.key === 'Alt') {
+            window.isAltPressed = false;
+            if (window.isEraserActive || window.isRestoreActive) updateBrushCursor();
+            else scrollContainer.style.cursor = isMobile ? 'default' : 'grab';
+        }
+    });
+    
+    scrollContainer.addEventListener('wheel', (e) => {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            const zoomDelta = e.deltaY < 0 ? 0.1 : -0.1;
+            const rect = scrollContainer.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const canvasX = (mouseX - panX) / currentZoom;
+            const canvasY = (mouseY - panY) / currentZoom;
+            currentZoom += zoomDelta;
+            if (currentZoom < 0.05) currentZoom = 0.05;
+            panX = mouseX - (canvasX * currentZoom);
+            panY = mouseY - (canvasY * currentZoom);
+            updateTransform();
+            if (!window.isAltPressed) updateBrushCursor();
+        }
+    }, { passive: false });
+    
+    scrollContainer.addEventListener('mousedown', (e) => {
+        if (isMobile) return;
+        if ((isPickerActive || window.isEraserActive || window.isRestoreActive) && !window.isAltPressed) return;
+        isDragging = true;
+        startDragX = e.clientX - panX;
+        startDragY = e.clientY - panY;
+        scrollContainer.style.cursor = 'grabbing';
+    });
+    
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        panX = e.clientX - startDragX;
+        panY = e.clientY - startDragY;
+        updateTransform();
+    });
+    
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        if (!isMobile) {
+            if (window.isAltPressed) scrollContainer.style.cursor = 'grab';
+            else if (window.isEraserActive || window.isRestoreActive) updateBrushCursor();
+            else scrollContainer.style.cursor = 'grab';
+        }
+    });
+    
+    window.panCanvas = function(dx, dy) {
+        if (!originalImgObject) return;
+        panX += dx; panY += dy;
+        updateTransform();
+    };
+    
+    function updateBrushCursor() {
+        if ((!window.isEraserActive && !window.isRestoreActive) || window.isAltPressed) return;
+        const scaledSize = Math.max(Math.round(window.eraserSize * currentZoom * window.pScale), 4);
+        const center = Math.round(scaledSize / 2);
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${scaledSize}" height="${scaledSize}" viewBox="0 0 ${scaledSize} ${scaledSize}"><circle cx="${center}" cy="${center}" r="${center - 1}" fill="none" stroke="#8B6F47" stroke-width="2"/><circle cx="${center}" cy="${center}" r="${Math.max(center - 2, 1)}" fill="none" stroke="#FDFBF7" stroke-width="1"/></svg>`;
+        const cursorUrl = `url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}') ${center} ${center}, crosshair`;
+        scrollContainer.style.cursor = cursorUrl;
+    }
+    
+    function getCanvasPos(e) {
+        const rect = previewCanvas.getBoundingClientRect();
+        const scaleX = previewCanvas.width / rect.width;
+        const scaleY = previewCanvas.height / rect.height;
+        let clientX = e.clientX, clientY = e.clientY;
+        if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        }
+        return {
+            x: ((clientX - rect.left) * scaleX) / window.pScale,
+            y: ((clientY - rect.top) * scaleY) / window.pScale
+        };
+    }
+    
+    function pushHistory() {
+        if (!window.editedCanvas || !window.restoreCanvas) return;
+        if (window.historyStack.length > 5) window.historyStack.shift();
+        const eCopy = document.createElement('canvas');
+        eCopy.width = window.editedCanvas.width; eCopy.height = window.editedCanvas.height;
+        eCopy.getContext('2d').drawImage(window.editedCanvas, 0, 0);
+        const rCopy = document.createElement('canvas');
+        rCopy.width = window.restoreCanvas.width; rCopy.height = window.restoreCanvas.height;
+        rCopy.getContext('2d').drawImage(window.restoreCanvas, 0, 0);
+        const mCopy = document.createElement('canvas');
+        mCopy.width = window.eraserMaskCanvas.width; mCopy.height = window.eraserMaskCanvas.height;
+        mCopy.getContext('2d').drawImage(window.eraserMaskCanvas, 0, 0);
+        window.historyStack.push({
+            e: eCopy, r: rCopy, m: mCopy,
+            frameUrl: window.currentFrameUrl,
+            fX: window.frameX, fY: window.frameY, fW: window.frameW, fH: window.frameH,
+            fForce: window.frameForce
+        });
+    }
+    
+    window.undoAction = function() {
+        if (window.historyStack.length === 0) return;
+        const state = window.historyStack.pop();
+        window.editedCtx.clearRect(0, 0, window.editedCanvas.width, window.editedCanvas.height);
+        window.editedCtx.drawImage(state.e, 0, 0);
+        window.restoreCtx.clearRect(0, 0, window.restoreCanvas.width, window.restoreCanvas.height);
+        window.restoreCtx.drawImage(state.r, 0, 0);
+        window.eraserMaskCtx.clearRect(0, 0, window.eraserMaskCanvas.width, window.eraserMaskCanvas.height);
+        if (state.m) window.eraserMaskCtx.drawImage(state.m, 0, 0);
+        if (state.frameUrl !== window.currentFrameUrl) {
+            window.currentFrameUrl = state.frameUrl;
+            if (state.frameUrl) {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = () => {
+                    window.currentFrameImg = img;
+                    window.frameX = state.fX; window.frameY = state.fY;
+                    window.frameW = state.fW; window.frameH = state.fH;
+                    window.frameForce = state.fForce || 0;
+                    document.getElementById('cfg-frame-force').value = window.frameForce;
+                    document.getElementById('val-frame-force').innerText = window.frameForce + '%';
+                    if (window.isEditingFrame) updateFrameEditBox();
+                    requestPreviewUpdate();
+                };
+                img.src = state.frameUrl;
+            } else {
+                window.currentFrameImg = null;
+                window.frameForce = state.fForce || 0;
+                document.getElementById('cfg-frame-force').value = window.frameForce;
+                document.getElementById('val-frame-force').innerText = window.frameForce + '%';
+                requestPreviewUpdate();
+            }
+        } else {
+            window.frameX = state.fX; window.frameY = state.fY;
+            window.frameW = state.fW; window.frameH = state.fH;
+            window.frameForce = state.fForce || 0;
+            document.getElementById('cfg-frame-force').value = window.frameForce;
+            document.getElementById('val-frame-force').innerText = window.frameForce + '%';
+            if (window.isEditingFrame) updateFrameEditBox();
+            requestPreviewUpdate();
+        }
+        document.querySelectorAll('.frame-item').forEach(item => item.classList.remove('active'));
+        const activeEl = Array.from(document.querySelectorAll('.frame-item')).find(el =>
+            el.getAttribute('onclick') && el.getAttribute('onclick').includes(state.frameUrl || 'null')
+        );
+        if (activeEl) activeEl.classList.add('active');
+    };
+    
+    function drawEraseLine(x1, y1, x2, y2) {
+        [window.editedCtx, window.restoreCtx].forEach(ctx => {
+            if (!ctx) return;
+            ctx.globalCompositeOperation = window.isRestoreActive ? 'source-over' : 'destination-out';
+            ctx.lineWidth = window.eraserSize;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            if (window.isRestoreActive) {
+                ctx.strokeStyle = ctx.createPattern(originalImgObject, 'no-repeat');
+            } else {
+                ctx.strokeStyle = '#000';
+            }
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.globalCompositeOperation = 'source-over';
+        });
+        if (window.eraserMaskCtx) {
+            window.eraserMaskCtx.lineWidth = window.eraserSize + 8;
+            window.eraserMaskCtx.lineCap = 'round';
+            window.eraserMaskCtx.lineJoin = 'round';
+            if (window.isRestoreActive) {
+                window.eraserMaskCtx.globalCompositeOperation = 'destination-out';
+                window.eraserMaskCtx.strokeStyle = 'rgba(0,0,0,1)';
+            } else {
+                window.eraserMaskCtx.globalCompositeOperation = 'source-over';
+                window.eraserMaskCtx.strokeStyle = 'rgba(139,111,71,1)';
+            }
+            window.eraserMaskCtx.beginPath();
+            window.eraserMaskCtx.moveTo(x1, y1);
+            window.eraserMaskCtx.lineTo(x2, y2);
+            window.eraserMaskCtx.stroke();
+            window.eraserMaskCtx.globalCompositeOperation = 'source-over';
+        }
+        previewCtx.globalCompositeOperation = window.isRestoreActive ? 'source-over' : 'destination-out';
+        previewCtx.lineWidth = window.eraserSize * window.pScale;
+        previewCtx.lineCap = 'round';
+        previewCtx.lineJoin = 'round';
+        if (window.isRestoreActive) {
+            const pPreview = previewCtx.createPattern(window.editedCanvas || originalImgObject, 'no-repeat');
+            const matrix = new DOMMatrix().scale(window.pScale, window.pScale);
+            pPreview.setTransform(matrix);
+            previewCtx.strokeStyle = pPreview;
+        } else {
+            previewCtx.strokeStyle = '#000000';
+        }
+        previewCtx.beginPath();
+        previewCtx.moveTo(x1 * window.pScale, y1 * window.pScale);
+        previewCtx.lineTo(x2 * window.pScale, y2 * window.pScale);
+        previewCtx.stroke();
+        previewCtx.globalCompositeOperation = 'source-over';
+    }
+    
+    function handleEraseStart(e) {
+        if ((!window.isEraserActive && !window.isRestoreActive) || !window.editedCanvas || window.isAltPressed) return;
+        isErasing = true;
+        pushHistory();
+        const pos = getCanvasPos(e);
+        lastEx = pos.x; lastEy = pos.y;
+        drawEraseLine(lastEx, lastEy, pos.x, pos.y);
+    }
+    
+    function handleEraseMove(e) {
+        if ((!window.isEraserActive && !window.isRestoreActive) || !isErasing || !window.editedCanvas || window.isAltPressed) return;
+        e.preventDefault();
+        const pos = getCanvasPos(e);
+        drawEraseLine(lastEx, lastEy, pos.x, pos.y);
+        lastEx = pos.x; lastEy = pos.y;
+    }
+    
+    function handleEraseEnd() {
+        if (isErasing) {
+            isErasing = false;
+            requestPreviewUpdate();
+        }
+    }
+    
+    previewCanvas.addEventListener('mousedown', handleEraseStart);
+    previewCanvas.addEventListener('mousemove', handleEraseMove);
+    window.addEventListener('mouseup', handleEraseEnd);
+    previewCanvas.addEventListener('touchstart', handleEraseStart, {passive: false});
+    previewCanvas.addEventListener('touchmove', handleEraseMove, {passive: false});
+    window.addEventListener('touchend', handleEraseEnd);
+    
+    let cropperInstance = null;
+    window.openCropModal = function() {
+        if (!originalImgObject) return alert("Sube una imagen primero.");
+        document.getElementById('crop-modal').style.display = 'flex';
+        const cropImage = document.getElementById('crop-image');
+        cropImage.src = originalImgObject.src;
+        setTimeout(() => {
+            if (cropperInstance) cropperInstance.destroy();
+            cropperInstance = new Cropper(cropImage, {
+                viewMode: 1, dragMode: 'crop', autoCropArea: 0.8,
+                background: false, zoomable: false, responsive: true, restore: false
+            });
+        }, 50);
+    };
+    
+    window.closeCrop = function() {
+        document.getElementById('crop-modal').style.display = 'none';
+        if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+    };
+    
+    window.applyCrop = function() {
+        if (!cropperInstance) return closeCrop();
+        const tCanvas = cropperInstance.getCroppedCanvas({ fillColor: '#ffffff' });
+        if (!tCanvas) return closeCrop();
+        const w = tCanvas.width, h = tCanvas.height;
+        const mCanvas = document.createElement('canvas');
+        mCanvas.width = w; mCanvas.height = h;
+        const cropData = cropperInstance.getData();
+        mCanvas.getContext('2d').drawImage(window.eraserMaskCanvas, cropData.x, cropData.y, w, h, 0, 0, w, h);
+        const newImg = new Image();
+        newImg.onload = function() {
+            originalImgObject = newImg;
+            window.editedCanvas.width = w; window.editedCanvas.height = h;
+            window.editedCtx.clearRect(0, 0, w, h);
+            window.editedCtx.drawImage(newImg, 0, 0);
+            window.restoreCanvas.width = w; window.restoreCanvas.height = h;
+            window.restoreCtx.clearRect(0, 0, w, h);
+            window.eraserMaskCanvas.width = w; window.eraserMaskCanvas.height = h;
+            window.eraserMaskCtx.clearRect(0, 0, w, h);
+            window.eraserMaskCtx.drawImage(mCanvas, 0, 0);
+            window.historyStack = [];
+            window.updateResolutionInfo(w, h);
+            requestPreviewUpdate();
+            setTimeout(resetView, 200);
+            closeCrop();
+        };
+        newImg.src = tCanvas.toDataURL();
+    };
+    
+    window.toggleEraser = function() {
+        if (window.isEditingFrame) toggleEditFrame();
+        if (window.isRestoreActive) {
+            window.isRestoreActive = false;
+            document.getElementById('btn-restore').classList.remove('active');
+            document.getElementById('btn-restore').innerText = "Recuperar";
+        }
+        window.isEraserActive = !window.isEraserActive;
+        const btnE = document.getElementById('btn-eraser');
+        const ctrlE = document.getElementById('eraser-controls');
+        if (window.isEraserActive) {
+            btnE.classList.add('active');
+            btnE.innerText = "Goma activa";
+            ctrlE.style.display = 'block';
+            if (!window.isAltPressed) updateBrushCursor();
+        } else {
+            btnE.classList.remove('active');
+            btnE.innerText = "Goma";
+            ctrlE.style.display = 'none';
+            if (!window.isAltPressed) scrollContainer.style.cursor = isMobile ? 'default' : 'grab';
+        }
+    };
+    
+    window.toggleRestore = function() {
+        if (window.isEditingFrame) toggleEditFrame();
+        if (window.isEraserActive) {
+            window.isEraserActive = false;
+            document.getElementById('btn-eraser').classList.remove('active');
+            document.getElementById('btn-eraser').innerText = "Goma";
+        }
+        window.isRestoreActive = !window.isRestoreActive;
+        const btnR = document.getElementById('btn-restore');
+        const ctrlE = document.getElementById('eraser-controls');
+        if (window.isRestoreActive) {
+            btnR.classList.add('active');
+            btnR.innerText = "Recuperar activo";
+            ctrlE.style.display = 'block';
+            if (!window.isAltPressed) updateBrushCursor();
+        } else {
+            btnR.classList.remove('active');
+            btnR.innerText = "Recuperar";
+            ctrlE.style.display = 'none';
+            if (!window.isAltPressed) scrollContainer.style.cursor = isMobile ? 'default' : 'grab';
+        }
+    };
+    
+    function updateTransform() {
+        viewport.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+        if (window.isEditingFrame) updateFrameEditBox();
+    }
+    
+    window.adjustZoom = function(d) {
+        const rect = scrollContainer.getBoundingClientRect();
+        const centerX = rect.width / 2, centerY = rect.height / 2;
+        const canvasX = (centerX - panX) / currentZoom;
+        const canvasY = (centerY - panY) / currentZoom;
+        currentZoom += d;
+        if (currentZoom < 0.05) currentZoom = 0.05;
+        panX = centerX - (canvasX * currentZoom);
+        panY = centerY - (canvasY * currentZoom);
+        updateTransform();
+        if (!window.isAltPressed) updateBrushCursor();
+    };
+    
+    window.resetView = function() {
+        if (!originalImgObject) return;
+        const containerW = scrollContainer.clientWidth;
+        const containerH = scrollContainer.clientHeight;
+        const imgW = previewCanvas.width, imgH = previewCanvas.height;
+        const scaleX = containerW / imgW, scaleY = containerH / imgH;
+        let bestScale = Math.min(scaleX, scaleY) * 0.9;
+        if (bestScale > 1) bestScale = 0.5;
+        currentZoom = bestScale;
+        panX = (containerW - (imgW * currentZoom)) / 2;
+        panY = (containerH - (imgH * currentZoom)) / 2;
+        updateTransform();
+        if (!window.isAltPressed) updateBrushCursor();
+    };
+    
+    function requestPreviewUpdate() {
+        if (!originalImgObject) return;
+        loader.style.display = 'none';
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => { updatePreviewFullRes(); }, 50);
+    }
+    
+    function loadFile(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        fileNameInput.value = file.name.replace(/\.[^/.]+$/, "");
+        loader.style.display = 'flex';
+        document.getElementById('loading-text').innerText = "Procesando";
+        document.getElementById('loading-sub').innerText = "Cargando imagen";
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            const img = new Image();
+            img.onload = function() {
+                originalImgObject = img;
+                window.updateResolutionInfo(img.width, img.height);
+                canvasPlaceholder.style.display = 'none';
+                viewport.style.display = 'block';
+                if (!window.editedCanvas) {
+                    window.editedCanvas = document.createElement('canvas');
+                    window.editedCtx = window.editedCanvas.getContext('2d', { willReadFrequently: true });
+                }
+                window.editedCanvas.width = img.width;
+                window.editedCanvas.height = img.height;
+                window.editedCtx.drawImage(img, 0, 0);
+                if (!window.restoreCanvas) {
+                    window.restoreCanvas = document.createElement('canvas');
+                    window.restoreCtx = window.restoreCanvas.getContext('2d', { willReadFrequently: true });
+                }
+                window.restoreCanvas.width = img.width;
+                window.restoreCanvas.height = img.height;
+                window.restoreCtx.clearRect(0, 0, img.width, img.height);
+                if (!window.eraserMaskCanvas) {
+                    window.eraserMaskCanvas = document.createElement('canvas');
+                    window.eraserMaskCtx = window.eraserMaskCanvas.getContext('2d', { willReadFrequently: true });
+                }
+                window.eraserMaskCanvas.width = img.width;
+                window.eraserMaskCanvas.height = img.height;
+                window.eraserMaskCtx.clearRect(0, 0, img.width, img.height);
+                window.frameX = 0; window.frameY = 0;
+                window.frameW = img.width; window.frameH = img.height;
+                if (window.isEditingFrame) updateFrameEditBox();
+                window.pScale = 1;
+                window.historyStack = [];
+                requestPreviewUpdate();
+                setTimeout(resetView, 200);
+            };
+            img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    function updatePreviewFullRes() {
+        if (!originalImgObject) return;
+        const MAX_PREVIEW_DIM = 1200;
+        let scale = 1;
+        if (originalImgObject.width > MAX_PREVIEW_DIM || originalImgObject.height > MAX_PREVIEW_DIM) {
+            scale = Math.min(MAX_PREVIEW_DIM / originalImgObject.width, MAX_PREVIEW_DIM / originalImgObject.height);
+        }
+        window.pScale = scale;
+        const pW = Math.floor(originalImgObject.width * scale);
+        const pH = Math.floor(originalImgObject.height * scale);
+        previewCanvas.width = pW; previewCanvas.height = pH;
+        const tempScaled = document.createElement('canvas');
+        tempScaled.width = pW; tempScaled.height = pH;
+        const tempCtx = tempScaled.getContext('2d');
+        tempCtx.drawImage(window.editedCanvas || originalImgObject, 0, 0, pW, pH);
+        let scaledMaskData = null;
+        if (window.eraserMaskCanvas) {
+            const tempMask = document.createElement('canvas');
+            tempMask.width = pW; tempMask.height = pH;
+            const tmCtx = tempMask.getContext('2d', {willReadFrequently: true});
+            tmCtx.drawImage(window.eraserMaskCanvas, 0, 0, pW, pH);
+            scaledMaskData = tmCtx.getImageData(0, 0, pW, pH).data;
+        }
+        previewCtx.drawImage(tempScaled, 0, 0, pW, pH);
+        if (window.currentFrameImg) {
+            window.applyFrameMask(previewCtx, pW, pH, scale);
+        }
+        if (scaledMaskData) {
+            const pData = previewCtx.getImageData(0, 0, pW, pH);
+            const data = pData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                if (scaledMaskData[i] > 0) data[i + 3] = 0;
+            }
+            previewCtx.putImageData(pData, 0, 0);
+        }
+        if (window.restoreCanvas) {
+            const tempRest = document.createElement('canvas');
+            tempRest.width = pW; tempRest.height = pH;
+            tempRest.getContext('2d').drawImage(window.restoreCanvas, 0, 0, pW, pH);
+            previewCtx.drawImage(tempRest, 0, 0);
+        }
+        loader.style.display = 'none';
+    }
+    
+    function removeSemiTransparencies(sourceCanvas) {
+        const w = sourceCanvas.width, h = sourceCanvas.height;
+        const solidCanvas = document.createElement('canvas');
+        solidCanvas.width = w; solidCanvas.height = h;
+        const ctx = solidCanvas.getContext('2d');
+        ctx.drawImage(sourceCanvas, 0, 0);
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+        for (let i = 0; i < data.length; i += 4) {
+            if (data[i+3] > 0 && data[i+3] < 255) {
+                data[i+3] = data[i+3] > 127 ? 255 : 0;
+            }
+        }
+        ctx.putImageData(imgData, 0, 0);
+        return solidCanvas;
+    }
+    
+    function removeStrayPixels(sourceCanvas) {
+        const w = sourceCanvas.width, h = sourceCanvas.height;
+        const ctx = sourceCanvas.getContext('2d');
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+        const visited = new Uint8Array(w * h);
+        const dxSearch = [-1, 1, 0, 0, -1, -1, 1, 1];
+        const dySearch = [0, 0, -1, 1, -1, 1, -1, 1];
+        const stack = new Int32Array(w * h);
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const pixelIndex = y * w + x;
+                if (data[pixelIndex * 4 + 3] > 0 && visited[pixelIndex] === 0) {
+                    let stackPtr = 0;
+                    stack[stackPtr++] = pixelIndex;
+                    visited[pixelIndex] = 1;
+                    let clusterPixels = [];
+                    let isSmall = true;
+                    while (stackPtr > 0) {
+                        const curr = stack[--stackPtr];
+                        if (isSmall) {
+                            clusterPixels.push(curr);
+                            if (clusterPixels.length > 7) isSmall = false;
+                        }
+                        const cy = Math.floor(curr / w), cx = curr % w;
+                        for (let k = 0; k < 8; k++) {
+                            const nx = cx + dxSearch[k], ny = cy + dySearch[k];
+                            if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                                const nIndex = ny * w + nx;
+                                if (visited[nIndex] === 0 && data[nIndex * 4 + 3] > 0) {
+                                    visited[nIndex] = 1;
+                                    stack[stackPtr++] = nIndex;
+                                }
+                            }
+                        }
+                    }
+                    if (isSmall) {
+                        for (let k = 0; k < clusterPixels.length; k++) {
+                            data[clusterPixels[k] * 4 + 3] = 0;
+                        }
+                    }
+                }
+            }
+        }
+        ctx.putImageData(imgData, 0, 0);
+        return sourceCanvas;
+    }
+    
+    function trimCanvas(canvas) {
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width, h = canvas.height;
+        const data = ctx.getImageData(0, 0, w, h).data;
+        let top = null, bottom = null, left = null, right = null;
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const alpha = data[(y * w + x) * 4 + 3];
+                if (alpha > 0) {
+                    if (top === null) top = y;
+                    bottom = y;
+                    if (left === null || x < left) left = x;
+                    if (right === null || x > right) right = x;
+                }
+            }
+        }
+        if (top === null) return canvas;
+        const trimW = right - left + 1, trimH = bottom - top + 1;
+        const trimmed = document.createElement('canvas');
+        trimmed.width = trimW; trimmed.height = trimH;
+        trimmed.getContext('2d').drawImage(canvas, left, top, trimW, trimH, 0, 0, trimW, trimH);
+        return trimmed;
+    }
+    
+    window.exportFinal = function(type) {
+        if (!originalImgObject) return alert("Carga una imagen");
+        loader.style.display = 'flex';
+        document.getElementById('loading-text').innerText = "Preparando descarga";
+        document.getElementById('loading-sub').innerText = "Renderizando 300 DPI Ultra HD";
+        setTimeout(() => {
+            try {
+                const fullW = originalImgObject.width, fullH = originalImgObject.height;
+                const exportCanvas = document.createElement('canvas');
+                exportCanvas.width = fullW; exportCanvas.height = fullH;
+                const eCtx = exportCanvas.getContext('2d');
+                let maskData = null;
+                if (window.eraserMaskCanvas) {
+                    maskData = window.eraserMaskCtx.getImageData(0, 0, fullW, fullH).data;
+                }
+                eCtx.drawImage(window.editedCanvas || originalImgObject, 0, 0, fullW, fullH);
+                if (window.currentFrameImg) {
+                    window.applyFrameMask(eCtx, fullW, fullH, 1);
+                }
+                if (maskData) {
+                    const eData = eCtx.getImageData(0, 0, fullW, fullH);
+                    const data = eData.data;
+                    for (let i = 0; i < data.length; i += 4) {
+                        if (maskData[i] > 0) data[i + 3] = 0;
+                    }
+                    eCtx.putImageData(eData, 0, 0);
+                }
+                if (window.restoreCanvas) {
+                    eCtx.drawImage(window.restoreCanvas, 0, 0);
+                }
+                let finalCanvas = exportCanvas;
+                document.getElementById('loading-text').innerText = "Limpiando semitransparencias";
+                finalCanvas = removeSemiTransparencies(finalCanvas);
+                document.getElementById('loading-text').innerText = "Limpiando píxeles solitarios";
+                finalCanvas = removeStrayPixels(finalCanvas);
+                document.getElementById('loading-text').innerText = "Recortando diseño";
+                finalCanvas = trimCanvas(finalCanvas);
+                let baseName = fileNameInput.value || 'imagen';
+                if (type === 'png') {
+                    const dataURL = finalCanvas.toDataURL('image/png');
+                    const dpiDataURL = injectDynamicDPI(dataURL, 300);
+                    const a = document.createElement('a');
+                    a.download = `${baseName}_chechena_shirts.png`;
+                    a.href = dpiDataURL;
+                    a.click();
+                } else if (type === 'pdf') {
+                    const { jsPDF } = window.jspdf;
+                    const mmW = (finalCanvas.width / 300) * 25.4;
+                    const mmH = (finalCanvas.height / 300) * 25.4;
+                    const pdf = new jsPDF({ orientation: mmW > mmH ? 'l' : 'p', unit: 'mm', format: [mmW, mmH] });
+                    pdf.addImage(finalCanvas.toDataURL('image/png', 0.8), 'PNG', 0, 0, mmW, mmH);
+                    pdf.save(`${baseName}_chechena_shirts.pdf`);
+                }
+                loader.style.display = 'none';
+            } catch(e) {
+                console.error(e);
+                alert("Error de memoria. Intenta con una imagen más pequeña.");
+                loader.style.display = 'none';
+            }
+        }, 100);
+    };
+    
+    function injectDynamicDPI(base64Image, targetDPI) {
+        const PPM = Math.round(targetDPI / 0.0254);
+        const byteString = atob(base64Image.split(',')[1]);
+        const buffer = new ArrayBuffer(byteString.length + 21);
+        const view = new Uint8Array(buffer);
+        let offset = 33;
+        for (let i = 0; i < offset; i++) view[i] = byteString.charCodeAt(i);
+        view[offset++] = 0; view[offset++] = 0; view[offset++] = 0; view[offset++] = 9;
+        view[offset++] = 112; view[offset++] = 72; view[offset++] = 89; view[offset++] = 115;
+        view[offset++] = (PPM >>> 24) & 0xFF; view[offset++] = (PPM >>> 16) & 0xFF;
+        view[offset++] = (PPM >>> 8) & 0xFF; view[offset++] = PPM & 0xFF;
+        view[offset++] = (PPM >>> 24) & 0xFF; view[offset++] = (PPM >>> 16) & 0xFF;
+        view[offset++] = (PPM >>> 8) & 0xFF; view[offset++] = PPM & 0xFF;
+        view[offset++] = 1;
+        view[offset++] = 0; view[offset++] = 0; view[offset++] = 0; view[offset++] = 0;
+        for (let i = 33; i < byteString.length; i++) { view[offset++] = byteString.charCodeAt(i); }
+        let binary = '';
+        const len = view.byteLength;
+        for (let i = 0; i < len; i++) { binary += String.fromCharCode(view[i]); }
+        return 'data:image/png;base64,' + btoa(binary);
+    }
+});
+</script>
+
+</body>
+</html>

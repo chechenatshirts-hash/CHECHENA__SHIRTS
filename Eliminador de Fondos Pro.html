@@ -1,0 +1,1979 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CHECHENA SHIRTS · Eliminador de Fondos Pro</title>
+<meta name="description" content="Elimina fondos con precisión profesional. Herramienta exclusiva de CHECHENA SHIRTS para diseños DTF de alta calidad.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    /* Paleta Crema CHECHENA SHIRTS */
+    --cream-50: #FDFBF7;
+    --cream-100: #FAF6EE;
+    --cream-200: #F3EBD9;
+    --cream-300: #E8DCC0;
+    --cream-400: #D4C4A0;
+    --cream-500: #B8A47E;
+
+    /* Acentos tierra/cacao */
+    --cacao-600: #8B6F47;
+    --cacao-700: #6B5435;
+    --cacao-800: #4A3A25;
+    --cacao-900: #2E2416;
+
+    /* Texto */
+    --ink: #2E2416;
+    --ink-soft: #5C4A33;
+    --ink-muted: #8B7A5E;
+
+    /* UI */
+    --border: rgba(139, 111, 71, 0.18);
+    --border-strong: rgba(139, 111, 71, 0.35);
+    --shadow-sm: 0 1px 2px rgba(46, 36, 22, 0.06);
+    --shadow-md: 0 4px 12px rgba(46, 36, 22, 0.08);
+    --shadow-lg: 0 12px 32px rgba(46, 36, 22, 0.12);
+    --shadow-xl: 0 24px 64px rgba(46, 36, 22, 0.16);
+
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: linear-gradient(135deg, var(--cream-100) 0%, var(--cream-200) 100%);
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 40px 20px;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: var(--cream-50);
+    border-radius: 24px;
+    padding: 50px 60px;
+    box-shadow: var(--shadow-xl);
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+/* ============ BRAND HEADER ============ */
+.brand-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.brand-monogram {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cacao-700), var(--cacao-900));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream-100);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-md);
+}
+
+h1 {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+}
+
+h1 em {
+    font-style: italic;
+    color: var(--cacao-600);
+    font-weight: 500;
+}
+
+.subtitle {
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 50px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+}
+
+/* ============ UPLOAD ============ */
+.upload-section { margin-bottom: 30px; }
+
+.upload-label {
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    display: block;
+}
+
+.upload-box {
+    background: var(--cream-100);
+    border: 2px dashed var(--cacao-600);
+    border-radius: 20px;
+    padding: 80px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-box:hover {
+    border-color: var(--cacao-700);
+    background: var(--cream-200);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.upload-box.highlight {
+    background: var(--cream-200);
+    border-color: var(--cacao-700);
+    transform: translateY(-2px);
+}
+
+.upload-box input[type=file] { position: absolute; left: -9999px; }
+
+.upload-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 0 15px 0;
+    color: var(--cacao-600);
+}
+
+.upload-text {
+    color: var(--ink);
+    font-size: 1.3rem;
+    font-weight: 500;
+    word-wrap: break-word;
+    font-family: var(--font-display);
+    letter-spacing: 0.5px;
+}
+
+.upload-subtext {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.upload-subtext kbd {
+    background: var(--cream-200);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: inherit;
+    color: var(--cacao-700);
+    border: 1px solid var(--border-strong);
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.upload-link {
+    color: var(--cacao-700);
+    text-decoration: underline;
+    font-weight: 600;
+    text-decoration-color: var(--cacao-400);
+}
+
+/* ============ TOOLS ============ */
+.tools-container { display: none; }
+.tools-container.active { display: block; }
+
+.quick-actions, .tools-section, .preview-section, .download-section, .enhance-section {
+    background: var(--cream-100);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    text-align: left;
+}
+
+.section-title {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-title .num {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--cream-50);
+    background: var(--cacao-700);
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
+}
+
+/* ============ ENHANCE SECTION ============ */
+.enhance-section { display: none; }
+.enhance-section.active { display: block; }
+
+.enhance-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.enhance-copy {
+    text-align: left;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.enhance-copy strong {
+    color: var(--cacao-700);
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.btn-enhance {
+    background: var(--cacao-900);
+    color: var(--cream-100);
+    border: 1px solid var(--cacao-900);
+    min-width: 180px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-enhance:hover:not(:disabled) {
+    background: var(--cacao-700);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-enhance:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-enhance.processing {
+    pointer-events: none;
+    opacity: 0.85;
+    background: var(--cacao-700);
+}
+
+.btn-enhance.enhanced {
+    background: var(--cream-200);
+    color: var(--cacao-700);
+    border-color: var(--cacao-600);
+    box-shadow: none;
+    cursor: default;
+}
+
+.btn-enhance .btn-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(250, 246, 238, 0.3);
+    border-top-color: var(--cream-100);
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: -2px;
+    animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.enhance-status-badge {
+    display: none;
+    width: max-content;
+    margin-top: 10px;
+    padding: 6px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--cacao-600);
+    background: var(--cream-200);
+    color: var(--cacao-700);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.enhance-status-badge.active {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.enhance-status-badge.active::before { content: '✓'; font-size: 0.85rem; }
+
+/* ============ ACTIONS GRID ============ */
+.actions-grid {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.color-picker-btn {
+    width: 100%;
+    height: 46px;
+    border: 2px solid var(--border-strong);
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: var(--cream-50);
+    transition: all 0.2s;
+}
+
+.color-picker-btn:hover {
+    border-color: var(--cacao-600);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 111, 71, 0.15);
+}
+
+.color-picker-btn input[type=color] {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    border: none;
+    cursor: pointer;
+}
+
+.btn {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border-strong);
+    background: var(--cream-50);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-body);
+}
+
+.btn:hover:not(:disabled) {
+    border-color: var(--cacao-600);
+    color: var(--cacao-700);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-active {
+    background: var(--cacao-900);
+    color: var(--cream-100);
+    border-color: var(--cacao-900);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============ TOOLS GRID ============ */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.tolerance-control { margin-top: 18px; }
+
+.tolerance-label {
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.tolerance-label span {
+    color: var(--cacao-700);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+input[type=range] {
+    width: 100%;
+    height: 4px;
+    background: var(--cream-300);
+    border-radius: 100px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--cream-50);
+    border: 2px solid var(--cacao-600);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    border-color: var(--cacao-700);
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--cream-50);
+    border: 2px solid var(--cacao-600);
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.contract-panel {
+    background: var(--cream-200);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-strong);
+    margin-top: 12px;
+}
+
+/* ============ PREVIEW ============ */
+.preview-section { position: relative; }
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.zoom-control {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.zoom-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--cream-50);
+    border: 1.5px solid var(--border-strong);
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-weight: 700;
+}
+
+.zoom-btn:hover {
+    border-color: var(--cacao-600);
+    color: var(--cacao-700);
+    transform: scale(1.05);
+}
+
+.zoom-level {
+    color: var(--cacao-700);
+    font-size: 0.85rem;
+    min-width: 55px;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.preview-wrapper {
+    background:
+        linear-gradient(45deg, var(--cream-300) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--cream-300) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--cream-300) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--cream-300) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    background-color: var(--cream-100);
+    border-radius: 14px;
+    min-height: 600px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.preview-viewport {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    cursor: crosshair;
+}
+
+.preview-viewport.panning { cursor: move; }
+
+.canvas-stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: 50% 50%;
+    will-change: transform;
+}
+
+.canvas-stack {
+    position: relative;
+    display: inline-block;
+}
+
+canvas#canvas {
+    border: 2px solid var(--cacao-600);
+    display: block;
+    box-shadow: var(--shadow-lg);
+    image-rendering: pixelated;
+    cursor: crosshair;
+    border-radius: 4px;
+}
+
+canvas#hudCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+.sidebar-controls {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+}
+
+.sidebar-btn {
+    width: 48px;
+    height: 48px;
+    background: rgba(253, 251, 247, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid var(--border-strong);
+    border-radius: 12px;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    transition: all 0.2s;
+    padding: 4px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebar-btn:hover:not(:disabled) {
+    border-color: var(--cacao-600);
+    color: var(--cacao-700);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.sidebar-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.sidebar-btn .icon { font-size: 1.1rem; margin-bottom: 2px; }
+
+/* ============ DOWNLOAD ============ */
+.download-section {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+}
+
+.btn-primary {
+    background: var(--cacao-900);
+    color: var(--cream-100);
+    border: 1px solid var(--cacao-900);
+    padding: 16px 24px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--cacao-700);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+    background: var(--cream-50);
+    color: var(--ink);
+    border: 1.5px solid var(--border-strong);
+    padding: 16px 24px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    border-color: var(--cacao-600);
+    color: var(--cacao-700);
+}
+
+.status-message {
+    padding: 14px 20px;
+    border-radius: 12px;
+    margin-top: 18px;
+    font-size: 0.85rem;
+    display: none;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.status-success {
+    background: var(--cream-200);
+    color: var(--cacao-700);
+    border: 1px solid var(--cacao-600);
+}
+
+.status-error {
+    background: #FDE8E8;
+    color: #991B1B;
+    border: 1px solid #F8B4B4;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1024px) {
+    .container { padding: 40px; }
+    h1 { font-size: 2.5rem; }
+    .subtitle { font-size: 1.05rem; }
+}
+
+@media (max-width: 768px) {
+    body { padding: 20px 15px; }
+    .container { border-radius: 20px; padding: 30px 22px; }
+    h1 { font-size: 2rem; margin-bottom: 15px; }
+    .subtitle { font-size: 1rem; margin-bottom: 35px; }
+    .upload-box { padding: 60px 25px; }
+    .upload-text { font-size: 1.1rem; }
+    .actions-grid { grid-template-columns: 1fr; }
+    .enhance-row { grid-template-columns: 1fr; }
+    .enhance-copy { text-align: center; }
+    .btn-enhance { width: 100%; }
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    .sidebar-controls {
+        position: static;
+        transform: none;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+    .download-section { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="brand-header">
+        <div class="brand-monogram">CS</div>
+    </div>
+    <h1>Eliminador de Fondos <em>Pro</em></h1>
+    <p class="subtitle">Sube tu imagen y elimina fondos con precisión profesional. Herramienta exclusiva de CHECHENA SHIRTS para diseños DTF de alta calidad.</p>
+
+    <div class="upload-section">
+        <label class="upload-label">Paso 01 · Carga tu imagen</label>
+        <div class="upload-box" id="uploadBox">
+            <input type="file" id="fileInput" accept="image/*">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p class="upload-text">Arrastra tu imagen aquí o <span class="upload-link">haz clic para seleccionar</span></p>
+            <p class="upload-subtext">También puedes pegar con <kbd>Ctrl</kbd> + <kbd>V</kbd></p>
+        </div>
+    </div>
+
+    <div class="tools-container" id="toolsContainer">
+        <div class="enhance-section" id="enhanceSection">
+            <div class="enhance-row">
+                <div class="enhance-copy">
+                    <strong>Mejora opcional con IA</strong>
+                    Sube tu diseño y mejora la calidad antes de eliminar el fondo.
+                    <span class="enhance-status-badge" id="enhanceStatusBadge">Imagen Mejorada</span>
+                </div>
+                <button class="btn-enhance" id="btnEnhanceImage">Mejorar Imagen</button>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <div class="section-title"><span class="num">02</span>Acciones Rápidas</div>
+            <div class="actions-grid">
+                <div class="color-picker-btn">
+                    <input type="color" id="colorPicker" value="#ffffff">
+                </div>
+                <button class="btn" id="btnRemoveColor">Remover Color</button>
+                <button class="btn" id="btnWhite">Remover Blanco</button>
+                <button class="btn" id="btnBlack">Remover Negro</button>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <div class="section-title"><span class="num">03</span>Herramientas</div>
+            <div class="tools-grid">
+                <button class="btn btn-active" id="btnGlobal">Global</button>
+                <button class="btn" id="btnWand">Varita</button>
+                <button class="btn" id="btnBrush">Manual</button>
+                <button class="btn" id="btnRestoreBrush">Restaurar Manual</button>
+                <button class="btn" id="btnRestoreWand">Restaurar Varita</button>
+                <button class="btn" id="btnReduceEdges">Limpiar Semitransp.</button>
+                <button class="btn" id="btnContractEdges">Contraer Bordes</button>
+            </div>
+            <div class="tolerance-control">
+                <label class="tolerance-label">Tolerancia de Color <span id="toleranceValue">30</span></label>
+                <input type="range" id="toleranceSlider" min="0" max="100" value="30">
+            </div>
+            <div id="brushSizeGroup" style="margin-top:15px; display:none;">
+                <label class="tolerance-label">Tamaño del Pincel <span id="brushValue">20</span>px</label>
+                <input type="range" id="brushSlider" min="5" max="100" value="20">
+            </div>
+            <div id="contractEdgesGroup" class="contract-panel" style="display:none;">
+                <label class="tolerance-label">Píxeles a Contraer <span id="contractValue">1</span>px</label>
+                <input type="range" id="contractSlider" min="1" max="10" value="1">
+                <button class="btn btn-primary" id="btnApplyContract" style="margin-top: 12px; width: 100%;">Aplicar Contracción</button>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <div class="preview-header">
+                <div class="section-title" style="margin:0;"><span class="num">04</span>Vista Previa</div>
+                <div class="zoom-control">
+                    <button class="zoom-btn" id="zoomOut" title="Alejar (-)">−</button>
+                    <span class="zoom-level" id="zoomLevel">100%</span>
+                    <button class="zoom-btn" id="zoomIn" title="Acercar (+)">+</button>
+                    <button class="zoom-btn" id="zoomFit" title="Ajustar (0)">⊙</button>
+                    <input type="range" id="zoomSlider" min="10" max="400" value="100" style="width:100px; margin-left:8px;">
+                </div>
+            </div>
+            <div class="preview-wrapper" id="previewWrapper">
+                <div class="preview-viewport" id="previewViewport">
+                    <div class="canvas-stage" id="canvasStage">
+                        <div class="canvas-stack">
+                            <canvas id="canvas"></canvas>
+                            <canvas id="hudCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-controls">
+                    <button class="sidebar-btn" id="btnUndo" title="Deshacer (Ctrl+Z)">
+                        <span class="icon">↶</span>
+                        <span>Undo</span>
+                    </button>
+                    <button class="sidebar-btn" id="btnRedo" title="Rehacer (Ctrl+Y)">
+                        <span class="icon">↷</span>
+                        <span>Redo</span>
+                    </button>
+                    <button class="sidebar-btn" id="btnClear" title="Limpiar todo">
+                        <span class="icon">✕</span>
+                        <span>Clear</span>
+                    </button>
+                    <button class="sidebar-btn" id="btnToggleLoupe" title="Activar/Desactivar lupa">
+                        <span class="icon">◎</span>
+                        <span>Loupe</span>
+                    </button>
+                    <button class="sidebar-btn" id="btnChangeBg" title="Cambiar fondo de vista previa">
+                        <span class="icon">◐</span>
+                        <span>BG</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <button class="btn btn-primary" id="btnDownload">Descargar PNG 300 DPI</button>
+            <button class="btn btn-secondary" id="btnReset">Reiniciar Ediciones</button>
+        </div>
+
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const uploadBox = document.getElementById('uploadBox');
+const toolsContainer = document.getElementById('toolsContainer');
+const enhanceSection = document.getElementById('enhanceSection');
+const btnEnhanceImage = document.getElementById('btnEnhanceImage');
+const enhanceStatusBadge = document.getElementById('enhanceStatusBadge');
+const canvas = document.getElementById('canvas');
+const hud = document.getElementById('hudCanvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: true, alpha: true });
+const hctx = hud.getContext('2d', { alpha: true });
+const canvasStage = document.getElementById('canvasStage');
+const previewViewport = document.getElementById('previewViewport');
+const previewWrapper = document.getElementById('previewWrapper');
+const btnGlobal = document.getElementById('btnGlobal');
+const btnWand = document.getElementById('btnWand');
+const btnBrush = document.getElementById('btnBrush');
+const btnRestoreBrush = document.getElementById('btnRestoreBrush');
+const btnRestoreWand = document.getElementById('btnRestoreWand');
+const btnReduceEdges = document.getElementById('btnReduceEdges');
+const btnContractEdges = document.getElementById('btnContractEdges');
+const btnUndo = document.getElementById('btnUndo');
+const btnRedo = document.getElementById('btnRedo');
+const btnClear = document.getElementById('btnClear');
+const btnDownload = document.getElementById('btnDownload');
+const btnReset = document.getElementById('btnReset');
+const btnToggleLoupe = document.getElementById('btnToggleLoupe');
+const btnChangeBg = document.getElementById('btnChangeBg');
+const colorPicker = document.getElementById('colorPicker');
+const statusMessage = document.getElementById('statusMessage');
+const toleranceSlider = document.getElementById('toleranceSlider');
+const toleranceValue = document.getElementById('toleranceValue');
+const brushSlider = document.getElementById('brushSlider');
+const brushValue = document.getElementById('brushValue');
+const brushSizeGroup = document.getElementById('brushSizeGroup');
+const contractSlider = document.getElementById('contractSlider');
+const contractValue = document.getElementById('contractValue');
+const contractEdgesGroup = document.getElementById('contractEdgesGroup');
+const btnApplyContract = document.getElementById('btnApplyContract');
+const zoomIn = document.getElementById('zoomIn');
+const zoomOut = document.getElementById('zoomOut');
+const zoomFit = document.getElementById('zoomFit');
+const zoomLevel = document.getElementById('zoomLevel');
+const zoomSlider = document.getElementById('zoomSlider');
+const btnRemoveColor = document.getElementById('btnRemoveColor');
+const btnWhite = document.getElementById('btnWhite');
+const btnBlack = document.getElementById('btnBlack');
+
+const ENHANCER_CONFIG = {
+    WORKER_URL: 'https://novage-enhancer.irvingkumul.workers.dev',
+    TURNSTILE_SITEKEY: '0x4AAAAAACHr7185EGOVmZSJ',
+    MAX_FILE_SIZE_MB: 35,
+    REQUEST_TIMEOUT_MS: 120000,
+    TURNSTILE_WAIT_MS: 12000,
+    MAX_CANVAS_PIXELS: 24000000,
+    MAX_CANVAS_SIDE: 6500,
+    LARGE_IMAGE_PIXELS: 12000000,
+    HISTORY_MAX_BYTES: 260 * 1024 * 1024
+};
+
+let originalImage = null;
+let originalImageData = null;
+let originalFileName = 'imagen';
+let currentImageFile = null;
+let currentObjectUrl = null;
+let imageAlreadyEnhanced = false;
+let sourceWasOptimized = false;
+let enhancerTurnstileToken = null;
+let enhancerTurnstileWidgetId = null;
+let enhancerTurnstileReadyPromise = null;
+let enhancerTurnstileWaiter = null;
+let currentTool = 'global';
+let tolerance = 30;
+let brushSize = 20;
+let contractPixels = 1;
+let history = [];
+let redoHistory = [];
+let historyBytes = 0;
+let zoom = 100;
+let panX = 0, panY = 0;
+let isPanning = false;
+let panStartX = 0, panStartY = 0;
+let spaceDown = false;
+let mouseButton = null;
+let isDrawing = false;
+let isBusy = false;
+let lastBrushPoint = null;
+let pendingHudEvent = null;
+let hudFrame = 0;
+
+const bgStyles = [
+    'linear-gradient(45deg, #E8DCC0 25%, transparent 25%), linear-gradient(-45deg, #E8DCC0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #E8DCC0 75%), linear-gradient(-45deg, transparent 75%, #E8DCC0 75%)',
+    '#FFFFFF',
+    '#2E2416',
+    '#8B7A5E',
+    '#8B6F47'
+];
+const bgSizes = ['20px 20px', 'auto', 'auto', 'auto', 'auto'];
+const bgPositions = ['0 0, 0 10px, 10px -10px, -10px 0px', '0 0', '0 0', '0 0', '0 0'];
+const bgColors = ['#FAF6EE', '#FFFFFF', '#2E2416', '#8B7A5E', '#8B6F47'];
+let currentBgIndex = 0;
+let loupeEnabled = true;
+const LOUPE_RADIUS = 60;
+const LOUPE_ZOOM = 4;
+let statusTimer = null;
+
+function showStatus(msg, type='success', duration=3000) {
+    if (statusTimer) clearTimeout(statusTimer);
+    statusMessage.textContent = msg;
+    statusMessage.className = `status-message status-${type}`;
+    statusMessage.style.display = 'block';
+    if (duration > 0) {
+        statusTimer = setTimeout(() => statusMessage.style.display = 'none', duration);
+    }
+}
+
+function yieldToBrowser() {
+    return new Promise(resolve => requestAnimationFrame(resolve));
+}
+
+function setBusy(active) {
+    isBusy = active;
+    [btnRemoveColor, btnWhite, btnBlack, btnGlobal, btnWand, btnBrush, btnRestoreBrush, btnRestoreWand, btnReduceEdges, btnContractEdges, btnApplyContract, btnClear, btnReset, btnDownload].forEach(btn => {
+        if (btn) btn.disabled = active;
+    });
+    updateHistoryButtons();
+    if (imageAlreadyEnhanced) setEnhanceButtonState('enhanced');
+    else if (active) btnEnhanceImage.disabled = true;
+    else setEnhanceButtonState('idle');
+}
+
+function setEnhanceButtonState(state) {
+    btnEnhanceImage.classList.remove('processing', 'enhanced');
+    enhanceStatusBadge.classList.remove('active');
+    if (state === 'idle') {
+        btnEnhanceImage.disabled = isBusy || !currentImageFile;
+        btnEnhanceImage.textContent = 'Mejorar Imagen';
+        return;
+    }
+    if (state === 'processing') {
+        btnEnhanceImage.disabled = true;
+        btnEnhanceImage.classList.add('processing');
+        btnEnhanceImage.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>Mejorando...';
+        return;
+    }
+    if (state === 'enhanced') {
+        btnEnhanceImage.disabled = true;
+        btnEnhanceImage.classList.add('enhanced');
+        btnEnhanceImage.textContent = 'Imagen Mejorada';
+        enhanceStatusBadge.classList.add('active');
+    }
+}
+
+function revokeCurrentObjectUrl() {
+    if (currentObjectUrl) {
+        URL.revokeObjectURL(currentObjectUrl);
+        currentObjectUrl = null;
+    }
+}
+
+function getSafeCanvasSize(width, height) {
+    const pixels = width * height;
+    const sideRatio = Math.min(1, ENHANCER_CONFIG.MAX_CANVAS_SIDE / Math.max(width, height));
+    const pixelRatio = Math.min(1, Math.sqrt(ENHANCER_CONFIG.MAX_CANVAS_PIXELS / pixels));
+    const ratio = Math.min(sideRatio, pixelRatio);
+    return {
+        width: Math.max(1, Math.round(width * ratio)),
+        height: Math.max(1, Math.round(height * ratio)),
+        ratio,
+        optimized: ratio < 1
+    };
+}
+
+function resetWorkspaceState() {
+    history = [];
+    redoHistory = [];
+    historyBytes = 0;
+    hctx.clearRect(0, 0, hud.width, hud.height);
+    updateHistoryButtons();
+    zoom = 100;
+    panX = 0;
+    panY = 0;
+    applyTransform();
+}
+
+async function decodeImageFromBlob(blob) {
+    if ('createImageBitmap' in window) {
+        return await createImageBitmap(blob, { imageOrientation: 'from-image', premultiplyAlpha: 'premultiply' });
+    }
+    const url = URL.createObjectURL(blob);
+    return await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo cargar la imagen')); };
+        img.src = url;
+    });
+}
+
+async function loadImageFromBlob(blob, fileName, sourceFile, options = {}) {
+    const { keepEnhancedState = false } = options;
+    const bitmap = await decodeImageFromBlob(blob);
+    const safe = getSafeCanvasSize(bitmap.width, bitmap.height);
+    sourceWasOptimized = safe.optimized;
+    canvas.width = safe.width;
+    canvas.height = safe.height;
+    hud.width = safe.width;
+    hud.height = safe.height;
+    canvas.style.maxWidth = 'none';
+    hud.style.maxWidth = 'none';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = safe.optimized;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(bitmap, 0, 0, safe.width, safe.height);
+    if (typeof bitmap.close === 'function') bitmap.close();
+    originalImage = await createImageBitmap(canvas);
+    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    currentImageFile = sourceFile || blob;
+    toolsContainer.classList.add('active');
+    enhanceSection.classList.add('active');
+    resetWorkspaceState();
+    setEnhanceButtonState(keepEnhancedState || imageAlreadyEnhanced ? 'enhanced' : 'idle');
+    if (sourceWasOptimized) {
+        showStatus(`Imagen optimizada: ${canvas.width}×${canvas.height}px`, 'success', 4500);
+    }
+    return true;
+}
+
+async function handleImageLoad(file) {
+    if (isBusy) return;
+    if (!file || !file.type.startsWith('image/')) {
+        showStatus('El archivo debe ser una imagen', 'error');
+        return;
+    }
+    const maxBytes = ENHANCER_CONFIG.MAX_FILE_SIZE_MB * 1024 * 1024;
+    if (file.size > maxBytes) {
+        showStatus(`Imagen demasiado pesada. Máx: ${ENHANCER_CONFIG.MAX_FILE_SIZE_MB} MB`, 'error', 6000);
+        return;
+    }
+    setBusy(true);
+    showStatus('Cargando imagen...', 'success', 0);
+    try {
+        originalFileName = file.name.replace(/\.[^/.]+$/, '') || 'imagen';
+        revokeCurrentObjectUrl();
+        currentObjectUrl = URL.createObjectURL(file);
+        currentImageFile = file;
+        imageAlreadyEnhanced = false;
+        await yieldToBrowser();
+        await loadImageFromBlob(file, originalFileName, file);
+        showStatus(sourceWasOptimized ? 'Imagen cargada en modo optimizado' : 'Imagen cargada correctamente');
+    } catch (error) {
+        showStatus(error.message || 'No se pudo cargar la imagen', 'error', 6000);
+    } finally {
+        setBusy(false);
+        if (fileInput) fileInput.value = '';
+    }
+}
+
+uploadBox.addEventListener('click', () => fileInput.click());
+uploadBox.addEventListener('dragover', (e) => { e.preventDefault(); uploadBox.classList.add('highlight'); });
+uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('highlight'));
+uploadBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadBox.classList.remove('highlight');
+    const file = e.dataTransfer.files[0];
+    if (file) handleImageLoad(file);
+});
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) handleImageLoad(file);
+});
+document.addEventListener('paste', (e) => {
+    const items = e.clipboardData?.items;
+    if (!items || isBusy) return;
+    for (const item of items) {
+        if (item.type.startsWith('image/')) {
+            e.preventDefault();
+            const file = item.getAsFile();
+            if (file) handleImageLoad(file);
+            return;
+        }
+    }
+});
+
+function estimateImageDataBytes(imageData) {
+    return imageData ? imageData.data.byteLength : 0;
+}
+
+function trimHistory() {
+    while (history.length > 0 && (historyBytes > ENHANCER_CONFIG.HISTORY_MAX_BYTES || history.length > 12)) {
+        const removed = history.shift();
+        historyBytes -= estimateImageDataBytes(removed);
+    }
+}
+
+function saveToHistory() {
+    if (!canvas.width || !canvas.height) return;
+    try {
+        const current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        history.push(current);
+        historyBytes += estimateImageDataBytes(current);
+        trimHistory();
+        redoHistory = [];
+        updateHistoryButtons();
+    } catch (error) {
+        showStatus('No se pudo guardar historial', 'error', 5000);
+    }
+}
+
+function updateHistoryButtons() {
+    btnUndo.disabled = isBusy || history.length === 0;
+    btnRedo.disabled = isBusy || redoHistory.length === 0;
+}
+
+btnUndo.addEventListener('click', () => {
+    if (isBusy || history.length === 0) return;
+    const current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    redoHistory.push(current);
+    const prev = history.pop();
+    historyBytes -= estimateImageDataBytes(prev);
+    ctx.putImageData(prev, 0, 0);
+    updateHistoryButtons();
+    showStatus('Deshecho');
+});
+
+btnRedo.addEventListener('click', () => {
+    if (isBusy || redoHistory.length === 0) return;
+    const current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    history.push(current);
+    historyBytes += estimateImageDataBytes(current);
+    trimHistory();
+    const next = redoHistory.pop();
+    ctx.putImageData(next, 0, 0);
+    updateHistoryButtons();
+    showStatus('Rehecho');
+});
+
+btnReset.addEventListener('click', () => {
+    if (!originalImage || isBusy) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hctx.clearRect(0, 0, hud.width, hud.height);
+    ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    history = [];
+    redoHistory = [];
+    historyBytes = 0;
+    updateHistoryButtons();
+    showStatus('Imagen reiniciada');
+});
+
+btnClear.addEventListener('click', () => {
+    if (isBusy) return;
+    if (confirm('¿Limpiar toda la imagen?')) {
+        saveToHistory();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        showStatus('Canvas limpiado');
+    }
+});
+
+// ====== TURNSTILE / ENHANCER ======
+function waitForTurnstileApi() {
+    if (window.turnstile && typeof window.turnstile.render === 'function') return Promise.resolve();
+    return new Promise((resolve, reject) => {
+        const started = Date.now();
+        const timer = setInterval(() => {
+            if (window.turnstile && typeof window.turnstile.render === 'function') {
+                clearInterval(timer);
+                resolve();
+            } else if (Date.now() - started > ENHANCER_CONFIG.TURNSTILE_WAIT_MS) {
+                clearInterval(timer);
+                reject(new Error('No se pudo cargar la validación.'));
+            }
+        }, 120);
+    });
+}
+
+function clearEnhancerTurnstileWaiter() {
+    if (enhancerTurnstileWaiter?.timer) clearTimeout(enhancerTurnstileWaiter.timer);
+    enhancerTurnstileWaiter = null;
+}
+
+function resolveEnhancerTurnstile(token) {
+    enhancerTurnstileToken = token;
+    if (enhancerTurnstileWaiter) {
+        const waiter = enhancerTurnstileWaiter;
+        clearEnhancerTurnstileWaiter();
+        waiter.resolve(token);
+    }
+}
+
+function rejectEnhancerTurnstile(message) {
+    enhancerTurnstileToken = null;
+    if (enhancerTurnstileWaiter) {
+        const waiter = enhancerTurnstileWaiter;
+        clearEnhancerTurnstileWaiter();
+        waiter.reject(new Error(message || 'No se pudo validar.'));
+    }
+}
+
+function ensureEnhancerTurnstile() {
+    if (enhancerTurnstileWidgetId !== null) return Promise.resolve(enhancerTurnstileWidgetId);
+    if (enhancerTurnstileReadyPromise) return enhancerTurnstileReadyPromise;
+    enhancerTurnstileReadyPromise = waitForTurnstileApi().then(() => {
+        let host = document.getElementById('turnstileWidget');
+        if (!host) {
+            host = document.createElement('div');
+            host.id = 'turnstileWidget';
+            host.style.cssText = 'position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0.01;pointer-events:none;z-index:0;';
+            document.body.appendChild(host);
+        }
+        enhancerTurnstileWidgetId = window.turnstile.render(host, {
+            sitekey: ENHANCER_CONFIG.TURNSTILE_SITEKEY,
+            theme: 'light',
+            size: 'invisible',
+            execution: 'execute',
+            callback: resolveEnhancerTurnstile,
+            'expired-callback': () => rejectEnhancerTurnstile('La validación expiró.'),
+            'error-callback': () => rejectEnhancerTurnstile('No se pudo validar.')
+        });
+        return enhancerTurnstileWidgetId;
+    }).catch((error) => {
+        enhancerTurnstileReadyPromise = null;
+        throw error;
+    });
+    return enhancerTurnstileReadyPromise;
+}
+
+async function requestEnhancerTurnstileToken() {
+    if (enhancerTurnstileToken) return enhancerTurnstileToken;
+    const widgetId = await ensureEnhancerTurnstile();
+    clearEnhancerTurnstileWaiter();
+    return new Promise((resolve, reject) => {
+        enhancerTurnstileWaiter = {
+            resolve, reject,
+            timer: setTimeout(() => {
+                enhancerTurnstileWaiter = null;
+                enhancerTurnstileToken = null;
+                reject(new Error('La validación tardó demasiado.'));
+            }, ENHANCER_CONFIG.TURNSTILE_WAIT_MS)
+        };
+        try { window.turnstile.execute(widgetId); }
+        catch (_error) {
+            clearEnhancerTurnstileWaiter();
+            reject(new Error('No se pudo iniciar la validación.'));
+        }
+    });
+}
+
+function resetEnhancerTurnstile() {
+    enhancerTurnstileToken = null;
+    clearEnhancerTurnstileWaiter();
+    if (window.turnstile && enhancerTurnstileWidgetId !== null) {
+        try { window.turnstile.reset(enhancerTurnstileWidgetId); } catch (_error) {}
+    }
+}
+
+async function fetchWithTimeout(url, options, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try { return await fetch(url, { ...options, signal: controller.signal }); }
+    finally { clearTimeout(timer); }
+}
+
+async function loadImageFromUrl(url) {
+    try {
+        const response = await fetchWithTimeout(url, { method: 'GET', mode: 'cors' }, ENHANCER_CONFIG.REQUEST_TIMEOUT_MS);
+        if (!response.ok) throw new Error('No se pudo descargar la imagen mejorada');
+        return await response.blob();
+    } catch (_error) {
+        return await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = async () => {
+                try {
+                    const out = document.createElement('canvas');
+                    out.width = img.naturalWidth || img.width;
+                    out.height = img.naturalHeight || img.height;
+                    const outCtx = out.getContext('2d');
+                    outCtx.drawImage(img, 0, 0);
+                    out.toBlob(blob => blob ? resolve(blob) : reject(new Error('No se pudo generar la imagen')), 'image/png');
+                } catch (error) { reject(error); }
+            };
+            img.onerror = () => reject(new Error('No se pudo cargar la imagen mejorada'));
+            img.src = url;
+        });
+    }
+}
+
+async function applyOriginalAlphaToBlob(enhancedBlob, alphaSourceFile) {
+    const resultBitmap = await decodeImageFromBlob(enhancedBlob);
+    const alphaBitmap = await decodeImageFromBlob(alphaSourceFile);
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = resultBitmap.width;
+    finalCanvas.height = resultBitmap.height;
+    const finalCtx = finalCanvas.getContext('2d');
+    finalCtx.imageSmoothingEnabled = true;
+    finalCtx.imageSmoothingQuality = 'high';
+    finalCtx.drawImage(resultBitmap, 0, 0);
+    finalCtx.globalCompositeOperation = 'destination-in';
+    finalCtx.drawImage(alphaBitmap, 0, 0, finalCanvas.width, finalCanvas.height);
+    finalCtx.globalCompositeOperation = 'source-over';
+    if (typeof resultBitmap.close === 'function') resultBitmap.close();
+    if (typeof alphaBitmap.close === 'function') alphaBitmap.close();
+    return await new Promise((resolve, reject) => {
+        finalCanvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('No se pudo preservar la transparencia')), 'image/png');
+    });
+}
+
+async function enhanceCurrentImage() {
+    if (!currentImageFile || btnEnhanceImage.disabled || imageAlreadyEnhanced || isBusy) return;
+    setEnhanceButtonState('processing');
+    showStatus('Verificando solicitud...', 'success', 0);
+    try {
+        const turnstileToken = await requestEnhancerTurnstileToken();
+        if (!turnstileToken) throw new Error('No se pudo validar.');
+        const formData = new FormData();
+        formData.append('image', currentImageFile);
+        showStatus('Mejorando imagen con IA...', 'success', 0);
+        const response = await fetchWithTimeout(ENHANCER_CONFIG.WORKER_URL, {
+            method: 'POST',
+            headers: { 'CF-Turnstile-Token': turnstileToken },
+            body: formData
+        }, ENHANCER_CONFIG.REQUEST_TIMEOUT_MS);
+        let result = null;
+        try { result = await response.json(); }
+        catch (_) { throw new Error('Respuesta inválida del servidor'); }
+        if (!response.ok || !result.success) {
+            const retry = result?.retry_after ? ` Intenta en ${result.retry_after}s.` : '';
+            throw new Error((result?.error || 'No se pudo mejorar') + retry);
+        }
+        showStatus('Cargando imagen mejorada...', 'success', 0);
+        let finalBlob = await loadImageFromUrl(result.output_url);
+        if (currentImageFile.type === 'image/png' || currentImageFile.type === 'image/webp') {
+            try {
+                showStatus('Preservando transparencia...', 'success', 0);
+                finalBlob = await applyOriginalAlphaToBlob(finalBlob, currentImageFile);
+            } catch (_error) {}
+        }
+        const enhancedName = `${originalFileName}_chechena_mejorada.png`;
+        currentImageFile = new File([finalBlob], enhancedName, { type: 'image/png' });
+        revokeCurrentObjectUrl();
+        currentObjectUrl = URL.createObjectURL(finalBlob);
+        imageAlreadyEnhanced = true;
+        await loadImageFromBlob(finalBlob, originalFileName, currentImageFile, { keepEnhancedState: true });
+        setEnhanceButtonState('enhanced');
+        showStatus('Imagen mejorada correctamente');
+    } catch (error) {
+        const message = error.name === 'AbortError' ? 'La mejora tardó demasiado.' : error.message;
+        showStatus(message, 'error', 7000);
+    } finally {
+        resetEnhancerTurnstile();
+        if (imageAlreadyEnhanced) setEnhanceButtonState('enhanced');
+        else setEnhanceButtonState('idle');
+    }
+}
+
+btnEnhanceImage.addEventListener('click', enhanceCurrentImage);
+
+// ====== TOOLS ======
+function setTool(tool) {
+    if (isBusy) return;
+    currentTool = tool;
+    [btnGlobal, btnWand, btnBrush, btnRestoreBrush, btnRestoreWand, btnContractEdges].forEach(btn => btn.classList.remove('btn-active'));
+    brushSizeGroup.style.display = 'none';
+    contractEdgesGroup.style.display = 'none';
+    if (tool === 'global') btnGlobal.classList.add('btn-active');
+    else if (tool === 'wand') btnWand.classList.add('btn-active');
+    else if (tool === 'brush') {
+        btnBrush.classList.add('btn-active');
+        brushSizeGroup.style.display = 'block';
+    }
+    else if (tool === 'restoreBrush') {
+        btnRestoreBrush.classList.add('btn-active');
+        brushSizeGroup.style.display = 'block';
+    }
+    else if (tool === 'restoreWand') btnRestoreWand.classList.add('btn-active');
+    else if (tool === 'contract') {
+        btnContractEdges.classList.add('btn-active');
+        contractEdgesGroup.style.display = 'block';
+    }
+}
+
+btnGlobal.addEventListener('click', () => { setTool('global'); showStatus('Modo Global'); });
+btnWand.addEventListener('click', () => { setTool('wand'); showStatus('Modo Varita'); });
+btnBrush.addEventListener('click', () => { setTool('brush'); showStatus('Modo Manual'); });
+btnRestoreBrush.addEventListener('click', () => { setTool('restoreBrush'); showStatus('Restaurar Manual'); });
+btnRestoreWand.addEventListener('click', () => { setTool('restoreWand'); showStatus('Restaurar Varita'); });
+btnContractEdges.addEventListener('click', () => { setTool('contract'); showStatus('Modo Contraer'); });
+
+toleranceSlider.addEventListener('input', () => { tolerance = parseInt(toleranceSlider.value); toleranceValue.textContent = tolerance; });
+brushSlider.addEventListener('input', () => { brushSize = parseInt(brushSlider.value); brushValue.textContent = brushSize; });
+contractSlider.addEventListener('input', () => { contractPixels = parseInt(contractSlider.value); contractValue.textContent = contractPixels; });
+
+function colorDistanceSquaredAt(data, i, color) {
+    const dr = data[i] - color[0];
+    const dg = data[i + 1] - color[1];
+    const db = data[i + 2] - color[2];
+    return dr * dr + dg * dg + db * db;
+}
+
+async function removeColorGlobal(targetColor) {
+    if (!canvas.width || isBusy) return;
+    setBusy(true);
+    saveToHistory();
+    showStatus('Eliminando color...', 'success', 0);
+    try {
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imgData.data;
+        const tol = tolerance * 2.55;
+        const tolSq = tol * tol;
+        const step = 900000;
+        for (let i = 0; i < data.length; i += 4) {
+            if (colorDistanceSquaredAt(data, i, targetColor) <= tolSq) data[i + 3] = 0;
+            if (i > 0 && i % step === 0) await yieldToBrowser();
+        }
+        ctx.putImageData(imgData, 0, 0);
+        showStatus('Color eliminado globalmente');
+    } catch (error) {
+        showStatus(error.message || 'Error al eliminar', 'error', 6000);
+    } finally {
+        setBusy(false);
+    }
+}
+
+async function floodFill(x, y, targetColor, restore = false) {
+    if (!canvas.width || isBusy) return;
+    setBusy(true);
+    saveToHistory();
+    showStatus(restore ? 'Restaurando área...' : 'Eliminando área...', 'success', 0);
+    try {
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imgData.data;
+        const originalData = originalImageData?.data;
+        const compareData = restore && originalData ? originalData : data;
+        const w = canvas.width;
+        const h = canvas.height;
+        const total = w * h;
+        const visited = new Uint8Array(total);
+        const stack = new Int32Array(total);
+        let top = 0;
+        stack[top++] = y * w + x;
+        const tol = tolerance * 2.55;
+        const tolSq = tol * tol;
+        let iterations = 0;
+        while (top > 0) {
+            const idx = stack[--top];
+            if (idx < 0 || idx >= total || visited[idx]) continue;
+            visited[idx] = 1;
+            const i = idx * 4;
+            if (colorDistanceSquaredAt(compareData, i, targetColor) > tolSq) continue;
+            if (restore && originalData) {
+                data[i] = originalData[i];
+                data[i + 1] = originalData[i + 1];
+                data[i + 2] = originalData[i + 2];
+                data[i + 3] = originalData[i + 3];
+            } else {
+                data[i + 3] = 0;
+            }
+            const cx = idx % w;
+            if (cx > 0) stack[top++] = idx - 1;
+            if (cx < w - 1) stack[top++] = idx + 1;
+            if (idx >= w) stack[top++] = idx - w;
+            if (idx < total - w) stack[top++] = idx + w;
+            iterations++;
+            if (iterations % 250000 === 0) await yieldToBrowser();
+        }
+        ctx.putImageData(imgData, 0, 0);
+        showStatus(restore ? 'Área restaurada' : 'Área eliminada');
+    } catch (error) {
+        showStatus(error.message || 'Error en varita', 'error', 6000);
+    } finally {
+        setBusy(false);
+    }
+}
+
+function getCanvasCoords(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+        x: Math.floor((clientX - rect.left) * scaleX),
+        y: Math.floor((clientY - rect.top) * scaleY)
+    };
+}
+
+function applyBrushAt(x, y, restore = false) {
+    if (!canvas.width) return;
+    const radius = Math.max(1, Math.ceil(brushSize / 2));
+    const left = Math.max(0, Math.floor(x - radius));
+    const top = Math.max(0, Math.floor(y - radius));
+    const right = Math.min(canvas.width, Math.ceil(x + radius));
+    const bottom = Math.min(canvas.height, Math.ceil(y + radius));
+    const w = right - left;
+    const h = bottom - top;
+    if (w <= 0 || h <= 0) return;
+    const imgData = ctx.getImageData(left, top, w, h);
+    const data = imgData.data;
+    const originalRegion = restore && originalImageData ? originalImageData : null;
+    const rSq = radius * radius;
+    for (let py = 0; py < h; py++) {
+        const gy = top + py;
+        const dy = gy - y;
+        for (let px = 0; px < w; px++) {
+            const gx = left + px;
+            const dx = gx - x;
+            if (dx * dx + dy * dy > rSq) continue;
+            const i = (py * w + px) * 4;
+            if (restore && originalRegion) {
+                const oi = (gy * canvas.width + gx) * 4;
+                data[i] = originalRegion.data[oi];
+                data[i + 1] = originalRegion.data[oi + 1];
+                data[i + 2] = originalRegion.data[oi + 2];
+                data[i + 3] = originalRegion.data[oi + 3];
+            } else {
+                data[i + 3] = 0;
+            }
+        }
+    }
+    ctx.putImageData(imgData, left, top);
+}
+
+function brushLine(from, to, restore = false) {
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const distance = Math.hypot(dx, dy);
+    const step = Math.max(1, brushSize * 0.35);
+    const steps = Math.max(1, Math.ceil(distance / step));
+    for (let s = 1; s <= steps; s++) {
+        const t = s / steps;
+        applyBrushAt(from.x + dx * t, from.y + dy * t, restore);
+    }
+}
+
+canvas.addEventListener('mousedown', async (e) => {
+    if (isBusy || spaceDown || e.button === 1 || e.button === 2) return;
+    const { x, y } = getCanvasCoords(e.clientX, e.clientY);
+    if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) return;
+    const p = ctx.getImageData(x, y, 1, 1).data;
+    const target = [p[0], p[1], p[2]];
+    if (currentTool === 'wand') await floodFill(x, y, target, false);
+    else if (currentTool === 'global') await removeColorGlobal(target);
+    else if (currentTool === 'brush') {
+        saveToHistory();
+        isDrawing = true;
+        lastBrushPoint = { x, y };
+        applyBrushAt(x, y, false);
+    }
+    else if (currentTool === 'restoreBrush') {
+        saveToHistory();
+        isDrawing = true;
+        lastBrushPoint = { x, y };
+        applyBrushAt(x, y, true);
+    }
+    else if (currentTool === 'restoreWand') {
+        if (!originalImageData) return;
+        const startIdx = (y * canvas.width + x) * 4;
+        const targetOriginal = [originalImageData.data[startIdx], originalImageData.data[startIdx + 1], originalImageData.data[startIdx + 2]];
+        await floodFill(x, y, targetOriginal, true);
+    }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (isDrawing && (currentTool === 'brush' || currentTool === 'restoreBrush')) {
+        const point = getCanvasCoords(e.clientX, e.clientY);
+        if (point.x < 0 || point.x >= canvas.width || point.y < 0 || point.y >= canvas.height) return;
+        brushLine(lastBrushPoint || point, point, currentTool === 'restoreBrush');
+        lastBrushPoint = point;
+    }
+});
+
+canvas.addEventListener('mouseup', () => {
+    if (isDrawing) {
+        isDrawing = false;
+        lastBrushPoint = null;
+        showStatus(currentTool === 'restoreBrush' ? 'Restauración finalizada' : 'Borrado finalizado');
+    }
+});
+
+canvas.addEventListener('mouseleave', () => { isDrawing = false; lastBrushPoint = null; });
+
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'z' && !e.shiftKey) { e.preventDefault(); btnUndo.click(); }
+    if (e.ctrlKey && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); btnRedo.click(); }
+});
+
+function applyTransform() {
+    const scale = zoom / 100;
+    canvasStage.style.transform = `translate(-50%, -50%) translate(${panX}px, ${panY}px) scale(${scale})`;
+    zoomLevel.textContent = `${zoom}%`;
+    zoomSlider.value = zoom;
+}
+
+zoomIn.addEventListener('click', () => { zoom = Math.min(400, zoom + 10); applyTransform(); });
+zoomOut.addEventListener('click', () => { zoom = Math.max(10, zoom - 10); applyTransform(); });
+zoomFit.addEventListener('click', () => { zoom = 100; panX = 0; panY = 0; applyTransform(); });
+zoomSlider.addEventListener('input', () => { zoom = parseInt(zoomSlider.value); applyTransform(); });
+
+previewViewport.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    zoom = Math.max(10, Math.min(400, Math.round(zoom - e.deltaY * 0.1)));
+    applyTransform();
+}, { passive: false });
+
+previewViewport.addEventListener('mousedown', (e) => {
+    mouseButton = e.button;
+    if (e.button === 1 || e.button === 2 || (e.button === 0 && spaceDown)) {
+        e.preventDefault();
+        isPanning = true;
+        panStartX = e.clientX - panX;
+        panStartY = e.clientY - panY;
+        previewViewport.classList.add('panning');
+    }
+});
+
+previewViewport.addEventListener('mousemove', (e) => {
+    if (isPanning) {
+        panX = e.clientX - panStartX;
+        panY = e.clientY - panStartY;
+        applyTransform();
+    }
+});
+
+previewViewport.addEventListener('mouseup', () => {
+    isPanning = false;
+    mouseButton = null;
+    previewViewport.classList.remove('panning');
+});
+
+previewViewport.addEventListener('mouseleave', () => {
+    isPanning = false;
+    mouseButton = null;
+    previewViewport.classList.remove('panning');
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && !spaceDown) {
+        spaceDown = true;
+        if (mouseButton === 0) previewViewport.classList.add('panning');
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.code === 'Space') {
+        spaceDown = false;
+        if (!isPanning) previewViewport.classList.remove('panning');
+    }
+});
+
+btnRemoveColor.addEventListener('click', () => {
+    const hex = colorPicker.value;
+    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    removeColorGlobal([r, g, b]);
+});
+
+btnWhite.addEventListener('click', () => removeColorGlobal([255, 255, 255]));
+btnBlack.addEventListener('click', () => removeColorGlobal([0, 0, 0]));
+
+async function reduceSemiTransparencyOnCanvas() {
+    if (isBusy) return;
+    setBusy(true);
+    saveToHistory();
+    showStatus('Limpiando semitransparencias...', 'success', 0);
+    try {
+        const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const d = img.data;
+        const threshold = 127;
+        const step = 1200000;
+        for (let i = 0; i < d.length; i += 4) {
+            const a = d[i + 3];
+            if (a > 0 && a < threshold) d[i + 3] = 0;
+            else if (a >= threshold) d[i + 3] = 255;
+            if (i > 0 && i % step === 0) await yieldToBrowser();
+        }
+        ctx.putImageData(img, 0, 0);
+        showStatus('Semitransparencias eliminadas');
+    } catch (error) {
+        showStatus(error.message || 'Error al limpiar', 'error', 6000);
+    } finally {
+        setBusy(false);
+    }
+}
+
+btnReduceEdges.addEventListener('click', reduceSemiTransparencyOnCanvas);
+
+function buildCircleOffsets(radius) {
+    const offsets = [];
+    const rSq = radius * radius;
+    for (let dy = -radius; dy <= radius; dy++) {
+        for (let dx = -radius; dx <= radius; dx++) {
+            if (dx * dx + dy * dy <= rSq) offsets.push([dx, dy]);
+        }
+    }
+    return offsets;
+}
+
+async function contractEdgesAsync(imageData, pixels) {
+    const width = imageData.width;
+    const height = imageData.height;
+    const src = imageData.data;
+    const dst = new Uint8ClampedArray(src);
+    const offsets = buildCircleOffsets(pixels);
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const idx = (y * width + x) * 4;
+            if (src[idx + 3] <= 0) continue;
+            let shouldErode = false;
+            for (let k = 0; k < offsets.length; k++) {
+                const nx = x + offsets[k][0];
+                const ny = y + offsets[k][1];
+                if (nx < 0 || nx >= width || ny < 0 || ny >= height || src[(ny * width + nx) * 4 + 3] === 0) {
+                    shouldErode = true;
+                    break;
+                }
+            }
+            if (shouldErode) dst[idx + 3] = 0;
+        }
+        if (y % 40 === 0) await yieldToBrowser();
+    }
+    return new ImageData(dst, width, height);
+}
+
+function removeSemiTransparency(imageData) {
+    const data = imageData.data;
+    const threshold = 127;
+    for (let i = 3; i < data.length; i += 4) data[i] = data[i] < threshold ? 0 : 255;
+    return imageData;
+}
+
+btnApplyContract.addEventListener('click', async () => {
+    if (isBusy) return;
+    setBusy(true);
+    saveToHistory();
+    showStatus('Procesando contracción...', 'success', 0);
+    try {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const contractedData = await contractEdgesAsync(imageData, contractPixels);
+        const finalData = removeSemiTransparency(contractedData);
+        ctx.putImageData(finalData, 0, 0);
+        showStatus(`Bordes contraídos ${contractPixels}px`, 'success');
+    } catch (error) {
+        showStatus(error.message || 'Error al contraer', 'error', 6000);
+    } finally {
+        setBusy(false);
+    }
+});
+
+btnToggleLoupe.addEventListener('click', () => {
+    loupeEnabled = !loupeEnabled;
+    showStatus(loupeEnabled ? 'Lupa activada' : 'Lupa desactivada');
+    hctx.clearRect(0, 0, hud.width, hud.height);
+});
+
+btnChangeBg.addEventListener('click', () => {
+    currentBgIndex = (currentBgIndex + 1) % bgStyles.length;
+    previewWrapper.style.backgroundImage = bgStyles[currentBgIndex];
+    previewWrapper.style.backgroundSize = bgSizes[currentBgIndex];
+    previewWrapper.style.backgroundPosition = bgPositions[currentBgIndex];
+    previewWrapper.style.backgroundColor = bgColors[currentBgIndex];
+    const bgNames = ['Cuadrícula Crema', 'Blanco', 'Cacao', 'Gris', 'Tierra'];
+    showStatus(`Fondo: ${bgNames[currentBgIndex]}`);
+});
+
+// Init bg
+previewWrapper.style.backgroundImage = bgStyles[0];
+previewWrapper.style.backgroundSize = bgSizes[0];
+previewWrapper.style.backgroundPosition = bgPositions[0];
+previewWrapper.style.backgroundColor = bgColors[0];
+
+function drawHUD(evt) {
+    if (!canvas.width) return;
+    hctx.clearRect(0, 0, hud.width, hud.height);
+    const { x, y } = getCanvasCoords(evt.clientX, evt.clientY);
+    if (x < 0 || y < 0 || x >= hud.width || y >= hud.height) return;
+    hctx.save();
+    hctx.strokeStyle = 'rgba(139, 111, 71, 0.9)';
+    hctx.lineWidth = 1;
+    hctx.setLineDash([4, 3]);
+    hctx.beginPath(); hctx.moveTo(0, y + 0.5); hctx.lineTo(hud.width, y + 0.5); hctx.stroke();
+    hctx.beginPath(); hctx.moveTo(x + 0.5, 0); hctx.lineTo(x + 0.5, hud.height); hctx.stroke();
+    hctx.setLineDash([]);
+    hctx.beginPath(); hctx.arc(x + 0.5, y + 0.5, 2, 0, Math.PI * 2);
+    hctx.fillStyle = '#8B6F47';
+    hctx.fill();
+    hctx.restore();
+    if (!loupeEnabled || canvas.width * canvas.height > ENHANCER_CONFIG.LARGE_IMAGE_PIXELS) return;
+    const sx = Math.max(0, Math.min(canvas.width - 1, x));
+    const sy = Math.max(0, Math.min(canvas.height - 1, y));
+    const srcSize = Math.floor(LOUPE_RADIUS / LOUPE_ZOOM);
+    const sLeft = Math.max(0, sx - srcSize);
+    const sTop = Math.max(0, sy - srcSize);
+    const sW = Math.min(canvas.width - sLeft, srcSize * 2);
+    const sH = Math.min(canvas.height - sTop, srcSize * 2);
+    hctx.save();
+    hctx.beginPath(); hctx.arc(sx, sy, LOUPE_RADIUS, 0, Math.PI * 2); hctx.closePath(); hctx.clip();
+    hctx.imageSmoothingEnabled = false;
+    hctx.drawImage(canvas, sLeft, sTop, sW, sH, sx - LOUPE_RADIUS, sy - LOUPE_RADIUS, sW * LOUPE_ZOOM, sH * LOUPE_ZOOM);
+    hctx.restore();
+    hctx.beginPath(); hctx.arc(sx, sy, LOUPE_RADIUS + 0.5, 0, Math.PI * 2);
+    hctx.strokeStyle = '#8B6F47';
+    hctx.lineWidth = 2;
+    hctx.stroke();
+    hctx.save();
+    hctx.strokeStyle = 'rgba(253, 251, 247, 0.95)';
+    hctx.lineWidth = 1;
+    hctx.strokeRect(Math.floor(sx) + 0.5, Math.floor(sy) + 0.5, 1, 1);
+    hctx.restore();
+}
+
+previewViewport.addEventListener('mousemove', (e) => {
+    pendingHudEvent = e;
+    if (hudFrame) return;
+    hudFrame = requestAnimationFrame(() => {
+        hudFrame = 0;
+        if (pendingHudEvent && canvasStage.style.display !== 'none') drawHUD(pendingHudEvent);
+    });
+});
+
+previewViewport.addEventListener('contextmenu', (e) => e.preventDefault());
+canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+previewViewport.addEventListener('mouseleave', () => hctx.clearRect(0, 0, hud.width, hud.height));
+
+// ====== PNG 300 DPI INJECTION ======
+function writeUint32(bytes, offset, value) {
+    bytes[offset] = (value >>> 24) & 255;
+    bytes[offset + 1] = (value >>> 16) & 255;
+    bytes[offset + 2] = (value >>> 8) & 255;
+    bytes[offset + 3] = value & 255;
+}
+
+function makeCRCTable() {
+    const table = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+        let c = n;
+        for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+        table[n] = c >>> 0;
+    }
+    return table;
+}
+
+const crcTable = makeCRCTable();
+
+function crc32(bytes, start, length) {
+    let c = 0xffffffff;
+    for (let i = start; i < start + length; i++) c = crcTable[(c ^ bytes[i]) & 255] ^ (c >>> 8);
+    return (c ^ 0xffffffff) >>> 0;
+}
+
+function createPhysChunk300DPI() {
+    const ppm = Math.round(300 / 0.0254);
+    const chunk = new Uint8Array(21);
+    writeUint32(chunk, 0, 9);
+    chunk[4] = 0x70; chunk[5] = 0x48; chunk[6] = 0x59; chunk[7] = 0x73;
+    writeUint32(chunk, 8, ppm);
+    writeUint32(chunk, 12, ppm);
+    chunk[16] = 1;
+    writeUint32(chunk, 17, crc32(chunk, 4, 13));
+    return chunk;
+}
+
+function removeExistingPhysChunks(bytes) {
+    const signature = bytes.slice(0, 8);
+    const chunks = [];
+    let offset = 8;
+    while (offset < bytes.length) {
+        const length = ((bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3]) >>> 0;
+        const type = String.fromCharCode(bytes[offset + 4], bytes[offset + 5], bytes[offset + 6], bytes[offset + 7]);
+        const total = 12 + length;
+        if (type !== 'pHYs') chunks.push(bytes.slice(offset, offset + total));
+        offset += total;
+    }
+    return { signature, chunks };
+}
+
+async function pngBlobWith300DPI(sourceCanvas) {
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = sourceCanvas.width;
+    exportCanvas.height = sourceCanvas.height;
+    const exportCtx = exportCanvas.getContext('2d', { willReadFrequently: true });
+    exportCtx.drawImage(sourceCanvas, 0, 0);
+    const imageData = exportCtx.getImageData(0, 0, exportCanvas.width, exportCanvas.height);
+    const finalData = removeSemiTransparency(imageData);
+    exportCtx.putImageData(finalData, 0, 0);
+    const rawBlob = await new Promise(resolve => exportCanvas.toBlob(resolve, 'image/png'));
+    const bytes = new Uint8Array(await rawBlob.arrayBuffer());
+    const { signature, chunks } = removeExistingPhysChunks(bytes);
+    const phys = createPhysChunk300DPI();
+    const finalParts = [signature];
+    for (let i = 0; i < chunks.length; i++) {
+        finalParts.push(chunks[i]);
+        const type = String.fromCharCode(chunks[i][4], chunks[i][5], chunks[i][6], chunks[i][7]);
+        if (type === 'IHDR') finalParts.push(phys);
+    }
+    return new Blob(finalParts, { type: 'image/png' });
+}
+
+btnDownload.addEventListener('click', async () => {
+    if (!canvas.width || !canvas.height || isBusy) return;
+    setBusy(true);
+    showStatus('Preparando descarga...', 'success', 0);
+    try {
+        const blob = await pngBlobWith300DPI(canvas);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.download = `${originalFileName}_chechena_shirts_300DPI.png`;
+        a.href = url;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showStatus('Imagen descargada · PNG 300 DPI · CHECHENA SHIRTS');
+    } catch (error) {
+        showStatus(error.message || 'Error al descargar', 'error', 6000);
+    } finally {
+        setBusy(false);
+    }
+});
+</script>
+
+</body>
+</html>
