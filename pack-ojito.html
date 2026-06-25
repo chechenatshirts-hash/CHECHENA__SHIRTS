@@ -137,24 +137,7 @@
     .price-new { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--white); letter-spacing: .04em; }
     .price-badge { background: var(--white); color: var(--black); font-size: 11px; font-weight: 700; padding: 3px 8px; letter-spacing: .1em; }
 
-    /* COUNTDOWN */
-    .countdown-wrap { border: 1px solid #2a2a2a; padding: 14px 16px; margin: 18px 0; background: #111; }
-    .countdown-label {
-      font-size: 10px; font-weight: 700; letter-spacing: .2em;
-      text-transform: uppercase; color: var(--white);
-      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
-    }
-    .countdown-label::before {
-      content: ''; display: inline-block;
-      width: 6px; height: 6px; background: var(--white);
-      border-radius: 50%; animation: blink 1s infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    .countdown-timer { display: flex; gap: 8px; align-items: center; }
-    .countdown-block { background: var(--black); border: 1px solid #333; padding: 8px 12px; text-align: center; min-width: 52px; }
-    .countdown-num { font-family: var(--font-display); font-size: 1.8rem; line-height: 1; color: var(--white); letter-spacing: .05em; }
-    .countdown-unit { font-size: 9px; color: var(--muted); font-weight: 700; letter-spacing: .15em; text-transform: uppercase; margin-top: 2px; }
-    .countdown-sep { font-family: var(--font-display); font-size: 1.6rem; color: var(--white); line-height: 1; margin-bottom: 14px; }
+
 
     .divider { border: none; border-top: 1px solid #1f1f1f; margin: 18px 0; }
 
@@ -538,6 +521,142 @@ margin-bottom:6px;
 .temas-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
 .tema { background:#1a1a1a; border:1px solid #2a2a2a; color:#bbb; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:5px 11px; }
 .tema.hot { background:#f5f5f5; color:#0a0a0a; border-color:#f5f5f5; }
+
+/* ══════════════════════════════════
+   CHECKOUT BOX — CUPÓN + RESUMEN + PAGO
+══════════════════════════════════ */
+.checkout-box {
+  border: 1px solid #222;
+  background: #0d0d0d;
+  margin: 18px 0;
+  overflow: hidden;
+}
+.checkout-step {
+  padding: 18px 20px;
+  border-bottom: 1px solid #1a1a1a;
+}
+.checkout-step-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 14px;
+}
+.step-num {
+  width: 22px; height: 22px;
+  background: var(--white);
+  color: var(--black);
+  border-radius: 50%;
+  font-size: 11px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-optional {
+  margin-left: auto;
+  font-size: 9px; color: #555; letter-spacing: .12em;
+}
+.cupon-input-row { display: flex; }
+.cupon-input {
+  flex: 1;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-right: none;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 11px 14px; outline: none;
+  transition: border-color .2s;
+}
+.cupon-input::placeholder { color: #444; font-weight: 400; letter-spacing: .04em; text-transform: none; }
+.cupon-input:focus { border-color: #555; }
+.cupon-apply-btn {
+  background: var(--white); color: var(--black);
+  border: none;
+  font-family: var(--font-body); font-weight: 700;
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  padding: 11px 18px; cursor: pointer; white-space: nowrap;
+  transition: background .2s;
+}
+.cupon-apply-btn:hover { background: #ddd; }
+.cupon-msg {
+  margin-top: 8px; font-size: 12px; font-weight: 600;
+  letter-spacing: .06em; padding: 8px 12px;
+}
+.cupon-msg.ok { background: rgba(34,197,94,.12); border-left: 3px solid #22c55e; color: #22c55e; }
+.cupon-msg.err { background: rgba(239,68,68,.1); border-left: 3px solid #ef4444; color: #ef4444; }
+.order-summary {
+  padding: 16px 20px;
+  border-bottom: 1px solid #1a1a1a;
+  background: #0a0a0a;
+}
+.order-row {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 10px;
+}
+.order-row:last-child { margin-bottom: 0; }
+.order-label { font-size: 13px; color: #aaa; }
+.order-val { font-size: 13px; color: var(--white); font-weight: 600; }
+.order-green { color: #22c55e !important; }
+.order-divider { border: none; border-top: 1px solid #1f1f1f; margin: 12px 0; }
+.order-total-row { align-items: flex-start; }
+.order-total-label {
+  font-family: var(--font-display);
+  font-size: 1rem; letter-spacing: .1em; text-transform: uppercase; color: var(--white);
+}
+.order-total-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.order-total-price {
+  font-family: var(--font-display);
+  font-size: 1.9rem; color: var(--white); letter-spacing: .04em; line-height: 1;
+  transition: all .3s;
+}
+.order-total-usd { font-size: 11px; color: #666; letter-spacing: .06em; }
+.metodos-grid { display: flex; flex-direction: column; gap: 8px; }
+.metodo-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: #111; border: 1px solid #2a2a2a; color: var(--white);
+  padding: 13px 16px; cursor: pointer; text-align: left;
+  transition: border-color .2s, background .2s; width: 100%;
+}
+.metodo-btn:hover { border-color: #555; background: #161616; }
+.metodo-btn.active { border-color: var(--white); background: #161616; }
+.metodo-flag { font-size: 20px; flex-shrink: 0; }
+.metodo-name {
+  font-family: var(--font-body); font-size: 13px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--white);
+}
+.metodo-sub { font-size: 11px; color: #666; letter-spacing: .04em; margin-top: 1px; }
+.metodo-check { margin-left: auto; font-size: 14px; color: var(--white); font-weight: 900; flex-shrink: 0; }
+.datos-field { margin-bottom: 12px; }
+.datos-field:last-child { margin-bottom: 0; }
+.datos-label {
+  display: block; font-size: 10px; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase; color: #666; margin-bottom: 6px;
+}
+.datos-input {
+  width: 100%; background: #111; border: 1px solid #2a2a2a;
+  color: var(--white); font-family: var(--font-body); font-size: 13px;
+  padding: 10px 13px; outline: none; transition: border-color .2s;
+}
+.datos-input:focus { border-color: var(--white); }
+.cta-pagar {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; background: var(--white); color: var(--black);
+  border: none; font-family: var(--font-body); font-weight: 700;
+  font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
+  padding: 16px 24px; cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.cta-pagar:hover { background: #e5e5e5; transform: translateY(-1px); }
+.cta-pagar:active { transform: translateY(0); }
+.cta-seguro {
+  font-size: 11px; color: #555; text-align: center;
+  padding: 10px 20px 14px; letter-spacing: .04em;
+}
   </style>
 </head>
 <body>
@@ -628,69 +747,112 @@ margin-bottom:6px;
     <span class="price-badge">50% OFF</span>
   </div>
 
-      <div class="countdown-wrap">
-        <div class="countdown-label">Oferta por tiempo limitado</div>
-        <div class="countdown-timer">
-          <div class="countdown-block">
-            <div class="countdown-num" id="cd-hrs">00</div>
-            <div class="countdown-unit">Hrs</div>
+      <!-- BLOQUE CUPÓN + RESUMEN + PAGO -->
+      <div class="checkout-box">
+
+        <!-- PASO 1: Cupón -->
+        <div class="checkout-step">
+          <div class="checkout-step-label">
+            <span class="step-num">1</span>
+            <span>¿Tienes un cupón?</span>
+            <span class="step-optional">opcional</span>
           </div>
-          <div class="countdown-sep">:</div>
-          <div class="countdown-block">
-            <div class="countdown-num" id="cd-min">00</div>
-            <div class="countdown-unit">Min</div>
+          <div class="cupon-input-row">
+            <input
+              type="text"
+              id="cupon-input"
+              class="cupon-input"
+              placeholder="Ej. CHECHENA_SHIRTS"
+              autocomplete="off"
+              oninput="this.value=this.value.toUpperCase()"
+            />
+            <button class="cupon-apply-btn" onclick="aplicarCupon()">Aplicar</button>
           </div>
-          <div class="countdown-sep">:</div>
-          <div class="countdown-block">
-            <div class="countdown-num" id="cd-sec">00</div>
-            <div class="countdown-unit">Seg</div>
-          </div>
+          <div id="cupon-msg" class="cupon-msg" style="display:none"></div>
         </div>
-      </div>
 
-      <hr class="divider" />
-
-      <p class="payment-title">Elige tu método de pago</p>
-      <div class="payment-options">
-
-        <button class="pay-btn pay-mx" onclick="toggleForm()">
-          <span class="pay-flag">🇲🇽</span>
-          México — Transferencia / Depósito
-        </button>
-
-        <div class="wa-form" id="wa-form">
-          <p class="wa-form-intro">¡Hola! Llena los datos y te mandamos los detalles de pago por WhatsApp.</p>
-          <div class="wa-field">
-            <label class="wa-label">Tu nombre</label>
-            <input type="text" id="wa-nombre" class="wa-input" placeholder="Ej. Juan Pérez" />
+        <!-- RESUMEN DE ORDEN -->
+        <div class="order-summary">
+          <div class="order-row">
+            <span class="order-label">Megapack Ojito</span>
+            <span class="order-val">$400 MXN</span>
           </div>
-          <div class="wa-field">
-            <label class="wa-label">¿Cómo vas a pagar?</label>
-            <div class="wa-options">
-              <button class="wa-opt" onclick="selectOpt(this)" data-val="Transferencia bancaria">💳 Transferencia</button>
-              <button class="wa-opt" onclick="selectOpt(this)" data-val="Depósito en efectivo">💵 Depósito</button>
+          <div class="order-row order-desc-row" id="descuento-row" style="display:none">
+            <span class="order-label order-green">
+              <span id="cupon-tag">CHECHENA50</span> aplicado ✓
+            </span>
+            <span class="order-val order-green" id="descuento-val">−$50 MXN</span>
+          </div>
+          <div class="order-divider"></div>
+          <div class="order-row order-total-row">
+            <span class="order-total-label">Total</span>
+            <div class="order-total-right">
+              <span class="order-total-price" id="precio-final">$400 MXN</span>
+              <span class="order-total-usd" id="precio-final-usd">≈ $20.00 USD</span>
             </div>
           </div>
-          <button class="wa-send" onclick="enviarWA()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.535 5.857L.057 23.273a.75.75 0 00.92.92l5.416-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.183-1.433l-.372-.222-3.862 1.053 1.053-3.862-.222-.372A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-            </svg>
-            Enviar por WhatsApp
-          </button>
         </div>
 
-        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=lunasegoviadg@gmail.com&currency_code=USD"
-           target="_blank" class="pay-btn pay-paypal">
-          <span class="pay-flag">🌎</span>
-          Otros países — PayPal
-        </a>
+        <!-- PASO 2: Método de pago -->
+        <div class="checkout-step">
+          <div class="checkout-step-label">
+            <span class="step-num">2</span>
+            <span>Elige tu método de pago</span>
+          </div>
+          <div class="metodos-grid">
+            <button class="metodo-btn metodo-mx active" id="btn-mx" onclick="selectMetodo('mx')">
+              <span class="metodo-flag">🇲🇽</span>
+              <div>
+                <div class="metodo-name">Transferencia</div>
+                <div class="metodo-sub">México · Depósito / SPEI</div>
+              </div>
+              <span class="metodo-check" id="check-mx">✓</span>
+            </button>
+            <button class="metodo-btn" id="btn-paypal" onclick="selectMetodo('paypal')">
+              <span class="metodo-flag">🌎</span>
+              <div>
+                <div class="metodo-name">PayPal</div>
+                <div class="metodo-sub">Internacional · USD</div>
+              </div>
+              <span class="metodo-check" id="check-paypal" style="display:none">✓</span>
+            </button>
+            <button class="metodo-btn" id="btn-felix" onclick="selectMetodo('felix')">
+              <span class="metodo-flag">🇺🇸</span>
+              <div>
+                <div class="metodo-name">Felix</div>
+                <div class="metodo-sub">Estados Unidos · USD</div>
+              </div>
+              <span class="metodo-check" id="check-felix" style="display:none">✓</span>
+            </button>
+          </div>
+        </div>
 
-        <a href="https://wa.me/529212337934?text=Hola%2C%20quiero%20comprar%20el%20Megapack%20Chechena%20desde%20USA%20por%20medio%20de%20Felix%20%F0%9F%91%8D"
-           target="_blank" class="pay-btn pay-felix">
-          <span class="pay-flag">🇺🇸</span>
-          Estados Unidos — Pago vía Felix
-        </a>
+        <!-- PASO 3: Datos -->
+        <div class="checkout-step" id="step-datos">
+          <div class="checkout-step-label">
+            <span class="step-num">3</span>
+            <span>Tus datos para el pedido</span>
+          </div>
+          <div class="datos-field">
+            <label class="datos-label">Nombre completo</label>
+            <input type="text" id="datos-nombre" class="datos-input" placeholder="Ej. Juan Pérez" />
+          </div>
+          <div class="datos-field">
+            <label class="datos-label">Correo electrónico</label>
+            <input type="email" id="datos-email" class="datos-input" placeholder="Ej. juan@correo.com" />
+          </div>
+        </div>
+
+        <!-- CTA FINAL -->
+        <button class="cta-pagar" id="cta-pagar" onclick="procesarPago()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.535 5.857L.057 23.273a.75.75 0 00.92.92l5.416-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.183-1.433l-.372-.222-3.862 1.053 1.053-3.862-.222-.372A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+          </svg>
+          <span id="cta-pagar-texto">Solicitar datos de pago por WhatsApp</span>
+        </button>
+
+        <p class="cta-seguro">🔒 Acceso inmediato tras confirmar tu pago · Sin suscripciones</p>
 
       </div>
 <div class="contact-section">
@@ -898,47 +1060,100 @@ No es solo un paquete de imágenes. Es un sistema completo de producción y vent
       thumb.classList.add('active');
     }
 
-    function toggleForm() {
-      const f = document.getElementById('wa-form');
-      f.style.display = f.style.display === 'block' ? 'none' : 'block';
-    }
+  /* ── CUPONES VÁLIDOS ── */
+  const CUPONES = {
+    'CHECHENA50': { descMXN: 50, descUSD: 2.50, label: '$50 MXN' }
+  };
+  const PRECIO_BASE_MXN = 400;
+  const PRECIO_BASE_USD = 20.00;
+  let cuponAplicado = null;
+  let metodoSeleccionado = 'mx';
 
-    function selectOpt(btn) {
-      document.querySelectorAll('.wa-opt').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-    }
+  function aplicarCupon() {
+    const input = document.getElementById('cupon-input').value.trim().toUpperCase();
+    const msg   = document.getElementById('cupon-msg');
+    const rowD  = document.getElementById('descuento-row');
 
-    function enviarWA() {
-      const nombre = document.getElementById('wa-nombre').value.trim();
-      const metodo = document.querySelector('.wa-opt.selected');
-      if (!nombre) { alert('Por favor escribe tu nombre'); return; }
-      if (!metodo) { alert('Selecciona Transferencia o Depósito'); return; }
-      const msg = `Hola! Me llamo ${nombre} y quiero comprar el Megapack Chechena por ${metodo.dataset.val} 🙌`;
-      window.open(`https://wa.me/529212337934?text=${encodeURIComponent(msg)}`, '_blank');
-    }
+    if (!input) { mostrarMsg(msg, 'err', '⚠ Escribe un código de cupón.'); return; }
 
-  // CAMBIAR IMAGEN PRINCIPAL
-  function changeImg(thumb, src) {
-    document.getElementById('main-img').src = src;
-    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-    thumb.classList.add('active');
+    if (CUPONES[input]) {
+      cuponAplicado = { codigo: input, ...CUPONES[input] };
+      mostrarMsg(msg, 'ok', `✓ Cupón "${input}" aplicado — ahorras ${cuponAplicado.label}`);
+      document.getElementById('cupon-tag').textContent = input;
+      document.getElementById('descuento-val').textContent = `−$${cuponAplicado.descMXN} MXN`;
+      rowD.style.display = 'flex';
+      actualizarTotal();
+    } else {
+      cuponAplicado = null;
+      rowD.style.display = 'none';
+      mostrarMsg(msg, 'err', '✕ Cupón inválido o expirado.');
+      actualizarTotal();
+    }
   }
 
-  // COUNTDOWN — empieza en 5:43:06
-  (function() {
-    const end = Date.now() + ((6 * 3600) + (23 * 60) + 9) * 1000;
-    function tick() {
-      const diff = Math.max(0, end - Date.now());
-      const h = Math.floor(diff / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      document.getElementById('cd-hrs').textContent = String(h).padStart(2,'0');
-      document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
-      document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
-      if (diff > 0) setTimeout(tick, 1000);
+  function mostrarMsg(el, tipo, texto) {
+    el.className = 'cupon-msg ' + tipo;
+    el.textContent = texto;
+    el.style.display = 'block';
+  }
+
+  function actualizarTotal() {
+    const descMXN = cuponAplicado ? cuponAplicado.descMXN : 0;
+    const descUSD = cuponAplicado ? cuponAplicado.descUSD : 0;
+    const finalMXN = PRECIO_BASE_MXN - descMXN;
+    const finalUSD = (PRECIO_BASE_USD - descUSD).toFixed(2);
+    document.getElementById('precio-final').textContent = `$${finalMXN} MXN`;
+    document.getElementById('precio-final-usd').textContent = `≈ $${finalUSD} USD`;
+  }
+
+  function selectMetodo(met) {
+    metodoSeleccionado = met;
+    ['mx','paypal','felix'].forEach(m => {
+      document.getElementById('btn-'+m).classList.remove('active');
+      document.getElementById('check-'+m).style.display = 'none';
+    });
+    document.getElementById('btn-'+met).classList.add('active');
+    document.getElementById('check-'+met).style.display = 'inline';
+
+    const stepDatos = document.getElementById('step-datos');
+    const ctaTxt    = document.getElementById('cta-pagar-texto');
+    if (met === 'mx') {
+      stepDatos.style.display = 'block';
+      ctaTxt.textContent = 'Solicitar datos de pago por WhatsApp';
+    } else if (met === 'paypal') {
+      stepDatos.style.display = 'none';
+      ctaTxt.textContent = 'Pagar con PayPal';
+    } else {
+      stepDatos.style.display = 'none';
+      ctaTxt.textContent = 'Pagar vía Felix — WhatsApp';
     }
-    tick();
-  })();
+  }
+
+  function procesarPago() {
+    const descMXN = cuponAplicado ? cuponAplicado.descMXN : 0;
+    const finalMXN = PRECIO_BASE_MXN - descMXN;
+    const descUSD  = cuponAplicado ? cuponAplicado.descUSD : 0;
+    const finalUSD = (PRECIO_BASE_USD - descUSD).toFixed(2);
+
+    if (metodoSeleccionado === 'paypal') {
+      window.open('https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=lunasegoviadg@gmail.com&currency_code=USD', '_blank');
+      return;
+    }
+
+    const nombre = (document.getElementById('datos-nombre')?.value || '').trim();
+    const email  = (document.getElementById('datos-email')?.value  || '').trim();
+
+    if (metodoSeleccionado === 'mx') {
+      if (!nombre) { alert('Por favor escribe tu nombre.'); document.getElementById('datos-nombre').focus(); return; }
+      if (!email || !email.includes('@')) { alert('Ingresa un correo electrónico válido.'); document.getElementById('datos-email').focus(); return; }
+      const cuponInfo = cuponAplicado ? `\nCupón aplicado: ${cuponAplicado.codigo} (−$${cuponAplicado.descMXN} MXN)` : '';
+      const msg = `Hola! 👋 Quiero comprar el Megapack Ojito.\n\n👤 Nombre: ${nombre}\n📧 Correo: ${email}${cuponInfo}\n💰 Total a pagar: $${finalMXN} MXN\n\nPor favor envíame los datos de pago 🙌`;
+      window.open(`https://wa.me/529212337934?text=${encodeURIComponent(msg)}`, '_blank');
+    } else {
+      const msg = `Hola! 👋 Quiero comprar el Megapack Ojito desde USA.\n💰 Total: $${finalUSD} USD\nPago vía Felix 🙌`;
+      window.open(`https://wa.me/529212337934?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+  }
   </script>
 <script src="script.js"></script>
 </body>

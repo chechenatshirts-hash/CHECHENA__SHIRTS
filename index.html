@@ -4,22 +4,30 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chechena Shirts</title>
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black: #000000;
-      --black2: #111111;
-      --black3: #1a1a1a;
-      --white: #ffffff;
-      --grey: #888888;
-      --grey2: #555555;
-      --border: #2c2c2c;
-      --offer: #7b2ff7;
-      --offer2: #c026d3;
+      --black:   #000000;
+      --black2:  #0a0a0a;
+      --black3:  #111111;
+      --black4:  #181818;
+      --white:   #f5f5f5;
+      --grey:    #777777;
+      --grey2:   #444444;
+      --border:  #1e1e1e;
+      --border2: #2a2a2a;
+      --accent:  #7c3aed;      /* violeta principal */
+      --accent2: #a855f7;      /* violeta claro     */
+      --green:   #22c55e;      /* verde éxito       */
+      --green2:  #16a34a;
+      --blue:    #3b82f6;
       --font-gothic: 'UnifrakturMaguntia', cursive;
-      --font-ui: 'Oswald', sans-serif;
-      --font-body: 'Roboto', sans-serif;
+      --font-ui:     'Syne', sans-serif;
+      --font-body:   'Space Grotesk', sans-serif;
+      --font-mono:   'Space Mono', monospace;
+      --offer:  #7c3aed;
+      --offer2: #a855f7;
     }
     html { scroll-behavior: smooth; }
     body { background: var(--black); color: var(--white); font-family: var(--font-body); overflow-x: hidden; }
@@ -27,36 +35,40 @@
     button { cursor: pointer; font-family: var(--font-ui); }
 
     /* TICKER */
-    .ticker-wrap { background: var(--white); border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 9px 0; }
-    .ticker-inner { display: inline-flex; animation: marquee 35s linear infinite; }
-    .ticker-item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--black); padding: 0 48px; }
-    .ticker-icon { color: #ff6b00; }
+    .ticker-wrap { background: linear-gradient(90deg,#0a0a0a,#111,#0a0a0a); border-bottom: 1px solid #222; overflow: hidden; white-space: nowrap; padding: 10px 0; }
+    .ticker-inner { display: inline-flex; animation: marquee 40s linear infinite; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #d1d5db; padding: 0 52px; }
+    .ticker-icon { color: #a78bfa; }
+    .ticker-item.cupon { color: #22c55e; }
     @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     /* NAVBAR */
-    .navbar { background: var(--black); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 500; }
+    .navbar { background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 500; }
     .nav-top { display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 68px; position: relative; }
-    .nav-search-btn { background: none; border: none; color: var(--white); font-size: 18px; padding: 6px; line-height: 1; }
+    .nav-search-btn { background: none; border: none; color: #aaa; font-size: 18px; padding: 6px; line-height: 1; transition: color .2s; }
+    .nav-search-btn:hover { color: var(--white); }
     .nav-logo { font-family: var(--font-gothic); font-size: clamp(1.7rem, 3.5vw, 2.6rem); color: var(--white); letter-spacing: .02em; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-lang-box { display: flex; align-items: center; gap: 4px; border: 1px solid var(--border); padding: 5px 10px; font-family: var(--font-ui); font-size: 12px; color: var(--white); }
-    .nav-lang-box select { background: none; border: none; color: var(--white); font-family: var(--font-ui); font-size: 12px; outline: none; cursor: pointer; }
-    .nav-lang-box select option { background: #111; }
+    .nav-lang-box { display: flex; align-items: center; gap: 4px; border: 1px solid var(--border2); padding: 5px 10px; font-family: var(--font-body); font-size: 12px; color: #aaa; border-radius: 4px; }
+    .nav-lang-box select { background: none; border: none; color: #aaa; font-family: var(--font-body); font-size: 12px; outline: none; cursor: pointer; }
+    .nav-lang-box select option { background: #111; color: #fff; }
     .nav-cart-btn { background: none; border: none; color: var(--white); font-size: 20px; position: relative; padding: 4px; line-height: 1; }
-    .cart-dot { position: absolute; top: -2px; right: -2px; background: var(--white); color: var(--black); width: 16px; height: 16px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: var(--font-ui); }
+    .cart-dot { position: absolute; top: -2px; right: -2px; background: var(--accent); color: #fff; width: 16px; height: 16px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); }
     .hamburger { display: none; background: none; border: none; color: var(--white); font-size: 22px; line-height: 1; }
     .nav-links-row { display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--border); }
-    .nav-links-row a { font-family: var(--font-ui); font-size: 13px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--white); padding: 12px 22px; border-right: 1px solid var(--border); transition: background .15s; }
+    .nav-links-row a { font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #888; padding: 12px 18px; border-right: 1px solid var(--border); transition: color .2s, background .2s; }
     .nav-links-row a:first-child { border-left: 1px solid var(--border); }
-    .nav-links-row a.active, .nav-links-row a:hover { background: var(--black3); }
+    .nav-links-row a.active, .nav-links-row a:hover { color: var(--white); background: var(--black3); }
     .mobile-nav { display: none; flex-direction: column; background: var(--black2); border-top: 1px solid var(--border); position: absolute; width: 100%; z-index: 499; top: 100%; }
     .mobile-nav.open { display: flex; }
-    .mobile-nav a { font-family: var(--font-ui); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; padding: 14px 20px; border-bottom: 1px solid var(--border); color: var(--white); }
+    .mobile-nav a { font-family: var(--font-body); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 14px 20px; border-bottom: 1px solid var(--border); color: #aaa; transition: color .2s; }
+    .mobile-nav a:hover { color: var(--white); }
     .search-row { display: none; background: var(--black2); border-bottom: 1px solid var(--border); padding: 12px 40px; gap: 10px; align-items: center; }
     .search-row.open { display: flex; }
-    .search-row input { flex: 1; background: var(--black); border: 1px solid var(--border); color: var(--white); font-family: var(--font-ui); font-size: 14px; padding: 10px 14px; outline: none; }
-    .search-row input:focus { border-color: #666; }
-    .search-row button { background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; padding: 10px 20px; }
+    .search-row input { flex: 1; background: var(--black); border: 1px solid var(--border2); color: var(--white); font-family: var(--font-body); font-size: 14px; padding: 10px 14px; outline: none; border-radius: 4px; }
+    .search-row input:focus { border-color: var(--accent2); }
+    .search-row button { background: var(--accent); color: #fff; border: none; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; padding: 10px 20px; border-radius: 4px; transition: background .2s; }
+    .search-row button:hover { background: var(--accent2); }
 
     /* HERO */
 .hero { position: relative; overflow: hidden; background: var(--black); }
@@ -67,177 +79,180 @@
   display: flex; 
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%), url('banner1.jpg') center/cover no-repeat; 
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.72) 100%), url('banner1.jpg') center/cover no-repeat; 
 }
 .slide-content { 
   position: relative; 
   z-index: 2; 
   text-align: center;
   padding: 0 clamp(16px, 5vw, 60px); 
-  max-width: 560px;
+  max-width: 600px;
   width: 100%;
 }
 .slide-label { 
   display: inline-block; 
-  border: 1px solid rgba(255,255,255,.25); 
-  font-family: var(--font-ui); 
+  border: 1px solid rgba(167,139,250,.4); 
+  font-family: var(--font-mono); 
   font-size: clamp(9px, 1.5vw, 11px);
-  font-weight: 500; 
-  letter-spacing: .2em; 
+  font-weight: 400; 
+  letter-spacing: .25em; 
   text-transform: uppercase; 
-  color: var(--white); 
-  padding: 5px 14px; 
-  margin-bottom: clamp(8px, 2vw, 14px);
-  background: rgba(255,255,255,.07); 
+  color: var(--accent2); 
+  padding: 5px 16px; 
+  margin-bottom: clamp(10px, 2vw, 16px);
+  background: rgba(124,58,237,0.12); 
+  border-radius: 2px;
 }
 .slide-title { 
   font-family: var(--font-ui); 
-  font-weight: 700; 
-  font-size: clamp(1.2rem, 4vw, 2.2rem);  /* ← se achica en celular automático */
+  font-weight: 800; 
+  font-size: clamp(1.4rem, 4.5vw, 2.8rem);
   text-transform: uppercase; 
-  line-height: 1.1; 
+  line-height: 1.05; 
   color: var(--white); 
-  margin-bottom: clamp(8px, 2vw, 12px);
+  margin-bottom: clamp(10px, 2vw, 14px);
+  letter-spacing: .03em;
 }
 .slide-desc { 
-  font-family: var(--font-ui); 
-  font-size: clamp(10px, 1.8vw, 12px);    /* ← se achica en celular automático */
+  font-family: var(--font-body); 
+  font-size: clamp(11px, 1.8vw, 13px);
   font-weight: 400; 
-  letter-spacing: .06em; 
-  text-transform: uppercase; 
-  color: rgba(255,255,255,0.7); 
-  line-height: 1.6; 
-  margin-bottom: clamp(16px, 3vw, 24px);
+  letter-spacing: .04em; 
+  color: rgba(245,245,245,0.6); 
+  line-height: 1.65; 
+  margin-bottom: clamp(18px, 3vw, 28px);
 }
 .slide-btn { 
   display: inline-block; 
-  background: var(--white); 
-  color: var(--black); 
-  font-family: var(--font-ui); 
+  background: var(--accent); 
+  color: #fff; 
+  font-family: var(--font-body); 
   font-weight: 700; 
   font-size: clamp(11px, 1.5vw, 13px);
-  letter-spacing: .15em; 
+  letter-spacing: .16em; 
   text-transform: uppercase; 
-  padding: clamp(10px, 2vw, 12px) clamp(20px, 4vw, 30px); /* ← botón proporcional */
+  padding: clamp(12px, 2vw, 14px) clamp(24px, 4vw, 36px);
   border: none; 
-  transition: background .2s; 
+  transition: background .2s, transform .2s; 
   cursor: pointer;
   text-decoration: none;
+  border-radius: 3px;
 }
-.slide-btn:hover { background: #ddd; }
+.slide-btn:hover { background: var(--accent2); transform: translateY(-2px); }
 
     /* PROMO 4X3 */
-    .promo-band { background: var(--black2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto; }
+    .promo-band { background: linear-gradient(135deg, #0f0f1a 0%, #1a0a2e 50%, #0a1a0f 100%); border-top: 1px solid #2a1a4a; border-bottom: 1px solid #2a1a4a; display: grid; grid-template-columns: 1fr auto; }
     .promo-band-text { padding: 24px 40px; }
-    .promo-band-text h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .05em; color: var(--white); margin-bottom: 6px; }
+    .promo-band-text h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .05em; background: linear-gradient(135deg, #fff, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 6px; }
     .promo-band-text p { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); }
-    .promo-band-btn { background: var(--white); color: var(--black); font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .15em; text-transform: uppercase; border: none; padding: 0 40px; white-space: nowrap; transition: background .2s; }
-    .promo-band-btn:hover { background: #ddd; }
+    .promo-band-btn { background: linear-gradient(135deg, #7b2ff7, #c026d3); color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .15em; text-transform: uppercase; border: none; padding: 0 40px; white-space: nowrap; transition: opacity .2s, transform .2s; }
+    .promo-band-btn:hover { opacity: 0.88; transform: scale(1.02); }
 
     /* SECTION TITLES */
-    .sec-head { text-align: center; padding: 50px 20px 30px; }
-    .sec-head h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .08em; }
-    .sec-head p { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); margin-top: 6px; }
+    .sec-head { text-align: center; padding: 56px 20px 32px; }
+    .sec-head h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .08em; background: linear-gradient(135deg, #fff 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .sec-head p { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); margin-top: 8px; }
 
     /* PRODUCTS */
     .products-wrap { padding: 0 20px 60px; }
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-    .p-card { background: var(--black2); border: 1px solid var(--border); overflow: hidden; position: relative; transition: border-color .2s, transform .25s; }
-    .p-card:hover { border-color: #555; transform: translateY(-3px); }
-    .p-thumb { width: 100%; aspect-ratio: 1/1; background: var(--black3); display: flex; align-items: center; justify-content: center; font-size: 72px; position: relative; }
-    .p-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    .p-card { background: var(--black3); border: 1px solid var(--border); overflow: hidden; position: relative; transition: border-color .25s, transform .3s cubic-bezier(.2,.8,.3,1), box-shadow .3s; border-radius: 4px; }
+    .p-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 14px 36px rgba(124,58,237,.15); }
+    .p-thumb { width: 100%; aspect-ratio: 1/1; background: var(--black4); display: flex; align-items: center; justify-content: center; font-size: 72px; position: relative; }
+    .p-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.65); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
     .p-card:hover .p-overlay { opacity: 1; }
-    .p-add-btn { background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 11px 22px; transition: background .15s; }
-    .p-add-btn:hover { background: #eee; }
-    .badge-oferta { position: absolute; top: 10px; left: 10px; z-index: 3; background: linear-gradient(135deg, var(--offer), var(--offer2)); color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; }
-    .badge-nuevo { position: absolute; top: 10px; left: 10px; z-index: 3; background: #166534; color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; }
+    .p-add-btn { background: var(--accent); color: #fff; border: none; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 11px 22px; transition: background .15s; border-radius: 3px; }
+    .p-add-btn:hover { background: var(--accent2); }
+    .badge-oferta { position: absolute; top: 10px; left: 10px; z-index: 3; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; }
+    .badge-nuevo { position: absolute; top: 10px; left: 10px; z-index: 3; background: var(--green2); color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; }
     .p-info { padding: 14px; }
-    .p-name { font-family: var(--font-ui); font-weight: 600; font-size: 14px; color: var(--white); margin-bottom: 10px; line-height: 1.3; }
+    .p-name { font-family: var(--font-body); font-weight: 700; font-size: 14px; color: var(--white); margin-bottom: 10px; line-height: 1.3; }
     .p-prices { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-    .p-price { font-family: var(--font-ui); font-weight: 700; font-size: 17px; color: var(--white); }
-    .p-price-usd { font-family: var(--font-ui); font-size: 13px; color: var(--grey); }
-    .p-price-old { font-family: var(--font-ui); font-size: 13px; color: var(--grey2); text-decoration: line-through; }
-    .p-btn { width: 100%; background: transparent; color: var(--white); border: 1px solid var(--border); font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 10px; transition: background .2s, color .2s; }
-    .p-btn:hover { background: var(--white); color: var(--black); }
+    .p-price { font-family: var(--font-mono); font-weight: 700; font-size: 17px; color: var(--white); }
+    .p-price-usd { font-family: var(--font-mono); font-size: 13px; color: var(--grey); }
+    .p-price-old { font-family: var(--font-mono); font-size: 13px; color: var(--grey2); text-decoration: line-through; }
+    .p-btn { width: 100%; background: transparent; color: var(--white); border: 1px solid var(--border2); font-family: var(--font-body); font-weight: 600; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 10px; transition: background .2s, color .2s, border-color .2s; border-radius: 3px; }
+    .p-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     /* CATEGORIES */
     .cats-wrap { padding: 0 20px 60px; }
     .cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; }
-    .cat-card { background: var(--black2); border: 1px solid var(--border); padding: 26px 14px; text-align: center; transition: border-color .2s, background .2s; cursor: pointer; }
-    .cat-card:hover { border-color: #666; background: var(--black3); }
+    .cat-card { background: var(--black3); border: 1px solid var(--border); padding: 26px 14px; text-align: center; transition: border-color .2s, background .2s, transform .2s; cursor: pointer; border-radius: 4px; }
+    .cat-card:hover { border-color: var(--accent); background: var(--black4); transform: translateY(-3px); }
     .cat-icon { font-size: 34px; display: block; margin-bottom: 10px; }
-    .cat-name { font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
-    .cat-count { font-family: var(--font-ui); font-size: 11px; color: var(--grey); margin-top: 4px; }
+    .cat-name { font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--white); }
+    .cat-count { font-family: var(--font-mono); font-size: 11px; color: var(--grey); margin-top: 4px; }
 
     /* MEMBERSHIP */
     .memb-wrap { padding: 0 20px 60px; }
-    .memb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
-    .m-card { background: var(--black2); border: 1px solid var(--border); padding: 28px 22px; display: flex; flex-direction: column; transition: border-color .2s; }
-    .m-card.highlight { border-color: var(--white); background: var(--black3); }
-    .m-badge { display: inline-block; align-self: flex-start; background: linear-gradient(135deg, var(--offer), var(--offer2)); color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; margin-bottom: 14px; }
-    .m-title { font-family: var(--font-ui); font-weight: 700; font-size: 1.4rem; text-transform: uppercase; letter-spacing: .06em; color: var(--white); margin-bottom: 6px; }
-    .m-price { font-family: var(--font-ui); font-weight: 700; font-size: 2.2rem; color: var(--white); }
+    .memb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .m-card { background: var(--black3); border: 1px solid var(--border); padding: 28px 22px; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; border-radius: 6px; }
+    .m-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .m-card.highlight { border-color: var(--accent); background: linear-gradient(135deg, #0d0820 0%, #100a1a 100%); }
+    .m-badge { display: inline-block; align-self: flex-start; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding: 4px 12px; border-radius: 3px; margin-bottom: 14px; }
+    .m-title { font-family: var(--font-ui); font-weight: 800; font-size: 1.4rem; text-transform: uppercase; letter-spacing: .06em; color: var(--white); margin-bottom: 6px; }
+    .m-price { font-family: var(--font-mono); font-weight: 700; font-size: 2.2rem; color: var(--white); }
     .m-price sub { font-size: 1rem; color: var(--grey); font-weight: 400; }
-    .m-usd { font-family: var(--font-ui); font-size: 12px; color: var(--grey); margin-bottom: 20px; margin-top: 2px; }
+    .m-usd { font-family: var(--font-mono); font-size: 12px; color: var(--grey); margin-bottom: 20px; margin-top: 2px; }
     .m-features { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
-    .m-features li { font-family: var(--font-ui); font-size: 13px; color: #ccc; display: flex; gap: 10px; }
-    .m-features li::before { content: "✓"; color: var(--white); font-weight: 700; flex-shrink: 0; }
-    .m-btn { width: 100%; background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 13px; transition: background .2s; }
-    .m-btn:hover { background: #ddd; }
-    .m-btn.outline { background: transparent; color: var(--white); border: 1px solid var(--border); }
-    .m-btn.outline:hover { background: var(--white); color: var(--black); }
+    .m-features li { font-family: var(--font-body); font-size: 13px; color: #bbb; display: flex; gap: 10px; }
+    .m-features li::before { content: "✓"; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .m-btn { width: 100%; background: var(--accent); color: #fff; border: none; font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 13px; transition: background .2s; border-radius: 4px; }
+    .m-btn:hover { background: var(--accent2); }
+    .m-btn.outline { background: transparent; color: var(--white); border: 1px solid var(--border2); }
+    .m-btn.outline:hover { background: var(--accent); border-color: var(--accent); }
 
     /* CONTACT */
     .contact-form { max-width: 500px; margin: 0 auto; padding: 0 20px 60px; display: flex; flex-direction: column; gap: 10px; }
-    .contact-form input, .contact-form textarea { background: var(--black); border: 1px solid var(--border); color: var(--white); font-family: var(--font-ui); font-size: 14px; padding: 13px 16px; outline: none; width: 100%; transition: border-color .2s; }
-    .contact-form input:focus, .contact-form textarea:focus { border-color: #666; }
+    .contact-form input, .contact-form textarea { background: var(--black3); border: 1px solid var(--border2); color: var(--white); font-family: var(--font-body); font-size: 14px; padding: 13px 16px; outline: none; width: 100%; transition: border-color .2s; border-radius: 4px; }
+    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent2); }
     .contact-form textarea { resize: none; }
-    .contact-form button { background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; padding: 14px; }
-    .contact-form button:hover { background: #ddd; }
-    .contact-note { font-family: var(--font-ui); font-size: 12px; color: var(--grey); text-align: center; }
+    .contact-form button { background: var(--accent); color: #fff; border: none; font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; padding: 14px; border-radius: 4px; transition: background .2s; }
+    .contact-form button:hover { background: var(--accent2); }
+    .contact-note { font-family: var(--font-body); font-size: 12px; color: var(--grey); text-align: center; }
 
     /* FOOTER */
     footer { background: var(--black2); border-top: 1px solid var(--border); padding: 50px 40px 26px; }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
     .footer-logo { font-family: var(--font-gothic); font-size: 2rem; color: var(--white); display: block; margin-bottom: 12px; }
-    .footer-desc { font-size: 13px; color: var(--grey); line-height: 1.7; max-width: 250px; }
-    .f-col h4 { font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--grey); margin-bottom: 14px; }
+    .footer-desc { font-family: var(--font-body); font-size: 13px; color: var(--grey); line-height: 1.7; max-width: 250px; }
+    .f-col h4 { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--grey); margin-bottom: 14px; }
     .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .f-col ul a { font-family: var(--font-ui); font-size: 13px; color: #bbb; transition: color .2s; }
+    .f-col ul a { font-family: var(--font-body); font-size: 13px; color: #666; transition: color .2s; }
     .f-col ul a:hover { color: var(--white); }
     .footer-bottom { border-top: 1px solid var(--border); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .footer-bottom p { font-family: var(--font-ui); font-size: 12px; color: var(--grey); }
+    .footer-bottom p { font-family: var(--font-body); font-size: 12px; color: var(--grey); }
     .socials { display: flex; gap: 8px; }
-    .socials a { width: 34px; height: 34px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--grey); transition: border-color .2s, color .2s; }
-    .socials a:hover { border-color: var(--white); color: var(--white); }
+    .socials a { width: 34px; height: 34px; border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--grey); transition: border-color .2s, color .2s; border-radius: 4px; }
+    .socials a:hover { border-color: var(--accent); color: var(--accent2); }
 
     /* CART PANEL */
-    .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.78); z-index: 800; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.82); z-index: 800; opacity: 0; pointer-events: none; transition: opacity .3s; }
     .backdrop.open { opacity: 1; pointer-events: all; }
     .cart-side { position: fixed; right: 0; top: 0; bottom: 0; width: min(380px, 100vw); background: var(--black2); border-left: 1px solid var(--border); z-index: 900; display: flex; flex-direction: column; transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1); }
     .cart-side.open { transform: translateX(0); }
     .cs-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--border); }
     .cs-head h3 { font-family: var(--font-ui); font-weight: 700; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; }
-    .cs-close { background: none; border: none; color: var(--grey); font-size: 22px; line-height: 1; }
+    .cs-close { background: none; border: none; color: var(--grey); font-size: 22px; line-height: 1; transition: color .2s; }
+    .cs-close:hover { color: var(--white); }
     .cs-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-    .cs-empty { text-align: center; padding: 50px 0; font-family: var(--font-ui); font-size: 14px; letter-spacing: .06em; color: var(--grey); }
-    .cs-line { display: flex; gap: 12px; align-items: center; background: var(--black3); border: 1px solid var(--border); padding: 12px; }
+    .cs-empty { text-align: center; padding: 50px 0; font-family: var(--font-body); font-size: 14px; letter-spacing: .06em; color: var(--grey); }
+    .cs-line { display: flex; gap: 12px; align-items: center; background: var(--black3); border: 1px solid var(--border); padding: 12px; border-radius: 4px; }
     .cs-icon { font-size: 30px; flex-shrink: 0; }
     .cs-info { flex: 1; }
-    .cs-iname { font-family: var(--font-ui); font-weight: 600; font-size: 13px; color: var(--white); }
-    .cs-iprice { font-family: var(--font-ui); font-size: 13px; color: var(--grey); }
+    .cs-iname { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--white); }
+    .cs-iprice { font-family: var(--font-mono); font-size: 13px; color: var(--grey); }
     .cs-rm { background: none; border: none; color: var(--grey); font-size: 18px; transition: color .2s; line-height: 1; }
     .cs-rm:hover { color: var(--white); }
     .cs-foot { padding: 16px; border-top: 1px solid var(--border); }
     .cs-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .cs-total span { font-family: var(--font-ui); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); }
-    .cs-total strong { font-family: var(--font-ui); font-weight: 700; font-size: 20px; }
-    .cs-checkout { width: 100%; background: var(--white); color: var(--black); border: none; font-family: var(--font-ui); font-weight: 700; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; padding: 14px; transition: background .2s; }
-    .cs-checkout:hover { background: #ddd; }
+    .cs-total span { font-family: var(--font-body); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); }
+    .cs-total strong { font-family: var(--font-mono); font-weight: 700; font-size: 20px; }
+    .cs-checkout { width: 100%; background: var(--accent); color: #fff; border: none; font-family: var(--font-body); font-weight: 700; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; padding: 14px; transition: background .2s; border-radius: 4px; }
+    .cs-checkout:hover { background: var(--accent2); }
 
     /* TOAST */
-    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--white); color: var(--black); font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; padding: 13px 22px; z-index: 1000; transform: translateY(60px); opacity: 0; transition: all .3s; }
-    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--black3); color: var(--white); border: 1px solid var(--border2); font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: .08em; padding: 13px 22px; z-index: 1000; transform: translateY(60px); opacity: 0; transition: all .3s; border-radius: 6px; box-shadow: 0 8px 30px rgba(0,0,0,.5); }
 
     /* RESPONSIVE */
     @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
@@ -274,7 +289,7 @@
 
 /* MEGAPACKS */
 .megapacks {
-  background: var(--white);
+  background: var(--black2);
   padding: clamp(32px, 6vw, 64px) clamp(16px, 5vw, 48px);
   text-align: center;
 }
@@ -283,20 +298,21 @@
 }
 .megapacks-tag {
   display: inline-block;
-  font-family: var(--font-ui);
+  font-family: var(--font-mono);
   font-size: clamp(10px, 1.5vw, 12px);
-  letter-spacing: .15em;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: #888;
+  color: var(--accent2);
   margin-bottom: 10px;
 }
 .megapacks-title {
   font-family: var(--font-ui);
-  font-weight: 700;
+  font-weight: 800;
   font-size: clamp(1.3rem, 4vw, 2.2rem);
   text-transform: uppercase;
-  color: var(--black);
+  color: var(--white);
   line-height: 1.1;
+  letter-spacing: .03em;
 }
 .megapacks-grid {
   display: grid;
@@ -306,14 +322,16 @@
   margin: 0 auto;
 }
 .mpack-card {
-  background: #fff;
-  border: 1px solid #eee;
+  background: var(--black3);
+  border: 1px solid var(--border);
   overflow: hidden;
-  transition: transform .2s, box-shadow .2s;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  border-radius: 6px;
 }
 .mpack-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 14px 40px rgba(124,58,237,.18);
+  border-color: var(--accent);
 }
 .mpack-img-wrap {
   position: relative;
@@ -347,15 +365,16 @@
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background: #e00;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
   color: #fff;
-  font-family: var(--font-ui);
+  font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
   padding: 4px 10px;
   z-index: 2;
+  border-radius: 3px;
 }
 .mpack-info {
   padding: clamp(12px, 2vw, 20px);
@@ -363,18 +382,19 @@
 }
 .mpack-name {
   font-family: var(--font-ui);
-  font-weight: 700;
+  font-weight: 800;
   font-size: clamp(13px, 2vw, 16px);
   text-transform: uppercase;
-  color: var(--black);
+  color: var(--white);
   margin-bottom: 4px;
+  letter-spacing: .04em;
 }
 .mpack-desc {
-  font-family: var(--font-ui);
+  font-family: var(--font-body);
   font-size: clamp(10px, 1.4vw, 12px);
-  color: #888;
+  color: var(--grey);
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .06em;
   margin-bottom: 10px;
 }
 .mpack-prices {
@@ -384,35 +404,36 @@
   margin-bottom: 14px;
 }
 .mpack-old {
-  font-family: var(--font-ui);
+  font-family: var(--font-mono);
   font-size: clamp(11px, 1.4vw, 13px);
-  color: #aaa;
+  color: var(--grey2);
   text-decoration: line-through;
 }
 .mpack-new {
-  font-family: var(--font-ui);
+  font-family: var(--font-mono);
   font-weight: 700;
   font-size: clamp(14px, 2vw, 17px);
-  color: var(--black);
+  color: var(--green);
 }
 .mpack-btn {
   display: block;
   width: 100%;
-  background: var(--black);
-  color: var(--white);
-  font-family: var(--font-ui);
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: clamp(11px, 1.5vw, 13px);
   letter-spacing: .15em;
   text-transform: uppercase;
-  padding: 11px 0;
+  padding: 12px 0;
   text-align: center;
   text-decoration: none;
   border: none;
   transition: background .2s;
   cursor: pointer;
+  border-radius: 3px;
 }
-.mpack-btn:hover { background: #333; }
+.mpack-btn:hover { background: var(--accent2); }
 
 @media (max-width: 480px) {
   .megapacks-grid { grid-template-columns: 1fr; }
@@ -431,7 +452,7 @@
 .social-btn { display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; padding: 13px 10px; font-size: 0.88rem; font-weight: 500; border: 1px solid var(--border); color: var(--white); background: #141414; transition: background 0.2s, border-color 0.2s, transform 0.15s; border-radius: 2px; }
 .social-btn:hover { transform: translateY(-2px); }
 .social-btn.whatsapp:hover { background: rgba(37,211,102,0.12); border-color: #25D366; color: #25D366; }
-.social-btn.instagram:hover { background: rgba(225,48,108,0.12); border-color: #E1306C; color: #E1306C; }
+.social-btn.instagram:hover { background: rgba(168,85,247,0.12); border-color: var(--accent2); color: var(--accent2); }
 .social-btn.facebook:hover { background: rgba(24,119,242,0.12); border-color: #1877F2; color: #1877F2; }
 .social-btn.tiktok:hover { background: rgba(255,255,255,0.06); border-color: #eee; color: #eee; }
 
@@ -441,10 +462,10 @@
 /* CONTACTO */
 
 .contacto{
-  background:#0f0f0f;
+  background:#080808;
   color:#f5f5f5;
   padding:80px 20px;
-  font-family:'Barlow',sans-serif;
+  font-family: var(--font-body);
 }
 
 .contacto .container{
@@ -456,10 +477,13 @@
 
 .contacto h2{
   text-align:center;
+  font-family: var(--font-ui);
+  font-weight: 800;
   font-size:28px;
-  letter-spacing:.15em;
+  letter-spacing:.12em;
   margin-bottom:10px;
   animation:fadeUp 1s ease;
+  text-transform: uppercase;
 }
 
 .contacto .sub{
@@ -730,8 +754,8 @@
 }
 
 .instagram:hover{
-  border-color:#E1306C;
-  box-shadow:0 0 10px rgba(225,48,108,.5);
+  border-color: var(--accent2);
+  box-shadow:0 0 10px rgba(168,85,247,.4);
 }
 
 .facebook:hover{
@@ -740,8 +764,8 @@
 }
 
 .tiktok:hover{
-  border-color:#ff0050;
-  box-shadow:0 0 10px rgba(255,0,80,.5);
+  border-color:#ccc;
+  box-shadow:0 0 10px rgba(200,200,200,.2);
 }
 
 /* ANIMACION DE ENTRADA */
@@ -830,8 +854,8 @@ background:#000000;
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,159,67,0); }
-  50%       { box-shadow: 0 0 18px 4px rgba(255,159,67,0.25); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
+  50%       { box-shadow: 0 0 18px 4px rgba(124,58,237,0.3); }
 }
 
 /* Clases de animación reutilizables */
@@ -1040,203 +1064,413 @@ background:#000000;
 
 
 
-  </style>
-</head>
-<body>
+/* ═══════════════════════════
+   POLISH GLOBAL — tipografía y espaciado
+═══════════════════════════ */
 
-<style>
-#fomo-flotante{
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  pointer-events: none;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+/* Titles and headings everywhere */
+h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
+
+/* Grupo box - better styling */
+.grupo-box {
+  background: #0c0c0c;
+  border: 1px solid rgba(124,58,237,.35);
+  border-radius: 10px;
+  padding: 22px;
+  transition: all .3s ease;
+}
+.grupo-box:hover {
+  border-color: var(--accent2);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 36px rgba(124,58,237,.15);
+}
+.grupo-box h3 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: .04em;
 }
 
-.fomo-card{
-  background: rgba(15,15,15,0.96);
-  backdrop-filter: blur(10px);
-  border-radius: 14px;
-  padding: 12px 14px;
+/* Divider refined */
+.divider span { background: var(--border); }
+.divider p { font-family: var(--font-mono); color: var(--grey); }
+
+/* Form contacto inputs */
+.form-contacto input,
+.form-contacto textarea {
+  font-family: var(--font-body) !important;
+}
+.form-contacto button {
+  font-family: var(--font-body) !important;
+  font-size: 13px !important;
+  letter-spacing: .14em !important;
+  background: var(--accent) !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 6px !important;
+  transition: background .2s !important;
+}
+.form-contacto button:hover {
+  background: var(--accent2) !important;
+  transform: none !important;
+  border-color: transparent !important;
+}
+.form-contacto input:focus,
+.form-contacto textarea:focus {
+  border-color: var(--accent2) !important;
+  box-shadow: 0 0 0 2px rgba(124,58,237,.18) !important;
+}
+
+/* Red-btn social links */
+.red-btn {
+  font-family: var(--font-body) !important;
+}
+
+/* Currency selector */
+#currency {
+  font-family: var(--font-body);
+  border-color: var(--border2) !important;
+  color: #aaa !important;
+}
+
+/* Megapacks badge */
+.mpack-badge {
+  font-family: var(--font-mono);
+  border-radius: 3px;
+}
+
+/* Reviews section headings */
+#reviews h2 { font-family: var(--font-ui) !important; font-weight: 800 !important; }
+
+/* Pack de la semana */
+#regalo-semana h2 { font-family: var(--font-ui) !important; font-weight: 800 !important; }
+
+/* FAQ headings */
+.faq-item button { font-family: var(--font-body) !important; font-weight: 600 !important; }
+
+/* Academia cards */
+.guia-card { border-radius: 6px; }
+
+/* Modal academia */
+#modal-academia-titulo { font-family: var(--font-ui) !important; font-weight: 800 !important; }
+
+/* TikTok section */
+#tiktok-videos h2 { font-family: var(--font-ui) !important; font-weight: 800 !important; }
+
+/* Bottom badge on grupo-box */
+.badge {
+  background: rgba(124,58,237,.18);
+  color: var(--accent2);
+  font-family: var(--font-mono);
+}
+
+/* btn-grupo */
+.btn-grupo {
+  font-family: var(--font-body) !important;
+  border-radius: 4px !important;
+}
+
+/* Redes title */
+.redes-title { font-family: var(--font-mono); color: var(--grey); }
+
+/* Section head paragraph */
+.sec-head p { font-family: var(--font-mono) !important; }
+
+  </style>
+<body>
+
+<!-- CUPÓN DE DESCUENTO -->
+<style>
+/* ══════════════════════════════════
+   BANNER CUPÓN DE DESCUENTO
+══════════════════════════════════ */
+.cupon-banner {
+  background: linear-gradient(135deg, #1a0533 0%, #2d0a5e 40%, #0a1f0a 100%);
+  border-bottom: 1px solid #3d1a7a;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.cupon-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(123,47,247,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(34,197,94,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cupon-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cupon-left {
   display: flex;
   align-items: center;
   gap: 12px;
-  max-width: 360px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-  animation: fadeSlide .5s ease;
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #e9e9e9;
 }
 
-@keyframes fadeSlide{
-  from{ opacity:0; transform: translateY(16px) scale(.96); }
-  to{ opacity:1; transform: translateY(0) scale(1); }
+.cupon-icon {
+  font-size: 28px;
+  animation: cupon-bounce 2s ease-in-out infinite;
 }
 
-.fomo-avatar{
-  width:36px; height:36px; border-radius:50%;
-  background: linear-gradient(135deg, #22c55e, #3b82f6);
-  color:#001013;
-  display:flex; align-items:center; justify-content:center;
+@keyframes cupon-bounce {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50%       { transform: translateY(-5px) rotate(5deg); }
+}
+
+.cupon-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #a78bfa;
+  margin-bottom: 2px;
+}
+
+.cupon-title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.cupon-prices {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cupon-precio-box {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  padding: 8px 18px;
+  text-align: center;
+  min-width: 110px;
+}
+
+.cupon-precio-moneda {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #a78bfa;
+  margin-bottom: 1px;
+}
+
+.cupon-precio-valor {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #22c55e;
+  line-height: 1;
+}
+
+.cupon-precio-unit {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.cupon-sep {
+  font-size: 18px;
+  color: #555;
+}
+
+.cupon-codigo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cupon-codigo-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.cupon-codigo {
+  background: rgba(34,197,94,0.1);
+  border: 1.5px dashed #22c55e;
+  border-radius: 6px;
+  padding: 6px 18px;
+  font-family: var(--font-ui);
   font-weight: 800;
-  font-size: 14px;
+  font-size: 1.1rem;
+  letter-spacing: .25em;
+  color: #22c55e;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+  user-select: all;
 }
 
-.fomo-text{
-  font-size:13px;
-  line-height:1.35;
-  color:#e2e8f0;
+.cupon-codigo:hover {
+  background: rgba(34,197,94,0.2);
+  transform: scale(1.04);
 }
 
-.fomo-text strong{ color:#fff; }
-
-.fomo-dot{
-  width:6px;
-  height:6px;
-  background:#22c55e;
-  border-radius:50%;
-  animation: pulse 1.4s infinite;
-  margin-left: auto;
+.cupon-vence {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
 }
 
-@keyframes pulse{
-  0%{opacity:.4; transform:scale(1);}
-  50%{opacity:1; transform:scale(1.25);}
-  100%{opacity:.4; transform:scale(1);}
+.cupon-vence-label {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.cupon-vence-fecha {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #fbbf24;
+}
+
+#cupon-timer {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: #f97316;
+  margin-top: 2px;
+}
+
+.cupon-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color .2s;
+}
+
+.cupon-close:hover { color: #aaa; }
+
+@media (max-width: 600px) {
+  .cupon-inner { gap: 12px 16px; }
+  .cupon-precio-valor { font-size: 1.2rem; }
+  .cupon-titulo { font-size: 0.95rem; }
 }
 </style>
 
-<div id="fomo-flotante"></div>
+<div class="cupon-banner" id="cupon-banner">
+  <button class="cupon-close" onclick="document.getElementById('cupon-banner').style.display='none'" title="Cerrar">✕</button>
+  <div class="cupon-inner">
+    <div class="cupon-left">
+      <span class="cupon-icon">🎟️</span>
+      <div>
+        <div class="cupon-label">Oferta especial</div>
+        <div class="cupon-title">Cupón de Descuento</div>
+      </div>
+    </div>
+
+    <div class="cupon-prices">
+      <div class="cupon-precio-box">
+        <div class="cupon-precio-moneda">MXN</div>
+        <div class="cupon-precio-valor">$50</div>
+        <div class="cupon-precio-unit">pesos mexicanos</div>
+      </div>
+      <span class="cupon-sep">/</span>
+      <div class="cupon-precio-box">
+        <div class="cupon-precio-moneda">USD</div>
+        <div class="cupon-precio-valor">$2.50</div>
+        <div class="cupon-precio-unit">dólares</div>
+      </div>
+    </div>
+
+    <div class="cupon-codigo-wrap">
+      <div class="cupon-codigo-label">Tu código</div>
+      <div class="cupon-codigo" onclick="copiarCupon(this)" title="Clic para copiar">CHECHENA50</div>
+    </div>
+
+    <div class="cupon-vence">
+      <div class="cupon-vence-label">Válido hasta</div>
+      <div class="cupon-vence-fecha">30 de Junio 2025</div>
+      <div id="cupon-timer">⏳ cargando...</div>
+    </div>
+  </div>
+</div>
 
 <script>
-// MUCHOS NOMBRES (realista LATAM + USA + EUROPA)
-const nombres = [
-"Juan","Luis","Carlos","Miguel","José","Andrés","Diego","Mateo","Santiago","Kevin",
-"Daniel","Alejandro","Jorge","Fernando","Ricardo","Emilio","Sebastián","Gabriel",
-"Leonardo","Iván","Hugo","Rafael","Marco","Esteban","Bruno","Adrián","Pablo",
-"Camila","Sofía","Valentina","Fernanda","María","Andrea","Daniela","Paula","Lucía",
-"Isabela","Renata","Diana","Emma","Olivia","Mia","Emily","Ashley","Jessica","Laura"
-];
-
-// CIUDAD + PAÍS
-const ubicaciones = [
-["CDMX","México"],["Monterrey","México"],["Guadalajara","México"],["Puebla","México"],["Veracruz","México"],
-["Bogotá","Colombia"],["Medellín","Colombia"],["Cali","Colombia"],["Cartagena","Colombia"],
-["Caracas","Venezuela"],["Maracaibo","Venezuela"],
-["Lima","Perú"],["Cusco","Perú"],
-["Quito","Ecuador"],["Guayaquil","Ecuador"],
-["Santiago","Chile"],
-["La Paz","Bolivia"],
-["San José","Costa Rica"],
-["Managua","Nicaragua"],
-["Miami","Estados Unidos"],["Houston","Estados Unidos"],["Los Ángeles","Estados Unidos"],
-["Madrid","España"],["Barcelona","España"],
-["Milán","Italia"],["Roma","Italia"]
-];
-
-// LO QUE REALMENTE VENDES
-const productos = [
-"MEGAPACK OJITO CON MAS DE 50,000 DISEÑOS",
-"MEGAPACK OJITO CON MAS DE 50,000 DISEÑOS Y PROGRAMAS",
-"MEGAPACK CHECHENA CON MAS DE 40,000 DISEÑOS"
-];
-
-// MENSAJES DE COMPRA (REALISTAS)
-const accionesCompra = [
-"acaba de comprar",
-"compró hace unos minutos",
-"adquirió",
-"aprovechó la promo de",
-"compró el"
-];
-
-// MENSAJES DE USO (HERRAMIENTAS GRATIS)
-const accionesUso = [
-"está usando",
-"probó",
-"está trabajando con",
-"está creando algo nuevo en",
-"está explorando",
-"acaba de probar",
-"acaba de finalizar en"
-];
-
-const herramientas = [
-"Semitonos Studio",
-"Marco Desgastado",
-"Mezzotinta Studio",
-"SEMITRANSPARENCIAS",
-"Pedrería PRO",
-"CALCULADORA",
-"Mockups Studio",
-"GENERADOR DE TICKERS",
-"Removedor IA",
-"Vectorizador"
-];
-
-function random(arr){
-  return arr[Math.floor(Math.random() * arr.length)];
+function copiarCupon(el) {
+  navigator.clipboard.writeText('CHECHENA50').then(() => {
+    const orig = el.textContent;
+    el.textContent = '✓ ¡Copiado!';
+    el.style.background = 'rgba(34,197,94,0.3)';
+    setTimeout(() => { el.textContent = orig; el.style.background = ''; }, 2000);
+  }).catch(() => {
+    alert('Código: CHECHENA50');
+  });
 }
 
-function crearFomo(){
-  const container = document.getElementById('fomo-flotante');
-  if(!container) return;
-
-  const nombre = random(nombres);
-  const [ciudad, pais] = random(ubicaciones);
-
-  const esCompra = Math.random() < 0.75; // 🔥 75% compras (más ventas)
-
-  let texto;
-
-  if(esCompra){
-    const accion = random(accionesCompra);
-    const producto = random(productos);
-    texto = `<strong>${nombre}</strong> · ${ciudad}, ${pais}<br>${accion} <strong>${producto}</strong>`;
-  }else{
-    const accion = random(accionesUso);
-    const herramienta = random(herramientas);
-    texto = `<strong>${nombre}</strong> · ${ciudad}, ${pais}<br>${accion} <strong>${herramienta}</strong>`;
+(function cuponTimer(){
+  const limite = new Date('2025-06-30T23:59:59');
+  function actualizar(){
+    const ahora = new Date();
+    const diff = limite - ahora;
+    const el = document.getElementById('cupon-timer');
+    if(!el) return;
+    if(diff <= 0){ el.textContent = '⚠ Cupón expirado'; return; }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    el.textContent = `⏳ ${d}d ${h}h ${m}m ${s}s restantes`;
   }
-
-  const card = document.createElement('div');
-  card.className = 'fomo-card';
-
-  card.innerHTML = `
-    <div class="fomo-avatar">${nombre[0]}</div>
-    <div class="fomo-text">${texto}</div>
-    <div class="fomo-dot"></div>
-  `;
-
-  container.appendChild(card);
-
-  setTimeout(()=>{
-    card.style.opacity="0";
-    card.style.transform="translateY(20px)";
-    setTimeout(()=> card.remove(),400);
-  },6500);
-}
-
-// 🔥 TIMING MÁS REALISTA
-setTimeout(crearFomo,2000);
-setInterval(crearFomo,9000);
+  actualizar();
+  setInterval(actualizar, 1000);
+})();
 </script>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-inner">
-    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA</span>
-    <span class="ticker-item"><span class="ticker-icon">⚡</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
-    <span class="ticker-item"><span class="ticker-icon">🔥</span> MEGAPACK OJITO</span>
-    <span class="ticker-item"><span class="ticker-icon">💀</span> +50,000 DISEÑOS LISTOS PARA MANDAR A IMPRIMIR MEGAPACK OJITO</span>
-    <span class="ticker-item"><span class="ticker-icon">🎁</span> UNETE A NUESTRO GRUPO DE WHATSAPP</span>
-    <span class="ticker-item"><span class="ticker-icon">⚡</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
-    <span class="ticker-item"><span class="ticker-icon">🔥</span> ACCESO INMEDIATO</span>
-    <span class="ticker-item"><span class="ticker-icon">💀</span> +40,000 DISEÑOS LISTOS PARA MANDAR A IMPRIMIR MEGAPACK CHECHENA</span>
+    <span class="ticker-item cupon"><span class="ticker-icon">🎟️</span> CUPÓN ACTIVO: CHECHENA50 — $50 MXN / $2.50 USD DE DESCUENTO — VÁLIDO HASTA 30 JUNIO</span>
+    <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +50,000 DISEÑOS DTF</span>
+    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +40,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
+    <span class="ticker-item"><span class="ticker-icon">🔥</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
+    <span class="ticker-item"><span class="ticker-icon">💀</span> ÚNETE A NUESTRO GRUPO DE WHATSAPP</span>
+    <span class="ticker-item"><span class="ticker-icon">✅</span> ACCESO INMEDIATO — HERRAMIENTAS GRATIS INCLUIDAS</span>
+    <span class="ticker-item cupon"><span class="ticker-icon">🎟️</span> CUPÓN ACTIVO: CHECHENA50 — $50 MXN / $2.50 USD DE DESCUENTO — VÁLIDO HASTA 30 JUNIO</span>
+    <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +50,000 DISEÑOS DTF</span>
+    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +40,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
+    <span class="ticker-item"><span class="ticker-icon">🔥</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
+    <span class="ticker-item"><span class="ticker-icon">💀</span> ÚNETE A NUESTRO GRUPO DE WHATSAPP</span>
+    <span class="ticker-item"><span class="ticker-icon">✅</span> ACCESO INMEDIATO — HERRAMIENTAS GRATIS INCLUIDAS</span>
   </div>
 </div>
 
@@ -1489,10 +1723,10 @@ setInterval(crearFomo,9000);
       <!-- TARJETA 1 -->
       <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
-          <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
           <div>
             <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Juan Pérez</h4>
-            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+            <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
         <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
@@ -1504,7 +1738,7 @@ setInterval(crearFomo,9000);
           <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">A</div>
           <div>
             <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Yazminarellano</h4>
-            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+            <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
         <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
@@ -1516,7 +1750,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">F</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Fernanda Ríos</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
@@ -1525,10 +1759,10 @@ setInterval(crearFomo,9000);
 <!-- RESEÑA: Megapack Chechena -->
 <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
-    <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Sandra Reyes</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 40,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
@@ -1540,7 +1774,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(34,197,94,0.2); color:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">O</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Omar Estampados GDL</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
@@ -1552,7 +1786,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">T</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Taller Textil Monterrey</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
@@ -1564,7 +1798,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(99,102,241,0.2); color:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">G</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Gabriela (Print House)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 50,000 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
@@ -1576,7 +1810,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(20,184,166,0.2); color:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">R</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Raúl (DTG Express CDMX)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
@@ -1588,7 +1822,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(234,179,8,0.2); color:#eab308; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">I</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Imprenta Ibarra</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
@@ -1600,7 +1834,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(168,85,247,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">J</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Jesús Velázquez</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
@@ -1612,7 +1846,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(249,115,22,0.2); color:#f97316; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">L</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Lupita (Estampados Puebla)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
@@ -1624,7 +1858,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">E</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Eduardo (Taller EG)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
@@ -1635,10 +1869,10 @@ setInterval(crearFomo,9000);
       <!-- TARJETA 1 -->
       <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
-          <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
           <div>
             <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Juan Pérez</h4>
-            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+            <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
         <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
@@ -1650,7 +1884,7 @@ setInterval(crearFomo,9000);
           <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">A</div>
           <div>
             <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Yazminarellano</h4>
-            <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+            <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
         <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
@@ -1662,7 +1896,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">F</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Fernanda Ríos</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
@@ -1671,10 +1905,10 @@ setInterval(crearFomo,9000);
 <!-- RESEÑA: Megapack Chechena -->
 <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
-    <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,159,67,0.2); color:#FF9F43; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Sandra Reyes</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 40,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
@@ -1686,7 +1920,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(34,197,94,0.2); color:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">O</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Omar Estampados GDL</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
@@ -1698,7 +1932,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">T</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Taller Textil Monterrey</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
@@ -1710,7 +1944,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(99,102,241,0.2); color:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">G</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Gabriela (Print House)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 50,000 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
@@ -1722,7 +1956,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(20,184,166,0.2); color:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">R</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Raúl (DTG Express CDMX)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
@@ -1734,7 +1968,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(234,179,8,0.2); color:#eab308; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">I</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Imprenta Ibarra</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
@@ -1746,7 +1980,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(168,85,247,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">J</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Jesús Velázquez</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
@@ -1758,7 +1992,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(249,115,22,0.2); color:#f97316; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">L</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Lupita (Estampados Puebla)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
@@ -1770,7 +2004,7 @@ setInterval(crearFomo,9000);
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">E</div>
     <div>
       <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Eduardo (Taller EG)</h4>
-      <div style="color:#FF9F43; font-size:10px; margin-top:2px;">★★★★★</div>
+      <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
   <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
@@ -2020,8 +2254,8 @@ setInterval(crearFomo,9000);
   <div style="max-width:1200px; margin:0 auto;">
 
     <div style="text-align:center; margin-bottom:70px;">
-      <span style="display:inline-block; background:#111; border:1px solid #1f1f1f; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:#777; padding:8px 20px; margin-bottom:16px;">KNOWLEDGE BASE</span>
-      <h2 style="font-family:'Oswald',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin-bottom:14px;">
+      <span style="display:inline-block; background:#111; border:1px solid #1f1f1f; font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:#777; padding:8px 20px; margin-bottom:16px;">KNOWLEDGE BASE</span>
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin-bottom:14px;">
         RECURSOS <span style="color:#9d0000;">CHECHENA</span>
       </h2>
       <p style="font-family:'Inter',sans-serif; font-size:15px; color:#aaa; max-width:520px; margin:0 auto; line-height:1.6;">
@@ -2076,7 +2310,7 @@ setInterval(crearFomo,9000);
 <div id="modal-academia" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:99999; align-items:center; justify-content:center; padding:20px;">
   <div style="background:#0f0f0f; border:1px solid #222; width:100%; max-width:620px; border-radius:12px; overflow:hidden; box-shadow:0 25px 50px -12px rgb(0 0 0 / 0.8);">
     <div style="padding:20px 28px; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center;">
-      <h3 id="modal-titulo" style="font-family:'Oswald',sans-serif; font-size:21px; color:#fff; margin:0; text-transform:uppercase;"></h3>
+      <h3 id="modal-titulo" style="font-family:'Space Grotesk',sans-serif; font-size:21px; color:#fff; margin:0; text-transform:uppercase;"></h3>
       <button onclick="cerrarGuia()" style="background:none; border:none; font-size:30px; color:#666; cursor:pointer;">×</button>
     </div>
     <div id="modal-cuerpo" style="padding:32px; overflow-y:auto; max-height:70vh; color:#ddd; line-height:1.8; font-size:15.2px;"></div>
@@ -2120,7 +2354,7 @@ setInterval(crearFomo,9000);
   transform:scale(1.15) rotate(15deg);
 }
 
-.guia-card h3 { font-family:'Oswald',sans-serif; font-size:18px; font-weight:700; text-transform:uppercase; color:#fff; margin:0; }
+.guia-card h3 { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; text-transform:uppercase; color:#fff; margin:0; }
 .guia-card p { color:#999; line-height:1.65; margin:0; flex-grow:1; }
 .guia-card .link { color:#00ffa2; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
 </style>
@@ -2190,10 +2424,10 @@ document.addEventListener('keydown', (e) => {
 
     </div>
     <div>
-      <h2 style="font-family:'Oswald',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin:0 0 4px 0;">
-        DISEÑOS GRATIS <span style="color:#FF9F43;">ENTRA AL GRUPO DE WHATSAPP</span>
+      <h2 style="font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin:0 0 4px 0;">
+        DISEÑOS GRATIS <span style="color:#a855f7;">ENTRA AL GRUPO DE WHATSAPP</span>
       </h2>
-      <p style="font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin:0;">
+      <p style="font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin:0;">
         ¿Quieres más diseños listos para imprimir? Arriba tienes los megapacks disponibles.
       </p>
     </div>
@@ -2201,7 +2435,7 @@ document.addEventListener('keydown', (e) => {
 
   <!-- CARD PRINCIPAL -->
   <div style="display:flex; flex-direction:row; background:#0a0a0a; border:1px solid #2c2c2c; border-radius:16px; overflow:hidden; transition:border-color .3s;"
-       onmouseover="this.style.borderColor='#FF9F43'" onmouseout="this.style.borderColor='#2c2c2c'">
+       onmouseover="this.style.borderColor='#a855f7'" onmouseout="this.style.borderColor='#1e1e1e'">
 
     <!-- IMAGEN -->
     <div class="regalo-img-col" style="width:380px; min-width:380px; overflow:hidden; border-right:1px solid #222;">
@@ -2213,11 +2447,11 @@ document.addEventListener('keydown', (e) => {
     <!-- CONTENIDO -->
     <div style="padding:40px; display:flex; flex-direction:column; justify-content:center; flex:1;">
 
-      <span style="display:inline-block; background:rgba(255,159,67,0.1); color:#FF9F43; font-family:'Oswald',sans-serif; font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; padding:6px 14px; border-radius:20px; border:1px solid rgba(255,159,67,0.2); margin-bottom:20px;">
+      <span style="display:inline-block; background:rgba(124,58,237,0.1); color:#a78bfa; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; padding:6px 14px; border-radius:20px; border:1px solid rgba(124,58,237,0.15); margin-bottom:20px;">
         <i class="fa-solid fa-clock" style="margin-right:4px;"></i>GRATUITOS 
       </span>
 
-      <h3 style="font-family:'Oswald',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:700; text-transform:uppercase; color:#fff; margin:0 0 12px 0;">
+      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:700; text-transform:uppercase; color:#fff; margin:0 0 12px 0;">
         DISEÑOS GRATIS
       </h3>
 
@@ -2228,14 +2462,14 @@ document.addEventListener('keydown', (e) => {
       <div>
         <a href="https://drive.google.com/drive/folders/1O9bNvXTL0pi7syMcrXAFovzG4q73wC5w?usp=sharing"
            target="_blank"
-           style="display:inline-flex; align-items:center; gap:10px; background:#FF9F43; color:#000; font-family:'Oswald',sans-serif; font-weight:700; font-size:13px; letter-spacing:.15em; text-transform:uppercase; padding:14px 32px; border-radius:10px; text-decoration:none; transition:all .2s; box-shadow:0 4px 15px rgba(255,159,67,0.2);"
-           onmouseover="this.style.background='#ff8c00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(255,159,67,0.4)'"
-           onmouseout="this.style.background='#FF9F43';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(255,159,67,0.2)'">
+           style="display:inline-flex; align-items:center; gap:10px; background:#7c3aed; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; letter-spacing:.15em; text-transform:uppercase; padding:14px 32px; border-radius:10px; text-decoration:none; transition:all .2s; box-shadow:0 4px 15px rgba(124,58,237,0.25);"
+           onmouseover="this.style.background='#a855f7';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(124,58,237,0.4)'"
+           onmouseout="this.style.background='#7c3aed';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(124,58,237,0.25)'">
           <i class="fa-brands fa-google-drive" style="font-size:18px;"></i>
           PACK DISEÑOS GRATIS
         </a>
-        <p style="font-size:10px; color:#444; margin-top:14px; font-family:'Oswald',sans-serif; letter-spacing:.05em;">
-          <i class="fa-solid fa-circle-info" style="color:#FF9F43; margin-right:4px;"></i>
+        <p style="font-size:10px; color:#444; margin-top:14px; font-family:'Space Grotesk',sans-serif; letter-spacing:.05em;">
+          <i class="fa-solid fa-circle-info" style="color:#a78bfa; margin-right:4px;"></i>
           Todos los diseños están listos para imprimir. Esta es una muestra de lo que ofrecemos.
         </p>
       </div>
@@ -2319,15 +2553,15 @@ document.addEventListener('keydown', (e) => {
   <div style="max-width:900px; margin:0 auto;">
 
     <div style="text-align:center; margin-bottom:48px;">
-      <span style="display:inline-block; background:#1a1a1a; border:1px solid #333; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#888; padding:5px 16px; margin-bottom:16px;">Soporte</span>
-      <h2 style="font-family:'Oswald',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#fff; margin-bottom:8px;">PREGUNTAS <span style="color:#ff6b00;">FRECUENTES</span></h2>
-      <p style="font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888;">Todo lo que necesitas saber sobre nuestros paquetes y descargas</p>
+      <span style="display:inline-block; background:#1a1a1a; border:1px solid #333; font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#888; padding:5px 16px; margin-bottom:16px;">Soporte</span>
+      <h2 style="font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:#fff; margin-bottom:8px;">PREGUNTAS <span style="color:#a855f7;">FRECUENTES</span></h2>
+      <p style="font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888;">Todo lo que necesitas saber sobre nuestros paquetes y descargas</p>
     </div>
 
     <div style="display:flex; flex-direction:column; gap:4px;" id="faq-lista">
 
       <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
           <span>¿En qué formato vienen los diseños?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
         <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
@@ -2336,7 +2570,7 @@ document.addEventListener('keydown', (e) => {
       </div>
 
       <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
           <span>¿Cómo descargo mis diseños después de pagar?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
         <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
@@ -2345,7 +2579,7 @@ document.addEventListener('keydown', (e) => {
       </div>
 
       <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
           <span>¿Puedo usar los diseños comercialmente?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
         <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
@@ -2354,7 +2588,7 @@ document.addEventListener('keydown', (e) => {
       </div>
 
       <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
           <span>¿Cada cuánto agregan diseños nuevos?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
         <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
@@ -2363,7 +2597,7 @@ document.addEventListener('keydown', (e) => {
       </div>
 
       <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
           <span>¿Qué métodos de pago aceptan?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
         <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
@@ -2372,7 +2606,7 @@ document.addEventListener('keydown', (e) => {
       </div>
 
       <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
           <span>¿Los diseños sirven para sublimación también?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
         <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
@@ -2383,8 +2617,8 @@ document.addEventListener('keydown', (e) => {
     </div>
 
     <div style="text-align:center; margin-top:40px;">
-      <p style="font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:#555; margin-bottom:16px;">¿No encontraste tu respuesta?</p>
-      <a href="https://wa.me/529212337934" target="_blank" style="display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#fff; font-family:'Oswald',sans-serif; font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; padding:13px 28px; text-decoration:none; border-radius:3px; transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">💬 PREGÚNTANOS POR WHATSAPP</a>
+      <p style="font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:#555; margin-bottom:16px;">¿No encontraste tu respuesta?</p>
+      <a href="https://wa.me/529212337934" target="_blank" style="display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; padding:13px 28px; text-decoration:none; border-radius:3px; transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">💬 PREGÚNTANOS POR WHATSAPP</a>
     </div>
 
   </div>
@@ -2407,7 +2641,7 @@ document.addEventListener('keydown', (e) => {
   background: rgba(37,211,102,.12);
   border: 1px solid rgba(37,211,102,.3);
   color: #25D366;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 11px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -2416,7 +2650,7 @@ document.addEventListener('keydown', (e) => {
   margin-bottom: 14px;
 }
 .comunidad-header h2 {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: clamp(1.6rem, 3.5vw, 2.6rem);
   text-transform: uppercase;
@@ -2425,7 +2659,7 @@ document.addEventListener('keydown', (e) => {
   margin-bottom: 8px;
 }
 .comunidad-header p {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 13px;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -2467,7 +2701,7 @@ document.addEventListener('keydown', (e) => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 10px;
   letter-spacing: .15em;
   text-transform: uppercase;
@@ -2489,7 +2723,7 @@ document.addEventListener('keydown', (e) => {
   line-height: 1;
 }
 .com-card h3 {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: clamp(1.1rem, 2.5vw, 1.4rem);
   text-transform: uppercase;
@@ -2509,7 +2743,7 @@ document.addEventListener('keydown', (e) => {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: .12em;
@@ -2562,7 +2796,7 @@ document.addEventListener('keydown', (e) => {
 
       <!-- Formulario / WhatsApp directo -->
       <div class="grupo-box" style="border-color:#333;">
-        <span class="badge" style="background:rgba(255,107,0,.15);color:#ff6b00;">SOPORTE DIRECTO</span>
+        <span class="badge" style="background:rgba(124,58,237,.18);color:#a855f7;">SOPORTE DIRECTO</span>
         <h3 style="color:#fff;">ESCRÍBENOS<br>POR WHATSAPP</h3>
         <p>Resolvemos tus dudas sobre pedidos, descargas o diseños. Respuesta rápida garantizada.</p>
         <a href="https://wa.me/529212337934" target="_blank" class="btn-grupo" style="background:#25D366;">
