@@ -11,85 +11,376 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.3.0/fontfaceobserver.standalone.js"></script>
 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background: #e0e0e0; }
 
-    /* --- ESTILOS BASE --- */
+    :root {
+      --cream:        #FAF7F2;
+      --ivory:        #F5F0E8;
+      --linen:        #EDE8DF;
+      --sand:         #E0D8CC;
+      --champagne:    #D4C9B0;
+      --warm-stone:   #C5B99A;
+      --blush:        #EDD5C5;
+      --dusty-rose:   #D9BDB0;
+      --sage-light:   #D8E0D4;
+
+      --text-primary:   #3A3228;
+      --text-secondary: #6B5F52;
+      --text-muted:     #9A8E82;
+
+      --accent-warm:  #B8977E;
+      --accent-gold:  #C9A96E;
+      --accent-sage:  #8A9E84;
+      --accent-rose:  #C4938A;
+
+      --border:       rgba(180,165,145,0.30);
+      --border-mid:   rgba(180,165,145,0.50);
+      --shadow-xs:    0 1px 3px rgba(80,60,40,0.06);
+      --shadow-sm:    0 4px 12px rgba(80,60,40,0.08);
+      --shadow-md:    0 8px 28px rgba(80,60,40,0.11);
+      --shadow-canvas:0 28px 72px rgba(80,60,40,0.18), 0 4px 18px rgba(80,60,40,0.09);
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --f-ui:      'Jost', 'Inter', sans-serif;
+      --f-display: 'Cormorant Garamond', serif;
+    }
+
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: var(--f-ui);
+      background: var(--linen);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Marca / Brand header ─────────────────────── */
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 22px 24px 16px;
+      background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .brand::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 56px; height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+    }
+    .brand img {
+      height: 50px;
+      filter: drop-shadow(0 2px 5px rgba(80,60,40,0.13));
+    }
+    .brand h2 {
+      font-family: var(--f-display);
+      font-size: 30px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    /* ── App wrapper ──────────────────────────────── */
     #ms-app-wrapper {
-      --c-bg-app: #e0e0e0; --c-panel: #ffffff; --c-text: #111111; --c-blue-action: #2962ff; --c-border: #d1d1d1;
-      --f-main: 'Inter', sans-serif; --f-title: 'Bebas Neue', sans-serif;
-      font-family: var(--f-main); background-color: var(--c-bg-app); color: var(--c-text);
-      width: 100%; height: 100vh; display: flex; overflow: hidden; position: relative; border: 1px solid var(--c-border);
+      --c-bg-app:      var(--linen);
+      --c-panel:       var(--ivory);
+      --c-text:        var(--text-primary);
+      --c-border:      var(--border);
+      --f-main:        var(--f-ui);
+      --f-title:       var(--f-display);
+
+      font-family: var(--f-main);
+      background-color: var(--c-bg-app);
+      color: var(--c-text);
+      width: 100%; height: 100vh;
+      display: flex; overflow: hidden;
+      position: relative;
+      border-top: 1px solid var(--border);
     }
     #ms-app-wrapper * { box-sizing: border-box; }
+
+    /* ── Sidebar ──────────────────────────────────── */
     #ms-app-wrapper .mobile-only-header { display: none; }
-    #ms-app-wrapper .studio-sidebar { width: 360px; min-width: 360px; background: var(--c-panel); border-right: 1px solid var(--c-border); display: flex; flex-direction: column; height: 100%; z-index: 10; }
-    #ms-app-wrapper .sidebar-header-area { padding: 20px; border-bottom: 2px solid #000; }
-    #ms-app-wrapper .sidebar-header-area h2 { font-family: var(--f-title); font-size: 28px; margin: 0; color: #000; }
-    #ms-app-wrapper .sidebar-scroll-area { flex: 1; overflow-y: auto; }
-    #ms-app-wrapper details.am-section { border-bottom: 1px solid #eee; }
-    #ms-app-wrapper summary.am-summary { padding: 16px 20px; cursor: pointer; list-style: none; font-weight: 800; font-size: 13px; color: #111; display: flex; justify-content: space-between; text-transform: uppercase; }
-    #ms-app-wrapper .am-content { padding: 0 20px 20px 20px; }
-    #ms-app-wrapper .section-header { font-weight: 800; font-size: 10px; text-transform: uppercase; margin-bottom: 8px; display: block; color: #888; }
-    #ms-app-wrapper .grid-2, #ms-app-wrapper .grid-3, #ms-app-wrapper .grid-4 { display: grid; gap: 8px; }
+
+    #ms-app-wrapper .studio-sidebar {
+      width: 368px; min-width: 368px;
+      background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 100%);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      height: 100%; z-index: 10;
+      scrollbar-width: thin;
+      scrollbar-color: var(--champagne) transparent;
+    }
+
+    #ms-app-wrapper .sidebar-header-area {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(245,240,232,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 5;
+    }
+    #ms-app-wrapper .sidebar-header-area h2 {
+      font-family: var(--f-display);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    #ms-app-wrapper .sidebar-scroll-area {
+      flex: 1; overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--champagne) transparent;
+    }
+    #ms-app-wrapper .sidebar-scroll-area::-webkit-scrollbar { width: 3px; }
+    #ms-app-wrapper .sidebar-scroll-area::-webkit-scrollbar-thumb { background: var(--champagne); border-radius: 4px; }
+
+    /* ── Secciones ────────────────────────────────── */
+    #ms-app-wrapper details.am-section {
+      border-bottom: 1px solid var(--border);
+    }
+    #ms-app-wrapper summary.am-summary {
+      padding: 14px 24px;
+      cursor: pointer; list-style: none;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      display: flex; justify-content: space-between; align-items: center;
+      transition: color 0.2s;
+      user-select: none;
+    }
+    #ms-app-wrapper summary.am-summary::-webkit-details-marker { display: none; }
+    #ms-app-wrapper summary.am-summary::after {
+      content: '›';
+      font-size: 16px; font-weight: 300;
+      transition: transform 0.25s var(--ease);
+      color: var(--warm-stone);
+    }
+    #ms-app-wrapper details.am-section[open] summary.am-summary {
+      color: var(--accent-warm);
+    }
+    #ms-app-wrapper details.am-section[open] summary.am-summary::after {
+      transform: rotate(90deg);
+    }
+    #ms-app-wrapper summary.am-summary:hover { color: var(--accent-warm); }
+
+    #ms-app-wrapper .am-content { padding: 4px 24px 20px 24px; }
+
+    /* ── Labels ───────────────────────────────────── */
+    #ms-app-wrapper .section-header {
+      font-weight: 600;
+      font-size: 9.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* ── Grids ────────────────────────────────────── */
+    #ms-app-wrapper .grid-2,
+    #ms-app-wrapper .grid-3,
+    #ms-app-wrapper .grid-4 { display: grid; gap: 7px; }
     #ms-app-wrapper .grid-2 { grid-template-columns: 1fr 1fr; }
     #ms-app-wrapper .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
     #ms-app-wrapper .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
-    #ms-app-wrapper .btn-ui { background: #fff; border: 1px solid #ddd; color: #333; padding: 10px 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 4px; width: 100%; }
-    #ms-app-wrapper .btn-ui.active { background: #111; color: #fff; border-color: #111; }
-    #ms-app-wrapper .product-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
-    #ms-app-wrapper .am-select, #ms-app-wrapper .am-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; margin-bottom: 6px; background: #fff; }
-    #ms-app-wrapper .color-bar { display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; padding: 8px; border-radius: 4px; margin-bottom: 5px; }
-    #ms-app-wrapper input[type="color"] { -webkit-appearance: none; border: none; width: 24px; height: 24px; cursor: pointer; background: none; }
-    #ms-app-wrapper .sidebar-footer-area { padding: 20px; border-top: 1px solid #eee; background: #fff; }
-    #ms-app-wrapper .btn-blue-action { background: var(--c-blue-action); color: #fff; width: 100%; padding: 15px; font-family: var(--f-title); font-size: 22px; border: none; cursor: pointer; border-radius: 6px; font-weight: normal; }
-    #ms-app-wrapper .studio-viewport { flex: 1; display: flex; justify-content: center; align-items: center; background-color: var(--c-bg-app); position: relative; }
-    #ms-app-wrapper .canvas-scaler { box-shadow: 0 30px 60px rgba(0,0,0,0.2); background: #fff; transform-origin: center center; }
 
-    /* --- AJUSTES MÓVIL Y TABLETAS --- */
+    /* ── Botones UI ───────────────────────────────── */
+    #ms-app-wrapper .btn-ui {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 10px 4px;
+      font-family: var(--f-ui);
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      width: 100%;
+      transition: all 0.18s var(--ease);
+      box-shadow: var(--shadow-xs);
+    }
+    #ms-app-wrapper .btn-ui:hover {
+      background: var(--ivory);
+      border-color: var(--border-mid);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+    #ms-app-wrapper .btn-ui.active {
+      background: linear-gradient(135deg, var(--accent-warm), var(--accent-gold));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(184,151,126,0.32);
+    }
+
+    /* ── Product grid ─────────────────────────────── */
+    #ms-app-wrapper .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+    }
+
+    /* ── Inputs / Selects ─────────────────────────── */
+    #ms-app-wrapper .am-select,
+    #ms-app-wrapper .am-input {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--f-ui);
+      font-size: 12px;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      box-shadow: var(--shadow-xs);
+    }
+    #ms-app-wrapper .am-select:focus,
+    #ms-app-wrapper .am-input:focus {
+      border-color: var(--accent-warm);
+      box-shadow: 0 0 0 3px rgba(184,151,126,0.15);
+    }
+    #ms-app-wrapper .am-input::placeholder { color: var(--text-muted); }
+
+    /* ── Color bar ────────────────────────────────── */
+    #ms-app-wrapper .color-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 7px;
+      background: rgba(255,255,255,0.4);
+      transition: border-color 0.2s;
+    }
+    #ms-app-wrapper .color-bar:hover {
+      border-color: var(--border-mid);
+    }
+    #ms-app-wrapper input[type="color"] {
+      -webkit-appearance: none; border: none;
+      width: 28px; height: 28px; cursor: pointer; background: none;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1.5px var(--border);
+    }
+
+    /* ── Range slider ─────────────────────────────── */
+    #ms-app-wrapper input[type="range"] {
+      accent-color: var(--accent-warm);
+      cursor: pointer;
+    }
+
+    /* ── Footer / acciones ────────────────────────── */
+    #ms-app-wrapper .sidebar-footer-area {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--ivory) 0%, var(--linen) 100%);
+    }
+
+    #ms-app-wrapper .btn-blue-action {
+      background: linear-gradient(135deg, var(--accent-warm) 0%, var(--accent-gold) 100%);
+      color: #fff;
+      width: 100%;
+      padding: 14px 16px;
+      font-family: var(--f-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      box-shadow: 0 6px 20px rgba(184,151,126,0.35);
+      transition: all 0.2s var(--ease);
+    }
+    #ms-app-wrapper .btn-blue-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(184,151,126,0.42);
+    }
+    #ms-app-wrapper .btn-blue-action:active { transform: translateY(0); }
+
+    /* ── Botón agregar diseño oscuro ──────────────── */
+    #ms-app-wrapper .btn-blue-action.dark-variant {
+      background: linear-gradient(135deg, #4A3F35, #6B5F52) !important;
+      box-shadow: 0 5px 16px rgba(74,63,53,0.28) !important;
+    }
+    #ms-app-wrapper .btn-blue-action.dark-variant:hover {
+      box-shadow: 0 9px 24px rgba(74,63,53,0.35) !important;
+    }
+
+    /* Botón borrar */
+    #ms-app-wrapper #btnDelete {
+      font-family: var(--f-ui);
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      color: var(--accent-rose) !important;
+      border-color: rgba(196,147,138,0.4) !important;
+    }
+
+    /* ── Viewport / canvas ────────────────────────── */
+    #ms-app-wrapper .studio-viewport {
+      flex: 1;
+      display: flex; justify-content: center; align-items: center;
+      position: relative; overflow: hidden;
+      background-color: var(--linen);
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(212,201,176,0.28) 0%, transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(237,213,197,0.22) 0%, transparent 55%),
+        radial-gradient(var(--champagne) 0.7px, transparent 0.7px);
+      background-size: auto, auto, 22px 22px;
+    }
+    #ms-app-wrapper .studio-viewport::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(145deg, rgba(250,247,242,0.35) 0%, transparent 45%, rgba(237,213,197,0.18) 100%);
+      pointer-events: none;
+    }
+
+    #ms-app-wrapper .canvas-scaler {
+      box-shadow: var(--shadow-canvas);
+      background: #fff;
+      transform-origin: center center;
+      border-radius: 2px;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Responsive ───────────────────────────────── */
     @media (max-width: 1100px) {
       #ms-app-wrapper { flex-direction: column !important; height: auto !important; overflow-y: auto !important; display: flex !important; }
-      #ms-app-wrapper .mobile-only-header { display: block !important; order: 1 !important; background: #fff; padding: 15px; border-bottom: 2px solid #000; text-align: center; }
-      #ms-app-wrapper .mobile-only-header h2 { font-family: var(--f-title); font-size: 24px; margin: 0; color: #000; }
-      #ms-app-wrapper .studio-viewport { order: 2 !important; width: 100% !important; height: 480px !important; flex: none !important; padding: 10px 0 !important; background-color: var(--c-bg-app); display: flex !important; align-items: center; justify-content: center; }
-      #ms-app-wrapper .studio-sidebar { order: 3 !important; width: 100% !important; min-width: 0 !important; height: auto !important; border-right: none !important; border-top: 1px solid var(--c-border); }
+      #ms-app-wrapper .mobile-only-header {
+        display: block !important; order: 1 !important;
+        background: rgba(245,240,232,0.95);
+        padding: 15px 24px;
+        border-bottom: 1px solid var(--border);
+        text-align: center;
+      }
+      #ms-app-wrapper .mobile-only-header h2 {
+        font-family: var(--f-display);
+        font-size: 20px; font-weight: 400;
+        letter-spacing: 4px; text-transform: uppercase;
+        margin: 0; color: var(--text-primary);
+      }
+      #ms-app-wrapper .studio-viewport { order: 2 !important; width: 100% !important; height: 480px !important; flex: none !important; padding: 10px 0 !important; display: flex !important; align-items: center; justify-content: center; }
+      #ms-app-wrapper .studio-sidebar { order: 3 !important; width: 100% !important; min-width: 0 !important; height: auto !important; border-right: none !important; border-top: 1px solid var(--border); }
       #ms-app-wrapper .studio-sidebar .sidebar-header-area { display: none !important; }
       body { overflow: auto !important; }
     }
-
-
-
-    .brand{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:15px;
-  margin-top:20px;
-}
-
-.brand img{
-  height:60px;
-}
-
-.brand h2{
-  font-size:40px;
-  font-family:"Old English Text MT", serif;
-}
-
-#header{
-  text-align:center;
-  margin-top:20px;
-}
-
-#header h1{
-  font-size:32px;
-  margin-bottom:10px;
-}
-
-#header p{
-  color:#bbb;
-}
   </style>
 </head>
 <body>
@@ -132,7 +423,7 @@
             </div>
             <div class="color-bar">
               <span class="section-header" style="margin:0;">Fondo</span>
-              <input type="color" id="bgColor" value="#f4f4f4" oninput="changeBgColor(this.value)">
+              <input type="color" id="bgColor" value="#F5F0E8" oninput="changeBgColor(this.value)">
             </div>
           </div>
         </div>
@@ -179,7 +470,7 @@
       <details class="am-section">
         <summary class="am-summary">04. Fondo Personalizado</summary>
         <div class="am-content">
-          <button class="btn-ui" style="border:1px dashed #ccc;" onclick="document.getElementById('bgUpload').click()">+ CARGAR FONDO</button>
+          <button class="btn-ui" style="border:1.5px dashed rgba(180,165,145,0.5); margin-bottom:4px;" onclick="document.getElementById('bgUpload').click()">＋ Cargar Fondo</button>
           <input type="file" id="bgUpload" hidden accept="image/*">
           <div style="margin-top:15px;">
             <div style="display:flex; justify-content:space-between;">
@@ -194,7 +485,7 @@
       <details class="am-section" open>
         <summary class="am-summary">05. Diseños Multi-Capa</summary>
         <div class="am-content">
-          <button class="btn-blue-action" style="font-size:14px; padding:12px; background:#111;" onclick="document.getElementById('designUpload').click()">+ AGREGAR DISEÑO</button>
+          <button class="btn-blue-action dark-variant" style="font-size:11px; padding:13px; margin-bottom:0;" onclick="document.getElementById('designUpload').click()">＋ Agregar Diseño</button>
           <input type="file" id="designUpload" hidden accept="image/*" multiple>
           <button id="btnDelete" class="btn-ui" style="color:red; margin-top:10px; opacity:0.5;" onclick="deleteSelected()" disabled>BORRAR SELECCIONADO</button>
         </div>
@@ -235,12 +526,12 @@
 
   const isTouch = window.innerWidth <= 1100;
   fabric.Object.prototype.set({
-    transparentCorners: false, cornerColor: '#2962ff', borderColor: '#2962ff',
+    transparentCorners: false, cornerColor: '#C9A96E', borderColor: '#B8977E',
     cornerSize: isTouch ? 35 : 14, borderScaleFactor: isTouch ? 5 : 2, padding: isTouch ? 12 : 6, centeredScaling: true
   });
 
   const canvas = new fabric.Canvas('c', {
-    width: 1080, height: 1080, backgroundColor: '#f4f4f4',
+    width: 1080, height: 1080, backgroundColor: '#F5F0E8',
     preserveObjectStacking: true, selection: !isTouch
   });
 
