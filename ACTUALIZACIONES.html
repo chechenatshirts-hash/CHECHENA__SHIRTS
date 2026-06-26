@@ -1,772 +1,1319 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevos Diseños | Chechena Shirts | Actualizaciones del Megapack</title>
-    <meta name="description" content="Todos los nuevos diseños que añado semanalmente a los Megapacks. Contenido actualizado para DTF, sublimación y serigrafía.">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuevos Diseños | Chechena Shirts | Actualizaciones del Megapack</title>
+<meta name="description" content="Todos los nuevos diseños que añado semanalmente a los Megapacks. Contenido actualizado para DTF, sublimación y serigrafía.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ====================================================
+   TOKENS
+   bg base   #0b0b0c   bg card  #15151750/#171719
+   chechena  #ff3b30 -> #ff8a00
+   ojito     #ffce00 -> #ff8a00
+   text      #f3f1ea  /  muted #8d8d93
+   line      #2a2a2d
+   display   Anton | body Inter | utility Space Mono
+   ==================================================== */
+:root{
+  --bg:#0b0b0c;
+  --bg-soft:#111113;
+  --card:#16161890;
+  --card-solid:#17171a;
+  --line:#28282c;
+  --ink:#f3f1ea;
+  --muted:#92929a;
+  --chechena-1:#ff3b30;
+  --chechena-2:#ff8a00;
+  --ojito-1:#ffce00;
+  --ojito-2:#ff8a00;
+  --green:#1ddb83;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.5;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+  background-size: 14px 14px;
+}
+h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:0.5px; text-transform:uppercase;}
+.mono{font-family:'Space Mono',monospace;}
+a{color:inherit;}
 
-        body {
-            font-family: system-ui, -apple-system, 'Inter', sans-serif;
-            background: #ffffff;
-            color: #111;
-            line-height: 1.5;
-        }
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important;}
+}
 
-        /* ========== HEADER / MENÚ ========== */
-        .header {
-            background: #0a0a0a;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+/* ========== HEADER ========== */
+.header{
+  background:rgba(10,10,11,0.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  color:white;
+  padding:1rem 2rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:1rem;
+  position:sticky;
+  top:0;
+  z-index:200;
+}
+.logo{
+  font-family:'Anton',sans-serif;
+  font-size:1.4rem;
+  letter-spacing:1px;
+  text-decoration:none;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.logo .bolt{ color:var(--chechena-2); }
+.nav-links{ display:flex; gap:2rem; flex-wrap:wrap; }
+.nav-links a{
+  color:#d8d8dc;
+  text-decoration:none;
+  font-weight:600;
+  font-size:0.92rem;
+  letter-spacing:0.3px;
+  transition:color 0.2s;
+  position:relative;
+}
+.nav-links a:hover{ color:var(--chechena-2); }
+.nav-links a.is-active{ color:var(--chechena-1); }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            text-decoration: none;
-            color: white;
-        }
+/* ========== HERO ========== */
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:4.5rem 1.5rem 2.5rem;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,59,48,0.18), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 10%, rgba(255,206,0,0.10), transparent 70%);
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1.2px, transparent 1.2px);
+  background-size: 10px 10px;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+  pointer-events:none;
+}
+.hero-inner{ position:relative; z-index:2; max-width:840px; margin:0 auto; }
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'Space Mono',monospace;
+  font-size:0.72rem;
+  letter-spacing:2px;
+  color:var(--chechena-2);
+  background:rgba(255,138,0,0.1);
+  border:1px solid rgba(255,138,0,0.35);
+  padding:0.4rem 1rem;
+  border-radius:50px;
+  margin-bottom:1.4rem;
+}
+.eyebrow .dot{ width:7px;height:7px;border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(29,219,131,0.6); animation: pulse-dot 1.8s infinite; }
+@keyframes pulse-dot{
+  0%{ box-shadow:0 0 0 0 rgba(29,219,131,0.55); }
+  70%{ box-shadow:0 0 0 7px rgba(29,219,131,0); }
+  100%{ box-shadow:0 0 0 0 rgba(29,219,131,0); }
+}
+.hero h1{
+  font-size:clamp(2.6rem, 8vw, 5rem);
+  line-height:0.95;
+  color:var(--ink);
+}
+.hero h1 span{
+  display:block;
+  background:linear-gradient(100deg, var(--chechena-1), var(--chechena-2) 60%, var(--ojito-1));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.hero p{
+  color:var(--muted);
+  max-width:560px;
+  margin:1.1rem auto 0;
+  font-size:1.05rem;
+}
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
+/* ---- stat strip ---- */
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:clamp(1.2rem,4vw,3rem);
+  flex-wrap:wrap;
+  margin-top:2.4rem;
+  position:relative; z-index:2;
+}
+.stat{ text-align:center; }
+.stat .num{
+  font-family:'Anton',sans-serif;
+  font-size:2.1rem;
+  color:var(--ink);
+  display:block;
+}
+.stat .num.fire{ color:var(--chechena-2); }
+.stat .lbl{
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;
+  letter-spacing:1px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
+/* ---- ticker (drop radar) ---- */
+.ticker-wrap{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(90deg, #ff3b30, #ff8a00);
+  overflow:hidden;
+  white-space:nowrap;
+  position:relative;
+}
+.ticker-track{
+  display:inline-block;
+  padding:0.55rem 0;
+  font-family:'Space Mono',monospace;
+  font-weight:700;
+  font-size:0.78rem;
+  letter-spacing:0.5px;
+  color:#1a0a02;
+  animation:ticker-scroll 70s linear infinite;
+}
+@keyframes ticker-scroll{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-50%); }
+}
+.ticker-wrap:hover .ticker-track{ animation-play-state:paused; }
 
-        .nav-links a:hover {
-            color: #ff3b3b;
-        }
+/* ========== CONTENEDOR ========== */
+.container{ max-width:1400px; margin:0 auto; padding:2.5rem 1.5rem; }
 
-        /* ========== CONTENEDOR PRINCIPAL ========== */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
+/* ---- audience switch ---- */
+.audience{
+  max-width:680px;
+  margin:0 auto 2.6rem;
+  text-align:center;
+}
+.audience-q{
+  font-family:'Space Mono',monospace;
+  font-size:0.78rem;
+  letter-spacing:1px;
+  color:var(--muted);
+  margin-bottom:0.8rem;
+  text-transform:uppercase;
+}
+.audience-switch{
+  display:inline-flex;
+  background:var(--card-solid);
+  border:1px solid var(--line);
+  border-radius:50px;
+  padding:5px;
+  gap:4px;
+}
+.audience-btn{
+  border:none;
+  background:transparent;
+  color:var(--muted);
+  font-weight:700;
+  font-size:0.85rem;
+  padding:0.65rem 1.4rem;
+  border-radius:40px;
+  cursor:pointer;
+  transition:all 0.25s;
+  font-family:'Inter',sans-serif;
+  white-space:nowrap;
+}
+.audience-btn.active[data-mode="cliente"]{
+  background:linear-gradient(100deg,#16a866,var(--green));
+  color:#06241a;
+}
+.audience-btn.active[data-mode="prospecto"]{
+  background:linear-gradient(100deg, var(--chechena-1), var(--chechena-2));
+  color:#1d0a00;
+}
+.audience-note{
+  margin-top:0.9rem;
+  font-size:0.85rem;
+  color:var(--muted);
+  min-height:1.2em;
+}
 
-        /* Encabezado de la página */
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+/* ---- filtros ---- */
+.filters{
+  display:flex;
+  justify-content:center;
+  gap:0.8rem;
+  flex-wrap:wrap;
+  margin:0 0 2.6rem;
+}
+.filter-btn{
+  background:var(--card-solid);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:0.6rem 1.5rem;
+  border-radius:50px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-size:0.85rem;
+  letter-spacing:0.3px;
+}
+.filter-btn:hover{ border-color:#3a3a3f; transform:translateY(-1px); }
+.filter-btn.active{
+  background:linear-gradient(100deg, var(--chechena-1), var(--chechena-2));
+  border-color:transparent;
+  color:#1a0a00;
+  box-shadow:0 8px 20px -8px rgba(255,90,30,0.55);
+}
+.filter-btn.active[data-filter="ojito"]{
+  background:linear-gradient(100deg, var(--ojito-1), var(--ojito-2));
+  box-shadow:0 8px 20px -8px rgba(255,200,0,0.5);
+}
 
-        .page-header h1 {
-            font-size: clamp(2rem, 6vw, 3.5rem);
-            font-weight: 800;
-            background: linear-gradient(135deg, #111, #ff3b3b);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 0.5rem;
-        }
+/* ========== GRID ========== */
+.disenos-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(290px, 1fr));
+  gap:1.8rem;
+  margin:0 0 3rem;
+}
 
-        .page-header p {
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-        }
+.card-diseno{
+  background:var(--card-solid);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+  transition:transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s, border-color 0.35s;
+}
+.card-diseno:hover{
+  transform:translateY(-6px);
+  border-color:#3c3c42;
+  box-shadow:0 24px 40px -18px rgba(0,0,0,0.55);
+}
 
-        .update-badge {
-            display: inline-block;
-            background: #ff3b3b20;
-            color: #ff3b3b;
-            padding: 0.3rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 1rem;
-        }
+/* corner punch like a price tag hole */
+.tag-punch{
+  position:absolute; top:14px; left:14px;
+  width:10px; height:10px;
+  border-radius:50%;
+  background:var(--bg);
+  border:1px solid var(--line);
+  z-index:3;
+}
 
-        /* ========== FILTROS POR MEGAPACK ========== */
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin: 2rem 0;
-        }
+.card-image{
+  aspect-ratio:1/1;
+  background:#0e0e10;
+  overflow:hidden;
+  position:relative;
+}
+.card-image img{
+  width:100%; height:100%;
+  object-fit:cover;
+  transition:transform 0.5s ease;
+  filter:saturate(1.04) contrast(1.02);
+}
+.card-diseno:hover .card-image img{ transform:scale(1.07); }
 
-        .filter-btn {
-            background: #f0f0f0;
-            border: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
+.card-shine{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+  pointer-events:none;
+}
 
-        .filter-btn.active {
-            background: #ff3b3b;
-            color: white;
-        }
+.tier-ribbon{
+  position:absolute;
+  top:12px; right:-8px;
+  font-family:'Space Mono',monospace;
+  font-size:0.62rem;
+  font-weight:700;
+  letter-spacing:0.5px;
+  padding:0.32rem 0.7rem 0.32rem 0.9rem;
+  border-radius:6px 0 0 6px;
+  color:#1a0a00;
+  z-index:3;
+  white-space:nowrap;
+}
+.tier-ribbon-nuevo{
+  background:linear-gradient(100deg, var(--chechena-1), var(--chechena-2));
+  box-shadow:0 0 18px rgba(255,90,20,0.65);
+  animation:ribbon-glow 1.7s ease-in-out infinite;
+}
+@keyframes ribbon-glow{
+  0%,100%{ box-shadow:0 0 10px rgba(255,90,20,0.45); }
+  50%{ box-shadow:0 0 22px rgba(255,140,20,0.85); }
+}
+.tier-ribbon-reciente{
+  background:linear-gradient(100deg, var(--ojito-1), var(--ojito-2));
+}
+.tier-ribbon-clasico{
+  background:#222226;
+  color:#cfcfd4;
+  border:1px solid var(--line);
+}
 
-        .filter-btn:hover {
-            background: #ddd;
-        }
+/* perforated cut line, like a hangtag */
+.card-perf{
+  height:0;
+  border-top:2px dashed #2c2c30;
+  position:relative;
+}
+.card-perf::before, .card-perf::after{
+  content:"";
+  position:absolute; top:-6px;
+  width:12px; height:12px;
+  border-radius:50%;
+  background:var(--bg);
+}
+.card-perf::before{ left:-6px; }
+.card-perf::after{ right:-6px; }
 
-        /* ========== GRID DE DISEÑOS ========== */
-        .disenos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0 3rem;
-        }
+.card-info{ padding:1.3rem 1.4rem 1.5rem; }
+.card-info-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:0.5rem;
+  margin-bottom:0.8rem;
+  flex-wrap:wrap;
+}
+.fecha{
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;
+  color:var(--muted);
+  white-space:nowrap;
+}
+.badge-pack{
+  display:inline-block;
+  padding:0.25rem 0.8rem;
+  border-radius:30px;
+  font-size:0.65rem;
+  font-weight:700;
+  letter-spacing:0.3px;
+  white-space:nowrap;
+}
+.badge-chechena{ background:rgba(255,59,48,0.14); color:#ff7a5c; border:1px solid rgba(255,59,48,0.3); }
+.badge-ojito{ background:rgba(255,206,0,0.14); color:#ffd84d; border:1px solid rgba(255,206,0,0.3); }
 
-        .card-diseno {
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            border: 1px solid #eee;
-        }
+.card-info h3{
+  font-size:1.25rem;
+  margin-bottom:0.4rem;
+  color:var(--ink);
+  letter-spacing:0.3px;
+}
+.card-info p{
+  color:var(--muted);
+  font-size:0.86rem;
+  margin-bottom:1.2rem;
+}
 
-        .card-diseno:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.15);
-        }
+.btn-wa{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:#25D366;
+  color:#06241a;
+  padding:0.7rem 1.2rem;
+  border-radius:12px;
+  text-decoration:none;
+  font-size:0.83rem;
+  font-weight:700;
+  transition:all 0.2s;
+  text-align:center;
+}
+.btn-wa:hover{ background:#1ebd5a; transform:scale(1.02); }
+body[data-audience="cliente"] .btn-wa{
+  background:linear-gradient(100deg,#16a866,var(--green));
+}
 
-        .card-image {
-            aspect-ratio: 1 / 1;
-            background: #f0f0f0;
-            overflow: hidden;
-        }
+.no-results{
+  text-align:center;
+  padding:4rem 1rem;
+  color:var(--muted);
+  display:none;
+  font-family:'Space Mono',monospace;
+}
 
-        .card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
+/* ========== BANNER FINAL ========== */
+.banner{
+  text-align:center;
+  margin:3rem 0 1rem;
+  padding:3rem 1.5rem;
+  border-radius:24px;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg, #1a0d08, #15110a);
+  border:1px solid var(--line);
+}
+.banner::before{
+  content:"";
+  position:absolute; inset:0;
+  background:radial-gradient(circle at 30% 20%, rgba(255,59,48,0.25), transparent 55%),
+             radial-gradient(circle at 80% 80%, rgba(255,206,0,0.18), transparent 55%);
+}
+.banner-inner{ position:relative; z-index:2; max-width:600px; margin:0 auto; }
+.banner h3{ font-size:clamp(1.5rem,4vw,2.1rem); margin-bottom:0.6rem; color:var(--ink); }
+.banner p{ color:var(--muted); margin-bottom:1.6rem; font-size:0.98rem; }
+.banner-cta{
+  display:inline-block;
+  background:linear-gradient(100deg, var(--chechena-1), var(--chechena-2));
+  color:#1a0a00;
+  padding:0.9rem 2.2rem;
+  border-radius:50px;
+  text-decoration:none;
+  font-weight:800;
+  letter-spacing:0.3px;
+  box-shadow:0 14px 28px -10px rgba(255,90,30,0.55);
+  transition:transform 0.2s;
+}
+.banner-cta:hover{ transform:translateY(-2px) scale(1.02); }
 
-        .card-diseno:hover .card-image img {
-            transform: scale(1.05);
-        }
+/* ========== WHATSAPP FLOTANTE ========== */
+.whatsapp-float{
+  position:fixed;
+  bottom:25px; right:25px;
+  background:#25D366;
+  border-radius:50px;
+  padding:14px 22px;
+  display:flex; align-items:center; gap:10px;
+  color:#06241a;
+  text-decoration:none;
+  font-weight:700;
+  box-shadow:0 10px 30px rgba(37,211,102,0.45);
+  z-index:150;
+  transition:all 0.2s;
+}
+.whatsapp-float::before{
+  content:"";
+  position:absolute; inset:-4px;
+  border-radius:50px;
+  border:2px solid rgba(37,211,102,0.5);
+  animation:wa-pulse 2s infinite;
+}
+@keyframes wa-pulse{
+  0%{ transform:scale(1); opacity:0.8; }
+  100%{ transform:scale(1.18); opacity:0; }
+}
+.whatsapp-float:hover{ background:#1ebd5a; transform:scale(1.05); }
 
-        .card-info {
-            padding: 1.5rem;
-            text-align: center;
-        }
+/* ========== FOOTER ========== */
+.footer{
+  background:var(--bg-soft);
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  text-align:center;
+  padding:2.2rem;
+  margin-top:2rem;
+  font-size:0.8rem;
+}
+.footer a{ color:var(--chechena-2); text-decoration:none; font-weight:600; }
 
-        .fecha {
-            font-size: 0.7rem;
-            color: #ff3b3b;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
+/* Responsive */
+@media (max-width:768px){
+  .header{ flex-direction:column; text-align:center; }
+  .disenos-grid{ gap:1.2rem; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
+  .whatsapp-float span{ display:none; }
+  .whatsapp-float{ padding:14px; border-radius:50%; }
+  .audience-switch{ flex-direction:column; width:100%; }
+  .audience-btn{ width:100%; }
+}
 
-        .card-info h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-info p {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .badge-pack {
-            display: inline-block;
-            background: #f0f0f0;
-            padding: 0.2rem 1rem;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .badge-pack.chechena { background: #ff3b3b20; color: #ff3b3b; }
-        .badge-pack.ojito { background: #ff8c0020; color: #ff8c00; }
-
-        .btn-wa {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #25D366;
-            color: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 40px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .btn-wa:hover {
-            background: #128C7E;
-            transform: scale(1.02);
-        }
-
-        /* Mensaje de "sin resultados" */
-        .no-results {
-            text-align: center;
-            padding: 3rem;
-            color: #888;
-            display: none;
-        }
-
-        /* ========== BOTÓN FLOTANTE WHATSAPP ========== */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: #25D366;
-            border-radius: 50px;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            z-index: 100;
-            transition: all 0.2s;
-        }
-
-        .whatsapp-float:hover {
-            background: #128C7E;
-            transform: scale(1.05);
-        }
-
-        /* ========== FOOTER ========== */
-        .footer {
-            background: #0a0a0a;
-            color: #888;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            font-size: 0.8rem;
-        }
-
-        .footer a {
-            color: #ff3b3b;
-            text-decoration: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .disenos-grid {
-                gap: 1.2rem;
-            }
-            .whatsapp-float span {
-                display: none;
-            }
-            .whatsapp-float {
-                padding: 12px;
-                border-radius: 50%;
-            }
-        }
-    </style>
+/* focus visibility */
+a:focus-visible, button:focus-visible{
+  outline:2px solid var(--chechena-2);
+  outline-offset:2px;
+}
+</style>
 </head>
-<body>
+<body data-audience="prospecto">
 
-    <!-- ========== HEADER ========== -->
-    <header class="header">
-        <a href="index.html" class="logo">⚡ CHECHENA SHIRTS</a>
-        <div class="nav-links">
-            <a href="index.html">INICIO</a>
-            <a href="nuevos-disenos.html" style="color: #ff3b3b;">✨ NUEVOS DISEÑOS</a>
-            <a href="index.html#megapacks">MEGAPACKS</a>
-            <a href="index.html#contacto">CONTACTO</a>
-        </div>
-    </header>
+<header class="header">
+  <a href="index.html" class="logo"><span class="bolt">⚡</span> CHECHENA SHIRTS</a>
+  <nav class="nav-links">
+    <a href="index.html">INICIO</a>
+    <a href="nuevos-disenos.html" class="is-active">✨ NUEVOS DISEÑOS</a>
+    <a href="index.html#megapacks">MEGAPACKS</a>
+    <a href="index.html#contacto">CONTACTO</a>
+  </nav>
+</header>
 
-    <!-- ========== CONTENIDO PRINCIPAL ========== -->
-    <main class="container">
-        <div class="page-header">
-            <h1>✨ NUEVOS DISEÑOS ✨</h1>
-            <p>Diseños frescos que voy añadiendo a los Megapacks cada semana.<br>Contenido exclusivo para DTF, sublimación y serigrafía.</p>
-            <div class="update-badge">📅 ACTUALIZADO: MAYO 2026</div>
-        </div>
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow"><span class="dot"></span> CATÁLOGO EN VIVO · SE ACTUALIZA CADA SEMANA</span>
+    <h1>NUEVOS<span>DROPS</span></h1>
+    <p>Diseños frescos que se suman a los Megapacks sin costo extra para quienes ya están dentro. Listos para DTF, sublimación y serigrafía.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><span class="num fire">28</span><span class="lbl">Diseños totales</span></div>
+    <div class="stat"><span class="num">20</span><span class="lbl">Añadidos en junio</span></div>
+    <div class="stat"><span class="num">2</span><span class="lbl">Megapacks activos</span></div>
+    <div class="stat"><span class="num">0$</span><span class="lbl">Costo extra por update</span></div>
+  </div>
+</section>
 
-        <!-- FILTROS -->
-        <div class="filters">
-            <button class="filter-btn active" data-filter="todos">🔥 TODOS</button>
-            <button class="filter-btn" data-filter="chechena">⚡ MEGAPACK CHECHENA</button>
-            <button class="filter-btn" data-filter="ojito">🎁 MEGAPACK OJITO</button>
-        </div>
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">NUEVO: URBANO SEMITONO   🔥   NUEVO: DARCSPORTS HARLEY-DAVIDSON   🔥   NUEVO: ARTISTAS SEMITONO   🔥   NUEVO: MESSI   🔥   NUEVO: URBANO 2   🔥   NUEVO: SANTOS DREAM   🔥   NUEVO: KENIA OS 2026   🔥   NUEVO: JUGADORES MUNDIAL   🔥   NUEVO: GYM   🔥   NUEVO: GTA CELEBRIDADES   🔥   NUEVO: DARCSPORT NARUTO   🔥   NUEVO: ANIME SEMITONOS   🔥   NUEVO: NEXUSLNK   🔥   NUEVO: IRONDGRIND GYM   🔥   NUEVO: PACK ACUATICO   🔥   NUEVO: ANTISOCIAL X MUNDIAL   🔥   NUEVO: SHEIN   🔥   NUEVO: SEMITONOS PELICULA   🔥   NUEVO: THE BOYS 2   🔥   NUEVO: DRAKE ICEMAN   🔥   NUEVO: URBANCHEN   🔥   NUEVO: FUTBOL FUTBOLISTAS   🔥   NUEVO: TRIBE   🔥   NUEVO: TOY STORY 5   🔥   NUEVO: ANTISOCIAL X MUNDIAL   🔥   NUEVO: NEXUSLNK   🔥   NUEVO: GYM ANIMADO V1   🔥   NUEVO: DISEÑO DARK GYM   🔥   NUEVO: URBANO SEMITONO   🔥   NUEVO: DARCSPORTS HARLEY-DAVIDSON   🔥   NUEVO: ARTISTAS SEMITONO   🔥   NUEVO: MESSI   🔥   NUEVO: URBANO 2   🔥   NUEVO: SANTOS DREAM   🔥   NUEVO: KENIA OS 2026   🔥   NUEVO: JUGADORES MUNDIAL   🔥   NUEVO: GYM   🔥   NUEVO: GTA CELEBRIDADES   🔥   NUEVO: DARCSPORT NARUTO   🔥   NUEVO: ANIME SEMITONOS   🔥   NUEVO: NEXUSLNK   🔥   NUEVO: IRONDGRIND GYM   🔥   NUEVO: PACK ACUATICO   🔥   NUEVO: ANTISOCIAL X MUNDIAL   🔥   NUEVO: SHEIN   🔥   NUEVO: SEMITONOS PELICULA   🔥   NUEVO: THE BOYS 2   🔥   NUEVO: DRAKE ICEMAN   🔥   NUEVO: URBANCHEN   🔥   NUEVO: FUTBOL FUTBOLISTAS   🔥   NUEVO: TRIBE   🔥   NUEVO: TOY STORY 5   🔥   NUEVO: ANTISOCIAL X MUNDIAL   🔥   NUEVO: NEXUSLNK   🔥   NUEVO: GYM ANIMADO V1   🔥   NUEVO: DISEÑO DARK GYM   🔥   </div>
+</div>
 
-        <!-- GRID DE DISEÑOS -->
-        <div class="disenos-grid" id="disenosGrid">
-            
-            <!-- ========================================== -->
-            <!-- 🟢 AQUÍ VAN TODOS TUS DISEÑOS NUEVOS        -->
-            <!-- ========================================== -->
-            
-            <!-- TARJETA 1 - MEGAPACK CHECHENA -->
-            <div class="card-diseno" data-pack="ojito">
+<main class="container">
+
+  <div class="audience">
+    <p class="audience-q">¿Ya tienes un Megapack?</p>
+    <div class="audience-switch" role="group" aria-label="Selecciona tu situación">
+      <button class="audience-btn active" data-mode="prospecto" onclick="setAudience('prospecto')">🛒 AÚN NO TENGO</button>
+      <button class="audience-btn" data-mode="cliente" onclick="setAudience('cliente')">✅ YA SOY CLIENTE</button>
+    </div>
+    <p class="audience-note" id="audienceNote">Estos diseños y muchos más vienen incluidos al comprar tu Megapack. Cero descargas sueltas — todo el catálogo completo.</p>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="todos">🔥 TODOS</button>
+    <button class="filter-btn" data-filter="chechena">⚡ MEGAPACK CHECHENA</button>
+    <button class="filter-btn" data-filter="ojito">🎁 MEGAPACK OJITO</button>
+  </div>
+
+  <div class="disenos-grid" id="disenosGrid">
+
+            <article class="card-diseno tier-clasico" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <!-- 🔽 CAMBIA ESTA URL por la imagen real de tu diseño -->
-                    <img src="ACT 1.png" alt="Diseño Dark Gym">
+                    <img src="ACT 1.png" alt="Diseño Diseño Dark Gym" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🔥 AÑADIDO MAYO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK OJITO</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO MAYO 2026</span>
+                    </div>
                     <h3>Diseño Dark Gym</h3>
                     <p>DiseñoS en la carpeta de GYM MARCAS.</p>
-                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22Dise%C3%B1o%20Dark%20Gym%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-                    <!-- TARJETA 6 - MEGAPACK OJITO -->
-            <div class="card-diseno" data-pack="ojito">
+            <article class="card-diseno tier-clasico" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="ACT 4.png" alt="Diseño INRI">
+                    <img src="ACT 4.png" alt="Diseño GYM ANIMADO V1" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🙏 AÑADIDO MAYO 2026</div>
-                    <span class="badge-pack ojito">MEGAPACK OJITO</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO MAYO 2026</span>
+                    </div>
                     <h3>GYM ANIMADO V1</h3>
                     <p>DiseñoS en la carpeta de GYM MARCAS.</p>
-                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22GYM%20ANIMADO%20V1%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-                                <!-- TARJETA 6 - MEGAPACK OJITO -->
-            <div class="card-diseno" data-pack="ojito">
+            <article class="card-diseno tier-clasico" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="A.png" alt="Diseño INRI">
+                    <img src="A.png" alt="Diseño Nexuslnk" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🙏 AÑADIDO 30 MAYO 2026</div>
-                    <span class="badge-pack ojito">MEGAPACK OJITO</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO 30 MAYO 2026</span>
+                    </div>
                     <h3>Nexuslnk</h3>
                     <p>DiseñoS en la carpeta de GYM MARCAS.</p>
-                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22Nexuslnk%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-                                            <!-- TARJETA 6 - MEGAPACK OJITO -->
-            <div class="card-diseno" data-pack="ojito">
+            <article class="card-diseno tier-clasico" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="4.png" alt="Diseño INRI">
+                    <img src="4.png" alt="Diseño ANTISOCIAL X MUNDIAL" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🙏 AÑADIDO 30 MAYO 2026</div>
-                    <span class="badge-pack ojito">MEGAPACK OJITO</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO 30 MAYO 2026</span>
+                    </div>
                     <h3>ANTISOCIAL X MUNDIAL</h3>
                     <p>🔥 Estos diseños son solo algunos de los muchos que encontrarás en el Megapack.</p>
-                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22ANTISOCIAL%20X%20MUNDIAL%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-                        <div class="card-diseno" data-pack="ojito">
+            <article class="card-diseno tier-reciente" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="OO1.png" alt="Diseño INRI">
+                    <img src="OO1.png" alt="Diseño Toy Story 5" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🙏 AÑADIDO 19 DE JUNIO 2026</div>
-                    <span class="badge-pack ojito">MEGAPACK OJITO</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO 19 DE JUNIO 2026</span>
+                    </div>
                     <h3>Toy Story 5</h3>
                     <p>🔥 Estos diseños son solo algunos de los muchos que encontrarás en el Megapack.</p>
-                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22Toy%20Story%205%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-                                    <div class="card-diseno" data-pack="ojito">
+            <article class="card-diseno tier-reciente" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="OO2.png" alt="Diseño INRI">
+                    <img src="OO2.png" alt="Diseño TRIBE" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🙏 AÑADIDO 19 DE JUNIO 2026</div>
-                    <span class="badge-pack ojito">MEGAPACK OJITO</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO 19 DE JUNIO 2026</span>
+                    </div>
                     <h3>TRIBE</h3>
                     <p>🔥 Estos diseños son solo algunos de los muchos que encontrarás en el Megapack.</p>
-                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22TRIBE%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>                                    <div class="card-diseno" data-pack="ojito">
+            </article>
+
+            <article class="card-diseno tier-reciente" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="OO3.png" alt="Diseño INRI">
+                    <img src="OO3.png" alt="Diseño FUTBOL FUTBOLISTAS" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🙏 AÑADIDO 19 DE JUNIO 2026</div>
-                    <span class="badge-pack ojito">MEGAPACK OJITO</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO 19 DE JUNIO 2026</span>
+                    </div>
                     <h3>FUTBOL FUTBOLISTAS</h3>
                     <p>🔥 Estos diseños son solo algunos de los muchos que encontrarás en el Megapack.</p>
-                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22FUTBOL%20FUTBOLISTAS%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-
-            <!-- TARJETA 2 - MEGAPACK CHECHENA -->
-            <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-reciente" data-pack="ojito">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="ACT 2.png" alt="Diseño Youngla x Demon Slayer">
+                    <img src="URBANCHEN.png" alt="Diseño URBANCHEN" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">⚡ AÑADIDO MAYO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-ojito">🎁 MEGAPACK OJITO</span>
+                        <span class="fecha">AÑADIDO 19 DE JUNIO 2026</span>
+                    </div>
+                    <h3>URBANCHEN</h3>
+                    <p>🔥 Estos diseños son solo algunos de los muchos que encontrarás en el Megapack.</p>
+                    <a href="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20Megapack%20OJITO"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20OJITO.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22URBANCHEN%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
+                </div>
+            </article>
+
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
+                <div class="card-image">
+                    <img src="ACT 2.png" alt="Diseño DRAKE ICEMAN" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
+                </div>
+                <div class="card-perf" aria-hidden="true"></div>
+                <div class="card-info">
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO MAYO 2026</span>
+                    </div>
                     <h3>DRAKE ICEMAN</h3>
                     <p>DISEÑOS EN PNG.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22DRAKE%20ICEMAN%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-            <!-- TARJETA 3 - MEGAPACK CHECHENA -->
-            <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="ACT 3.png" alt="Diseño Calaveras Urbanas">
+                    <img src="ACT 3.png" alt="Diseño THE BOYS 2" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO MAYO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO MAYO 2026</span>
+                    </div>
                     <h3>THE BOYS 2</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22THE%20BOYS%202%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-
-                        <!-- TARJETA 3 - MEGAPACK CHECHENA -->
-            <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="B.png" alt="Diseño Calaveras Urbanas">
+                    <img src="B.png" alt="Diseño SEMITONOS PELICULA" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 30 MAYO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 30 MAYO 2026</span>
+                    </div>
                     <h3>SEMITONOS PELICULA</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22SEMITONOS%20PELICULA%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-                                    <!-- TARJETA 3 - MEGAPACK CHECHENA -->
-            <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C.png" alt="Diseño SHEIN" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 30 MAYO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 30 MAYO 2026</span>
+                    </div>
                     <h3>SHEIN</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22SHEIN%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-                                                <!-- TARJETA 3 - MEGAPACK CHECHENA -->
-            <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="4.png" alt="Diseño Calaveras Urbanas">
+                    <img src="4.png" alt="Diseño ANTISOCIAL X MUNDIAL" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 05 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>ANTISOCIAL X MUNDIAL
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 05 JUNIO 2026</span>
+                    </div>
+                    <h3>ANTISOCIAL X MUNDIAL</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22ANTISOCIAL%20X%20MUNDIAL%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-                                                            <!-- TARJETA 3 - MEGAPACK CHECHENA -->
-            <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="6.png" alt="Diseño Calaveras Urbanas">
+                    <img src="6.png" alt="Diseño PACK ACUATICO" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 05 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>PACK ACUATICO
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 05 JUNIO 2026</span>
+                    </div>
+                    <h3>PACK ACUATICO</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22PACK%20ACUATICO%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-                        <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="7.png" alt="Diseño Calaveras Urbanas">
+                    <img src="7.png" alt="Diseño IRONDGRIND GYM" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 05 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>IRONDGRIND GYM
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 05 JUNIO 2026</span>
+                    </div>
+                    <h3>IRONDGRIND GYM</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22IRONDGRIND%20GYM%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-
-                                    <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-clasico" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="5.png" alt="Diseño Calaveras Urbanas">
+                    <img src="5.png" alt="Diseño NEXUSLNK" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-clasico">✅ YA DISPONIBLE</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 05 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>NEXUSLNK
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 05 JUNIO 2026</span>
+                    </div>
+                    <h3>NEXUSLNK</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22NEXUSLNK%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-                                    <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C1.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C1.png" alt="Diseño ANIME SEMITONOS" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>ANIME SEMITONOS
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>ANIME SEMITONOS</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22ANIME%20SEMITONOS%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
-                                                <div class="card-diseno" data-pack="chechena">
+            </article>
+
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C2.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C2.png" alt="Diseño DARCSPORT NARUTO" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>DARCSPORT NARUTO
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>DARCSPORT NARUTO</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22DARCSPORT%20NARUTO%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
-                                                <div class="card-diseno" data-pack="chechena">
+            </article>
+
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C3.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C3.png" alt="Diseño GTA CELEBRIDADES" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>GTA CELEBRIDADES
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>GTA CELEBRIDADES</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22GTA%20CELEBRIDADES%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
-                                                <div class="card-diseno" data-pack="chechena">
+            </article>
+
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C4.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C4.png" alt="Diseño GYM" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>GYM
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>GYM</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22GYM%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
-                                                            <div class="card-diseno" data-pack="chechena">
+            </article>
+
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C5.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C5.png" alt="Diseño JUGADORES MUNDIAL" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>JUGADORES MUNDIAL
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>JUGADORES MUNDIAL</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22JUGADORES%20MUNDIAL%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
-                                                            <div class="card-diseno" data-pack="chechena">
+            </article>
+
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C6.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C6.png" alt="Diseño kenia os 2026" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>kenia os 2026
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>kenia os 2026</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22kenia%20os%202026%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
-                                                            <div class="card-diseno" data-pack="chechena">
+            </article>
+
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C7.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C7.png" alt="Diseño SANTOS DREAM" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>SANTOS DREAM
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>SANTOS DREAM</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22SANTOS%20DREAM%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
+            </article>
 
-                                                                        <div class="card-diseno" data-pack="chechena">
+            <article class="card-diseno tier-reciente" data-pack="chechena">
+                <div class="tag-punch"></div>
                 <div class="card-image">
-                    <img src="C8.png" alt="Diseño Calaveras Urbanas">
+                    <img src="C8.png" alt="Diseño urbano 2" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-reciente">✨ NUEVO ESTA SEMANA</span>
                 </div>
+                <div class="card-perf" aria-hidden="true"></div>
                 <div class="card-info">
-                    <div class="fecha">🚀 AÑADIDO 19 JUNIO 2026</div>
-                    <span class="badge-pack chechena">MEGAPACK CHECHENA</span>
-                    <h3>urbano 2
-                    </h3>
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 19 JUNIO 2026</span>
+                    </div>
+                    <h3>urbano 2</h3>
                     <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
-                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa">
-                        💬 QUIERO INFORMACIÓN DEL MEGAPACK
-                    </a>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22urbano%202%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
                 </div>
-            </div>
-            <!-- ========================================== -->
-            <!-- 🔵 COPIA ESTE BLOQUE para añadir más diseños -->
-            <!-- ========================================== -->
-            
-        </div>
+            </article>
 
-        <!-- MENSAJE SIN RESULTADOS (lo muestra el filtro si no hay) -->
-        <div class="no-results" id="noResults">
-            🔍 No hay diseños en esta categoría. ¡Pronto añadiremos más!
-        </div>
+            <article class="card-diseno tier-nuevo" data-pack="chechena">
+                <div class="tag-punch"></div>
+                <div class="card-image">
+                    <img src="MESSI.png" alt="Diseño MESSI" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-nuevo">🔥 RECIÉN AÑADIDO</span>
+                </div>
+                <div class="card-perf" aria-hidden="true"></div>
+                <div class="card-info">
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 25 JUNIO 2026</span>
+                    </div>
+                    <h3>MESSI</h3>
+                    <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22MESSI%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
+                </div>
+            </article>
 
-        <!-- BANNER FINAL -->
-        <div style="text-align: center; margin: 3rem 0 1rem; padding: 2rem; background: #f8f8f8; border-radius: 30px;">
-            <h3 style="margin-bottom: 0.5rem;">🔥 ¿Quieres tener acceso a TODOS estos diseños?</h3>
-            <p style="margin-bottom: 1.5rem;">Adquiere un Megapack y recibe actualizaciones constantes SIN costo extra.</p>
-            <a href="index.html" style="background: #111; color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600;">← VER MEGAPACKS EN INICIO</a>
-        </div>
-    </main>
+            <article class="card-diseno tier-nuevo" data-pack="chechena">
+                <div class="tag-punch"></div>
+                <div class="card-image">
+                    <img src="Artistas semitono.png" alt="Diseño Artistas semitono" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-nuevo">🔥 RECIÉN AÑADIDO</span>
+                </div>
+                <div class="card-perf" aria-hidden="true"></div>
+                <div class="card-info">
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 25 JUNIO 2026</span>
+                    </div>
+                    <h3>Artistas semitono</h3>
+                    <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22Artistas%20semitono%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
+                </div>
+            </article>
 
-    <!-- WHATSAPP FLOTANTE -->
-    <a href="https://wa.me/529212337934?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20de%20NUEVOS%20DISE%C3%91OS" class="whatsapp-float">
-        💬
-        <span>¿Dudas? Escríbenos</span>
-    </a>
+            <article class="card-diseno tier-nuevo" data-pack="chechena">
+                <div class="tag-punch"></div>
+                <div class="card-image">
+                    <img src="darcsports harley-davidson.png" alt="Diseño darcsports harley-davidson" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-nuevo">🔥 RECIÉN AÑADIDO</span>
+                </div>
+                <div class="card-perf" aria-hidden="true"></div>
+                <div class="card-info">
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 25 JUNIO 2026</span>
+                    </div>
+                    <h3>darcsports harley-davidson</h3>
+                    <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22darcsports%20harley-davidson%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
+                </div>
+            </article>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <p>&copy; 2026 Chechena Shirts</p>
-        <p style="margin-top: 0.5rem;">📧 <a href="mailto:contacto@chechenashirts.com">PURO CHECHENA SHIRTS</a> | 💬 Respuesta rápida por WhatsApp</p>
-    </footer>
+            <article class="card-diseno tier-nuevo" data-pack="chechena">
+                <div class="tag-punch"></div>
+                <div class="card-image">
+                    <img src="urbano semitono.png" alt="Diseño urbano semitono" loading="lazy">
+                    <div class="card-shine"></div>
+                    <span class="tier-ribbon tier-ribbon-nuevo">🔥 RECIÉN AÑADIDO</span>
+                </div>
+                <div class="card-perf" aria-hidden="true"></div>
+                <div class="card-info">
+                    <div class="card-info-top">
+                        <span class="badge-pack badge-chechena">⚡ MEGAPACK CHECHENA</span>
+                        <span class="fecha">AÑADIDO 25 JUNIO 2026</span>
+                    </div>
+                    <h3>urbano semitono</h3>
+                    <p>DISEÑOS EN PNG LISTOS PARA ESTAMPAR.</p>
+                    <a href="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena" class="btn-wa"
+                       data-href-prospecto="https://wa.me/52912337934?text=Info%20del%20Megapack%20Chechena"
+                       data-href-cliente="https://wa.me/52912337934?text=Hola%2C%20ya%20tengo%20el%20Megapack%20CHECHENA.%20Tengo%20una%20duda%20o%20no%20encuentro%20el%20dise%C3%B1o%20%22urbano%20semitono%22%2C%20%C2%BFme%20ayudas%3F"
+                       data-prospecto="💬 QUIERO INFO DEL MEGAPACK"
+                       data-cliente="❓ DUDAS / NO LO ENCUENTRO">💬 QUIERO INFO DEL MEGAPACK</a>
+                </div>
+            </article>
+  </div>
 
-    <!-- SCRIPT PARA FILTROS -->
-    <script>
-        // Selecciona todos los elementos
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.card-diseno');
-        const noResultsDiv = document.getElementById('noResults');
+  <div class="no-results" id="noResults">
+    🔍 No hay diseños en esta categoría. ¡Pronto añadiremos más!
+  </div>
 
-        function filterCards(pack) {
-            let visibleCount = 0;
-            
-            cards.forEach(card => {
-                const cardPack = card.getAttribute('data-pack');
-                if (pack === 'todos' || cardPack === pack) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+  <div class="banner">
+    <div class="banner-inner">
+      <h3 id="bannerTitle">🔥 ¿Quieres tener acceso a TODOS estos diseños?</h3>
+      <p id="bannerText">Adquiere un Megapack y recibe actualizaciones constantes sin costo extra, para siempre.</p>
+      <a href="index.html" class="banner-cta">← VER MEGAPACKS EN INICIO</a>
+    </div>
+  </div>
 
-            // Muestra u oculta el mensaje de "sin resultados"
-            if (visibleCount === 0) {
-                noResultsDiv.style.display = 'block';
-            } else {
-                noResultsDiv.style.display = 'none';
-            }
-        }
+</main>
 
-        // Agrega evento a cada botón de filtro
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Quita la clase 'active' de todos los botones
-                filterBtns.forEach(b => b.classList.remove('active'));
-                // Añade la clase 'active' al botón clickeado
-                btn.classList.add('active');
-                
-                const pack = btn.getAttribute('data-filter');
-                filterCards(pack);
-            });
-        });
-    </script>
+<a href="https://wa.me/529212337934?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20de%20NUEVOS%20DISE%C3%91OS" class="whatsapp-float">
+  💬 <span>¿Dudas? Escríbenos</span>
+</a>
+
+<footer class="footer">
+  <p>&copy; 2026 Chechena Shirts</p>
+  <p style="margin-top:0.5rem;">📧 <a href="mailto:contacto@chechenashirts.com">PURO CHECHENA SHIRTS</a> | 💬 Respuesta rápida por WhatsApp</p>
+</footer>
+
+<script>
+const filterBtns = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.card-diseno');
+const noResultsDiv = document.getElementById('noResults');
+
+function filterCards(pack){
+  let visibleCount = 0;
+  cards.forEach(card => {
+    const cardPack = card.getAttribute('data-pack');
+    if (pack === 'todos' || cardPack === pack){
+      card.style.display = 'block';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+  noResultsDiv.style.display = visibleCount === 0 ? 'block' : 'none';
+}
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterCards(btn.getAttribute('data-filter'));
+  });
+});
+
+const audienceCopy = {
+  prospecto: {
+    note: 'Estos diseños y muchos más vienen incluidos al comprar tu Megapack. Cero descargas sueltas — todo el catálogo completo.',
+    bannerTitle: '🔥 ¿Quieres tener acceso a TODOS estos diseños?',
+    bannerText: 'Adquiere un Megapack y recibe actualizaciones constantes sin costo extra, para siempre.'
+  },
+  cliente: {
+    note: '¿Tienes dudas sobre algún diseño o no lo encuentras en tu carpeta? Toca el botón de la tarjeta y te ayudamos por WhatsApp.',
+    bannerTitle: '✅ ¿Algo no aparece en tu Megapack?',
+    bannerText: 'Si tienes dudas o no encuentras un diseño que ya debería estar en tu carpeta, escríbenos y lo resolvemos al momento.'
+  }
+};
+
+function setAudience(mode){
+  document.body.setAttribute('data-audience', mode);
+  document.querySelectorAll('.audience-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
+  document.getElementById('audienceNote').textContent = audienceCopy[mode].note;
+  document.getElementById('bannerTitle').textContent = audienceCopy[mode].bannerTitle;
+  document.getElementById('bannerText').textContent = audienceCopy[mode].bannerText;
+  document.querySelectorAll('.btn-wa').forEach(btn => {
+    const text = mode === 'cliente' ? btn.getAttribute('data-cliente') : btn.getAttribute('data-prospecto');
+    const href = mode === 'cliente' ? btn.getAttribute('data-href-cliente') : btn.getAttribute('data-href-prospecto');
+    if (text) btn.textContent = text;
+    if (href) btn.setAttribute('href', href);
+  });
+}
+</script>
 </body>
 </html>
