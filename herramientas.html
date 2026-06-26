@@ -475,6 +475,80 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
   .tool-grid{grid-template-columns:1fr;}
   .hero-actions .btn{flex:1;justify-content:center;}
 }
+
+/* SOLO afecta a este badge */
+.badge-legend{
+    position: relative;
+    overflow: hidden;
+    color:#000000;
+    font-weight:800;
+    border:1px solid rgba(255,255,255,.25);
+
+    background:linear-gradient(
+        135deg,
+        #fff8b5 0%,
+        #ffd54a 20%,
+        #ffb300 45%,
+        #ffdd73 65%,
+        #fff6b0 100%
+    );
+
+    box-shadow:
+        0 0 8px rgba(255,210,0,.8),
+        0 0 18px rgba(255,180,0,.7),
+        0 0 35px rgba(255,190,0,.5);
+
+    animation:legendPulse 2s ease-in-out infinite;
+}
+
+.badge-legend::before{
+    content:"";
+    position:absolute;
+    top:-60%;
+    left:-60%;
+    width:45%;
+    height:220%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.95),
+        transparent
+    );
+    transform:rotate(25deg);
+    animation:legendShine 2.8s linear infinite;
+}
+
+.badge-legend::after{
+    content:"";
+    position:absolute;
+    inset:-4px;
+    border-radius:999px;
+    background:radial-gradient(circle,rgba(255,210,0,.45),transparent 70%);
+    filter:blur(10px);
+    z-index:-1;
+}
+
+@keyframes legendShine{
+    from{left:-70%;}
+    to{left:170%;}
+}
+
+@keyframes legendPulse{
+    0%,100%{
+        transform:scale(1);
+        box-shadow:
+            0 0 8px rgba(255,210,0,.8),
+            0 0 18px rgba(255,180,0,.7),
+            0 0 35px rgba(255,190,0,.5);
+    }
+    50%{
+        transform:scale(1.05);
+        box-shadow:
+            0 0 15px rgba(255,220,0,1),
+            0 0 30px rgba(255,170,0,.9),
+            0 0 55px rgba(255,220,0,.8);
+    }
+}
 </style>
 </head>
 <body>
@@ -614,7 +688,9 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="d-semitonos">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-halftone"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-popular">Popular</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+                          <div>
+            <span class="badge badge-popular badge-legend">🔥 Popular</span>
+        </div>
           </div>
           <div class="tcard-title">Semitonos Studio</div>
           <div class="tcard-sub">Halftone Generator</div>
@@ -630,12 +706,27 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div>
             <div class="tcard-meta"><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
-          <div class="tcard-title">Pedrería PRO</div>
+          <div class="tcard-title">Pedrería</div>
           <div class="tcard-sub">Rhinestone Studio</div>
           <p class="tcard-desc">Convierte imágenes en plantillas de alta precisión para rhinestones y pedrería en playeras.</p>
           <div class="tcard-actions">
             <a href="D.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7625845030661410069" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
+          </div>
+        </div>
+
+                <div class="tcard" data-id="d-pedreria">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div>
+            <div class="tcard-meta"><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+                        <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Pedrería PRO</div>
+          <div class="tcard-sub">Rhinestone Studio</div>
+          <p class="tcard-desc">Convierte imágenes en plantillas de alta precisión para rhinestones y pedrería en playeras.</p>
+          <div class="tcard-actions">
+            <a href="chechena_pedreria_pro.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+                        <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
           </div>
         </div>
 
@@ -656,7 +747,6 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="d-patrones">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-pattern"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Patrones de Sublimación</div>
           <div class="tcard-sub">Pattern Generator</div>
@@ -698,14 +788,13 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="d-texturas">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-frame"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Texturas Grunge</div>
           <div class="tcard-sub">Texturas para DTF</div>
           <p class="tcard-desc">Aplica texturas grunge a tus diseños para impresión en DTF con calidad profesional.</p>
           <div class="tcard-actions">
             <a href="Texturas para diseños.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
-            <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
+            <a href="https://www.tiktok.com/@chechena_shirts/video/7655575646273293589?is_from_webapp=1&sender_device=pc&web_id=7652820373969798663" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>VER TUTORIAL</a>
           </div>
         </div>
 
@@ -738,7 +827,9 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="ia-quitarfondo">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-wand"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-popular">Popular</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+                          <div>
+            <span class="badge badge-popular badge-legend">🔥 Popular</span>
+        </div>
           </div>
           <div class="tcard-title">Quitar Fondo</div>
           <div class="tcard-sub">AI Background Removal</div>
@@ -766,7 +857,9 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="ia-mejorar">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-wand"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-popular">Popular</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+                          <div>
+            <span class="badge badge-popular badge-legend">🔥 Popular</span>
+        </div>
           </div>
           <div class="tcard-title">Mejorar Calidad</div>
           <div class="tcard-sub">AI Upscaler · gratis hasta el 10/07/2026</div>
@@ -820,7 +913,9 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="p-armador">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-layout"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+                          <div>
+            <span class="badge badge-popular badge-legend">🔥 Popular</span>
+        </div>
           </div>
           <div class="tcard-title">Armador de Metro DTF</div>
           <div class="tcard-sub">Metro Pliego</div>
@@ -834,7 +929,9 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="p-analizador">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-scan"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+              <div>
+            <span class="badge badge-popular badge-legend">🔥 Popular</span>
+        </div>
           </div>
           <div class="tcard-title">Analizador DTF</div>
           <div class="tcard-sub">Revisión de archivos</div>
@@ -845,20 +942,45 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           </div>
         </div>
 
-        <div class="tcard" data-id="p-semitransparencias">
-          <div class="tcard-top">
-            <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-droplet"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-popular">Popular</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
-          </div>
-          <div class="tcard-title">Semitransparencias</div>
-          <div class="tcard-sub">Opacity Fixer</div>
-          <p class="tcard-desc">Prepara tus áreas semi-transparentes para que se impriman sin manchas.</p>
-          <div class="tcard-actions">
-            <a href="semitransparencias.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
-            <a href="https://www.tiktok.com/@chechena_shirts/video/7636198768865578261?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
-          </div>
+<div class="tcard" data-id="p-semitransparencias">
+    <div class="tcard-top">
+        <div class="tcard-icon">
+            <svg viewBox="0 0 24 24">
+                <use href="#i-droplet"/>
+            </svg>
         </div>
 
+        <div>
+            <span class="badge badge-popular badge-legend">🔥 Popular</span>
+        </div>
+    </div> <!-- Cierra tcard-top -->
+
+    <div class="tcard-title">Semitransparencias</div>
+    <div class="tcard-sub">Opacity Fixer</div>
+
+    <p class="tcard-desc">
+        Prepara tus áreas semi-transparentes para que se impriman sin manchas.
+    </p>
+
+    <div class="tcard-actions">
+        <a href="semitransparencias.html" class="tcard-btn-p">
+            Abrir Studio
+            <svg viewBox="0 0 24 24">
+                <use href="#i-arrow"/>
+            </svg>
+        </a>
+
+        <a href="https://www.tiktok.com/@chechena_shirts/video/7636198768865578261?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049"
+           target="_blank"
+           rel="noopener"
+           class="tcard-btn-s">
+            <svg viewBox="0 0 24 24">
+                <use href="#i-play"/>
+            </svg>
+            Ver guía
+        </a>
+    </div>
+</div>
         <div class="tcard" data-id="p-cambiarcolor">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-palette"/></svg></div>
@@ -876,28 +998,27 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="p-redimensionador">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-resize"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+           
           </div>
           <div class="tcard-title">Redimensionador de Imágenes</div>
           <div class="tcard-sub">Resize Studio</div>
           <p class="tcard-desc">Ajusta el tamaño y la resolución de tus diseños con precisión. Control total de unidades, DPI y proporciones.</p>
           <div class="tcard-actions">
             <a href="Redimensionador de imágenes.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
-            <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
+            <a href="https://www.tiktok.com/@chechena_shirts/video/7655576417865911572?is_from_webapp=1&sender_device=pc&web_id=7652820373969798663" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>VER TUTORIAL</a>
           </div>
         </div>
 
         <div class="tcard" data-id="p-reducirborde">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-crop"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
           </div>
           <div class="tcard-title">Reducir Borde</div>
           <div class="tcard-sub">Trim Transparente</div>
           <p class="tcard-desc">Elimina el espacio transparente alrededor de tus diseños PNG.</p>
           <div class="tcard-actions">
             <a href="chechena-shirts-reductor.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
-            <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
+            <a href="https://www.tiktok.com/@chechena_shirts/video/7655574169735679253?is_from_webapp=1&sender_device=pc&web_id=7652820373969798663" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>VER TUTORIAL</a>
           </div>
         </div>
 
@@ -972,7 +1093,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="m-batch">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-tshirt"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+      
           </div>
           <div class="tcard-title">Mockup Studio Batch</div>
           <div class="tcard-sub">Procesamiento masivo</div>
@@ -986,7 +1107,9 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="m-promo">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-tshirt"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-popular">Popular</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+                          <div>
+            <span class="badge badge-popular badge-legend">🔥 Popular</span>
+        </div>
           </div>
           <div class="tcard-title">Promo Maker</div>
           <div class="tcard-sub">Diseño con Fondo</div>
@@ -1040,7 +1163,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         <div class="tcard" data-id="u-conversor">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-convert"/></svg></div>
-            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+           
           </div>
           <div class="tcard-title">Conversor Universal</div>
           <div class="tcard-sub">PDF · SVG · PNG · JPG</div>
@@ -1117,9 +1240,27 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <p class="tcard-desc">Encuentra tu talla y visualiza tu diseño antes de comprar.</p>
           <div class="tcard-actions">
             <a href="GUÍA DE MEDIDAS Y DISEÑO´PRO.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="https://www.tiktok.com/@chechena_shirts/video/7655572642111589653?is_from_webapp=1&sender_device=pc&web_id=7652820373969798663" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>VER TUTORIAL</a>
+          </div>
+        </div>
+
+
+
+                <div class="tcard" data-id="u-guiatallaspro">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-ruler"/></svg></div>
+            <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div><div class="tcard-meta"><span class="badge badge-pro">Pro</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+          </div>
+          <div class="tcard-title">Guía de Tallas Doble Vista</div>
+          <div class="tcard-sub">muestra el diseño en ambos lados al mismo tiempo</div>
+          <p class="tcard-desc">Encuentra la talla ideal y visualiza tu diseño en la parte frontal y trasera antes de imprimir.</p>
+          <div class="tcard-actions">
+            <a href="chechena_guia_medidas_pro.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
           </div>
         </div>
+
+
 
         <div class="tcard" data-id="u-tony">
           <div class="tcard-top">

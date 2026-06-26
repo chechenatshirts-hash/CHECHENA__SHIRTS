@@ -1,0 +1,2158 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de Medidas PRO – Chechena Shirts</title>
+<meta name="description" content="Ajusta tus diseños a tamaño real sobre playeras, sudaderas y manga larga, y descárgalos listos para imprimir en DTF/DTG. Chechena Shirts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #f7ecd6; }
+</style>
+</head>
+<body>
+<!-- LIBRERÍA AÑADIDA PARA ZIP (jsPDF eliminado según requerimiento) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+.design-layer, .ghost-layer {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -webkit-touch-callout: none !important;
+    touch-action: none !important;
+}
+#mockup-container {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+@media screen and (max-width: 768px) {
+    .anti-zoom-input { font-size: 16px !important; }
+}
+
+.accordion-header {
+    background: #f0e9d8; padding: 18px 22px; cursor: pointer; display: flex;
+    justify-content: space-between; align-items: center; border-radius: 6px;
+    font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.15rem; color: #2b2117;
+    border: 1px solid #dccba9; transition: background 0.2s; margin-bottom: 5px;
+    text-transform: uppercase;
+}
+.accordion-header:hover { background: #ecdfc4; }
+.accordion-body {
+    padding: 22px; background: #fffaf0; border: 1px solid #dccba9;
+    border-radius: 6px; margin-bottom: 15px;
+}
+
+input[type=range] { -webkit-appearance: none; background: transparent; }
+input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #ecdfc4; border-radius: 4px; border: 1px solid #dccba9; }
+input[type=range]::-webkit-slider-thumb { 
+    height: 26px; width: 26px; border-radius: 50%; cursor: pointer; -webkit-appearance: none; margin-top: -10px; 
+    border: 3px solid #fffaf0; box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+#shirt-w-slider::-webkit-slider-thumb { background: #a1672e; }
+#shirt-h-slider::-webkit-slider-thumb { background: #c1583c; }
+#design-scale-slider::-webkit-slider-thumb { background: #2b2117; }
+#design-rotation-slider::-webkit-slider-thumb { background: #2b2117; }
+#zoom-slider::-webkit-slider-thumb { background: #a1672e; width: 20px; height: 20px; margin-top: -6px; }
+
+.size-btn { 
+    background: #fffaf0; border: 1px solid #dccba9; color: #4a3c2c; padding: 10px 18px; 
+    border-radius: 6px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.05rem; 
+    cursor: pointer; transition: 0.2s; flex-grow: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.02); text-align: center;
+}
+.size-btn:hover { background: #ecdfc4; color: #2b2117; }
+.active-size { background: #a1672e !important; color: #fffaf0 !important; border-color: #a1672e !important; }
+
+#btn-delete-layer:hover { background: #9c3f2c !important; box-shadow: 0 5px 15px rgba(230,0,0,0.3); }
+#btn-pan:hover, #btn-reset-zoom:hover { background: #ecdfc4 !important; }
+#download-btn:hover { background: #7a4e22 !important; box-shadow: 0 5px 15px rgba(0,85,255,0.4); }
+#btn-save-shirt:hover { background: #65805d !important; }
+label[for="upload-design"]:hover { background: #3a2f22 !important; }
+
+/* ESTILOS DE INTERRUPTORES TIPO PALANCA (Toggle Switches) */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+    flex-shrink: 0;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ddd0b8;
+    transition: .4s;
+    border-radius: 24px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+input:checked + .toggle-slider { background-color: #2b2117; }
+input:checked + .toggle-slider.red-accent { background-color: #c1583c; }
+input:checked + .toggle-slider.blue-accent { background-color: #a1672e; }
+input:checked + .toggle-slider:before { transform: translateX(24px); }
+.toggle-label-text {
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700; color: #3a2f22;
+}
+
+/* Animación para botón Cómo Medir (Ajustada a azul) */
+@keyframes pulseGlowBlue {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 85, 255, 0.7); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(0, 85, 255, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 85, 255, 0); }
+}
+.btn-como-medir-animate {
+    animation: pulseGlowBlue 1.5s infinite;
+}
+
+/* Animación Spinner */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.spinner {
+    display: inline-block; width: 18px; height: 18px;
+    border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+    border-top-color: #fffaf0; animation: spin 1s ease-in-out infinite;
+    vertical-align: middle; margin-right: 8px;
+}
+
+/* MEDIAS QUERIES ACTUALIZADAS PARA DISTRIBUCIÓN RESPONSIVA */
+@media (max-width: 1150px) {
+    .content-wrapper { flex-direction: column !important; align-items: stretch !important; gap: 20px; }
+    .center-column { order: 1; padding: 0 !important; }
+    .sec-canvas { border: none; box-shadow: none; min-height: auto !important;}
+    .sidebar-left { order: 2; width: 100% !important; max-width: 100% !important; border: none; padding: 0; background: transparent; box-shadow: none; }
+    .sidebar-right { order: 3; width: 100% !important; max-width: 100% !important; }
+}
+</style>
+
+<div id="studio-container" style="background: linear-gradient(180deg, #fbf3e3 0%, #f7ecd6 100%); color: #2b2117; font-family: 'Inter', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; box-sizing: border-box; position: relative; z-index: 1;">
+    
+    <div style="width: 100%; max-width: 1800px; margin-bottom: 22px; border-bottom: 2px solid #e8d9b8; padding-bottom: 18px; text-align: center;">
+        <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #a1672e;"></span>
+            <span style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 3px; text-transform: uppercase; color: #a1672e;">Guía de Medidas PRO</span>
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #a1672e;"></span>
+        </div>
+        <h1 style="font-family: 'Bebas Neue', cursive; font-size: 3.6rem; color: #2b2117; margin: 0; line-height: 1; letter-spacing: 2px;">CHECHENA <span style="color: #a1672e;">SHIRTS</span></h1>
+        <p style="margin: 6px 0 0 0; font-size: 1.05rem; font-weight: 600; color: #7a6a55; font-family: 'Inter', sans-serif;">Ajusta tus diseños a tamaño real y descárgalos listos para imprimir</p>
+    </div>
+
+    <!-- WRAPPER DIRECCIÓN ROW -->
+    <div class="content-wrapper" style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 30px; width: 100%; max-width: 1800px; justify-content: center; align-items: flex-start;">
+        
+        <!-- SIDEBAR IZQUIERDO: Diseño -->
+        <div class="sidebar sidebar-left" style="flex: 1; width: 100%; min-width: 320px; max-width: 380px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box;">
+            
+            <div style="background: #fffdf6; border-radius: 14px; border: 1px solid #e8d9b8; box-shadow: 0 4px 15px rgba(0,0,0,0.03); overflow: hidden;">
+                <div class="accordion-header" onclick="toggleAcc('acc-diseno', 'icon-diseno')" style="border: none; border-bottom: 1px solid #ecdfc4; border-radius: 0; margin: 0;">
+                    <span>Ajuste de diseño</span>
+                    <span id="icon-diseno">▲</span>
+                </div>
+                <div id="acc-diseno" class="accordion-body" style="display: block; border: none; padding: 25px;">
+                    
+                    <div id="layer-controls" style="opacity: 0.3; pointer-events: none; transition: opacity 0.3s ease; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center;">
+                            <label style="font-size: 1.1rem; font-weight: 700; color: #4a3c2c; font-family: 'Inter', sans-serif;">Tamaño del diseño</label>
+                            <span id="val-scale" style="font-family: 'Bebas Neue', cursive; color: #a1672e; font-size: 1.5rem;">0.0 cm</span>
+                        </div>
+                        <input type="range" id="design-scale-slider" min="5" max="100" step="0.1" value="20" style="width: 100%; accent-color: #2b2117; margin-bottom: 20px;">
+
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center;">
+                            <label style="font-size: 1.1rem; font-weight: 700; color: #4a3c2c; font-family: 'Inter', sans-serif;">Rotación</label>
+                            <span id="val-rotation" style="font-family: 'Bebas Neue', cursive; color: #a1672e; font-size: 1.5rem;">0°</span>
+                        </div>
+                        <input type="range" id="design-rotation-slider" min="-180" max="180" step="1" value="0" style="width: 100%; accent-color: #2b2117; margin-bottom: 18px;">
+
+                        <div class="toggle-container" style="padding-top: 5px; cursor: pointer;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="switch-envolver">
+                                <span class="toggle-slider blue-accent"></span>
+                            </label>
+                            <span class="toggle-label-text" style="color: #a1672e;">Envolver 360° este diseño</span>
+                        </div>
+                    </div>
+
+                    <label for="upload-design" style="display: block; width: 100%; background: #2b2117; color: #fffaf0; text-align: center; padding: 16px 0; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 10px;">
+                        + Añadir diseños PNG (Múltiples)
+                    </label>
+                    <input type="file" id="upload-design" accept="image/png" multiple style="display: none;">
+
+                    <button id="btn-delete-layer" style="width: 100%; background: #c1583c; border: none; color: white; padding: 14px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; border-radius: 6px; transition: 0.3s; margin-bottom: 25px; opacity: 0.3; pointer-events: none;">
+                        Eliminar selección
+                    </button>
+
+                    <div style="margin-bottom: 20px; border-top: 1px dashed #dccba9; padding-top: 20px;">
+                        <div class="toggle-container" style="margin-bottom: 10px; cursor: pointer;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="switch-bordes">
+                                <span class="toggle-slider red-accent"></span>
+                            </label>
+                            <span class="toggle-label-text" style="color: #7a6a55;">Cortar en bordes (Laterales)</span>
+                        </div>
+                        <div class="toggle-container" style="margin-bottom: 10px; cursor: pointer;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="switch-separar">
+                                <span class="toggle-slider" style=""></span>
+                            </label>
+                            <span class="toggle-label-text" style="color: #7a6a55;">Separar capas al exportar</span>
+                        </div>
+                        <p style="margin: 10px 0 0 0; font-size: 0.8rem; color: #7a6a55; font-family: 'Inter', sans-serif; line-height: 1.4;">*Al exportar se aplicará 1 cm de separación real entre cortes si marcas las opciones de corte. Con "Separar capas" los diseños envueltos se dividen en 2 archivos independientes para optimizar el DTF.</p>
+                    </div>
+
+                    <div style="border-top: 1px dashed #dccba9; padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <label style="font-size: 1rem; font-weight: 700; color: #4a3c2c; font-family: 'Inter', sans-serif;">Costo x metro DTF ($):</label>
+                            <input type="number" id="dtf-price" value="200" class="anti-zoom-input" style="width: 90px; padding: 8px; border: 1px solid #dccba9; border-radius: 4px; font-family: 'Inter', sans-serif; text-align: right; font-weight: 700; color: #a1672e; font-size: 1.1rem;">
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <label style="font-size: 0.9rem; font-weight: 700; color: #7a6a55; font-family: 'Inter', sans-serif;">Área a imprimir:</label>
+                            <span id="dtf-total-area" style="font-family: 'Bebas Neue', cursive; color: #7a6a55; font-size: 1.2rem;">0.0 cm²</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label style="font-size: 1.1rem; font-weight: 700; color: #2b2117; font-family: 'Inter', sans-serif;">Costo de impresión:</label>
+                            <span id="dtf-total-cost" style="font-family: 'Bebas Neue', cursive; color: #c1583c; font-size: 2rem;">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA CENTRAL: LIENZO PRINCIPAL Y PANEL DE DESCARGA -->
+        <div class="center-column" style="flex: 3; width: 100%; min-width: 320px; max-width: 100%; display: flex; flex-direction: column; gap: 20px;">
+            
+            <div class="sec-canvas" style="width: 100%; display: flex; justify-content: center; align-items: center; position: relative; background: #efe2c4; border-radius: 14px; border: 1px solid #e3d3ab; box-shadow: inset 0 0 25px rgba(43,33,23,0.04); box-sizing: border-box; overflow: hidden; z-index: 1;">
+                
+                <!-- CONTROLES ZOOM / PAN / RESET -->
+                <div style="position: absolute; bottom: 15px; left: 15px; z-index: 50; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.9); padding: 8px 12px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #e3d6bf;">
+                    <button id="btn-pan" style="background: transparent; border: 1px solid #dccba9; border-radius: 4px; padding: 4px 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;" title="Mover (Alt + Click)"><span style="font-size: 1.2rem;">✋</span></button>
+                    <button id="btn-reset-zoom" style="background: transparent; border: 1px solid #dccba9; border-radius: 4px; padding: 4px 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; font-weight: 700; font-size: 1.1rem;" title="Restablecer Zoom">⟲</button>
+                    <label style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700; color: #3a2f22; margin: 0 0 0 5px;">Zoom</label>
+                    <input type="range" id="zoom-slider" min="0.5" max="3" step="0.1" value="1" style="width: 100px; accent-color: #a1672e;">
+                    <span id="zoom-val" style="font-family: 'Bebas Neue', cursive; font-size: 1.1rem; color: #a1672e; font-weight: 700; min-width: 45px; text-align: right;">100%</span>
+                </div>
+
+                <!-- TOGGLE SISTEMA DE MEDIDAS (TIPO PALANCA) -->
+                <div style="position: absolute; top: 15px; left: 15px; z-index: 50;">
+                    <div class="toggle-container" style="background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #e3d6bf;">
+                        <span class="toggle-label-text" style="color: #a1672e;">CM</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="btn-unit-system-toggle">
+                            <span class="toggle-slider blue-accent"></span>
+                        </label>
+                        <span class="toggle-label-text">IN</span>
+                    </div>
+                </div>
+
+                <!-- CONTENEDOR SUPERIOR DERECHO: TOGGLES + GUARDAR PLAYERA -->
+                <div id="top-right-controls" style="position: absolute; top: 15px; right: 15px; z-index: 50; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                    <div style="display: none;" id="side-toggles-container">
+                        <button onclick="window.switchSide('front')" id="btn-front" style="background: #a1672e; color: #fffaf0; border: none; padding: 8px 16px; border-radius: 6px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s;">Frente</button>
+                        <button onclick="window.switchSide('back')" id="btn-back" style="background: #fffaf0; color: #3a2f22; border: 1px solid #dccba9; padding: 8px 16px; border-radius: 6px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s;">Espalda</button>
+                    </div>
+                    <!-- BOTÓN GUARDAR -->
+                    <button id="btn-save-shirt" style="background: #7c9473; color: white; border: none; padding: 8px 16px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1rem; border-radius: 6px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        💾 Guardar Playera 1
+                    </button>
+                </div>
+
+                <div id="workspace-viewport" style="width: 100%; height: 100%; min-height: 600px; overflow: hidden; position: relative; cursor: default;">
+                    <div id="mockup-container" style="position: relative; margin: 0 auto; width: 100%; max-width: 600px; aspect-ratio: 6 / 7; height: auto !important; overflow: visible; box-sizing: border-box; transform-origin: 0 0;">
+                        
+                        <!-- SVG PRINCIPAL (FRENTE) -->
+                        <svg id="dynamic-shirt" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none; overflow: visible;">
+                            <path id="path-perimeter" class="dynamic-fill-garment" fill="#fffaf0" stroke="none" vector-effect="non-scaling-stroke"/>
+                            
+                            <g id="group-playera">
+                                <path id="playera-seam-l" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="playera-seam-r" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <g id="playera-front-collar">
+                                    <path d="M 456 427 s 6 81.96 76 80.48" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 439.22 432.15 s 6.78 93.52 92.78 93.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 459.37 445.37 s 5.63 12.22 72.63 12.22" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 608 427 s -6 81.96 -76 80.48" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 624.78 432.15 s -6.78 93.52 -92.78 93.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 604.63 445.37 s -5.63 12.22 -72.63 12.22" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <g id="playera-back-collar" style="display: none;">
+                                    <path d="M 439.22 432.15 s 6.78 26.52 92.78 26.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 624.78 432.15 s -6.78 26.52 -92.78 26.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <path id="playera-outline" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                            </g>
+
+                            <g id="group-sudadera" style="display: none;">
+                                <path id="sudadera-seam-l" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="sudadera-seam-r" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <g id="sudadera-front-collar">
+                                    <path id="sudadera-pocket" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path id="sudadera-collar-l" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path id="sudadera-collar-r" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path class="dynamic-fill-hole" d="m662.5,331.5c-9.94.46-19.3,4.64-38,13-12.83,5.74-19.25,8.61-22,12-11.48,14.17-8.24,42.78,5,60,8.28,10.76,18.7,14.78,20,27,.42,3.97-.1,9,3,15,2.74,5.32,5.96,6.82,9,10,11.61,12.13,1.05,28.1,13,47,2.05,3.24,6.1,9.64,10,9,4.95-.82,5.36-12.27,12-36,4.25-15.19,6.37-22.79,10-28,7.87-11.32,15.15-11.94,20-24,1.25-3.1,2.53-7.45,6-14,3.1-5.86,3.33-4.76,6-10,5.41-10.61,5.92-17.98,6-21,.02-.83,0-1.02,0-2,0-16.47,5.71-23.89,4-31-1.5-6.26-9-9.5-24-16-17.29-7.49-26.8-11.61-40-11Z" fill="#2b2117"/>
+                                </g>
+                                <g id="sudadera-back-collar" style="display: none;">
+                                    <path id="sudadera-collar-b-l" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path id="sudadera-collar-b-r" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <path id="sudadera-outline" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+                            </g>
+
+                            <g id="group-mangalarga" style="display: none;">
+                                <path id="ml-seam-l" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="ml-seam-r" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <g id="ml-front-collar">
+                                    <path d="M 595.5 478.5 S 597.5 549.48 660 549.48 C 722.5 549.48 724.5 478.5 724.5 478.5" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 578.5 485.5 S 589.5 567.74 660 567.74 C 730.5 567.74 741.5 485.5 741.5 485.5" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 599.5 501.5 S 624.5 515.6 660 515.6" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 720.5 501.5 S 695.5 515.6 660 515.6" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <g id="ml-back-collar" style="display: none;">
+                                    <path d="M 578.5 485.5 S 606.5 512.5 660 512.5 S 741.5 485.5 741.5 485.5" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <path id="ml-sleeve-l" class="dynamic-fill-garment dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="ml-sleeve-r" class="dynamic-fill-garment dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="ml-outline" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+                            </g>
+                        </svg>
+
+                        <!-- SVG SECUNDARIO PARA ENVOLVER (ESPALDA, DERECHA) -->
+                        <svg id="dynamic-shirt-back-view" preserveAspectRatio="xMidYMid meet" style="width: 50%; height: 100%; position: absolute; top: 0; left: 50%; z-index: 1; pointer-events: none; overflow: visible; display: none;">
+                            <path id="path-perimeter-b" class="dynamic-fill-garment" fill="#fffaf0" stroke="none" vector-effect="non-scaling-stroke"/>
+                            
+                            <g id="group-playera-b">
+                                <path id="playera-seam-l-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="playera-seam-r-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <g id="playera-front-collar-b" style="display: none;">
+                                    <path d="M 456 427 s 6 81.96 76 80.48" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 439.22 432.15 s 6.78 93.52 92.78 93.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 459.37 445.37 s 5.63 12.22 72.63 12.22" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 608 427 s -6 81.96 -76 80.48" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 624.78 432.15 s -6.78 93.52 -92.78 93.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 604.63 445.37 s -5.63 12.22 -72.63 12.22" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <g id="playera-back-collar-b">
+                                    <path d="M 439.22 432.15 s 6.78 26.52 92.78 26.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 624.78 432.15 s -6.78 26.52 -92.78 26.52" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <path id="playera-outline-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                            </g>
+
+                            <g id="group-sudadera-b" style="display: none;">
+                                <path id="sudadera-seam-l-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="sudadera-seam-r-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <g id="sudadera-front-collar-b" style="display: none;">
+                                    <path id="sudadera-pocket-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path id="sudadera-collar-l-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path id="sudadera-collar-r-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path class="dynamic-fill-hole" d="m662.5,331.5c-9.94.46-19.3,4.64-38,13-12.83,5.74-19.25,8.61-22,12-11.48,14.17-8.24,42.78,5,60,8.28,10.76,18.7,14.78,20,27,.42,3.97-.1,9,3,15,2.74,5.32,5.96,6.82,9,10,11.61,12.13,1.05,28.1,13,47,2.05,3.24,6.1,9.64,10,9,4.95-.82,5.36-12.27,12-36,4.25-15.19,6.37-22.79,10-28,7.87-11.32,15.15-11.94,20-24,1.25-3.1,2.53-7.45,6-14,3.1-5.86,3.33-4.76,6-10,5.41-10.61,5.92-17.98,6-21,.02-.83,0-1.02,0-2,0-16.47,5.71-23.89,4-31-1.5-6.26-9-9.5-24-16-17.29-7.49-26.8-11.61-40-11Z" fill="#2b2117"/>
+                                </g>
+                                <g id="sudadera-back-collar-b">
+                                    <path id="sudadera-collar-b-l-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path id="sudadera-collar-b-r-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <path id="sudadera-outline-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+                            </g>
+
+                            <g id="group-mangalarga-b" style="display: none;">
+                                <path id="ml-seam-l-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="ml-seam-r-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <g id="ml-front-collar-b" style="display: none;">
+                                    <path d="M 595.5 478.5 S 597.5 549.48 660 549.48 C 722.5 549.48 724.5 478.5 724.5 478.5" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 578.5 485.5 S 589.5 567.74 660 567.74 C 730.5 567.74 741.5 485.5 741.5 485.5" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 599.5 501.5 S 624.5 515.6 660 515.6" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                    <path d="M 720.5 501.5 S 695.5 515.6 660 515.6" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <g id="ml-back-collar-b">
+                                    <path d="M 578.5 485.5 S 606.5 512.5 660 512.5 S 741.5 485.5 741.5 485.5" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                </g>
+                                <path id="ml-sleeve-l-b" class="dynamic-fill-garment dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="ml-sleeve-r-b" class="dynamic-fill-garment dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                                <path id="ml-outline-b" fill="none" class="dynamic-stroke" stroke-miterlimit="10" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+                            </g>
+                        </svg>
+
+                        <div id="design-wrapper" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 10;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL DE DESCARGA -->
+            <div id="download-panel-container" style="padding: 20px; background: #fffdf6; border-radius: 14px; border: 1px solid #e8d9b8; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                <div id="saved-shirts-list" style="margin-bottom: 15px; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700; color: #3a2f22; max-height: 120px; overflow-y: auto;">
+                    <!-- Las playeras guardadas aparecerán aquí -->
+                </div>
+
+                <!-- Acción principal: botón de descarga -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <button id="download-btn" style="width: 100%; max-width: 340px; background: #a1672e; color: #fffaf0; border: none; padding: 15px 28px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.15rem; cursor: pointer; transition: 0.3s; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,85,255,0.25);">
+                        ⬇️ Descargar diseños PNG
+                    </button>
+                    <label style="display: flex; align-items: center; gap: 7px; font-family: 'Inter', sans-serif; font-weight: 700; color: #6b5d4a; font-size: 0.9rem; cursor: pointer;">
+                        <input type="checkbox" id="switch-zip" style="width: 16px; height: 16px; accent-color: #a1672e;"> 📦 Comprimir en ZIP (Todas las prendas)
+                    </label>
+                </div>
+
+                <!-- Información de calidad centrada -->
+                <ul style="list-style: none; padding: 10px 0 0 0; margin: 0; font-family: 'Inter', sans-serif; font-size: 0.88rem; color: #8a7a64; font-weight: 600; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; border-top: 1px dashed #e3d6bf;">
+                    <li>✔️ Máxima calidad</li>
+                    <li>✔️ Tamaño real y Envolvencia</li>
+                    <li>✔️ 300 DPI reales</li>
+                </ul>
+            </div>
+            
+        </div>
+
+        <!-- SIDEBAR DERECHO: Prenda y Descargas -->
+        <div class="sidebar sidebar-right" style="flex: 1; width: 100%; min-width: 320px; max-width: 380px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box;">
+
+            <!-- PRENDA + COLOR siempre al inicio -->
+            <div style="background: #fffdf6; border-radius: 14px; border: 1px solid #e8d9b8; box-shadow: 0 4px 15px rgba(0,0,0,0.03); padding: 15px; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <select id="model-selector" style="flex: 1; padding: 10px 12px; background: #fffaf0; color: #2b2117; border: 1px solid #dccba9; border-radius: 6px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; outline: none;">
+                        <option value="playera">Playera estándar</option>
+                        <option value="sudadera">Sudadera / Hoodie</option>
+                        <option value="mangalarga">Camiseta manga larga</option>
+                    </select>
+                    <button id="btn-como-medir" title="¿Cómo medir mi playera?" style="width: 32px; height: 32px; flex-shrink: 0; background: transparent; color: #9c8a72; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.95rem; border-radius: 50%; border: 1.5px solid #d8c9ab; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;">?</button>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #fffaf0; padding: 10px 15px; border-radius: 6px; border: 1px solid #dccba9;">
+                    <label style="font-size: 1rem; font-weight: 700; color: #4a3c2c; margin: 0; font-family: 'Inter', sans-serif;">🎨 Color de la prenda</label>
+                    <input type="color" id="shirt-color-picker" value="#2b2117" style="cursor: pointer; border: 2px solid #2b2117; border-radius: 6px; background: transparent; width: 40px; height: 40px; padding: 2px;">
+                </div>
+            </div>
+
+            <div style="background: #fffdf6; border-radius: 14px; border: 1px solid #e8d9b8; box-shadow: 0 4px 15px rgba(0,0,0,0.03); overflow: hidden;">
+                <div class="accordion-header" onclick="toggleAcc('acc-prenda', 'icon-prenda')" style="border: none; border-bottom: 1px solid #ecdfc4; border-radius: 0; margin: 0;">
+                    <span>Tallas y medidas</span>
+                    <span id="icon-prenda">▲</span>
+                </div>
+                <div id="acc-prenda" class="accordion-body" style="display: block; border: none; padding: 25px;">
+
+                    <!-- TALLAS -->
+                    <div id="quick-sizes-playera" style="margin-bottom: 20px;">
+                        <label style="font-size: 1rem; font-weight: 700; color: #7a6a55; font-family: 'Inter', sans-serif; display: block; margin-bottom: 8px;">Tallas mujer:</label>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 15px;">
+                            <button class="size-btn" onclick="setShirtSize(43, 63, this)">CH</button>
+                            <button class="size-btn active-size" onclick="setShirtSize(47, 64, this)">M</button>
+                            <button class="size-btn" onclick="setShirtSize(52, 66, this)">G</button>
+                            <button class="size-btn" onclick="setShirtSize(54, 68, this)">EG</button>
+                            <button class="size-btn" onclick="setShirtSize(59, 73, this)">2EG</button>
+                        </div>
+                        <label style="font-size: 1rem; font-weight: 700; color: #7a6a55; font-family: 'Inter', sans-serif; display: block; margin-bottom: 8px;">Tallas hombre:</label>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <button class="size-btn" onclick="setShirtSize(47, 71, this)">CH</button>
+                            <button class="size-btn" onclick="setShirtSize(51, 73, this)">M</button>
+                            <button class="size-btn" onclick="setShirtSize(56, 76, this)">G</button>
+                            <button class="size-btn" onclick="setShirtSize(61, 78, this)">EG</button>
+                            <button class="size-btn" onclick="setShirtSize(66, 80, this)">2EG</button>
+                            <button class="size-btn" onclick="setShirtSize(71, 85, this)">3EG</button>
+                        </div>
+                    </div>
+
+                    <div id="quick-sizes-sudadera" style="display: none; margin-bottom: 20px;">
+                        <label style="font-size: 1rem; font-weight: 700; color: #7a6a55; font-family: 'Inter', sans-serif; display: block; margin-bottom: 8px;">Tallas sudadera (Unisex):</label>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <button class="size-btn active-size" onclick="setShirtSize(47, 67.3, this)">XS</button>
+                            <button class="size-btn" onclick="setShirtSize(52.1, 69.9, this)">S</button>
+                            <button class="size-btn" onclick="setShirtSize(57.2, 72.4, this)">M</button>
+                            <button class="size-btn" onclick="setShirtSize(62.2, 74.9, this)">L</button>
+                            <button class="size-btn" onclick="setShirtSize(67.3, 77.5, this)">XL</button>
+                            <button class="size-btn" onclick="setShirtSize(72.4, 80.0, this)">XXL</button>
+                            <button class="size-btn" onclick="setShirtSize(77.5, 82.6, this)">3XL</button>
+                            <button class="size-btn" onclick="setShirtSize(82.6, 85.1, this)">4XL</button>
+                        </div>
+                    </div>
+
+                    <div id="quick-sizes-mangalarga" style="display: none; margin-bottom: 20px;">
+                        <label style="font-size: 1rem; font-weight: 700; color: #7a6a55; font-family: 'Inter', sans-serif; display: block; margin-bottom: 8px;">Tallas manga larga (Unisex):</label>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <button class="size-btn" onclick="setShirtSize(46, 70, this)">CH</button>
+                            <button class="size-btn active-size" onclick="setShirtSize(51, 73, this)">M</button>
+                            <button class="size-btn" onclick="setShirtSize(56, 76, this)">G</button>
+                            <button class="size-btn" onclick="setShirtSize(61, 78, this)">EG</button>
+                            <button class="size-btn" onclick="setShirtSize(65, 82, this)">2EG</button>
+                        </div>
+                    </div>
+
+                    <!-- ANCHO Y LARGO -->
+                    <div style="margin-bottom: 15px; border-top: 1px dashed #dccba9; padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <label style="font-size: 1.1rem; font-weight: 700; color: #a1672e; font-family: 'Inter', sans-serif;">Ancho</label>
+                            <span id="val-w" style="font-family: 'Bebas Neue', cursive; color: #2b2117; font-size: 1.5rem;">47.0 cm</span>
+                        </div>
+                        <input type="range" id="shirt-w-slider" min="43" max="85" value="47" step="0.1" style="width: 100%; accent-color: #a1672e;">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <label style="font-size: 1.1rem; font-weight: 700; color: #c1583c; font-family: 'Inter', sans-serif;">Largo</label>
+                            <span id="val-h" style="font-family: 'Bebas Neue', cursive; color: #2b2117; font-size: 1.5rem;">71.0 cm</span>
+                        </div>
+                        <input type="range" id="shirt-h-slider" min="63" max="100" value="71" step="0.1" style="width: 100%; accent-color: #c1583c;">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- VENTANA MODAL CÓMO MEDIR -->
+<div id="como-medir-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: #fffaf0; padding: 25px; border-radius: 12px; position: relative; max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <button id="close-modal-btn" style="position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: 700; color: #3a2f22; background: transparent; border: none; cursor: pointer;">✖</button>
+        <h2 style="font-family: 'Inter', sans-serif; margin-top: 0; color: #2b2117;">Guía de Medición</h2>
+        <img src="https://cdn.shopify.com/s/files/1/0941/6920/3057/files/playera_medida.png?v=1778221523" style="max-width: 100%; max-height: 70vh; border-radius: 8px;" />
+    </div>
+</div>
+
+<canvas id="crop-canvas" style="display: none;"></canvas>
+<canvas id="export-canvas" style="display: none;"></canvas>
+<script>
+(function() {
+    const modelSelector = document.getElementById('model-selector');
+    const shirtWInput = document.getElementById('shirt-w-slider');
+    const shirtHInput = document.getElementById('shirt-h-slider');
+    const colorPicker = document.getElementById('shirt-color-picker');
+    const designScaleSlider = document.getElementById('design-scale-slider');
+    const designRotationSlider = document.getElementById('design-rotation-slider');
+    const valScaleText = document.getElementById('val-scale');
+    const mockupContainer = document.getElementById('mockup-container');
+    const workspaceViewport = document.getElementById('workspace-viewport');
+    const uploadInput = document.getElementById('upload-design');
+    const downloadBtn = document.getElementById('download-btn');
+    const btnDeleteLayer = document.getElementById('btn-delete-layer');
+    const switchEnvolver = document.getElementById('switch-envolver');
+    const designWrapper = document.getElementById('design-wrapper');
+    const dynamicShirtSvg = document.getElementById('dynamic-shirt');
+    const dynamicShirtBackSvg = document.getElementById('dynamic-shirt-back-view');
+    const dtfPriceInput = document.getElementById('dtf-price');
+    const studioContainer = document.getElementById('studio-container');
+    
+    // --- NUEVAS VARIABLES DE CONTROL ---
+    let isMetric = true;
+    const btnUnitSystemToggle = document.getElementById('btn-unit-system-toggle');
+    const btnResetZoom = document.getElementById('btn-reset-zoom');
+    const btnComoMedir = document.getElementById('btn-como-medir');
+    const modalComoMedir = document.getElementById('como-medir-modal');
+    const btnCloseModal = document.getElementById('close-modal-btn');
+    const btnSaveShirt = document.getElementById('btn-save-shirt');
+    const savedShirtsList = document.getElementById('saved-shirts-list');
+    const switchZip = document.getElementById('switch-zip');
+    
+    let savedShirtsExports = [];
+    let shirtCounter = 1;
+    let editingShirtData = null; // { id, div } — set when restoring a saved shirt to edit
+
+    // Utilidad para formatear unidades (Métrico vs Inglés)
+    function formatUnit(cmVal) {
+        return isMetric ? `${cmVal.toFixed(1)} cm` : `${(cmVal / 2.54).toFixed(1)} in`;
+    }
+
+    // Helper Nombre Dinámico
+    function getModelName() {
+        if(currentModel === 'playera') return 'Playera';
+        if(currentModel === 'sudadera') return 'Sudadera';
+        if(currentModel === 'mangalarga') return 'Manga Larga';
+        return 'Prenda';
+    }
+
+    if (btnUnitSystemToggle) {
+        btnUnitSystemToggle.addEventListener('change', (e) => {
+            isMetric = !e.target.checked;
+            drawGeometry();
+            if (activeLayerId) highlightActiveLayer();
+        });
+    }
+
+    if (btnComoMedir) {
+        btnComoMedir.addEventListener('click', () => {
+            btnComoMedir.classList.remove('btn-como-medir-animate');
+            btnComoMedir.style.background = '#fffaf0';
+            btnComoMedir.style.color = '#2b2117';
+            btnComoMedir.style.borderColor = '#dccba9';
+            modalComoMedir.style.display = 'flex';
+        });
+    }
+    if (btnCloseModal) {
+        btnCloseModal.addEventListener('click', () => {
+            modalComoMedir.style.display = 'none';
+        });
+    }
+
+    // Zoom & Pan Elements
+    const zoomSlider = document.getElementById('zoom-slider');
+    const zoomVal = document.getElementById('zoom-val');
+    const btnPan = document.getElementById('btn-pan');
+    
+    let currentZoom = 1;
+    let panX = 0, panY = 0;
+    let isPanning = false, startPanX = 0, startPanY = 0;
+    let isHandActive = false;
+
+    function updateTransform() {
+        mockupContainer.style.transform = `matrix(${currentZoom}, 0, 0, ${currentZoom}, ${panX}, ${panY})`;
+    }
+
+    if (btnResetZoom) {
+        btnResetZoom.addEventListener('click', () => {
+            currentZoom = 1; panX = 0; panY = 0;
+            zoomSlider.value = 1; zoomVal.innerText = '100%';
+            updateTransform();
+        });
+    }
+
+    btnPan.addEventListener('click', () => {
+        isHandActive = !isHandActive;
+        btnPan.style.background = isHandActive ? '#a1672e' : 'transparent';
+        btnPan.style.color = isHandActive ? '#fffaf0' : '#2b2117';
+        workspaceViewport.style.cursor = isHandActive ? 'grab' : 'default';
+    });
+
+    workspaceViewport.addEventListener('mousedown', (e) => {
+        if (!isPanning && !e.altKey && !isHandActive) {
+            const rect = mockupContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            currentSide = (x > rect.width / 2) ? 'back' : 'front';
+        }
+
+        if (e.altKey || isHandActive || e.button === 1) {
+            isPanning = true;
+            startPanX = e.clientX - panX;
+            startPanY = e.clientY - panY;
+            workspaceViewport.style.cursor = 'grabbing';
+            e.preventDefault();
+        }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (isPanning) {
+            panX = e.clientX - startPanX;
+            panY = e.clientY - startPanY;
+            updateTransform();
+        }
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (isPanning) {
+            isPanning = false;
+            workspaceViewport.style.cursor = isHandActive ? 'grab' : 'default';
+        }
+    });
+
+    workspaceViewport.addEventListener('wheel', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            const zoomDirection = e.deltaY < 0 ? 1 : -1;
+            const zoomStep = 0.1;
+            let newZoom = currentZoom + (zoomDirection * zoomStep);
+            newZoom = Math.max(0.5, Math.min(newZoom, 3));
+
+            const rect = workspaceViewport.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            panX = mouseX - (mouseX - panX) * (newZoom / currentZoom);
+            panY = mouseY - (mouseY - panY) * (newZoom / currentZoom);
+
+            currentZoom = newZoom;
+            zoomSlider.value = currentZoom;
+            zoomVal.innerText = Math.round(currentZoom * 100) + '%';
+            updateTransform();
+        }
+    }, { passive: false });
+
+    zoomSlider.addEventListener('input', (e) => {
+        const newZoom = parseFloat(e.target.value);
+        const rect = workspaceViewport.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        panX = centerX - (centerX - panX) * (newZoom / currentZoom);
+        panY = centerY - (centerY - panY) * (newZoom / currentZoom);
+
+        currentZoom = newZoom;
+        zoomVal.innerText = Math.round(currentZoom * 100) + '%';
+        updateTransform();
+    });
+
+    const pPerimeter = document.getElementById('path-perimeter');
+    const playeraOutline = document.getElementById('playera-outline');
+    const pSeamL = document.getElementById('playera-seam-l');
+    const pSeamR = document.getElementById('playera-seam-r');
+    const groupPlayeraFront = document.getElementById('playera-front-collar');
+    const groupPlayeraBack = document.getElementById('playera-back-collar');
+
+    const sudaderaOutline = document.getElementById('sudadera-outline');
+    const sSeamL = document.getElementById('sudadera-seam-l');
+    const sSeamR = document.getElementById('sudadera-seam-r');
+    const sPocket = document.getElementById('sudadera-pocket');
+    const groupSudaderaFront = document.getElementById('sudadera-front-collar');
+    const groupSudaderaBack = document.getElementById('sudadera-back-collar');
+
+    const mlOutline = document.getElementById('ml-outline');
+    const mlSeamL = document.getElementById('ml-seam-l');
+    const mlSeamR = document.getElementById('ml-seam-r');
+    const mlSleeveL = document.getElementById('ml-sleeve-l');
+    const mlSleeveR = document.getElementById('ml-sleeve-r');
+    const groupMlFront = document.getElementById('ml-front-collar');
+    const groupMlBack = document.getElementById('ml-back-collar');
+    
+    let currentSide = 'front';
+    let currentModel = 'playera';
+    let layerCounter = 0;
+    let activeLayerId = null;
+    
+    const layersData = { 
+        playera: { front: [], back: [] }, 
+        sudadera: { front: [], back: [] },
+        mangalarga: { front: [], back: [] }
+    };
+    
+    const DPI_FACTOR = 118.11;
+
+    window.toggleAcc = function(id, iconId) {
+        const el = document.getElementById(id);
+        const icon = document.getElementById(iconId);
+        if(el.style.display === 'none') {
+            el.style.display = 'block';
+            icon.innerText = '▲';
+        } else {
+            el.style.display = 'none';
+            icon.innerText = '▼';
+        }
+    };
+
+    function updateCalculator() {
+        if (!dtfPriceInput) return;
+        const pricePerMeter = parseFloat(dtfPriceInput.value) || 0;
+        const DTF_AREA = 5800; 
+        let totalArea = 0;
+        
+        ['front', 'back'].forEach(side => {
+            layersData[currentModel][side].forEach(layer => {
+                totalArea += (layer.realW * layer.realH);
+            });
+        });
+        
+        const totalCost = (totalArea / DTF_AREA) * pricePerMeter;
+        
+        const areaEl = document.getElementById('dtf-total-area');
+        const costEl = document.getElementById('dtf-total-cost');
+        if (areaEl) areaEl.innerText = `${totalArea.toFixed(1)} cm²`;
+        if (costEl) costEl.innerText = `$${totalCost.toFixed(2)}`;
+    }
+    
+    if(dtfPriceInput) dtfPriceInput.addEventListener('input', updateCalculator);
+
+    function updateStrokeColor(hexColor) {
+        const c = hexColor.substring(1);
+        const rgb = parseInt(c, 16);
+        const r = (rgb >> 16) & 0xff;
+        const g = (rgb >>  8) & 0xff;
+        const b = (rgb >>  0) & 0xff;
+        const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        
+        const strokeColor = luma < 120 ? 'rgba(255, 255, 255, 0.85)' : '#2b2117';
+        const holeColor = luma < 120 ? '#241b13' : '#2b2117';
+        
+        document.querySelectorAll('.dynamic-stroke').forEach(s => s.setAttribute('stroke', strokeColor));
+        document.querySelectorAll('.dynamic-fill-garment').forEach(f => f.setAttribute('fill', hexColor));
+        document.querySelectorAll('.dynamic-fill-hole').forEach(h => h.setAttribute('fill', holeColor));
+    }
+    colorPicker.addEventListener('input', function(e) { updateStrokeColor(e.target.value); });
+
+    window.setShirtSize = function(w, h, btnElement) {
+        shirtWInput.value = w;
+        shirtHInput.value = h;
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active-size'));
+        if(btnElement) btnElement.classList.add('active-size');
+        drawGeometry();
+    };
+
+    function getMetrics() {
+        const valW = parseFloat(shirtWInput.value);
+        const valL = parseFloat(shirtHInput.value);
+        const valL_visual = valL + 5;
+
+        let minX, minY, viewW, viewH, torsoLeftSVG, torsoTopSVG, torsoWidthSVG, torsoHeightSVG, dw, dh;
+
+        if (currentModel === 'playera') {
+            dw = (valW - 47) * 4.5957; 
+            dh = (valL_visual - 71) * 10; 
+            minX = -150; viewW = 1450; minY = 0; viewH = 1650;
+            torsoWidthSVG = (748 + dw) - (316 - dw);
+            torsoHeightSVG = (1067 + dh) - 427; 
+            torsoLeftSVG = (316 - dw) - minX; 
+            torsoTopSVG = 427 - minY;
+
+        } else if (currentModel === 'sudadera') {
+            dw = (valW - 47) * 3.9361; 
+            dh = (valL_visual - 67.3) * 10; 
+            minX = 210; viewW = 900; minY = 140; viewH = 1100; 
+            torsoWidthSVG = (845 + dw) - (475 - dw);
+            torsoHeightSVG = (947 + dh) - 282.6;
+            torsoLeftSVG = (475 - dw) - minX;
+            torsoTopSVG = 282.6 - minY;
+            
+        } else if (currentModel === 'mangalarga') {
+            dw = (valW - 51) * 3.6274; 
+            dh = (valL_visual - 73) * 6.2; 
+            minX = 210; viewW = 900; minY = 300; viewH = 800;
+            torsoWidthSVG = (845 + dw) - (475 - dw);
+            torsoHeightSVG = (947 + dh) - 494;
+            torsoLeftSVG = (475 - dw) - minX;
+            torsoTopSVG = 494 - minY;
+        }
+
+        const realContainerW = mockupContainer.offsetWidth > 0 ? mockupContainer.offsetWidth : 1200;
+        const containerWpx = realContainerW * 0.50;
+        const containerHpx = mockupContainer.offsetHeight > 0 ? mockupContainer.offsetHeight : Math.round(containerWpx * (7/6)); 
+
+        const scale = Math.min(containerWpx / viewW, containerHpx / viewH);
+        const renderedW = viewW * scale;
+        const renderedH = viewH * scale;
+        const offsetX = (containerWpx - renderedW) / 2;
+        const offsetY = (containerHpx - renderedH) / 2;
+
+        const torsoWidthPx = torsoWidthSVG * scale;
+        const torsoHeightPx = torsoHeightSVG * scale;
+        const torsoLeftPx = offsetX + (torsoLeftSVG * scale);
+        const torsoTopPx = offsetY + (torsoTopSVG * scale);
+
+        let baseValW, baseTorsoWidthSVG;
+        if (currentModel === 'playera') { baseValW = 47; baseTorsoWidthSVG = 432; } 
+        else if (currentModel === 'sudadera') { baseValW = 47; baseTorsoWidthSVG = 370; } 
+        else if (currentModel === 'mangalarga') { baseValW = 51; baseTorsoWidthSVG = 370; }
+
+        const pxPerCmX = (baseTorsoWidthSVG * scale) / baseValW;
+        const pxPerCmY = pxPerCmX;
+
+        return { valW, valL, dw, dh, minX, minY, viewW, viewH, pxPerCmX, pxPerCmY, torsoLeftPx, torsoTopPx, torsoWidthPx, torsoHeightPx, offsetPct: 0.50 };
+    }
+
+    function updateAllLayersVisualScale() {
+        const metrics = getMetrics();
+        ['front', 'back'].forEach(side => {
+            layersData[currentModel][side].forEach(layer => {
+                const origWpx = layer.realW * metrics.pxPerCmX;
+                const origHpx = layer.realH * metrics.pxPerCmX;
+                const rotRad = (layer.rotation || 0) * Math.PI / 180;
+                const cosR = Math.abs(Math.cos(rotRad));
+                const sinR = Math.abs(Math.sin(rotRad));
+                layer.w = origWpx * cosR + origHpx * sinR;
+                layer.h = origWpx * sinR + origHpx * cosR;
+
+                if (layer.relCenterX !== undefined && layer.relCenterY !== undefined) {
+                    const centerX = metrics.torsoLeftPx + (layer.relCenterX * metrics.torsoWidthPx);
+                    const centerY = metrics.torsoTopPx + (layer.relCenterY * metrics.torsoHeightPx);
+                    layer.x = centerX - (layer.w / 2);
+                    layer.y = centerY - (layer.h / 2);
+                } else {
+                    layer.x = metrics.torsoLeftPx + (metrics.torsoWidthPx / 2) - (layer.w / 2);
+                    layer.y = metrics.torsoTopPx + (metrics.torsoHeightPx / 2.5) - (layer.h / 2);
+                }
+            });
+        });
+
+        renderLayers();
+    }
+
+    window.addEventListener('resize', () => { drawGeometry(); });
+
+    shirtWInput.addEventListener('input', drawGeometry);
+    shirtHInput.addEventListener('input', drawGeometry);
+
+    function drawGeometry() {
+        const valW = parseFloat(shirtWInput.value);
+        const valL = parseFloat(shirtHInput.value);
+        
+        document.getElementById('val-w').innerText = formatUnit(valW);
+        document.getElementById('val-h').innerText = formatUnit(valL);
+
+        const metrics = getMetrics();
+
+        mockupContainer.style.aspectRatio = '10 / 6';
+        mockupContainer.style.maxWidth = '100%';
+
+        dynamicShirtSvg.setAttribute('viewBox', `${metrics.minX} ${metrics.minY} ${metrics.viewW} ${metrics.viewH}`);
+        dynamicShirtBackSvg.setAttribute('viewBox', `${metrics.minX} ${metrics.minY} ${metrics.viewW} ${metrics.viewH}`);
+
+        dynamicShirtSvg.style.width = '50%';
+        dynamicShirtBackSvg.style.display = 'block';
+
+        if (currentModel === 'playera') {
+            document.getElementById('group-playera').style.display = 'block';
+            document.getElementById('group-sudadera').style.display = 'none';
+            document.getElementById('group-mangalarga').style.display = 'none';
+            document.getElementById('group-playera-b').style.display = 'block';
+            document.getElementById('group-sudadera-b').style.display = 'none';
+            document.getElementById('group-mangalarga-b').style.display = 'none';
+
+            const dw = metrics.dw;
+            const dh = metrics.dh;
+
+            const dynPerimeter = `
+                M 532 ${1067 + dh} L ${316 - dw} ${1067 + dh} L ${316 - dw} 692 L ${229 - dw} 710
+                L ${150 - dw} 571 L ${306 - dw} 481 L 456 426
+                C 482 442, 531 439.91, 531 439.91 L 532 439.87 C 532.5 439.89, 533 439.91, 533 439.91
+                C 533 439.91, 582 442, 608 426
+                L ${758 + dw} 481 L ${914 + dw} 571 L ${835 + dw} 710 L ${748 + dw} 692
+                L ${748 + dw} ${1067 + dh} Z
+            `;
+            pPerimeter.setAttribute('d', dynPerimeter);
+            playeraOutline.setAttribute('d', dynPerimeter);
+            pSeamL.setAttribute('d', `M ${305 - dw} 482 s 27 98 11 210`);
+            pSeamR.setAttribute('d', `M ${759 + dw} 482 s -27 98 -11 210`);
+            
+            document.getElementById('path-perimeter-b').setAttribute('d', dynPerimeter);
+            document.getElementById('playera-outline-b').setAttribute('d', dynPerimeter);
+            document.getElementById('playera-seam-l-b').setAttribute('d', `M ${305 - dw} 482 s 27 98 11 210`);
+            document.getElementById('playera-seam-r-b').setAttribute('d', `M ${759 + dw} 482 s -27 98 -11 210`);
+
+            groupPlayeraFront.style.display = 'block';
+            groupPlayeraBack.style.display = 'none';
+
+            document.getElementById('playera-front-collar-b').style.display = 'none';
+            document.getElementById('playera-back-collar-b').style.display = 'block';
+
+        } else if (currentModel === 'sudadera') {
+            document.getElementById('group-playera').style.display = 'none';
+            document.getElementById('group-sudadera').style.display = 'block';
+            document.getElementById('group-mangalarga').style.display = 'none';
+            document.getElementById('group-playera-b').style.display = 'none';
+            document.getElementById('group-sudadera-b').style.display = 'block';
+            document.getElementById('group-mangalarga-b').style.display = 'none';
+
+            const dw = metrics.dw; 
+            const dh = metrics.dh;
+
+            const sudBody = `
+                M 660 282.61
+                C 642 280 605 314 605 314
+                L 568 371 L 565 480 L 555 494
+                L ${475 - dw} 534
+                L ${361.5 - dw*1.5} 677.5
+                L ${361.5 - dw*1.5} ${947 + dh}
+                L ${475 - dw} ${947 + dh}
+                L 660 ${947 + dh}
+                L ${845 + dw} ${947 + dh}
+                L ${958.5 + dw*1.5} ${947 + dh}
+                L ${958.5 + dw*1.5} 677.5
+                L ${845 + dw} 534
+                L 765 494 L 755 480 L 752 371 L 715 314
+                C 715 314 678 280 660 282.61 Z
+            `;
+            pPerimeter.setAttribute('d', sudBody); 
+            sudaderaOutline.setAttribute('d', sudBody);
+            document.getElementById('path-perimeter-b').setAttribute('d', sudBody); 
+            document.getElementById('sudadera-outline-b').setAttribute('d', sudBody);
+
+            sSeamL.setAttribute('d', `M ${475 - dw} 534 L ${475 - dw} ${947 + dh}`);
+            sSeamR.setAttribute('d', `M ${845 + dw} 534 L ${845 + dw} ${947 + dh}`);
+            document.getElementById('sudadera-seam-l-b').setAttribute('d', `M ${475 - dw} 534 L ${475 - dw} ${947 + dh}`);
+            document.getElementById('sudadera-seam-r-b').setAttribute('d', `M ${845 + dw} 534 L ${845 + dw} ${947 + dh}`);
+
+            document.getElementById('sudadera-collar-l').setAttribute('d', `M 554.5 494.5 Q 568.5 534.5 660 534.5`);
+            document.getElementById('sudadera-collar-r').setAttribute('d', `M 765.5 494.5 Q 751.5 534.5 660 534.5`);
+            document.getElementById('sudadera-collar-b-l').setAttribute('d', `M 554.5 494.5 Q 568.5 534.5 660 534.5`);
+            document.getElementById('sudadera-collar-b-r').setAttribute('d', `M 765.5 494.5 Q 751.5 534.5 660 534.5`);
+            
+            document.getElementById('sudadera-collar-l-b').setAttribute('d', `M 554.5 494.5 Q 568.5 534.5 660 534.5`);
+            document.getElementById('sudadera-collar-r-b').setAttribute('d', `M 765.5 494.5 Q 751.5 534.5 660 534.5`);
+            document.getElementById('sudadera-collar-b-l-b').setAttribute('d', `M 554.5 494.5 Q 568.5 534.5 660 534.5`);
+            document.getElementById('sudadera-collar-b-r-b').setAttribute('d', `M 765.5 494.5 Q 751.5 534.5 660 534.5`);
+            
+            const pocketD = `M 660 ${775 + dh} L 581.5 ${775 + dh} Q 582.5 ${822 + dh} 533.5 ${865.75 + dh} L 546.5 ${911.5 + dh} L 660 ${911.5 + dh} L 774.17 ${911.5 + dh} L 787.17 ${865.75 + dh} Q 738.17 ${822 + dh} 738.5 ${775 + dh} Z`;
+            
+            sPocket.style.display = 'block';
+            sPocket.setAttribute('d', pocketD);
+
+            document.getElementById('sudadera-pocket-b').style.display = 'none';
+            document.getElementById('sudadera-front-collar-b').style.display = 'none';
+            document.getElementById('sudadera-back-collar-b').style.display = 'block';
+
+            groupSudaderaFront.style.display = 'block';
+            groupSudaderaBack.style.display = 'none';
+            
+        } else if (currentModel === 'mangalarga') {
+            document.getElementById('group-playera').style.display = 'none';
+            document.getElementById('group-sudadera').style.display = 'none';
+            document.getElementById('group-mangalarga').style.display = 'block';
+            document.getElementById('group-playera-b').style.display = 'none';
+            document.getElementById('group-sudadera-b').style.display = 'none';
+            document.getElementById('group-mangalarga-b').style.display = 'block';
+
+            const dw = metrics.dw; 
+            const dh = metrics.dh;
+
+            const mlBody = `
+                M 660 494
+                S 624.5 495.5 593.5 476.5
+                C 593.5 476.5 590.72 473.03 577.61 485.26
+                L ${475 - dw} 534
+                L ${475 - dw} ${947 + dh}
+                L ${845 + dw} ${947 + dh}
+                L ${845 + dw} 534
+                L 742.39 485.26
+                C 729.28 473.03 726.5 476.5 726.5 476.5
+                S 695.5 495.5 660 494 Z
+            `;
+            pPerimeter.setAttribute('d', mlBody); 
+            mlOutline.setAttribute('d', mlBody);
+            document.getElementById('path-perimeter-b').setAttribute('d', mlBody); 
+            document.getElementById('ml-outline-b').setAttribute('d', mlBody);
+
+            const sL = `M ${475 - dw} 534 L ${361.5 - dw} 677.5 L ${361.5 - dw} ${947 + dh} L ${475 - dw} ${947 + dh} Z`;
+            const sR = `M ${845 + dw} 534 L ${958.5 + dw} 677.5 L ${958.5 + dw} ${947 + dh} L ${845 + dw} ${947 + dh} Z`;
+            mlSleeveL.setAttribute('d', sL);
+            mlSleeveR.setAttribute('d', sR);
+            document.getElementById('ml-sleeve-l-b').setAttribute('d', sL);
+            document.getElementById('ml-sleeve-r-b').setAttribute('d', sR);
+
+            mlSeamL.setAttribute('d', `M ${475 - dw} 534 L ${475 - dw} ${947 + dh}`);
+            mlSeamR.setAttribute('d', `M ${845 + dw} 534 L ${845 + dw} ${947 + dh}`);
+            document.getElementById('ml-seam-l-b').setAttribute('d', `M ${475 - dw} 534 L ${475 - dw} ${947 + dh}`);
+            document.getElementById('ml-seam-r-b').setAttribute('d', `M ${845 + dw} 534 L ${845 + dw} ${947 + dh}`);
+
+            groupMlFront.style.display = 'block';
+            groupMlBack.style.display = 'none';
+
+            document.getElementById('ml-front-collar-b').style.display = 'none';
+            document.getElementById('ml-back-collar-b').style.display = 'block';
+        }
+
+        updateAllLayersVisualScale();
+    }
+
+    if (switchEnvolver) switchEnvolver.addEventListener('change', () => {
+        if (!activeLayerId) return;
+        const layer = layersData[currentModel][currentSide].find(l => l.id === activeLayerId);
+        if (layer) {
+            layer.envolver = switchEnvolver.checked;
+            updateRealTimeWrap();
+        }
+    });
+
+    modelSelector.addEventListener('change', function(e) {
+        currentModel = e.target.value;
+        activeLayerId = null; 
+        
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active-size'));
+
+        if (currentModel === 'playera') {
+            document.getElementById('quick-sizes-playera').style.display = 'block';
+            document.getElementById('quick-sizes-sudadera').style.display = 'none';
+            document.getElementById('quick-sizes-mangalarga').style.display = 'none';
+            shirtWInput.min = 43; shirtHInput.min = 63;
+            shirtWInput.value = 47; shirtHInput.value = 71;
+        } else if (currentModel === 'sudadera') {
+            document.getElementById('quick-sizes-playera').style.display = 'none';
+            document.getElementById('quick-sizes-sudadera').style.display = 'block';
+            document.getElementById('quick-sizes-mangalarga').style.display = 'none';
+            shirtWInput.min = 47; shirtHInput.min = 67.3;
+            shirtWInput.value = 47; shirtHInput.value = 67.3;
+        } else if (currentModel === 'mangalarga') {
+            document.getElementById('quick-sizes-playera').style.display = 'none';
+            document.getElementById('quick-sizes-sudadera').style.display = 'none';
+            document.getElementById('quick-sizes-mangalarga').style.display = 'block';
+            shirtWInput.min = 46; shirtHInput.min = 70;
+            shirtWInput.value = 51; shirtHInput.value = 73;
+        }
+        
+        btnSaveShirt.innerHTML = `💾 Guardar ${getModelName()} ${shirtCounter}`;
+
+        drawGeometry();
+        renderLayers(); 
+        updateCalculator();
+    });
+
+    function highlightActiveLayer() {
+        document.querySelectorAll('.design-layer').forEach(el => {
+            if (el.id === activeLayerId) {
+                el.style.border = 'none';
+                el.style.boxShadow = 'none';
+                el.style.zIndex = '50';
+                const bInd = el.querySelector('.layer-border-indicator');
+                if (bInd) { bInd.style.display = 'block'; bInd.style.border = '2px dashed #a1672e'; bInd.style.boxShadow = '0 0 15px rgba(0,85,255,0.2)'; }
+                const tag = el.querySelector('.dim-tag');
+                if(tag) {
+                    tag.style.display = 'block';
+                    const layer = layersData[currentModel][currentSide] ? layersData[currentModel][currentSide].find(l => l.id === activeLayerId) : null;
+                    if(layer) {
+                        const m = getMetrics();
+                        tag.innerHTML = `${formatUnit(layer.w / m.pxPerCmX)} x ${formatUnit(layer.h / m.pxPerCmX)}`;
+                    }
+                }
+            } else {
+                el.style.border = 'none';
+                el.style.boxShadow = 'none';
+                el.style.zIndex = '40';
+                const bInd = el.querySelector('.layer-border-indicator');
+                if (bInd) { bInd.style.display = 'none'; bInd.style.border = 'none'; bInd.style.boxShadow = 'none'; }
+                const tag = el.querySelector('.dim-tag');
+                if(tag) tag.style.display = 'none';
+            }
+        });
+        
+        const layerControls = document.getElementById('layer-controls');
+        
+        if (activeLayerId) {
+            const activeLayer = layersData[currentModel][currentSide] ? layersData[currentModel][currentSide].find(l => l.id === activeLayerId) : null;
+            if(activeLayer) {
+                layerControls.style.opacity = '1';
+                layerControls.style.pointerEvents = 'auto';
+                btnDeleteLayer.style.opacity = '1';
+                btnDeleteLayer.style.pointerEvents = 'auto';
+
+                designScaleSlider.value = activeLayer.scaleCm;
+                designRotationSlider.value = activeLayer.rotation || 0;
+                valScaleText.innerText = formatUnit(activeLayer.scaleCm);
+                document.getElementById('val-rotation').innerText = `${activeLayer.rotation || 0}°`;
+                if (switchEnvolver) switchEnvolver.checked = activeLayer.envolver || false;
+            }
+        } else {
+            layerControls.style.opacity = '0.3';
+            layerControls.style.pointerEvents = 'none';
+            btnDeleteLayer.style.opacity = '0.3';
+            btnDeleteLayer.style.pointerEvents = 'none';
+            if (switchEnvolver) switchEnvolver.checked = false;
+        }
+    }
+
+    function renderLayers() {
+        document.querySelectorAll('.ghost-layer').forEach(g => g.remove());
+        document.querySelectorAll('.design-layer').forEach(l => l.remove());
+        
+        const metrics = getMetrics();
+        const distTorsos = mockupContainer.offsetWidth * metrics.offsetPct;
+
+        const renderSide = (side) => {
+            layersData[currentModel][side].forEach(layer => {
+                const isVisuallyBack = (side === 'back');
+                const visualX = isVisuallyBack ? layer.x + distTorsos : layer.x;
+
+                const el = document.createElement('div');
+                el.id = layer.id;
+                el.className = 'design-layer';
+                el.dataset.side = side;
+                el.style.position = 'absolute';
+                el.style.left = visualX + 'px';
+                el.style.top = layer.y + 'px';
+                el.style.width = layer.w + 'px';
+                el.style.height = layer.h + 'px';
+                el.style.pointerEvents = 'auto';
+                el.style.cursor = 'grab';
+                
+                // Img at original pixel size, centered inside the rotated-bbox div
+                const origWpx = layer.realW * metrics.pxPerCmX;
+                const origHpx = layer.realH * metrics.pxPerCmX;
+                const img = document.createElement('img');
+                img.src = layer.imgSrc;
+                img.setAttribute('draggable', 'false');
+                img.style.position = 'absolute';
+                img.style.width = origWpx + 'px';
+                img.style.height = origHpx + 'px';
+                img.style.left = ((layer.w - origWpx) / 2) + 'px';
+                img.style.top = ((layer.h - origHpx) / 2) + 'px';
+                img.style.pointerEvents = 'none';
+                img.style.userSelect = 'none';
+                img.style.webkitUserDrag = 'none';
+                img.style.transform = `rotate(${layer.rotation || 0}deg)`;
+                el.appendChild(img);
+
+                const borderEl = document.createElement('div');
+                borderEl.className = 'layer-border-indicator';
+                borderEl.style.position = 'absolute';
+                borderEl.style.width = origWpx + 'px';
+                borderEl.style.height = origHpx + 'px';
+                borderEl.style.left = ((layer.w - origWpx) / 2) + 'px';
+                borderEl.style.top = ((layer.h - origHpx) / 2) + 'px';
+                borderEl.style.transform = `rotate(${layer.rotation || 0}deg)`;
+                borderEl.style.pointerEvents = 'none';
+                borderEl.style.boxSizing = 'border-box';
+                borderEl.style.display = 'none';
+                el.appendChild(borderEl);
+
+                const tag = document.createElement('div');
+                tag.className = 'dim-tag';
+                tag.innerHTML = `${formatUnit(layer.w / metrics.pxPerCmX)} x ${formatUnit(layer.h / metrics.pxPerCmX)}`;
+                tag.style.position = 'absolute';
+                tag.style.bottom = '-35px';
+                tag.style.left = '50%';
+                tag.style.transform = 'translateX(-50%)';
+                tag.style.background = '#a1672e';
+                tag.style.color = '#fffaf0';
+                tag.style.fontFamily = "'Bebas Neue', cursive";
+                tag.style.fontSize = '1.2rem';
+                tag.style.letterSpacing = '1px';
+                tag.style.padding = '4px 12px';
+                tag.style.whiteSpace = 'nowrap';
+                tag.style.borderRadius = '4px';
+                tag.style.zIndex = '100';
+                tag.style.pointerEvents = 'none';
+                tag.style.display = 'none';
+                el.appendChild(tag);
+
+                el.addEventListener('mousedown', interactionStart);
+                el.addEventListener('touchstart', interactionStart, {passive: false});
+
+                designWrapper.appendChild(el);
+            });
+        };
+
+        renderSide('front');
+        renderSide('back');
+
+        highlightActiveLayer();
+        updateRealTimeWrap();
+        updateCalculator();
+    }
+
+    function updateRealTimeWrap() {
+        document.querySelectorAll('.ghost-layer').forEach(e => e.remove());
+
+        const metrics = getMetrics();
+        const distTorsos = mockupContainer.offsetWidth * metrics.offsetPct;
+
+        const processWrapForSide = (side) => {
+            layersData[currentModel][side].forEach(layer => {
+                const el = document.getElementById(layer.id);
+                if (!el) return;
+
+                if (!layer.envolver) {
+                    el.style.clipPath = 'none';
+                    return;
+                }
+
+                let overflowLeft = Math.max(0, metrics.torsoLeftPx - layer.x);
+                let overflowRight = Math.max(0, (layer.x + layer.w) - (metrics.torsoLeftPx + metrics.torsoWidthPx));
+
+                if (overflowLeft >= layer.w) overflowLeft = layer.w;
+                if (overflowRight >= layer.w) overflowRight = layer.w;
+
+                // Si el diseño está completamente fuera del torso, no clipear ni crear ghost
+                if (overflowLeft + overflowRight >= layer.w) {
+                    el.style.clipPath = 'none';
+                    return;
+                }
+
+                el.style.clipPath = `inset(0px ${overflowRight}px 0px ${overflowLeft}px)`;
+
+                const isVisuallyBack = (side === 'back');
+                const visualX = isVisuallyBack ? layer.x + distTorsos : layer.x;
+
+                const createGhost = (clipLeft, clipRight, offsetX) => {
+                    const ghost = el.cloneNode(true);
+                    ghost.id = layer.id + '-ghost';
+                    ghost.className = 'ghost-layer';
+                    ghost.style.left = (visualX + offsetX) + 'px';
+                    ghost.style.top = layer.y + 'px';
+                    ghost.style.clipPath = `inset(0px ${clipRight}px 0px ${clipLeft}px)`;
+                    
+                    ghost.style.opacity = '1'; 
+                    ghost.style.zIndex = '5'; 
+                    ghost.style.pointerEvents = 'auto';
+                    ghost.style.cursor = 'grab';
+                    ghost.dataset.originalId = layer.id;
+                    ghost.dataset.side = side;
+
+                    if (ghost.style.border) ghost.style.border = 'none';
+                    if (ghost.style.boxShadow) ghost.style.boxShadow = 'none';
+                    
+                    const tag = ghost.querySelector('.dim-tag');
+                    if (tag) tag.remove();
+
+                    const bIndG = ghost.querySelector('.layer-border-indicator');
+                    if (bIndG) bIndG.remove();
+
+                    ghost.addEventListener('mousedown', interactionStart);
+                    ghost.addEventListener('touchstart', interactionStart, {passive: false});
+
+                    designWrapper.appendChild(ghost);
+                };
+
+                if (side === 'front') {
+                    if (overflowLeft > 0) createGhost(0, layer.w - overflowLeft, distTorsos + metrics.torsoWidthPx);
+                    if (overflowRight > 0) createGhost(layer.w - overflowRight, 0, distTorsos - metrics.torsoWidthPx);
+                } else {
+                    if (overflowLeft > 0) createGhost(0, layer.w - overflowLeft, -distTorsos + metrics.torsoWidthPx);
+                    if (overflowRight > 0) createGhost(layer.w - overflowRight, 0, -distTorsos - metrics.torsoWidthPx);
+                }
+            });
+        };
+
+        processWrapForSide('front');
+        processWrapForSide('back');
+    }
+
+    function applyScaleFromSlider() {
+        if (!activeLayerId) return;
+        const layer = layersData[currentModel][currentSide].find(l => l.id === activeLayerId);
+        if (!layer) return;
+
+        const desiredCm = parseFloat(designScaleSlider.value);
+        valScaleText.innerText = formatUnit(desiredCm);
+        layer.scaleCm = desiredCm;
+
+        const metrics = getMetrics();
+        const origWpx = desiredCm * metrics.pxPerCmX;
+        const origHpx = desiredCm * layer.aspect * metrics.pxPerCmX;
+        const rotRad = (layer.rotation || 0) * Math.PI / 180;
+        const cosR = Math.abs(Math.cos(rotRad));
+        const sinR = Math.abs(Math.sin(rotRad));
+
+        const oldW = layer.w;
+        const oldH = layer.h;
+
+        layer.w = origWpx * cosR + origHpx * sinR;
+        layer.h = origWpx * sinR + origHpx * cosR;
+        layer.realW = desiredCm;
+        layer.realH = desiredCm * layer.aspect;
+
+        layer.x = layer.x - (layer.w - oldW) / 2;
+        layer.y = layer.y - (layer.h - oldH) / 2;
+        
+        const centerX = layer.x + (layer.w / 2);
+        const centerY = layer.y + (layer.h / 2);
+        layer.relCenterX = (centerX - metrics.torsoLeftPx) / metrics.torsoWidthPx;
+        layer.relCenterY = (centerY - metrics.torsoTopPx) / metrics.torsoHeightPx;
+
+        renderLayers();
+    }
+
+    function applyRotationFromSlider() {
+        if (!activeLayerId) return;
+        const layer = layersData[currentModel][currentSide].find(l => l.id === activeLayerId);
+        if (!layer) return;
+
+        const rot = parseFloat(designRotationSlider.value);
+        const rotRad = rot * Math.PI / 180;
+        const cosR = Math.abs(Math.cos(rotRad));
+        const sinR = Math.abs(Math.sin(rotRad));
+
+        const metrics = getMetrics();
+        const origWpx = layer.realW * metrics.pxPerCmX;
+        const origHpx = layer.realH * metrics.pxPerCmX;
+
+        // Mantener el centro fijo al cambiar el bounding box
+        const centerX = layer.x + layer.w / 2;
+        const centerY = layer.y + layer.h / 2;
+
+        layer.rotation = rot;
+        layer.w = origWpx * cosR + origHpx * sinR;
+        layer.h = origWpx * sinR + origHpx * cosR;
+        layer.x = centerX - layer.w / 2;
+        layer.y = centerY - layer.h / 2;
+        layer.relCenterX = (centerX - metrics.torsoLeftPx) / metrics.torsoWidthPx;
+        layer.relCenterY = (centerY - metrics.torsoTopPx) / metrics.torsoHeightPx;
+
+        document.getElementById('val-rotation').innerText = `${rot}°`;
+
+        const isVisuallyBack = (currentSide === 'back');
+        const distTorsos = mockupContainer.offsetWidth * metrics.offsetPct;
+
+        const el = document.getElementById(layer.id);
+        if (el) {
+            el.style.width = layer.w + 'px';
+            el.style.height = layer.h + 'px';
+            el.style.left = (isVisuallyBack ? layer.x + distTorsos : layer.x) + 'px';
+            el.style.top = layer.y + 'px';
+
+            const imgEl = el.querySelector('img');
+            if (imgEl) {
+                imgEl.style.width = origWpx + 'px';
+                imgEl.style.height = origHpx + 'px';
+                imgEl.style.left = ((layer.w - origWpx) / 2) + 'px';
+                imgEl.style.top = ((layer.h - origHpx) / 2) + 'px';
+                imgEl.style.transform = `rotate(${rot}deg)`;
+            }
+
+            const bInd = el.querySelector('.layer-border-indicator');
+            if (bInd) {
+                bInd.style.width = origWpx + 'px';
+                bInd.style.height = origHpx + 'px';
+                bInd.style.left = ((layer.w - origWpx) / 2) + 'px';
+                bInd.style.top = ((layer.h - origHpx) / 2) + 'px';
+                bInd.style.transform = `rotate(${rot}deg)`;
+            }
+
+            const tag = el.querySelector('.dim-tag');
+            if (tag && tag.style.display !== 'none') {
+                tag.innerHTML = `${formatUnit(layer.w / metrics.pxPerCmX)} x ${formatUnit(layer.h / metrics.pxPerCmX)}`;
+            }
+        }
+
+        if (layer.envolver) updateRealTimeWrap();
+    }
+
+    designScaleSlider.addEventListener('input', applyScaleFromSlider);
+    designRotationSlider.addEventListener('input', applyRotationFromSlider);
+
+    btnDeleteLayer.addEventListener('click', function() {
+        if(!activeLayerId) return;
+        layersData[currentModel][currentSide] = layersData[currentModel][currentSide].filter(l => l.id !== activeLayerId);
+        activeLayerId = null;
+        renderLayers();
+    });
+
+    designWrapper.addEventListener('mousedown', function(e) {
+        if(e.target === designWrapper) { activeLayerId = null; highlightActiveLayer(); }
+    });
+    designWrapper.addEventListener('touchstart', function(e) {
+        if(e.target === designWrapper) { activeLayerId = null; highlightActiveLayer(); }
+    });
+
+    window.switchSide = function(side) {
+        currentSide = side;
+        activeLayerId = null; 
+        
+        document.getElementById('btn-front').style.background = side === 'front' ? '#a1672e' : '#fffaf0';
+        document.getElementById('btn-front').style.color = side === 'front' ? '#fffaf0' : '#3a2f22';
+        document.getElementById('btn-front').style.border = side === 'front' ? 'none' : '1px solid #dccba9';
+        
+        document.getElementById('btn-back').style.background = side === 'back' ? '#a1672e' : '#fffaf0';
+        document.getElementById('btn-back').style.color = side === 'back' ? '#fffaf0' : '#3a2f22';
+        document.getElementById('btn-back').style.border = side === 'back' ? 'none' : '1px solid #dccba9';
+        
+        drawGeometry(); 
+        renderLayers();
+    };
+
+    function autoCropCanvas(imageSrc, callback) {
+        const img = new Image();
+        img.onload = function() {
+            const tmp = document.createElement('canvas');
+            tmp.width = img.width;
+            tmp.height = img.height;
+            const ctx = tmp.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const data = ctx.getImageData(0, 0, tmp.width, tmp.height).data;
+            const W = tmp.width, H = tmp.height;
+            let minX = W, minY = H, maxX = -1, maxY = -1;
+
+            top: for (let y = 0; y < H; y++) {
+                for (let x = 0; x < W; x++) {
+                    if (data[(y * W + x) * 4 + 3] > 0) { minY = y; break top; }
+                }
+            }
+            if (minY === H) { callback(imageSrc, W); return; }
+
+            bottom: for (let y = H - 1; y >= minY; y--) {
+                for (let x = 0; x < W; x++) {
+                    if (data[(y * W + x) * 4 + 3] > 0) { maxY = y; break bottom; }
+                }
+            }
+            left: for (let x = 0; x < W; x++) {
+                for (let y = minY; y <= maxY; y++) {
+                    if (data[(y * W + x) * 4 + 3] > 0) { minX = x; break left; }
+                }
+            }
+            right: for (let x = W - 1; x >= minX; x--) {
+                for (let y = minY; y <= maxY; y++) {
+                    if (data[(y * W + x) * 4 + 3] > 0) { maxX = x; break right; }
+                }
+            }
+
+            const cropW = maxX - minX + 1;
+            const cropH = maxY - minY + 1;
+            if (cropW === W && cropH === H) { callback(imageSrc, W); return; }
+
+            const out = document.createElement('canvas');
+            out.width = cropW; out.height = cropH;
+            out.getContext('2d').drawImage(tmp, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
+            callback(out.toDataURL('image/png'), cropW);
+        };
+        img.src = imageSrc;
+    }
+
+    function processFiles(files) {
+        let fileArray = Array.from(files).filter(f => f.type === 'image/png');
+        if(fileArray.length === 0) return;
+
+        let currentIndex = 0;
+        function processNext() {
+            if(currentIndex >= fileArray.length) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                autoCropCanvas(event.target.result, function(croppedSrc, cropWidthPx) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const aspect = img.height / img.width;
+                        layerCounter++;
+                        const newId = 'layer-' + layerCounter;
+                        
+                        const metrics = getMetrics();
+                        
+                        let targetCm = cropWidthPx / DPI_FACTOR;
+                        targetCm = Math.max(5, Math.min(targetCm, 100));
+
+                        const initialW = targetCm * metrics.pxPerCmX;
+                        const initialH = initialW * aspect;
+                        
+                        const cW = mockupContainer.offsetWidth > 0 ? mockupContainer.offsetWidth : 600;
+                        const cH = mockupContainer.offsetHeight > 0 ? mockupContainer.offsetHeight : 700;
+                        
+                        const offsetPx = currentIndex * 20; 
+                        
+                        const virtualW = cW * 0.50;
+
+                        const initialX = ((virtualW - initialW) / 2) + offsetPx;
+                        const initialY = ((cH - initialH) / 2.5) + offsetPx;
+                        
+                        const centerX = initialX + (initialW / 2);
+                        const centerY = initialY + (initialH / 2);
+
+                        const targetSideForUpload = currentSide;
+
+                        const newLayer = {
+                            id: newId,
+                            imgSrc: croppedSrc,
+                            originalName: fileArray[currentIndex].name.replace(/\.[^.]+$/, ''),
+                            x: initialX,
+                            y: initialY,
+                            w: initialW,
+                            h: initialH,
+                            scaleCm: targetCm,
+                            realW: targetCm,
+                            realH: targetCm * aspect,
+                            aspect: aspect,
+                            rotation: 0,
+                            envolver: false,
+                            relCenterX: (centerX - metrics.torsoLeftPx) / metrics.torsoWidthPx,
+                            relCenterY: (centerY - metrics.torsoTopPx) / metrics.torsoHeightPx
+                        };
+                        
+                        layersData[currentModel][targetSideForUpload].push(newLayer);
+                        activeLayerId = newId; 
+                        
+                        renderLayers();
+                        
+                        const accCapa = document.getElementById('acc-diseno');
+                        const iconCapa = document.getElementById('icon-diseno');
+                        if(accCapa.style.display === 'none') {
+                            accCapa.style.display = 'block';
+                            iconCapa.innerText = '▲';
+                        }
+
+                        currentIndex++;
+                        processNext();
+                    };
+                    img.src = croppedSrc;
+                });
+            };
+            reader.readAsDataURL(fileArray[currentIndex]);
+        }
+        processNext();
+    }
+
+    uploadInput.addEventListener('click', function() { this.value = null; });
+    uploadInput.addEventListener('change', function(e) {
+        if (!e.target.files) return;
+        processFiles(e.target.files);
+    });
+
+    studioContainer.addEventListener('dragover', e => {
+        e.preventDefault();
+        studioContainer.style.background = '#fffdf6';
+        studioContainer.style.outline = '4px dashed #a1672e';
+    });
+    studioContainer.addEventListener('dragleave', e => {
+        e.preventDefault();
+        studioContainer.style.background = '#fffaf0';
+        studioContainer.style.outline = 'none';
+    });
+    studioContainer.addEventListener('drop', e => {
+        e.preventDefault();
+        studioContainer.style.background = '#fffaf0';
+        studioContainer.style.outline = 'none';
+        if(e.dataTransfer.files) {
+            processFiles(e.dataTransfer.files);
+        }
+    });
+
+    function getEventX(e) { return (e.type.startsWith('touch') && e.touches.length > 0) ? e.touches[0].clientX : e.clientX; }
+    function getEventY(e) { return (e.type.startsWith('touch') && e.touches.length > 0) ? e.touches[0].clientY : e.clientY; }
+
+    let isDragging = false, startX, startY, startLeft, startTop;
+
+    function interactionStart(e) {
+        if(e.altKey || isHandActive || e.button === 1) return; 
+
+        let targetEl = e.currentTarget;
+        let realId = targetEl.id;
+        if (targetEl.classList.contains('ghost-layer')) {
+            realId = targetEl.dataset.originalId;
+        }
+
+        activeLayerId = realId;
+        currentSide = targetEl.dataset.side; 
+        highlightActiveLayer(); 
+        
+        isDragging = true;
+        const activeEl = document.getElementById(activeLayerId);
+        if(activeEl) activeEl.style.cursor = 'grabbing';
+        
+        startX = getEventX(e); 
+        startY = getEventY(e);
+        const layer = layersData[currentModel][currentSide].find(l => l.id === activeLayerId);
+        if (!layer) {
+            isDragging = false;
+            return;
+        }
+        startLeft = layer.x; 
+        startTop = layer.y;
+        
+        if(e.cancelable && !e.type.startsWith('touch')) e.preventDefault(); 
+        e.stopPropagation();
+    }
+
+    function interactionMove(e) {
+        if (!isDragging || !activeLayerId) return;
+        if(e.cancelable) e.preventDefault(); 
+        
+        let dx = (getEventX(e) - startX) / currentZoom;
+        let dy = (getEventY(e) - startY) / currentZoom;
+        
+        const layer = layersData[currentModel][currentSide].find(l => l.id === activeLayerId);
+        if (!layer) return;
+
+        layer.x = startLeft + dx;
+        layer.y = startTop + dy;
+        
+        const metrics = getMetrics();
+        const distTorsos = mockupContainer.offsetWidth * metrics.offsetPct;
+
+        // --- INICIO: LÓGICA DE SALTO Y TRANSFERENCIA DE LADO ---
+        if (layer.envolver) {
+            let visualCenterX = layer.x + (layer.w / 2);
+            if (currentSide === 'back') visualCenterX += distTorsos;
+            
+            const midline = mockupContainer.offsetWidth / 2;
+            
+            if (currentSide === 'front' && visualCenterX > midline) {
+                layersData[currentModel].front = layersData[currentModel].front.filter(l => l.id !== layer.id);
+                layersData[currentModel].back.push(layer);
+
+                layer.x -= distTorsos;
+                startLeft -= distTorsos;
+                
+                currentSide = 'back';
+                highlightActiveLayer();
+                
+                const el = document.getElementById(layer.id);
+                if(el) {
+                    el.dataset.side = 'back';
+                    el.style.transform = 'scale(1.08)';
+                    el.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    setTimeout(() => { if(el) el.style.transform = 'scale(1)'; }, 200);
+                }
+            } else if (currentSide === 'back' && visualCenterX < midline) {
+                layersData[currentModel].back = layersData[currentModel].back.filter(l => l.id !== layer.id);
+                layersData[currentModel].front.push(layer);
+
+                layer.x += distTorsos;
+                startLeft += distTorsos;
+                
+                currentSide = 'front';
+                highlightActiveLayer();
+                
+                const el = document.getElementById(layer.id);
+                if(el) {
+                    el.dataset.side = 'front';
+                    el.style.transform = 'scale(1.08)';
+                    el.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    setTimeout(() => { if(el) el.style.transform = 'scale(1)'; }, 200);
+                }
+            }
+        }
+        // --- FIN: LÓGICA DE SALTO ---
+
+        const isVisuallyBack = (currentSide === 'back');
+
+        const activeEl = document.getElementById(activeLayerId);
+        if (activeEl) {
+            activeEl.style.left = (isVisuallyBack ? layer.x + distTorsos : layer.x) + 'px';
+            activeEl.style.top = layer.y + 'px';
+        }
+        updateRealTimeWrap();
+    }
+
+    document.addEventListener('mousemove', interactionMove, {passive: false});
+    document.addEventListener('touchmove', interactionMove, {passive: false});
+
+    function interactionEnd() {
+        if(isDragging && activeLayerId) {
+            const el = document.getElementById(activeLayerId);
+            if(el) el.style.cursor = 'grab';
+            
+            const layer = layersData[currentModel][currentSide].find(l => l.id === activeLayerId);
+            if (layer) {
+                const metrics = getMetrics();
+                const centerX = layer.x + (layer.w / 2);
+                const centerY = layer.y + (layer.h / 2);
+                layer.relCenterX = (centerX - metrics.torsoLeftPx) / metrics.torsoWidthPx;
+                layer.relCenterY = (centerY - metrics.torsoTopPx) / metrics.torsoHeightPx;
+            }
+        }
+        isDragging = false;
+    }
+
+    document.addEventListener('mouseup', interactionEnd);
+    document.addEventListener('touchend', interactionEnd);
+
+    // =========================================================================
+    // EXPORTACIÓN METADATA & PNG
+    // =========================================================================
+    const crcTable = new Int32Array(256);
+    for (let i = 0; i < 256; i++) {
+        let c = i;
+        for (let j = 0; j < 8; j++) { c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1)); }
+        crcTable[i] = c;
+    }
+    function crc32(buffer) {
+        let crc = 0xFFFFFFFF;
+        for (let i = 0; i < buffer.length; i++) crc = crcTable[(crc ^ buffer[i]) & 0xFF] ^ (crc >>> 8);
+        return crc ^ 0xFFFFFFFF;
+    }
+    function createPhysChunk(dpi) {
+        const ppm = Math.round(dpi / 0.0254);
+        const chunk = new Uint8Array(21);
+        chunk[0] = 0; chunk[1] = 0; chunk[2] = 0; chunk[3] = 9;
+        chunk[4] = 112; chunk[5] = 72; chunk[6] = 89; chunk[7] = 115;
+        chunk[8] = (ppm >>> 24) & 0xFF; chunk[9] = (ppm >>> 16) & 0xFF; chunk[10] = (ppm >>> 8) & 0xFF; chunk[11] = ppm & 0xFF;
+        chunk[12] = (ppm >>> 24) & 0xFF; chunk[13] = (ppm >>> 16) & 0xFF; chunk[14] = (ppm >>> 8) & 0xFF; chunk[15] = ppm & 0xFF;
+        chunk[16] = 1;
+        const crc = crc32(chunk.subarray(4, 17));
+        chunk[17] = (crc >>> 24) & 0xFF; chunk[18] = (crc >>> 16) & 0xFF; chunk[19] = (crc >>> 8) & 0xFF; chunk[20] = crc & 0xFF;
+        return chunk;
+    }
+    function changeDpiDataUrl(base64Image, dpi) {
+        const dataText = base64Image.split(',')[1];
+        const binaryString = window.atob(dataText);
+        const length = binaryString.length;
+        const bytes = new Uint8Array(length);
+        for (let i = 0; i < length; i++) bytes[i] = binaryString.charCodeAt(i);
+        let offset = 8;
+        while (offset < bytes.length) {
+            const dataLength = (bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3];
+            const chunkType = String.fromCharCode(bytes[offset + 4], bytes[offset + 5], bytes[offset + 6], bytes[offset + 7]);
+            if (chunkType === 'IHDR') {
+                const physChunk = createPhysChunk(dpi);
+                const newBytes = new Uint8Array(bytes.length + physChunk.length);
+                newBytes.set(bytes.subarray(0, offset + 12 + dataLength));
+                newBytes.set(physChunk, offset + 12 + dataLength);
+                newBytes.set(bytes.subarray(offset + 12 + dataLength), offset + 12 + dataLength + physChunk.length);
+                let newBinary = "";
+                for (let i = 0; i < newBytes.length; i++) newBinary += String.fromCharCode(newBytes[i]);
+                return 'data:image/png;base64,' + window.btoa(newBinary);
+            }
+            offset += 12 + dataLength;
+        }
+        return base64Image; 
+    }
+
+    function makeShirtListItem(savedId, mName, filesCount) {
+        const div = document.createElement('div');
+        div.style.cssText = 'padding: 10px 12px; border-bottom: 1px solid #ece1cb; cursor: pointer; border-radius: 4px; transition: background 0.2s; user-select: none; font-family: Inter, sans-serif; font-size: 0.95rem; color: #4a3c2c; display: flex; align-items: center; justify-content: space-between;';
+        div.innerHTML = `<span>✅ ${mName} ${savedId} <span style="color:#b5a78d; font-size:0.82em;">(${filesCount} arch.)</span></span><span style="color:#a1672e; font-size:0.82em;">↩ editar</span>`;
+        div.addEventListener('mouseover', () => { if (div.style.pointerEvents !== 'none') div.style.background = '#f3ead8'; });
+        div.addEventListener('mouseout', () => { div.style.background = 'transparent'; });
+        div.addEventListener('click', async () => {
+            const saved = savedShirtsExports.find(s => s.id === savedId);
+            if (!saved) return;
+            if (editingShirtData !== null) {
+                await performSave(true);
+            }
+            savedShirtsExports = savedShirtsExports.filter(s => s.id !== savedId);
+            div.style.pointerEvents = 'none';
+            div.style.opacity = '0.55';
+            div.lastElementChild.textContent = '✏️ editando';
+            div.lastElementChild.style.color = '#7a6a55';
+            editingShirtData = { id: savedId, div, snapshot: saved };
+            btnSaveShirt.innerHTML = `💾 Guardar ${saved.name}`;
+            if (saved.model !== currentModel) {
+                currentModel = saved.model;
+                modelSelector.value = currentModel;
+                document.getElementById('quick-sizes-playera').style.display = currentModel === 'playera' ? 'block' : 'none';
+                document.getElementById('quick-sizes-sudadera').style.display = currentModel === 'sudadera' ? 'block' : 'none';
+                document.getElementById('quick-sizes-mangalarga').style.display = currentModel === 'mangalarga' ? 'block' : 'none';
+                if (currentModel === 'playera') { shirtWInput.min = 43; shirtHInput.min = 63; }
+                else if (currentModel === 'sudadera') { shirtWInput.min = 47; shirtHInput.min = 67.3; }
+                else if (currentModel === 'mangalarga') { shirtWInput.min = 46; shirtHInput.min = 70; }
+            }
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active-size'));
+            if (saved.layersSnapshot.shirtW !== undefined) {
+                shirtWInput.value = saved.layersSnapshot.shirtW;
+                shirtHInput.value = saved.layersSnapshot.shirtH;
+                const savedW = saved.layersSnapshot.shirtW;
+                const savedH = saved.layersSnapshot.shirtH;
+                document.querySelectorAll('.size-btn').forEach(btn => {
+                    const oc = btn.getAttribute('onclick') || '';
+                    const m = oc.match(/setShirtSize\(([^,]+),\s*([^,]+),/);
+                    if (m && Math.abs(parseFloat(m[1]) - savedW) < 0.01 && Math.abs(parseFloat(m[2]) - savedH) < 0.01) {
+                        btn.classList.add('active-size');
+                    }
+                });
+            }
+            layersData[currentModel].front = JSON.parse(JSON.stringify(saved.layersSnapshot.front));
+            layersData[currentModel].back = JSON.parse(JSON.stringify(saved.layersSnapshot.back));
+            activeLayerId = null;
+            drawGeometry();
+            renderLayers();
+        });
+        return div;
+    }
+
+    async function performSave(silent = false) {
+        const layersF = layersData[currentModel].front;
+        const layersB = layersData[currentModel].back;
+        if (layersF.length === 0 && layersB.length === 0) {
+            if (editingShirtData !== null) {
+                savedShirtsExports.push(editingShirtData.snapshot);
+                editingShirtData.div.lastElementChild.textContent = '↩ editar';
+                editingShirtData.div.lastElementChild.style.color = '#a1672e';
+                editingShirtData.div.style.opacity = '1';
+                editingShirtData.div.style.pointerEvents = 'auto';
+                editingShirtData = null;
+            }
+            if (!silent) alert("No hay diseños para guardar en esta prenda.");
+            btnSaveShirt.style.pointerEvents = 'auto';
+            return;
+        }
+
+        btnSaveShirt.style.pointerEvents = 'none';
+        btnSaveShirt.innerHTML = '<span class="spinner"></span> Guardando...';
+
+        await new Promise(r => setTimeout(r, 50));
+
+        const isUpdate = editingShirtData !== null;
+        const targetId = isUpdate ? editingShirtData.id : shirtCounter;
+        const mName = getModelName();
+
+        let files = [];
+        files = files.concat(await exportSideLogic('front', targetId));
+        files = files.concat(await exportSideLogic('back', targetId));
+
+        const layersSnapshot = {
+            front: JSON.parse(JSON.stringify(layersData[currentModel].front)),
+            back: JSON.parse(JSON.stringify(layersData[currentModel].back)),
+            shirtW: parseFloat(shirtWInput.value),
+            shirtH: parseFloat(shirtHInput.value)
+        };
+
+        const savedEntry = {
+            id: targetId,
+            name: `${mName} ${targetId}`,
+            files: files,
+            layersSnapshot: layersSnapshot,
+            model: currentModel
+        };
+
+        if (isUpdate) {
+            const existingIdx = savedShirtsExports.findIndex(s => s.id === targetId);
+            if (existingIdx >= 0) {
+                savedShirtsExports[existingIdx] = savedEntry;
+            } else {
+                savedShirtsExports.push(savedEntry);
+            }
+            const oldDiv = editingShirtData.div;
+            oldDiv.style.opacity = '1';
+            oldDiv.style.pointerEvents = 'auto';
+            oldDiv.lastElementChild.textContent = '↩ editar';
+            oldDiv.lastElementChild.style.color = '#a1672e';
+            oldDiv.querySelector('span:first-child').innerHTML = `✅ ${mName} ${targetId} <span style="color:#b5a78d; font-size:0.82em;">(${files.length} arch.)</span>`;
+            editingShirtData = null;
+        } else {
+            savedShirtsExports.push(savedEntry);
+            const div = makeShirtListItem(targetId, mName, files.length);
+            savedShirtsList.appendChild(div);
+            shirtCounter++;
+        }
+
+        layersData[currentModel].front = [];
+        layersData[currentModel].back = [];
+        activeLayerId = null;
+        renderLayers();
+
+        btnSaveShirt.innerHTML = `💾 Guardar ${getModelName()} ${shirtCounter}`;
+        btnSaveShirt.style.pointerEvents = 'auto';
+    }
+    btnSaveShirt.addEventListener('click', performSave);
+
+    async function getAllFilesToExport() {
+        let allExportFiles = [];
+
+        // Re-export saved shirts at download time so bordes/cuts always apply
+        for (const shirt of savedShirtsExports) {
+            const prevModel = currentModel;
+            currentModel = shirt.model;
+            const filesF = await exportSideLogic('front', shirt.id, shirt.layersSnapshot.front);
+            const filesB = await exportSideLogic('back', shirt.id, shirt.layersSnapshot.back);
+            allExportFiles = allExportFiles.concat(filesF).concat(filesB);
+            currentModel = prevModel;
+        }
+
+        const layersF = layersData[currentModel].front;
+        const layersB = layersData[currentModel].back;
+        if (layersF.length > 0 || layersB.length > 0) {
+            const filesF = await exportSideLogic('front', 'Actual');
+            const filesB = await exportSideLogic('back', 'Actual');
+            allExportFiles = allExportFiles.concat(filesF).concat(filesB);
+        }
+
+        return allExportFiles;
+    }
+
+    downloadBtn.addEventListener('click', async function() {
+        let rawExportFiles = await getAllFilesToExport();
+
+        let allExportFiles = [];
+        let uniqueUrls = new Set();
+        for (let f of rawExportFiles) {
+            if (!uniqueUrls.has(f.url)) {
+                uniqueUrls.add(f.url);
+                allExportFiles.push(f);
+            }
+        }
+
+        if (allExportFiles.length === 0) {
+            alert(`No hay diseños para exportar.`);
+            return;
+        }
+
+        const originalText = downloadBtn.innerText;
+        downloadBtn.innerHTML = '<span class="spinner"></span> Procesando descarga...';
+        downloadBtn.style.opacity = '0.7';
+        downloadBtn.style.pointerEvents = 'none';
+
+        await new Promise(r => setTimeout(r, 50));
+
+        if (switchZip && switchZip.checked) {
+            const zip = new JSZip();
+            allExportFiles.forEach(f => {
+                const b64 = f.url.split(',')[1];
+                zip.file(f.name, b64, {base64: true});
+            });
+            const content = await zip.generateAsync({type:"blob"});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = "ChechenaShirts_Disenos.zip";
+            link.click();
+        } else {
+            for (let i = 0; i < allExportFiles.length; i++) {
+                const file = allExportFiles[i];
+                const link = document.createElement('a');
+                link.download = file.name;
+                link.href = file.url;
+                document.body.appendChild(link); 
+                link.click();
+                document.body.removeChild(link);
+                
+                if (i < allExportFiles.length - 1) {
+                    await new Promise(r => setTimeout(r, 1500));
+                }
+            }
+        }
+
+        downloadBtn.innerText = originalText;
+        downloadBtn.style.opacity = '1';
+        downloadBtn.style.pointerEvents = 'auto';
+    });
+
+    // Recorta los bordes transparentes de un canvas — escaneo optimizado desde los bordes
+    function autoCropExportCanvas(srcCanvas) {
+        const data = srcCanvas.getContext('2d').getImageData(0, 0, srcCanvas.width, srcCanvas.height).data;
+        const W = srcCanvas.width, H = srcCanvas.height;
+        let minX = W, minY = H, maxX = -1, maxY = -1;
+
+        top: for (let y = 0; y < H; y++) {
+            for (let x = 0; x < W; x++) {
+                if (data[(y * W + x) * 4 + 3] > 0) { minY = y; break top; }
+            }
+        }
+        if (minY === H) return srcCanvas;
+
+        bottom: for (let y = H - 1; y >= minY; y--) {
+            for (let x = 0; x < W; x++) {
+                if (data[(y * W + x) * 4 + 3] > 0) { maxY = y; break bottom; }
+            }
+        }
+        left: for (let x = 0; x < W; x++) {
+            for (let y = minY; y <= maxY; y++) {
+                if (data[(y * W + x) * 4 + 3] > 0) { minX = x; break left; }
+            }
+        }
+        right: for (let x = W - 1; x >= minX; x--) {
+            for (let y = minY; y <= maxY; y++) {
+                if (data[(y * W + x) * 4 + 3] > 0) { maxX = x; break right; }
+            }
+        }
+
+        const cw = maxX - minX + 1, ch = maxY - minY + 1;
+        if (cw === W && ch === H) return srcCanvas;
+        const out = document.createElement('canvas');
+        out.width = cw; out.height = ch;
+        out.getContext('2d').drawImage(srcCanvas, minX, minY, cw, ch, 0, 0, cw, ch);
+        return out;
+    }
+
+    async function exportSideLogic(targetExportSide, prefixNum = '', layersOverride = null) {
+        const processedFiles = [];
+        const metrics = getMetrics();
+
+        const wantBordes = document.getElementById('switch-bordes') && document.getElementById('switch-bordes').checked;
+        const wantSeparar = document.getElementById('switch-separar') && document.getElementById('switch-separar').checked;
+        const wantMangas = document.getElementById('switch-mangas') && document.getElementById('switch-mangas').checked;
+        const applyCut = wantBordes || wantMangas;
+
+        const targetLayers = layersOverride !== null ? layersOverride : layersData[currentModel][targetExportSide];
+
+        for (let i = 0; i < targetLayers.length; i++) {
+            const layer = targetLayers[i];
+            await new Promise((resolve) => {
+                const imgW = layer.realW * DPI_FACTOR;
+                const imgH = layer.realH * DPI_FACTOR;
+                const rotRad = (layer.rotation || 0) * Math.PI / 180;
+
+                const rotatedExportW = Math.round(Math.abs(imgW * Math.cos(rotRad)) + Math.abs(imgH * Math.sin(rotRad)));
+                const rotatedExportH = Math.round(Math.abs(imgW * Math.sin(rotRad)) + Math.abs(imgH * Math.cos(rotRad)));
+
+                const rotCanvas = document.createElement('canvas');
+                rotCanvas.width = rotatedExportW;
+                rotCanvas.height = rotatedExportH;
+                const rotCtx = rotCanvas.getContext('2d');
+
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = function() {
+                    rotCtx.save();
+                    rotCtx.translate(rotatedExportW / 2, rotatedExportH / 2);
+                    rotCtx.rotate(rotRad);
+                    rotCtx.drawImage(img, -imgW / 2, -imgH / 2, imgW, imgH);
+                    rotCtx.restore();
+
+                    // Calcula posiciones de corte en píxeles de exportación
+                    const getCutPositions = () => {
+                        const domCenterX = layer.x + layer.w / 2;
+                        const screenPxToExportPx = DPI_FACTOR / metrics.pxPerCmX;
+                        const bboxLeftScreenX = domCenterX - (rotatedExportW / screenPxToExportPx / 2);
+                        const cutL = (metrics.torsoLeftPx - bboxLeftScreenX) * screenPxToExportPx;
+                        const cutR = ((metrics.torsoLeftPx + metrics.torsoWidthPx) - bboxLeftScreenX) * screenPxToExportPx;
+                        const pos = [];
+                        if (cutL > 1 && cutL < rotatedExportW - 1) pos.push(cutL);
+                        if (cutR > 1 && cutR < rotatedExportW - 1) pos.push(cutR);
+                        pos.sort((a, b) => a - b);
+                        return pos;
+                    };
+
+                    const sideLabel = targetExportSide === 'front' ? 'Frente' : 'Espalda';
+                    const baseName = layer.originalName || `${getModelName()}${prefixNum || ''}`;
+
+                    // Aplica threshold de alpha, auto-recorta transparencias y genera archivo
+                    const pushFile = (srcCanvas, partSuffix = '') => {
+                        const tmp = document.createElement('canvas');
+                        tmp.width = srcCanvas.width;
+                        tmp.height = srcCanvas.height;
+                        const tCtx = tmp.getContext('2d');
+                        tCtx.drawImage(srcCanvas, 0, 0);
+                        const id = tCtx.getImageData(0, 0, tmp.width, tmp.height);
+                        for (let j = 0; j < id.data.length; j += 4) {
+                            id.data[j + 3] = id.data[j + 3] < 128 ? 0 : 255;
+                        }
+                        tCtx.putImageData(id, 0, 0);
+                        const cropped = autoCropExportCanvas(tmp);
+                        let dataUrl = cropped.toDataURL('image/png');
+                        dataUrl = changeDpiDataUrl(dataUrl, 300);
+                        const wCm = (cropped.width / DPI_FACTOR).toFixed(1);
+                        const hCm = (cropped.height / DPI_FACTOR).toFixed(1);
+                        const fileName = `${wCm}x${hCm}cm_${baseName}${partSuffix}_${sideLabel}_chechenashirts.com.png`;
+                        processedFiles.push({ name: fileName, url: dataUrl, wCm: parseFloat(wCm), hCm: parseFloat(hCm) });
+                    };
+
+                    if (wantSeparar && layer.envolver) {
+                        // Divide el diseño envuelto en capas independientes sin separación
+                        const cuts = getCutPositions();
+                        if (cuts.length > 0) {
+                            const boundaries = [0, ...cuts.map(c => Math.round(c)), rotatedExportW];
+                            for (let s = 0; s < boundaries.length - 1; s++) {
+                                const x0 = boundaries[s], x1 = boundaries[s + 1];
+                                if (x1 <= x0) continue;
+                                const seg = document.createElement('canvas');
+                                seg.width = x1 - x0;
+                                seg.height = rotatedExportH;
+                                seg.getContext('2d').drawImage(rotCanvas, x0, 0, x1 - x0, rotatedExportH, 0, 0, x1 - x0, rotatedExportH);
+                                pushFile(seg, `_parte${s + 1}`);
+                            }
+                        } else {
+                            pushFile(rotCanvas);
+                        }
+                    } else if (applyCut) {
+                        const cuts = getCutPositions();
+                        if (cuts.length > 0) {
+                            const gapSize = Math.round(DPI_FACTOR);
+                            const finalCanvas = document.createElement('canvas');
+                            finalCanvas.width = rotatedExportW + cuts.length * gapSize;
+                            finalCanvas.height = rotatedExportH;
+                            const fCtx = finalCanvas.getContext('2d');
+                            if (cuts.length === 1) {
+                                const cx = cuts[0];
+                                fCtx.drawImage(rotCanvas, 0, 0, cx, rotatedExportH, 0, 0, cx, rotatedExportH);
+                                fCtx.drawImage(rotCanvas, cx, 0, rotatedExportW - cx, rotatedExportH, cx + gapSize, 0, rotatedExportW - cx, rotatedExportH);
+                            } else {
+                                const cx1 = cuts[0], cx2 = cuts[1];
+                                fCtx.drawImage(rotCanvas, 0, 0, cx1, rotatedExportH, 0, 0, cx1, rotatedExportH);
+                                fCtx.drawImage(rotCanvas, cx1, 0, cx2 - cx1, rotatedExportH, cx1 + gapSize, 0, cx2 - cx1, rotatedExportH);
+                                fCtx.drawImage(rotCanvas, cx2, 0, rotatedExportW - cx2, rotatedExportH, cx2 + gapSize * 2, 0, rotatedExportW - cx2, rotatedExportH);
+                            }
+                            pushFile(finalCanvas);
+                        } else {
+                            pushFile(rotCanvas);
+                        }
+                    } else {
+                        pushFile(rotCanvas);
+                    }
+
+                    resolve();
+                };
+                img.src = layer.imgSrc;
+            });
+        }
+        return processedFiles;
+    }
+
+    shirtWInput.min = 43; 
+    shirtHInput.min = 63;
+    
+    updateStrokeColor('#2b2117');
+    drawGeometry();
+    updateCalculator();
+
+})();
+</script></body></html>
