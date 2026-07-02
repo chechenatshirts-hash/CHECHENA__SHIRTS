@@ -1387,85 +1387,39 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 }
 </style>
 
-<div class="cupon-banner" id="cupon-banner">
-  <button class="cupon-close" onclick="document.getElementById('cupon-banner').style.display='none'" title="Cerrar">✕</button>
-  <div class="cupon-inner">
-    <div class="cupon-left">
-      <span class="cupon-icon">🎟️</span>
-      <div>
-        <div class="cupon-label">Oferta especial</div>
-        <div class="cupon-title">Cupón de Descuento  en megapack de diseños</div>
-      </div>
-    </div>
-
-    <div class="cupon-prices">
-      <div class="cupon-precio-box">
-        <div class="cupon-precio-moneda">MXN</div>
-        <div class="cupon-precio-valor">$50</div>
-        <div class="cupon-precio-unit">pesos mexicanos</div>
-      </div>
-      <span class="cupon-sep">/</span>
-      <div class="cupon-precio-box">
-        <div class="cupon-precio-moneda">USD</div>
-        <div class="cupon-precio-valor">$2.50</div>
-        <div class="cupon-precio-unit">dólares</div>
-      </div>
-    </div>
-
-    <div class="cupon-codigo-wrap">
-      <div class="cupon-codigo-label">Tu código</div>
-      <div class="cupon-codigo" onclick="copiarCupon(this)" title="Clic para copiar">CHECHENA50</div>
-    </div>
-
-    <div class="cupon-vence">
-      <div class="cupon-vence-label">Válido hasta</div>
-      <div class="cupon-vence-fecha">30 de Junio 2025</div>
-      <div id="cupon-timer">⏳ cargando...</div>
-    </div>
-  </div>
+<!-- CUPÓN SEMANAL (fecha automática, siempre vigente) -->
+<div id="cupon-banner" style="background:linear-gradient(90deg,#111,#1a0a2e,#111); border-bottom:1px solid #2a1a4a; padding:10px 16px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px; text-align:center;">
+  <span style="font-size:16px;">🎟️</span>
+  <span style="font-family:var(--font-body); font-size:12.5px; color:#e5e5e5; letter-spacing:.02em;">
+    Código <strong style="color:var(--accent2);">CHECHENA50</strong> — $50 MXN / $2.50 USD de descuento en tu megapack ·
+    <span id="cupon-vence-texto">válido esta semana</span>
+  </span>
+  <button onclick="navigator.clipboard.writeText('CHECHENA50'); this.textContent='✓ Copiado'; setTimeout(()=>this.textContent='Copiar código',2000)"
+    style="background:var(--accent); color:#fff; border:none; font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:.08em; text-transform:uppercase; padding:6px 14px; border-radius:3px;">Copiar código</button>
+  <button onclick="document.getElementById('cupon-banner').style.display='none'" style="background:none; border:none; color:#888; font-size:14px; padding:4px;" title="Cerrar">✕</button>
 </div>
-
 <script>
-function copiarCupon(el) {
-  navigator.clipboard.writeText('CHECHENA50').then(() => {
-    const orig = el.textContent;
-    el.textContent = '✓ ¡Copiado!';
-    el.style.background = 'rgba(34,197,94,0.3)';
-    setTimeout(() => { el.textContent = orig; el.style.background = ''; }, 2000);
-  }).catch(() => {
-    alert('Código: CHECHENA50');
-  });
-}
-
-(function cuponTimer(){
-  const limite = new Date('2025-06-30T23:59:59');
-  function actualizar(){
-    const ahora = new Date();
-    const diff = limite - ahora;
-    const el = document.getElementById('cupon-timer');
-    if(!el) return;
-    if(diff <= 0){ el.textContent = '⚠ Cupón expirado'; return; }
-    const d = Math.floor(diff/86400000);
-    const h = Math.floor((diff%86400000)/3600000);
-    const m = Math.floor((diff%3600000)/60000);
-    const s = Math.floor((diff%60000)/1000);
-    el.textContent = `⏳ ${d}d ${h}h ${m}m ${s}s restantes`;
-  }
-  actualizar();
-  setInterval(actualizar, 1000);
+(function(){
+  // Calcula el domingo de la semana actual a las 23:59 para que el cupón nunca se muestre vencido
+  const hoy = new Date();
+  const diasHastaDomingo = 7 - hoy.getDay() === 7 ? 0 : (7 - hoy.getDay()) % 7;
+  const finSemana = new Date(hoy);
+  finSemana.setDate(hoy.getDate() + diasHastaDomingo);
+  finSemana.setHours(23,59,0,0);
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const el = document.getElementById('cupon-vence-texto');
+  if (el) el.textContent = `válido hasta el ${finSemana.getDate()} de ${meses[finSemana.getMonth()]}`;
 })();
 </script>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-inner">
-    <span class="ticker-item cupon"><span class="ticker-icon">🎟️</span> CUPÓN ACTIVO: CHECHENA50 — $50 MXN / $2.50 USD DE DESCUENTO — VÁLIDO HASTA 30 JUNIO</span>
     <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +50,000 DISEÑOS DTF</span>
     <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +40,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
     <span class="ticker-item"><span class="ticker-icon">🔥</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
     <span class="ticker-item"><span class="ticker-icon">💀</span> ÚNETE A NUESTRO GRUPO DE WHATSAPP</span>
     <span class="ticker-item"><span class="ticker-icon">✅</span> ACCESO INMEDIATO — HERRAMIENTAS GRATIS INCLUIDAS</span>
-    <span class="ticker-item cupon"><span class="ticker-icon">🎟️</span> CUPÓN ACTIVO: CHECHENA50 — $50 MXN / $2.50 USD DE DESCUENTO — VÁLIDO HASTA 30 JUNIO</span>
     <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +50,000 DISEÑOS DTF</span>
     <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +40,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
     <span class="ticker-item"><span class="ticker-icon">🔥</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
@@ -1539,17 +1493,115 @@ function copiarCupon(el) {
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="slide-1">
-    <div class="slide-content">
-      <div class="slide-label">🔥 Oferta Especial</div>
-      <h1 class="slide-title">MEGAPACKS CON MILES DE DISEÑOS LISTOS PARA MANDAR A IMPRIMIR</h1>
-      <p class="slide-desc">DEJA DE PERDER TIEMPO DISEÑANDO Y ADQUIERE UN MEGAPACK DE DISEÑO.</p>
-      <a href="#megapacks" class="slide-btn">VER MÁS</a>
+<section class="hero" style="background:var(--black); padding:clamp(32px,6vw,72px) clamp(16px,5vw,40px);">
+  <div style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(24px,4vw,56px); align-items:center;">
+
+    <div>
+      <div class="slide-label" style="display:inline-block;">✅ Descarga inmediata</div>
+      <h1 style="font-family:var(--font-ui); font-weight:800; font-size:clamp(1.8rem,4vw,2.9rem); text-transform:uppercase; line-height:1.08; letter-spacing:.02em; margin:14px 0 16px; color:var(--white);">
+        DEJA DE PERDER HORAS DISEÑANDO<span style="color:var(--accent2);">.</span><br>IMPRIME HOY MISMO
+      </h1>
+      <p style="font-family:var(--font-body); font-size:clamp(13px,1.6vw,15px); color:#b3b3b3; line-height:1.65; max-width:520px; margin-bottom:24px;">
+        Miles de diseños listos para imprimir en DTF, DTG, sublimación y serigrafía. Los compras, los descargas al instante y los mandas directo a tu máquina.
+      </p>
+
+      <!-- TRUST BADGES -->
+      <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px;">
+        <div style="display:flex; align-items:center; gap:8px; background:var(--black3); border:1px solid var(--border2); border-radius:8px; padding:9px 14px;">
+          <span style="font-size:16px;">👕</span>
+          <span style="font-family:var(--font-body); font-size:12px; color:#ddd;"><strong style="color:#fff;">40,000+</strong> diseños</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; background:var(--accent); border-radius:8px; padding:9px 14px;">
+          <span style="font-size:16px;">⚡</span>
+          <span style="font-family:var(--font-body); font-size:12px; color:#fff;"><strong>Descarga</strong> inmediata</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; background:var(--black3); border:1px solid var(--border2); border-radius:8px; padding:9px 14px;">
+          <span style="font-size:16px;">🔄</span>
+          <span style="font-family:var(--font-body); font-size:12px; color:#ddd;">Diseños <strong style="color:#fff;">nuevos cada semana</strong></span>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-wrap:wrap; gap:12px;">
+        <a href="#megapacks" class="slide-btn" style="display:inline-block;">VER MEGAPACKS</a>
+        <a href="https://wa.me/529212337934?text=%C2%BFDudas%20sobre%20los%20megapacks%3F" target="_blank" rel="noopener"
+           style="display:inline-flex; align-items:center; gap:8px; background:transparent; color:var(--white); border:1px solid var(--border2); font-family:var(--font-body); font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:13px 28px; border-radius:3px; text-decoration:none;">
+          💬 ¿DUDAS? ESCRÍBENOS
+        </a>
+      </div>
     </div>
+
+<div>
+  <img src="banner1.jpg" alt="Playeras estampadas Chechena Shirts"
+       style="width:100%; height:clamp(260px,32vw,400px); object-fit:cover; border-radius:16px; display:block;">
+</div>
+
   </div>
 </section>
 
+
+<!-- TRUST SECTION -->
+<section class="trust-bar" style="background:var(--black3); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:clamp(36px,5vw,56px) 20px;">
+  <div style="max-width:1200px; margin:0 auto;">
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:28px; text-align:center; margin-bottom:44px;">
+      <div>
+        <div style="font-size:30px; margin-bottom:8px;">⚡</div>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">Descarga Inmediata</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">Recibe tus diseños al instante después del pago.</p>
+      </div>
+      <div>
+        <div style="font-size:30px; margin-bottom:8px;">👕</div>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">+40,000 Diseños</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">Actualizados cada semana. Nunca te quedas sin ideas.</p>
+      </div>
+      <div>
+        <div style="font-size:30px; margin-bottom:8px;">🔒</div>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">Pago Seguro</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">Tarjeta, PayPal o transferencia. Sin sorpresas.</p>
+      </div>
+      <div>
+        <div style="font-size:30px; margin-bottom:8px;">💬</div>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">Soporte Directo</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">¿Dudas? Te contestamos por WhatsApp.</p>
+      </div>
+    </div>
+
+    <!-- TESTIMONIOS RÁPIDOS -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;">
+      <div style="background:var(--black2); border:1px solid var(--border2); border-radius:12px; padding:20px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div style="width:38px; height:38px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900;">J</div>
+          <div>
+            <strong style="font-family:var(--font-body); font-size:13px; color:#fff;">Juan Pérez</strong>
+            <div style="color:#a78bfa; font-size:11px;">★★★★★</div>
+          </div>
+        </div>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.6; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
+      </div>
+      <div style="background:var(--black2); border:1px solid var(--border2); border-radius:12px; padding:20px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div style="width:38px; height:38px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900;">A</div>
+          <div>
+            <strong style="font-family:var(--font-body); font-size:13px; color:#fff;">Yazminarellano</strong>
+            <div style="color:#a78bfa; font-size:11px;">★★★★★</div>
+          </div>
+        </div>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.6; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
+      </div>
+      <div style="background:var(--black2); border:1px solid var(--border2); border-radius:12px; padding:20px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div style="width:38px; height:38px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900;">F</div>
+          <div>
+            <strong style="font-family:var(--font-body); font-size:13px; color:#fff;">Fernanda Ríos</strong>
+            <div style="color:#a78bfa; font-size:11px;">★★★★★</div>
+          </div>
+        </div>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.6; margin:0;">Muy buena calidad de imagen y variedad de diseños para imprimir.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <!-- MEGAPACKS -->
 <section id="megapacks" class="megapacks">
@@ -1570,11 +1622,16 @@ function copiarCupon(el) {
       <div class="mpack-info">
         <h3 class="mpack-name">MEGAPACK CHECHENA</h3>
         <p class="mpack-desc">Sublimación, Serigrafía, DTF & DTG</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">+40,000 diseños</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Multiformato</span>
+        </div>
         <div class="mpack-prices">
 <span class="mpack-old" data-mxn="439"> $ 439 MXN</span>
 <span class="mpack-new" data-mxn="250"> $ 250 MXN</span>
         </div>
-        <a href="pack-chechena.html" class="mpack-btn">VER MÁS</a>
+        <a href="pack-chechena.html" class="mpack-btn">COMPRAR Y DESCARGAR</a>
+        <p style="font-size:11px; color:#666; margin-top:8px; text-align:center;">⚡ Descarga inmediata al pagar</p>
       </div>
     </div>
 
@@ -1588,11 +1645,16 @@ function copiarCupon(el) {
       <div class="mpack-info">
         <h3 class="mpack-name">MEGAPACK OJITO</h3>
         <p class="mpack-desc">Diseños DTF DTG 2026</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">+50,000 diseños</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Tendencias 2026</span>
+        </div>
         <div class="mpack-prices">
 <span class="mpack-old" data-mxn="800"> $ 800 MXN</span>
 <span class="mpack-new" data-mxn="400"> $ 400 MXN</span>
         </div>
-        <a href="pack-ojito.html" class="mpack-btn">VER MÁS</a>
+        <a href="pack-ojito.html" class="mpack-btn">COMPRAR Y DESCARGAR</a>
+        <p style="font-size:11px; color:#666; margin-top:8px; text-align:center;">⚡ Descarga inmediata al pagar</p>
       </div>
     </div>
 
@@ -1601,7 +1663,7 @@ function copiarCupon(el) {
 <!-- MEGAPACKS -->
 <section id="megapacks" class="megapacks">
   <div class="megapacks-header">
-    <span class="megapacks-tag">⭐ Mejor valorado por nuestros clientes</span>
+    <span class="megapacks-tag">🆕 Nuevo de la semana</span>
     <h2 class="megapacks-title">PAQUETE EMPRENDEDOR ENVIO GRATIS</h2>
   </div>
 
@@ -1610,18 +1672,24 @@ function copiarCupon(el) {
     <!-- CARD 1 -->
     <div class="mpack-card">
       <div class="mpack-img-wrap">
-        <span class="mpack-badge">Más Vendido</span>
+        <span class="mpack-badge">Nuevo</span>
         <img src="em.png" alt="Megapack Chechena" class="mpack-img" />
         <span class="mpack-offer">Oferta</span>
       </div>
       <div class="mpack-info">
         <h3 class="mpack-name">PAQUETE EMPRENDEDOR</h3>
         <p class="mpack-desc">8 playeras premium con los diseños que tú eliges + etiqueta de cuello personalizada con tu marca. Envío gratis a todo México.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">8 playeras</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Tú eliges diseños</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Envío gratis</span>
+        </div>
         <div class="mpack-prices">
 <span class="mpack-old" data-mxn="3000"> $ 3000 MXN</span>
 <span class="mpack-new" data-mxn="2000"> $ 2000 MXN</span>
         </div>
-        <a href="emprendedor.html" class="mpack-btn">VER MÁS</a>
+        <a href="emprendedor.html" class="mpack-btn">QUIERO MI PAQUETE</a>
+        <p style="font-size:11px; color:#666; margin-top:8px; text-align:center;">🚚 Envío gratis a todo México</p>
       </div>
     </div>
 
@@ -2854,7 +2922,7 @@ document.addEventListener('keydown', (e) => {
       </ul>
     </div>
   <div class="footer-bottom">
-    <p>© 2025 Chechena Shirts. Todos los derechos reservados.</p>
+    <p>© 2026 Chechena Shirts. Todos los derechos reservados.</p>
 </footer>
 
 <!-- CARRITO -->
@@ -3073,6 +3141,23 @@ function toggleFaq(btn) {
   }
 }
 </script>
+<!-- WHATSAPP FLOTANTE -->
+<a href="https://wa.me/529212337934?text=%C2%BFNecesitas%20ayuda%20para%20elegir%20un%20dise%C3%B1o%3F" target="_blank" rel="noopener"
+   style="position:fixed; bottom:22px; right:22px; z-index:900; display:flex; align-items:center; gap:10px;
+          background:#25D366; color:#fff; padding:14px 18px; border-radius:50px;
+          box-shadow:0 6px 20px rgba(0,0,0,.4); font-family:'Space Grotesk',sans-serif; font-weight:700;
+          font-size:13px; text-decoration:none; transition:transform .2s, box-shadow .2s;"
+   onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"
+   title="¿Necesitas ayuda para elegir un diseño?">
+  <i class="fa-brands fa-whatsapp" style="font-size:22px;"></i>
+  <span class="wa-float-text" style="white-space:nowrap;">¿Necesitas ayuda para elegir un diseño?</span>
+</a>
+<style>
+  @media (max-width: 640px) {
+    .wa-float-text { display: none; }
+  }
+</style>
+
 </body>
 <script src="script.js"></script>
 </html>
