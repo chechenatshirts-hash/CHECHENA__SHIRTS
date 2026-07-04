@@ -135,6 +135,8 @@
     .preview-toolbar{width:100%;max-width:640px;display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
     .preview-toolbar h2{font-family:var(--font-head);font-size:1.3rem;letter-spacing:.06em;color:var(--text);}
     .toolbar-right{margin-left:auto;display:flex;gap:8px;}
+    .preview-body{display:flex;gap:18px;width:100%;max-width:900px;align-items:flex-start;justify-content:center;flex-wrap:wrap;}
+    @media (max-width:760px){ #mockupAdjustPanel{width:100% !important;max-width:640px;} }
 
     .canvas-outer{width:100%;max-width:640px;aspect-ratio:1/1;position:relative;overflow:hidden;border-radius:var(--r-xl);box-shadow:var(--sh-lg);background:#fff;border:1px solid var(--border);}
     .canvas-stage{width:1080px;height:1080px;position:absolute;top:0;left:0;transform-origin:top left;}
@@ -148,6 +150,7 @@
 
     /* library grid */
     .lib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    #mockupGrid{max-height:320px;overflow-y:auto;padding-right:4px;}
     .lib-item{position:relative;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden;background:var(--bg2);aspect-ratio:1/1;cursor:pointer;transition:all var(--tr);}
     .lib-item:hover{border-color:var(--accent);}
     .lib-item.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-lt);}
@@ -210,26 +213,6 @@
             <div class="sec-body">
               <div class="lib-grid" id="mockupGrid"></div>
               <p class="no-selection" id="mockupEmptyMsg" style="display:none">No hay mockups configurados. Agrega tus imágenes en el objeto MOCKUPS del código.</p>
-            </div>
-          </div>
-
-          <div class="sec open">
-            <div class="sec-head"><div class="sec-icon">📐</div><span class="sec-title">Ajuste de la Taza</span></div>
-            <div class="sec-body">
-              <div class="range-row">
-                <div class="range-head"><span>Tamaño</span><span class="range-val" id="valMockScale">80%</span></div>
-                <input type="range" id="mockScale" min="30" max="130" value="80" oninput="onMockRange(this,'valMockScale','mockupScale')" />
-              </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                <div class="range-row">
-                  <div class="range-head"><span>Pos. X</span></div>
-                  <input type="range" id="mockX" min="0" max="100" value="50" oninput="onMockRange(this,null,'mockupX')" />
-                </div>
-                <div class="range-row">
-                  <div class="range-head"><span>Pos. Y</span></div>
-                  <input type="range" id="mockY" min="0" max="100" value="50" oninput="onMockRange(this,null,'mockupY')" />
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -449,8 +432,28 @@
           <button class="btn btn-secondary btn-sm" onclick="handleExport()" id="btnExportTop" disabled>⬇ Descargar PNG</button>
         </div>
       </div>
-      <div class="canvas-outer" id="canvasOuter">
-        <div class="canvas-stage" id="canvasStage"></div>
+      <div class="preview-body">
+        <div class="canvas-outer" id="canvasOuter">
+          <div class="canvas-stage" id="canvasStage"></div>
+        </div>
+        <div class="sec" id="mockupAdjustPanel" style="width:220px;flex-shrink:0;">
+          <div class="sec-head"><div class="sec-icon">📐</div><span class="sec-title">Ajuste de la Taza</span></div>
+          <div class="sec-body">
+            <div class="range-row">
+              <div class="range-head"><span>Tamaño</span><span class="range-val" id="valMockScale">80%</span></div>
+              <input type="range" id="mockScale" min="30" max="130" value="80" oninput="onMockRange(this,'valMockScale','mockupScale')" />
+            </div>
+            <div class="range-row">
+              <div class="range-head"><span>Pos. X</span></div>
+              <input type="range" id="mockX" min="0" max="100" value="50" oninput="onMockRange(this,null,'mockupX')" />
+            </div>
+            <div class="range-row">
+              <div class="range-head"><span>Pos. Y</span></div>
+              <input type="range" id="mockY" min="0" max="100" value="50" oninput="onMockRange(this,null,'mockupY')" />
+            </div>
+            <button class="btn btn-primary" id="btnExportSide" disabled onclick="handleExport()" style="margin-top:6px;">⬇ Descargar Mockup PNG</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
