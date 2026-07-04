@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mockup Tazas · Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --bg2: #ede8df;
+      --surface: #faf7f2;
+      --surface2: #f2ede4;
+      --surface3: #e8e2d8;
+      --border: #ddd7cc;
+      --border2: #ccc5b8;
+      --text: #2d2820;
+      --text2: #6b6358;
+      --text3: #a09890;
+      --accent: #d9793f;
+      --accent2: #c2652e;
+      --accent-lt: rgba(217,121,63,.1);
+      --accent-glow: rgba(217,121,63,.25);
+      --green: #2a9d6e;
+      --red: #d94f4f;
+      --r-sm: 6px; --r: 10px; --r-lg: 16px; --r-xl: 22px;
+      --sh: 0 2px 12px rgba(0,0,0,.08);
+      --sh-lg: 0 8px 32px rgba(0,0,0,.12);
+      --font-head: 'Bebas Neue', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-w: 330px;
+      --tr: .18s cubic-bezier(.4,0,.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:14px;scroll-behavior:smooth;}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;display:grid;grid-template-rows:auto 1fr;overflow:hidden;height:100vh;}
+    ::-webkit-scrollbar{width:4px;height:4px;}
+    ::-webkit-scrollbar-track{background:var(--bg2);}
+    ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px;}
+
+    header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:16px;height:52px;position:sticky;top:0;z-index:100;}
+    .logo{font-family:var(--font-head);font-size:1.4rem;letter-spacing:.06em;color:var(--text);display:flex;align-items:center;gap:8px;text-decoration:none;}
+    .logo-icon{width:30px;height:30px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.65rem;font-weight:700;color:#fff;letter-spacing:.04em;}
+    .badge{font-size:.6rem;font-weight:600;background:var(--accent-lt);color:var(--accent);border:1px solid rgba(217,121,63,.3);border-radius:20px;padding:2px 8px;letter-spacing:.08em;text-transform:uppercase;font-family:var(--font-mono);}
+    .header-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .design-count-badge{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:5px 12px;font-family:var(--font-mono);font-size:.72rem;color:var(--text2);}
+    .design-count-badge strong{color:var(--accent);}
+    .icon-btn{width:34px;height:34px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all var(--tr);color:var(--text2);}
+    .icon-btn:hover{background:var(--surface3);border-color:var(--border2);color:var(--text);}
+
+    .app-layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr;overflow:hidden;height:calc(100vh - 52px);}
+    @media (max-width:900px){ .app-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto;} body{height:auto;overflow:auto;} }
+
+    aside{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:visible;}
+    .sidebar-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg2);padding:6px 6px 0;gap:2px;flex-wrap:wrap;}
+    .stab{flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:.56rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);cursor:pointer;border-radius:var(--r-sm) var(--r-sm) 0 0;border:1px solid transparent;border-bottom:none;transition:all var(--tr);font-family:var(--font-mono);background:transparent;}
+    .stab.active{color:var(--text);background:var(--surface);border-color:var(--border);border-bottom-color:var(--surface);position:relative;top:1px;}
+    .stab:hover:not(.active){color:var(--text2);background:rgba(0,0,0,.02);}
+    .sidebar-panel{display:none;flex:1;flex-direction:column;overflow:visible;}
+    .sidebar-panel.active{display:flex;}
+    .sidebar-scroll{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;height:0;}
+
+    .upload-zone{border:2px dashed var(--border2);border-radius:var(--r-lg);padding:18px 14px;text-align:center;cursor:pointer;transition:all var(--tr);position:relative;background:var(--bg2);}
+    .upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-lt);}
+    .upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+    .upload-zone-icon{width:34px;height:34px;background:rgba(217,121,63,.12);border-radius:10px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;border:1px solid rgba(217,121,63,.2);}
+    .upload-zone p{font-size:.76rem;color:var(--text2);font-weight:500;}
+    .upload-zone small{font-size:.6rem;color:var(--text3);margin-top:4px;display:block;font-family:var(--font-mono);letter-spacing:.04em;}
+
+    .sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh);}
+    .sec-head{display:flex;align-items:center;gap:9px;padding:11px 14px;font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text);font-family:var(--font-mono);border-bottom:1px solid var(--border);background:var(--surface2);}
+    .sec-icon{width:24px;height:24px;border-radius:7px;background:var(--accent-lt);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;border:1px solid rgba(217,121,63,.15);}
+    .sec-title{flex:1;}
+    .sec-body{display:flex;padding:14px;flex-direction:column;gap:12px;background:var(--surface);}
+    .sec + .sec{margin-top:0;}
+
+    .field{display:flex;flex-direction:column;gap:6px;}
+    .lbl{font-size:.58rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);font-family:var(--font-mono);display:flex;align-items:center;gap:5px;}
+    input[type="text"],select,textarea{font-family:var(--font-body);font-size:.8rem;color:var(--text);background:var(--bg);border:1px solid var(--border2);border-radius:var(--r-sm);padding:8px 10px;outline:none;width:100%;transition:border-color var(--tr),box-shadow var(--tr);}
+    input[type="text"]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-lt);}
+
+    .seg{display:flex;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:2px;gap:2px;}
+    .seg-btn{flex:1;font-family:var(--font-mono);font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:6px 5px;border:none;border-radius:4px;cursor:pointer;background:transparent;color:var(--text3);transition:all var(--tr);}
+    .seg-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);border:1px solid var(--border);}
+
+    .range-row{display:flex;flex-direction:column;gap:6px;}
+    .range-head{display:flex;justify-content:space-between;align-items:center;}
+    .range-head span:first-child{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);font-family:var(--font-mono);}
+    .range-val{font-size:.62rem;font-weight:700;color:var(--accent);background:var(--accent-lt);padding:2px 7px;border-radius:20px;font-family:var(--font-mono);border:1px solid rgba(217,121,63,.2);}
+    input[type="range"]{-webkit-appearance:none;width:100%;height:3px;background:var(--border2);border-radius:10px;outline:none;cursor:pointer;}
+    input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 3px var(--accent-lt);transition:transform .15s;}
+    input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.25);}
+
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;}
+    .toggle-row .tl{font-size:.76rem;font-weight:500;color:var(--text2);}
+    .toggle{position:relative;width:36px;height:20px;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .ttrack{position:absolute;inset:0;background:var(--border2);border-radius:20px;cursor:pointer;transition:background var(--tr);}
+    .ttrack::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;left:3px;top:3px;transition:left var(--tr);box-shadow:0 1px 3px rgba(0,0,0,.2);}
+    .toggle input:checked + .ttrack{background:var(--accent);}
+    .toggle input:checked + .ttrack::after{left:19px;}
+
+    .logo-upload-label{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px dashed var(--border2);border-radius:var(--r-sm);cursor:pointer;transition:all var(--tr);position:relative;color:var(--text2);}
+    .logo-upload-label:hover{border-color:var(--accent);background:var(--accent-lt);}
+    .logo-upload-label input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+    .logo-upload-label span{font-size:.74rem;font-weight:500;}
+
+    .color-presets{display:flex;flex-wrap:wrap;gap:6px;}
+    .cp{width:26px;height:26px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all var(--tr);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);}
+    .cp.active{border-color:var(--text);box-shadow:0 0 0 3px var(--accent-lt);}
+
+    .text-presets{display:flex;flex-wrap:wrap;gap:6px;}
+    .tp{font-family:var(--font-mono);font-size:.58rem;font-weight:600;padding:4px 8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;color:var(--text2);transition:all var(--tr);letter-spacing:.03em;}
+    .tp:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt);}
+
+    .sidebar-footer{padding:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;background:var(--bg2);}
+    .btn{font-family:var(--font-body);font-size:.78rem;font-weight:600;cursor:pointer;border:none;border-radius:var(--r-sm);padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all var(--tr);}
+    .btn-primary{background:var(--accent);color:#fff;}
+    .btn-primary:hover:not(:disabled){background:var(--accent2);box-shadow:0 4px 20px var(--accent-glow);transform:translateY(-1px);}
+    .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+    .btn-secondary:hover:not(:disabled){background:var(--surface3);border-color:var(--border2);}
+    .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
+    .btn-ghost:hover:not(:disabled){background:var(--surface2);}
+    .btn-sm{font-size:.68rem;padding:6px 9px;}
+    .btn:disabled{opacity:.35;cursor:not-allowed;}
+    .btn-row{display:flex;gap:6px;}
+    .btn-row .btn{flex:1;}
+
+    /* PREVIEW */
+    .preview-area{background:var(--bg);overflow-y:auto;padding:20px;position:relative;display:flex;flex-direction:column;align-items:center;}
+    .preview-toolbar{width:100%;max-width:640px;display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+    .preview-toolbar h2{font-family:var(--font-head);font-size:1.3rem;letter-spacing:.06em;color:var(--text);}
+    .toolbar-right{margin-left:auto;display:flex;gap:8px;}
+
+    .canvas-outer{width:100%;max-width:640px;aspect-ratio:1/1;position:relative;overflow:hidden;border-radius:var(--r-xl);box-shadow:var(--sh-lg);background:#fff;border:1px solid var(--border);}
+    .canvas-stage{width:1080px;height:1080px;position:absolute;top:0;left:0;transform-origin:top left;}
+    .canvas-layer{transition:box-shadow .1s;}
+    .canvas-layer.selected > img{outline:3px dashed var(--accent);outline-offset:4px;}
+    .canvas-layer:active{cursor:grabbing;}
+    .exporting .canvas-layer.selected > img{outline:none;}
+
+    .empty-hint{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text3);text-align:center;padding:30px;font-family:var(--font-mono);font-size:.75rem;z-index:5;}
+    .empty-hint .ic{font-size:2rem;}
+
+    /* library grid */
+    .lib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .lib-item{position:relative;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden;background:var(--bg2);aspect-ratio:1/1;cursor:pointer;transition:all var(--tr);}
+    .lib-item:hover{border-color:var(--accent);}
+    .lib-item.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-lt);}
+    .lib-item img{width:100%;height:100%;object-fit:contain;}
+    .lib-item .lib-del{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:4px;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .lib-item .lib-add{position:absolute;bottom:2px;right:2px;width:18px;height:18px;background:var(--accent);color:#fff;border:none;border-radius:4px;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+    .layer-list{display:flex;flex-direction:column;gap:6px;max-height:150px;overflow-y:auto;}
+    .layer-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;font-size:.7rem;}
+    .layer-row.active{border-color:var(--accent);background:var(--accent-lt);}
+    .layer-row img{width:26px;height:26px;object-fit:contain;border-radius:4px;background:var(--bg2);}
+    .layer-row .lname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);}
+    .layer-row .ldel{background:none;border:none;color:var(--red);cursor:pointer;font-size:.7rem;}
+    .no-selection{font-size:.7rem;color:var(--text3);font-family:var(--font-mono);text-align:center;padding:14px 6px;border:1px dashed var(--border);border-radius:var(--r-sm);}
+
+    /* export overlay */
+    .export-overlay{position:fixed;inset:0;background:rgba(20,16,10,.7);display:none;align-items:center;justify-content:center;z-index:999;}
+    .export-overlay.visible{display:flex;}
+    .export-box{background:var(--surface);border-radius:var(--r-lg);padding:26px 30px;text-align:center;min-width:260px;box-shadow:var(--sh-lg);}
+    .export-box h3{font-family:var(--font-head);font-size:1.1rem;letter-spacing:.05em;margin-bottom:4px;}
+    .export-box p{font-size:.75rem;color:var(--text2);margin-bottom:14px;}
+    .export-bar{height:6px;background:var(--border);border-radius:10px;overflow:hidden;}
+    .export-bar div{height:100%;background:var(--accent);transition:width .25s;width:0%;}
+
+    .notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:.78rem;font-weight:500;opacity:0;pointer-events:none;transition:all .25s;z-index:1000;box-shadow:var(--sh-lg);}
+    .notif.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .notif.error{background:var(--red);}
+
+    @media (max-width:900px){ aside{max-height:56vh;border-right:none;border-bottom:1px solid var(--border);} }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo"><div class="logo-icon">MT</div>MOCKUP TAZAS</a>
+    <span class="badge">Studio</span>
+    <div class="header-right">
+      <div class="design-count-badge"><span>Capas:</span><strong id="headerCount">0</strong></div>
+      <button class="icon-btn" title="Limpiar todo" onclick="clearAll()">🗑</button>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside>
+      <div class="sidebar-tabs">
+        <div class="stab active" onclick="switchTab('taza')">☕ Taza</div>
+        <div class="stab" onclick="switchTab('disenos')">🎨 Diseños</div>
+        <div class="stab" onclick="switchTab('fondo')">🖼 Fondo</div>
+        <div class="stab" onclick="switchTab('texto')">✏️ Texto</div>
+        <div class="stab" onclick="switchTab('marca')">🏷 Marca</div>
+        <div class="stab" onclick="switchTab('historial')">⏱ Hist.</div>
+      </div>
+
+      <!-- TAB: TAZA (mockup base, subido por el usuario) -->
+      <div class="sidebar-panel active" id="tab-taza">
+        <div class="sidebar-scroll">
+
+          <div class="sec open" id="secMockupLib">
+            <div class="sec-head"><div class="sec-icon">☕</div><span class="sec-title">Elige tu Taza</span></div>
+            <div class="sec-body">
+              <div class="lib-grid" id="mockupGrid"></div>
+              <p class="no-selection" id="mockupEmptyMsg" style="display:none">No hay mockups configurados. Agrega tus imágenes en el objeto MOCKUPS del código.</p>
+            </div>
+          </div>
+
+          <div class="sec open">
+            <div class="sec-head"><div class="sec-icon">📐</div><span class="sec-title">Ajuste de la Taza</span></div>
+            <div class="sec-body">
+              <div class="range-row">
+                <div class="range-head"><span>Tamaño</span><span class="range-val" id="valMockScale">80%</span></div>
+                <input type="range" id="mockScale" min="30" max="130" value="80" oninput="onMockRange(this,'valMockScale','mockupScale')" />
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div class="range-row">
+                  <div class="range-head"><span>Pos. X</span></div>
+                  <input type="range" id="mockX" min="0" max="100" value="50" oninput="onMockRange(this,null,'mockupX')" />
+                </div>
+                <div class="range-row">
+                  <div class="range-head"><span>Pos. Y</span></div>
+                  <input type="range" id="mockY" min="0" max="100" value="50" oninput="onMockRange(this,null,'mockupY')" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn btn-primary" id="btnExport" disabled onclick="handleExport()">⬇ Descargar Mockup PNG</button>
+        </div>
+      </div>
+
+      <!-- TAB: DISEÑOS (varios diseños, uno por uno, en el mismo mockup) -->
+      <div class="sidebar-panel" id="tab-disenos">
+        <div class="sidebar-scroll">
+          <div class="upload-zone" id="designUploadZone">
+            <input type="file" id="designInput" accept="image/png,image/jpeg,image/webp" multiple onchange="handleDesignFiles(this.files); this.value='';" />
+            <div class="upload-zone-icon">📁</div>
+            <p>Arrastra diseños o <strong>haz clic</strong></p>
+            <small>Cada diseño se coloca como su propia capa</small>
+          </div>
+
+          <div class="sec open">
+            <div class="sec-head"><div class="sec-icon">🗂</div><span class="sec-title">Librería de Diseños</span></div>
+            <div class="sec-body">
+              <div class="lib-grid" id="designGrid"></div>
+              <p class="no-selection" id="designEmptyMsg">Sube tu primer diseño</p>
+            </div>
+          </div>
+
+          <div class="sec open">
+            <div class="sec-head"><div class="sec-icon">🧩</div><span class="sec-title">Capas en este Mockup</span></div>
+            <div class="sec-body">
+              <div class="layer-list" id="layerList"></div>
+              <p class="no-selection" id="layerEmptyMsg" style="display:none">Aún no hay diseños colocados</p>
+            </div>
+          </div>
+
+          <div class="sec open" id="secLayerEdit" style="display:none">
+            <div class="sec-head"><div class="sec-icon">🎚</div><span class="sec-title">Editar Capa Seleccionada</span></div>
+            <div class="sec-body">
+              <div class="range-row">
+                <div class="range-head"><span>Tamaño</span><span class="range-val" id="valLayerScale">35%</span></div>
+                <input type="range" id="layerScale" min="5" max="100" value="35" oninput="onLayerRange(this,'valLayerScale','scale')" />
+              </div>
+              <div class="range-row">
+                <div class="range-head"><span>Rotación</span><span class="range-val" id="valLayerRot">0°</span></div>
+                <input type="range" id="layerRot" min="-180" max="180" value="0" oninput="onLayerRange(this,'valLayerRot','rotation','°')" />
+              </div>
+              <div class="range-row">
+                <div class="range-head"><span>Opacidad</span><span class="range-val" id="valLayerOpacity">100%</span></div>
+                <input type="range" id="layerOpacity" min="0" max="100" value="100" oninput="onLayerRange(this,'valLayerOpacity','opacity')" />
+              </div>
+              <p style="font-size:.6rem;color:var(--text3);font-family:var(--font-mono);">💡 También puedes arrastrar el diseño directo sobre el mockup.</p>
+              <div class="btn-row">
+                <button class="btn btn-secondary btn-sm" onclick="layerZ(1)">⬆ Al frente</button>
+                <button class="btn btn-secondary btn-sm" onclick="layerZ(-1)">⬇ Atrás</button>
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-secondary btn-sm" onclick="duplicateLayer()">⧉ Duplicar</button>
+                <button class="btn btn-ghost btn-sm" style="color:var(--red);border-color:var(--red)" onclick="deleteSelectedLayer()">✕ Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn btn-primary" id="btnExport2" disabled onclick="handleExport()">⬇ Descargar Mockup PNG</button>
+        </div>
+      </div>
+
+      <!-- TAB: FONDO -->
+      <div class="sidebar-panel" id="tab-fondo">
+        <div class="sidebar-scroll">
+          <div class="sec open">
+            <div class="sec-head"><div class="sec-icon">🎨</div><span class="sec-title">Tipo de Fondo</span></div>
+            <div class="sec-body">
+              <div class="seg">
+                <button class="seg-btn active" id="btnBgColor" onclick="setBgMode('color')">Color</button>
+                <button class="seg-btn" id="btnBgImage" onclick="setBgMode('image')">Imagen</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sec open" id="secBgColorPanel">
+            <div class="sec-head"><div class="sec-icon">🌈</div><span class="sec-title">Color / Degradado</span></div>
+            <div class="sec-body">
+              <div class="color-presets" id="bgColorPresets"></div>
+              <div class="field">
+                <label class="lbl">Color 1</label>
+                <input type="color" id="customBgColor" value="#f5f0e8" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="setCustomBgColor(this.value)" />
+              </div>
+              <div class="field">
+                <label class="lbl">Color 2 (degradado)</label>
+                <input type="color" id="customBgColor2" value="#ede8df" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="setCustomBgColor2(this.value)" />
+              </div>
+              <div class="range-row">
+                <div class="range-head"><span>Ángulo</span><span class="range-val" id="valGradAngle">135°</span></div>
+                <input type="range" id="gradAngle" min="0" max="360" value="135" oninput="onRange(this,'valGradAngle','angle','°')" />
+              </div>
+            </div>
+          </div>
+
+          <div class="sec open" id="secBgImagePanel" style="display:none">
+            <div class="sec-head"><div class="sec-icon">🖼</div><span class="sec-title">Imagen de Fondo</span></div>
+            <div class="sec-body">
+              <div class="upload-zone" id="bgImageUploadZone" style="padding:14px;">
+                <input type="file" id="bgImageInput" accept="image/png,image/jpeg,image/webp" onchange="handleBgImage(this.files[0]); this.value='';" />
+                <div class="upload-zone-icon">🌄</div>
+                <p>Sube una imagen de fondo</p>
+                <small>Se coloca detrás de la taza</small>
+              </div>
+              <div class="toggle-row">
+                <span class="tl">Blanco y Negro</span>
+                <label class="toggle"><input type="checkbox" id="bgGrayscale" onchange="onBgGrayscale()" /><span class="ttrack"></span></label>
+              </div>
+              <div class="range-row">
+                <div class="range-head"><span>Opacidad</span><span class="range-val" id="valBgImgOpacity">100%</span></div>
+                <input type="range" id="bgImgOpacity" min="0" max="100" value="100" oninput="onRange(this,'valBgImgOpacity','imageOpacity')" />
+              </div>
+              <div class="range-row">
+                <div class="range-head"><span>Zoom</span><span class="range-val" id="valBgImgScale">100%</span></div>
+                <input type="range" id="bgImgScale" min="50" max="250" value="100" oninput="onRange(this,'valBgImgScale','imageScale')" />
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div class="range-row">
+                  <div class="range-head"><span>Pos. X</span></div>
+                  <input type="range" id="bgImgX" min="0" max="100" value="50" oninput="onRange(this,null,'imageX')" />
+                </div>
+                <div class="range-row">
+                  <div class="range-head"><span>Pos. Y</span></div>
+                  <input type="range" id="bgImgY" min="0" max="100" value="50" oninput="onRange(this,null,'imageY')" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn btn-primary" id="btnExport3" disabled onclick="handleExport()">⬇ Descargar Mockup PNG</button>
+        </div>
+      </div>
+
+      <!-- TAB: TEXTO -->
+      <div class="sidebar-panel" id="tab-texto">
+        <div class="sidebar-scroll">
+          <div class="sec open">
+            <div class="sec-head"><div class="sec-icon">✏️</div><span class="sec-title">Textos</span></div>
+            <div class="sec-body">
+              <div class="field"><label class="lbl">Línea 1 (Título)</label><input type="text" id="textLine1" value="" placeholder="EJ. TAZAS PERSONALIZADAS" oninput="onTextChange()" /></div>
+              <div class="field"><label class="lbl">Línea 2 (Etiqueta)</label><input type="text" id="textLine2" value="" placeholder="EJ. HAZ TU PEDIDO" oninput="onTextChange()" /></div>
+              <div class="range-row">
+                <div class="range-head"><span>Tamaño título</span><span class="range-val" id="valFontSize">60px</span></div>
+                <input type="range" id="fontSize" min="24" max="110" value="60" oninput="onRange(this,'valFontSize','fontSize','px')" />
+              </div>
+              <div class="field">
+                <label class="lbl">Color de texto</label>
+                <input type="color" id="textColor" value="#2d2820" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="onTextColorChange(this.value)" />
+              </div>
+              <div class="field"><label class="lbl">Presets rápidos</label><div class="text-presets" id="textPresets"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn btn-primary" id="btnExport4" disabled onclick="handleExport()">⬇ Descargar Mockup PNG</button>
+        </div>
+      </div>
+
+      <!-- TAB: MARCA -->
+      <div class="sidebar-panel" id="tab-marca">
+        <div class="sidebar-scroll">
+          <div class="sec open">
+            <div class="sec-head"><div class="sec-icon">🏷</div><span class="sec-title">Tu Marca</span></div>
+            <div class="sec-body">
+              <div class="seg">
+                <button class="seg-btn" id="btnBrandText" onclick="setBrandType('text')">Texto</button>
+                <button class="seg-btn" id="btnBrandLogo" onclick="setBrandType('logo')">Logo</button>
+                <button class="seg-btn active" id="btnBrandNone" onclick="setBrandType('none')">Ninguno</button>
+              </div>
+              <div id="brandTextWrap" style="display:none">
+                <div class="field"><label class="lbl">Nombre de Marca</label><input type="text" id="brandText" placeholder="EJ. MI MARCA" oninput="onBrandTextChange()" /></div>
+              </div>
+              <div id="brandLogoWrap" style="display:none">
+                <label class="logo-upload-label"><span>📤</span><span id="logoUploadTxt">Subir Logo (PNG)</span><input type="file" id="logoInput" accept="image/png" onchange="onLogoUpload(event)" /></label>
+              </div>
+              <div class="field">
+                <label class="lbl">Posición de Marca</label>
+                <div class="seg">
+                  <button class="seg-btn active" id="btnBrandTR" onclick="setBrandPos('tr')">↗ Arr.Der.</button>
+                  <button class="seg-btn" id="btnBrandTL" onclick="setBrandPos('tl')">↖ Arr.Izq.</button>
+                  <button class="seg-btn" id="btnBrandBR" onclick="setBrandPos('br')">↘ Ab.Der.</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn btn-primary" id="btnExport5" disabled onclick="handleExport()">⬇ Descargar Mockup PNG</button>
+        </div>
+      </div>
+
+      <!-- TAB: HISTORIAL -->
+      <div class="sidebar-panel" id="tab-historial">
+        <div class="sidebar-scroll">
+          <div class="sec open">
+            <div class="sec-head"><div class="sec-icon">⏱</div><span class="sec-title">Configuraciones Guardadas</span></div>
+            <div class="sec-body">
+              <div id="histList" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn btn-ghost" onclick="saveToHistory()">💾 Guardar configuración</button>
+          <button class="btn btn-primary" id="btnExport6" disabled onclick="handleExport()">⬇ Descargar Mockup PNG</button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="preview-area">
+      <div class="preview-toolbar">
+        <h2>Vista Previa</h2>
+        <div class="toolbar-right">
+          <button class="btn btn-secondary btn-sm" onclick="handleExport()" id="btnExportTop" disabled>⬇ Descargar PNG</button>
+        </div>
+      </div>
+      <div class="canvas-outer" id="canvasOuter">
+        <div class="canvas-stage" id="canvasStage"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="export-overlay" id="exportOverlay">
+    <div class="export-box">
+      <h3 id="exportTitle">Generando…</h3>
+      <p id="exportSub">Por favor espera</p>
+      <div class="export-bar"><div id="exportProgressBar"></div></div>
+    </div>
+  </div>
+
+  <div class="notif" id="notif"></div>
+
+  <script>
+  /* ══════════════════════════════════════════════════════════
+     ⚙️ CONFIGURA AQUÍ TUS MOCKUPS DE TAZA (esto lo pone el desarrollador,
+     el usuario final NO sube tazas, solo sus diseños).
+     - Agrega una entrada por cada taza/ángulo/color que quieras ofrecer.
+     - "url" debe ser una imagen PNG con fondo transparente (idealmente)
+       de la taza en blanco, vista de frente.
+     - Si solo tienes una taza, deja una sola entrada: el selector
+       se oculta automáticamente y esa taza se usa siempre.
+  ══════════════════════════════════════════════════════════ */
+const MOCKUPS = {
+    taza_1: {
+      label: 'Taza Blanca',
+      url: 'https://i.ibb.co/tTtVHHJ5/Dise-o-sin-t-tulo.png'
+    },
+    taza_2: {
+      label: 'Taza blanca2',
+      url: 'https://i.ibb.co/S4rdTJxT/che.png'
+    },
+    taza_3: {
+      label: 'Taza verde',
+      url: 'https://i.ibb.co/DDqQ0mvm/che1.png'
+    },
+    taza_4: {
+      label: 'Taza roja',
+      url: 'https://i.ibb.co/GfGZv4wB/che4.png'
+    },
+    taza_5: {
+      label: 'taza azul',
+      url: 'https://i.ibb.co/qYRZNc6b/che5.png'
+    },
+    taza_6: {
+      label: 'taza negra',
+      url: 'https://i.ibb.co/gxR4H32/che6.png'
+    },
+    taza_7: {
+      label: 'taza b v',
+      url: 'https://i.ibb.co/fz5ZTVC6/che7.png'
+    },
+    taza_8: {
+      label: 'taza n d',
+      url: 'https://i.ibb.co/cXDvqhPW/che9.png'
+    },
+    taza_9: {
+      label: 'taza negra dif',
+      url: 'https://i.ibb.co/4wNyxQQd/che9-1.png'
+    },
+    taza_10: {
+      label: 'taza blanca di',
+      url: 'https://i.ibb.co/mCg4H5t4/che10.png'
+    },
+    taza_11: {
+      label: 'taza blancadif',
+      url: 'https://i.ibb.co/mVCVdNm1/che11.png'
+    },
+    taza_12: {
+      label: 'taza blanca dif',
+      url: 'https://i.ibb.co/9H5FGmbc/che12.png'
+    },
+    taza_13: {
+      label: 'taza blanca dife',
+      url: 'https://i.ibb.co/NnLV4TJH/che13.png'
+    },
+    taza_14: {
+      label: 'taza blanca diferen',
+      url: 'https://i.ibb.co/sdFBk1gZ/che14.png'
+    },
+    taza_15: {
+      label: 'taza blanca diferente',
+      url: 'https://i.ibb.co/4Rsvkw7q/che15.png'
+    },
+    taza_16: {
+      label: 'taza blanca diferente1',
+      url: 'https://i.ibb.co/RTjGrtM4/che16.png'
+    },
+    taza_17: {
+      label: 'taza b a',
+      url: 'https://i.ibb.co/wFGDhKpv/che17.png'
+    },
+    taza_18: {
+      label: 'taza',
+      url: 'https://i.ibb.co/0RtvykmD/che18.png'
+    },
+  };
+
+  /* ── DATA ── */
+  const BG_PRESETS = [
+    { c1:'#f5f0e8', c2:'#ede8df', label:'Crema' },
+    { c1:'#ffffff', c2:'#e8e2d8', label:'Blanco' },
+    { c1:'#0d0d0d', c2:'#1a1a1a', label:'Obsidiana' },
+    { c1:'#0f0c29', c2:'#302b63', label:'Noche' },
+    { c1:'#fff3e0', c2:'#ffd9a0', label:'Durazno' },
+    { c1:'#e0f7f4', c2:'#b2e8de', label:'Menta' },
+    { c1:'#ffe8ec', c2:'#ffc2ce', label:'Rosa' },
+    { c1:'#e8f0ff', c2:'#c2d6ff', label:'Cielo' },
+    { c1:'#1a0533', c2:'#4a0072', label:'Morado' },
+    { c1:'#1a1a2e', c2:'#16213e', label:'Azul Ocs.' },
+    { c1:'#1a0f00', c2:'#664400', label:'Café' },
+    { c1:'#111111', c2:'#333333', label:'Gris' },
+  ];
+  const TEXT_PRESETS = [
+    { l1:'TAZAS', l2:'PERSONALIZADAS', name:'Personalizadas' },
+    { l1:'NUEVA', l2:'COLECCIÓN', name:'Nueva Col.' },
+    { l1:'HAZ TU', l2:'PEDIDO', name:'Haz tu Pedido' },
+    { l1:'EDICIÓN', l2:'LIMITADA', name:'Ed. Limitada' },
+    { l1:'DISEÑOS', l2:'ÚNICOS', name:'Diseños Únicos' },
+    { l1:'SALE', l2:'50% OFF', name:'Sale' },
+    { l1:'REGALA', l2:'ALGO ÚNICO', name:'Regalo' },
+    { l1:'', l2:'', name:'Sin texto' },
+  ];
+
+  const uid = () => Math.random().toString(36).slice(2,10);
+
+  /* ── STATE ── */
+  const S = {
+    activeMockupId: Object.keys(MOCKUPS)[0] || null,
+    mockupScale: 80, mockupX: 50, mockupY: 50,
+    designsLibrary: [],
+    layers: [],
+    selectedLayerId: null,
+    bg: {
+      mode: 'color',
+      color1: '#f5f0e8', color2: '#ede8df', angle: 135,
+      image: null, grayscale: false, imageOpacity: 1, imageScale: 100, imageX: 50, imageY: 50,
+    },
+    line1: '', line2: '', fontSize: 60, textColor: '#2d2820',
+    brandType: 'none', brandText: '', brandLogo: null, brandPos: 'tr',
+    isExporting: false,
+    history: [],
+    _zCounter: 1,
+  };
+
+  /* ── TABS ── */
+  function switchTab(name) {
+    const tabs = ['taza','disenos','fondo','texto','marca','historial'];
+    document.querySelectorAll('.stab').forEach((t,i) => t.classList.toggle('active', tabs[i] === name));
+    document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  /* ── NOTIFY ── */
+  let _notifT;
+  function notify(msg, type='success') {
+    const n = document.getElementById('notif');
+    n.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
+    n.className = 'notif ' + type + ' show';
+    clearTimeout(_notifT);
+    _notifT = setTimeout(() => n.classList.remove('show'), 2600);
+  }
+
+  /* ── MOCKUPS (fijos, configurados por el desarrollador en el objeto MOCKUPS) ── */
+  function renderMockupGrid() {
+    const grid = document.getElementById('mockupGrid');
+    const keys = Object.keys(MOCKUPS);
+    grid.innerHTML = '';
+    document.getElementById('mockupEmptyMsg').style.display = keys.length ? 'none' : 'block';
+    document.getElementById('secMockupLib').style.display = keys.length > 1 ? '' : (keys.length === 1 ? 'none' : '');
+    keys.forEach(key => {
+      const m = MOCKUPS[key];
+      const el = document.createElement('div');
+      el.className = 'lib-item' + (key === S.activeMockupId ? ' active' : '');
+      el.title = m.label;
+      el.innerHTML = `<img src="${m.url}">`;
+      el.onclick = () => { S.activeMockupId = key; renderMockupGrid(); renderCanvas(); };
+      grid.appendChild(el);
+    });
+  }
+
+  function onMockRange(el, valId, key) {
+    const v = el.value;
+    if (valId) document.getElementById(valId).textContent = v + '%';
+    S[key] = parseFloat(v);
+    renderCanvas();
+  }
+
+  /* ── DESIGNS (librería + capas) ── */
+  function handleDesignFiles(files) {
+    const accepted = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (!accepted.length) return;
+    let loaded = 0;
+    accepted.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const design = { id: uid(), url: e.target.result, name: file.name };
+        S.designsLibrary.push(design);
+        addLayerFromDesign(design.id, true);
+        loaded++;
+        if (loaded === accepted.length) { renderDesignGrid(); notify(`${accepted.length} diseño(s) añadido(s) al mockup`, 'success'); }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function addLayerFromDesign(designId, stagger=false) {
+    const n = S.layers.length;
+    const offset = stagger ? (n % 5) * 6 : 0;
+    const layer = {
+      id: uid(), designId,
+      x: 50 + offset, y: 50 + offset,
+      scale: 35, rotation: 0, opacity: 1,
+      z: S._zCounter++,
+    };
+    S.layers.push(layer);
+    S.selectedLayerId = layer.id;
+    renderLayerList(); renderCanvas(); syncLayerEditPanel(); updateHeaderCount(); updateExportButtons();
+  }
+
+  function renderDesignGrid() {
+    const grid = document.getElementById('designGrid');
+    grid.innerHTML = '';
+    document.getElementById('designEmptyMsg').style.display = S.designsLibrary.length ? 'none' : 'block';
+    S.designsLibrary.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'lib-item';
+      el.innerHTML = `<img src="${d.url}"><button class="lib-add" title="Agregar otra vez al mockup">+</button><button class="lib-del" title="Eliminar de la librería">✕</button>`;
+      el.querySelector('.lib-add').onclick = (e) => { e.stopPropagation(); addLayerFromDesign(d.id); switchTab('disenos'); };
+      el.querySelector('.lib-del').onclick = (e) => { e.stopPropagation(); removeDesignFromLibrary(d.id); };
+      grid.appendChild(el);
+    });
+  }
+
+  function removeDesignFromLibrary(id) {
+    S.designsLibrary = S.designsLibrary.filter(d => d.id !== id);
+    S.layers = S.layers.filter(l => l.designId !== id);
+    if (S.selectedLayerId && !S.layers.find(l => l.id === S.selectedLayerId)) S.selectedLayerId = null;
+    renderDesignGrid(); renderLayerList(); renderCanvas(); syncLayerEditPanel(); updateHeaderCount(); updateExportButtons();
+  }
+
+  function renderLayerList() {
+    const list = document.getElementById('layerList');
+    list.innerHTML = '';
+    document.getElementById('layerEmptyMsg').style.display = S.layers.length ? 'none' : 'block';
+    S.layers.slice().sort((a,b) => b.z - a.z).forEach(layer => {
+      const design = S.designsLibrary.find(d => d.id === layer.designId);
+      if (!design) return;
+      const row = document.createElement('div');
+      row.className = 'layer-row' + (layer.id === S.selectedLayerId ? ' active' : '');
+      row.innerHTML = `<img src="${design.url}"><span class="lname">${design.name}</span><button class="ldel" title="Eliminar">✕</button>`;
+      row.querySelector('img').parentElement.onclick = () => selectLayer(layer.id);
+      row.onclick = () => selectLayer(layer.id);
+      row.querySelector('.ldel').onclick = (e) => { e.stopPropagation(); deleteLayer(layer.id); };
+      list.appendChild(row);
+    });
+  }
+
+  function selectLayer(id) {
+    S.selectedLayerId = id;
+    renderLayerList(); renderCanvas(); syncLayerEditPanel();
+  }
+
+  function syncLayerEditPanel() {
+    const panel = document.getElementById('secLayerEdit');
+    const layer = S.layers.find(l => l.id === S.selectedLayerId);
+    if (!layer) { panel.style.display = 'none'; return; }
+    panel.style.display = '';
+    document.getElementById('layerScale').value = layer.scale;
+    document.getElementById('valLayerScale').textContent = layer.scale + '%';
+    document.getElementById('layerRot').value = layer.rotation;
+    document.getElementById('valLayerRot').textContent = layer.rotation + '°';
+    document.getElementById('layerOpacity').value = Math.round(layer.opacity * 100);
+    document.getElementById('valLayerOpacity').textContent = Math.round(layer.opacity * 100) + '%';
+  }
+
+  function onLayerRange(el, valId, key, suffix='%') {
+    const layer = S.layers.find(l => l.id === S.selectedLayerId);
+    if (!layer) return;
+    const v = parseFloat(el.value);
+    document.getElementById(valId).textContent = el.value + suffix;
+    if (key === 'opacity') layer.opacity = v / 100;
+    else layer[key] = v;
+    renderCanvas();
+  }
+
+  function layerZ(dir) {
+    const layer = S.layers.find(l => l.id === S.selectedLayerId);
+    if (!layer) return;
+    layer.z = dir > 0 ? (S._zCounter++) : -1 * (S._zCounter++);
+    renderLayerList(); renderCanvas();
+  }
+
+  function duplicateLayer() {
+    const layer = S.layers.find(l => l.id === S.selectedLayerId);
+    if (!layer) return;
+    const copy = { ...layer, id: uid(), x: Math.min(95, layer.x + 5), y: Math.min(95, layer.y + 5), z: S._zCounter++ };
+    S.layers.push(copy);
+    S.selectedLayerId = copy.id;
+    renderLayerList(); renderCanvas(); syncLayerEditPanel(); updateHeaderCount(); updateExportButtons();
+  }
+
+  function deleteLayer(id) {
+    S.layers = S.layers.filter(l => l.id !== id);
+    if (S.selectedLayerId === id) S.selectedLayerId = null;
+    renderLayerList(); renderCanvas(); syncLayerEditPanel(); updateHeaderCount(); updateExportButtons();
+  }
+
+  function deleteSelectedLayer() { if (S.selectedLayerId) deleteLayer(S.selectedLayerId); }
+
+  /* ── FONDO ── */
+  function setBgMode(mode) {
+    S.bg.mode = mode;
+    document.getElementById('btnBgColor').classList.toggle('active', mode === 'color');
+    document.getElementById('btnBgImage').classList.toggle('active', mode === 'image');
+    document.getElementById('secBgColorPanel').style.display = mode === 'color' ? '' : 'none';
+    document.getElementById('secBgImagePanel').style.display = mode === 'image' ? '' : 'none';
+    renderCanvas();
+  }
+
+  function initBgColorPresets() {
+    const cont = document.getElementById('bgColorPresets');
+    BG_PRESETS.forEach((p,i) => {
+      const btn = document.createElement('div');
+      btn.className = 'cp' + (i === 0 ? ' active' : '');
+      btn.title = p.label;
+      btn.style.background = `linear-gradient(135deg, ${p.c1}, ${p.c2})`;
+      btn.onclick = () => {
+        document.querySelectorAll('.cp').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        S.bg.color1 = p.c1; S.bg.color2 = p.c2;
+        document.getElementById('customBgColor').value = p.c1;
+        document.getElementById('customBgColor2').value = p.c2;
+        renderCanvas();
+      };
+      cont.appendChild(btn);
+    });
+  }
+  function setCustomBgColor(v) { S.bg.color1 = v; renderCanvas(); }
+  function setCustomBgColor2(v) { S.bg.color2 = v; renderCanvas(); }
+
+  function handleBgImage(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => { S.bg.image = e.target.result; renderCanvas(); notify('Imagen de fondo añadida', 'success'); };
+    reader.readAsDataURL(file);
+  }
+  function onBgGrayscale() { S.bg.grayscale = document.getElementById('bgGrayscale').checked; renderCanvas(); }
+
+  function onRange(el, valId, key, suffix='%') {
+    const v = el.value;
+    if (valId) document.getElementById(valId).textContent = v + suffix;
+    if (key === 'imageOpacity') S.bg.imageOpacity = v / 100;
+    else if (['imageScale','imageX','imageY','angle'].includes(key)) S.bg[key] = parseFloat(v);
+    else if (key === 'fontSize') S.fontSize = parseInt(v);
+    else S[key] = v;
+    renderCanvas();
+  }
+
+  /* ── TEXTO ── */
+  function initTextPresets() {
+    const cont = document.getElementById('textPresets');
+    TEXT_PRESETS.forEach(p => {
+      const btn = document.createElement('div');
+      btn.className = 'tp';
+      btn.textContent = p.name;
+      btn.onclick = () => {
+        S.line1 = p.l1; S.line2 = p.l2;
+        document.getElementById('textLine1').value = p.l1;
+        document.getElementById('textLine2').value = p.l2;
+        renderCanvas();
+        notify('Texto aplicado: ' + p.name, 'success');
+      };
+      cont.appendChild(btn);
+    });
+  }
+  function onTextChange() {
+    S.line1 = document.getElementById('textLine1').value;
+    S.line2 = document.getElementById('textLine2').value;
+    renderCanvas();
+  }
+  function onTextColorChange(v) { S.textColor = v; renderCanvas(); }
+
+  /* ── MARCA ── */
+  function setBrandType(t) {
+    S.brandType = t;
+    document.getElementById('btnBrandText').classList.toggle('active', t === 'text');
+    document.getElementById('btnBrandLogo').classList.toggle('active', t === 'logo');
+    document.getElementById('btnBrandNone').classList.toggle('active', t === 'none');
+    document.getElementById('brandTextWrap').style.display = t === 'text' ? '' : 'none';
+    document.getElementById('brandLogoWrap').style.display = t === 'logo' ? '' : 'none';
+    renderCanvas();
+  }
+  function setBrandPos(p) {
+    S.brandPos = p;
+    ['tr','tl','br'].forEach(x => document.getElementById('btnBrand'+x.toUpperCase()).classList.toggle('active', x===p));
+    renderCanvas();
+  }
+  function onBrandTextChange() { S.brandText = document.getElementById('brandText').value; renderCanvas(); }
+  function onLogoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => { S.brandLogo = ev.target.result; document.getElementById('logoUploadTxt').textContent = file.name; renderCanvas(); };
+    reader.readAsDataURL(file);
+  }
+
+  /* ── HISTORIAL ── */
+  function saveToHistory() {
+    const snap = {
+      id: Date.now(),
+      time: new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}),
+      label: (S.line1 || 'Config') + ' · ' + (MOCKUPS[S.activeMockupId]?.label || 'sin taza'),
+      state: JSON.stringify({ bg:S.bg, line1:S.line1, line2:S.line2, fontSize:S.fontSize, textColor:S.textColor, brandType:S.brandType, brandText:S.brandText, brandPos:S.brandPos, mockupScale:S.mockupScale, mockupX:S.mockupX, mockupY:S.mockupY })
+    };
+    S.history.unshift(snap);
+    if (S.history.length > 20) S.history.pop();
+    renderHistory();
+    notify('Configuración guardada', 'success');
+  }
+  function renderHistory() {
+    const list = document.getElementById('histList');
+    list.innerHTML = '';
+    if (!S.history.length) { list.innerHTML = '<p style="font-size:.7rem;color:var(--text3);font-family:var(--font-mono);text-align:center;padding:16px 0;">Sin guardados aún</p>'; return; }
+    S.history.forEach(h => {
+      const item = document.createElement('div');
+      item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);';
+      item.innerHTML = `<div style="flex:1;min-width:0;"><div style="font-size:.74rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${h.label}</div><div style="font-size:.6rem;color:var(--text3);font-family:var(--font-mono);">${h.time}</div></div><button class="btn btn-secondary btn-sm" onclick="applyHistory(${h.id})">Aplicar</button>`;
+      list.appendChild(item);
+    });
+  }
+  function applyHistory(id) {
+    const h = S.history.find(x => x.id === id);
+    if (!h) return;
+    const saved = JSON.parse(h.state);
+    Object.assign(S.bg, saved.bg);
+    S.line1 = saved.line1; S.line2 = saved.line2; S.fontSize = saved.fontSize; S.textColor = saved.textColor;
+    S.brandType = saved.brandType; S.brandText = saved.brandText; S.brandPos = saved.brandPos;
+    S.mockupScale = saved.mockupScale; S.mockupX = saved.mockupX; S.mockupY = saved.mockupY;
+    document.getElementById('textLine1').value = S.line1 || '';
+    document.getElementById('textLine2').value = S.line2 || '';
+    document.getElementById('fontSize').value = S.fontSize;
+    document.getElementById('textColor').value = S.textColor;
+    setBrandType(S.brandType); setBrandPos(S.brandPos);
+    setBgMode(S.bg.mode);
+    renderCanvas();
+    notify('Configuración aplicada', 'success');
+  }
+
+  /* ── CANVAS RENDER ── */
+  function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function renderCanvas() {
+    const stage = document.getElementById('canvasStage');
+    stage.innerHTML = '';
+
+    // fondo color/gradiente (siempre presente como base)
+    const bgBase = document.createElement('div');
+    bgBase.style.cssText = `position:absolute;inset:0;background:linear-gradient(${S.bg.angle}deg, ${S.bg.color1}, ${S.bg.color2});z-index:1;`;
+    stage.appendChild(bgBase);
+
+    // imagen de fondo (si aplica)
+    if (S.bg.mode === 'image' && S.bg.image) {
+      const bgImg = document.createElement('div');
+      bgImg.style.cssText = `position:absolute;inset:0;overflow:hidden;z-index:2;`;
+      bgImg.innerHTML = `<img src="${S.bg.image}" style="position:absolute;left:${S.bg.imageX}%;top:${S.bg.imageY}%;width:${S.bg.imageScale}%;min-width:100%;min-height:100%;transform:translate(-50%,-50%);object-fit:cover;opacity:${S.bg.imageOpacity};filter:${S.bg.grayscale ? 'grayscale(100%)' : 'none'};">`;
+      stage.appendChild(bgImg);
+    }
+
+    // taza (mockup base)
+    const activeMockup = MOCKUPS[S.activeMockupId];
+    if (activeMockup) {
+      const mockDiv = document.createElement('div');
+      mockDiv.style.cssText = `position:absolute;left:${S.mockupX}%;top:${S.mockupY}%;width:${S.mockupScale}%;transform:translate(-50%,-50%);pointer-events:none;z-index:10;`;
+      mockDiv.innerHTML = `<img src="${activeMockup.url}" style="width:100%;height:auto;display:block;filter:drop-shadow(0 25px 45px rgba(0,0,0,.25));">`;
+      stage.appendChild(mockDiv);
+    } else {
+      const hint = document.createElement('div');
+      hint.className = 'empty-hint';
+      hint.innerHTML = `<div class="ic">☕</div><div>No hay ningún mockup configurado.<br/>Agrega tus imágenes en el objeto MOCKUPS del código.</div>`;
+      stage.appendChild(hint);
+    }
+
+    // capas de diseño (ordenadas por z)
+    S.layers.slice().sort((a,b) => a.z - b.z).forEach(layer => {
+      const design = S.designsLibrary.find(d => d.id === layer.designId);
+      if (!design) return;
+      const el = document.createElement('div');
+      el.className = 'canvas-layer' + (layer.id === S.selectedLayerId ? ' selected' : '');
+      el.dataset.id = layer.id;
+      el.style.cssText = `position:absolute;left:${layer.x}%;top:${layer.y}%;width:${layer.scale}%;transform:translate(-50%,-50%) rotate(${layer.rotation}deg);opacity:${layer.opacity};z-index:${100 + layer.z};cursor:grab;`;
+      el.innerHTML = `<img src="${design.url}" style="width:100%;height:auto;display:block;pointer-events:none;">`;
+      el.addEventListener('mousedown', startDrag);
+      el.addEventListener('touchstart', startDrag, { passive:false });
+      el.addEventListener('click', (e) => { e.stopPropagation(); selectLayer(layer.id); });
+      stage.appendChild(el);
+    });
+
+    // texto
+    const c1 = escHtml(S.line1), c2 = escHtml(S.line2);
+    if (c1 || c2) {
+      const line1 = c1 ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:${S.fontSize}px;font-weight:900;color:${S.textColor};line-height:1;letter-spacing:.03em;text-transform:uppercase;">${c1}</div>` : '';
+      const line2 = c2 ? `<div style="display:inline-block;background:${S.textColor};padding:5px 14px;margin-top:6px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:${S.bg.color1};letter-spacing:.05em;text-transform:uppercase;line-height:1;">${c2}</span></div>` : '';
+      const textDiv = document.createElement('div');
+      textDiv.style.cssText = 'position:absolute;top:50px;left:50px;z-index:200;pointer-events:none;max-width:70%;';
+      textDiv.innerHTML = line1 + line2;
+      stage.appendChild(textDiv);
+    }
+
+    // marca
+    let brandPosStyle = 'top:50px;right:50px;text-align:right;';
+    if (S.brandPos === 'tl') brandPosStyle = 'top:50px;left:50px;text-align:left;';
+    if (S.brandPos === 'br') brandPosStyle = 'bottom:50px;right:50px;text-align:right;';
+    let brand = '';
+    if (S.brandType === 'text' && S.brandText) {
+      brand = `<div style="font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:${S.textColor};letter-spacing:.06em;text-transform:uppercase;opacity:.9;">${escHtml(S.brandText)}</div>`;
+    } else if (S.brandType === 'logo' && S.brandLogo) {
+      brand = `<img src="${S.brandLogo}" style="height:56px;width:auto;max-width:240px;object-fit:contain;opacity:.9;">`;
+    }
+    if (brand) {
+      const brandDiv = document.createElement('div');
+      brandDiv.style.cssText = `position:absolute;${brandPosStyle}z-index:200;pointer-events:none;`;
+      brandDiv.innerHTML = brand;
+      stage.appendChild(brandDiv);
+    }
+
+    updateCanvasScale();
+  }
+
+  /* click en fondo del canvas deselecciona */
+  document.getElementById('canvasOuter').addEventListener('click', (e) => {
+    if (e.target.id === 'canvasOuter' || e.target.id === 'canvasStage') selectLayer(null);
+  });
+
+  /* ── RESPONSIVE SCALE ── */
+  function updateCanvasScale() {
+    const outer = document.getElementById('canvasOuter');
+    const stage = document.getElementById('canvasStage');
+    const factor = outer.clientWidth / 1080;
+    stage.style.transform = `scale(${factor})`;
+  }
+  window.addEventListener('resize', updateCanvasScale);
+
+  /* ── DRAG (mover capa directo en el lienzo) ── */
+  let dragState = null;
+  function startDrag(e) {
+    e.preventDefault();
+    const layerId = e.currentTarget.dataset.id;
+    selectLayer(layerId);
+    const rect = document.getElementById('canvasStage').getBoundingClientRect();
+    dragState = { layerId, rect };
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('touchmove', onDrag, { passive:false });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+  }
+  function onDrag(e) {
+    if (!dragState) return;
+    e.preventDefault();
+    const point = e.touches ? e.touches[0] : e;
+    const rect = dragState.rect;
+    let xPct = ((point.clientX - rect.left) / rect.width) * 100;
+    let yPct = ((point.clientY - rect.top) / rect.height) * 100;
+    xPct = Math.max(0, Math.min(100, xPct));
+    yPct = Math.max(0, Math.min(100, yPct));
+    const layer = S.layers.find(l => l.id === dragState.layerId);
+    if (layer) { layer.x = xPct; layer.y = yPct; renderCanvas(); }
+  }
+  function endDrag() {
+    dragState = null;
+    document.removeEventListener('mousemove', onDrag);
+    document.removeEventListener('touchmove', onDrag);
+    document.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('touchend', endDrag);
+  }
+
+  /* ── DRAG & DROP DE ARCHIVOS ── */
+  function initDragDrop(zoneId, handler) {
+    const zone = document.getElementById(zoneId);
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handler(e.dataTransfer.files); });
+  }
+
+  /* ── HEADER / BOTONES ── */
+  function updateHeaderCount() { document.getElementById('headerCount').textContent = S.layers.length; }
+  function updateExportButtons() {
+    const canExport = !!S.activeMockupId && !S.isExporting;
+    ['btnExport','btnExport2','btnExport3','btnExport4','btnExport5','btnExport6','btnExportTop'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = !canExport;
+    });
+  }
+
+  function clearAll() {
+    if (!S.layers.length) return;
+    if (!confirm('¿Eliminar todos tus diseños colocados?')) return;
+    S.designsLibrary = []; S.layers = []; S.selectedLayerId = null;
+    renderDesignGrid(); renderLayerList(); syncLayerEditPanel();
+    renderCanvas(); updateHeaderCount(); updateExportButtons();
+    notify('Diseños limpiados', 'success');
+  }
+
+  /* ── EXPORT ── */
+  function setExporting(flag, title='Procesando…', sub='Por favor espera', progress=0) {
+    S.isExporting = flag;
+    document.getElementById('exportOverlay').classList.toggle('visible', flag);
+    document.getElementById('exportTitle').textContent = title;
+    document.getElementById('exportSub').textContent = sub;
+    document.getElementById('exportProgressBar').style.width = progress + '%';
+    updateExportButtons();
+  }
+
+  async function captureCanvas() {
+    if (!window.htmlToImage) throw new Error('htmlToImage no disponible');
+    const stage = document.getElementById('canvasStage');
+    stage.classList.add('exporting');
+    // clon fijo 1080x1080 sin escalado ni bordes de selección
+    const clone = stage.cloneNode(true);
+    clone.style.transform = 'none';
+    clone.style.position = 'fixed';
+    clone.style.top = '0'; clone.style.left = '0';
+    clone.style.zIndex = '-9999';
+    clone.querySelectorAll('.canvas-layer.selected img').forEach(img => img.style.outline = 'none');
+    document.body.appendChild(clone);
+    await Promise.all(Array.from(clone.querySelectorAll('img')).map(img =>
+      img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
+    ));
+    await document.fonts.ready;
+    await new Promise(r => setTimeout(r, 80));
+    try {
+      const dataUrl = await window.htmlToImage.toPng(clone, { pixelRatio: 1.5 });
+      return dataUrl;
+    } finally {
+      document.body.removeChild(clone);
+      stage.classList.remove('exporting');
+    }
+  }
+
+  window.handleExport = async function() {
+    if (!S.activeMockupId) { notify('Primero sube una taza', 'error'); return; }
+    setExporting(true, 'Generando imagen…', 'Componiendo mockup…', 50);
+    try {
+      const dataUrl = await captureCanvas();
+      const link = document.createElement('a');
+      link.download = `mockup-taza-${(S.line1 || 'diseno').replace(/\s+/g,'-')}.png`;
+      link.href = dataUrl;
+      link.click();
+      notify('Mockup descargado', 'success');
+    } catch (err) {
+      notify('Error: ' + (err.message || err), 'error');
+    } finally { setExporting(false); }
+  };
+
+  /* ── BOOT ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    initBgColorPresets();
+    initTextPresets();
+    renderHistory();
+    initDragDrop('designUploadZone', handleDesignFiles);
+    renderMockupGrid();
+    renderDesignGrid();
+    renderLayerList();
+    syncLayerEditPanel();
+    renderCanvas();
+    updateHeaderCount();
+    updateExportButtons();
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mesa de Inspección DTF</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg:#10161a;
+    --panel:#182226;
+    --panel-raised:#1f2b30;
+    --text:#eae6dd;
+    --text-dim:#8fa0a3;
+    --film:#c98a3e;
+    --pass:#5fae9d;
+    --warn:#c1503f;
+    --rule:#2b383d;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;}
+  body{padding:28px 20px 60px;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
+
+  .wrap{max-width:1080px;margin:0 auto;}
+
+  header.hero{border-bottom:1px solid var(--rule);padding-bottom:24px;margin-bottom:28px;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--film);margin-bottom:10px;}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(32px,5vw,52px);line-height:1.02;letter-spacing:.01em;}
+  h1 span{color:var(--film);}
+  .hero-sub{max-width:56ch;color:var(--text-dim);font-size:15px;line-height:1.55;margin-top:12px;}
+
+  .grid{display:grid;grid-template-columns:300px 1fr;gap:20px;}
+  @media (max-width:820px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:var(--radius);padding:18px;}
+  .panel + .panel{margin-top:20px;}
+  .panel-title{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-bottom:14px;}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);margin-bottom:6px;}
+  .field input[type=number]{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--text);padding:9px 10px;font-family:'JetBrains Mono',monospace;font-size:14px;border-radius:var(--radius);}
+  .field input[type=number]:focus{outline:2px solid var(--film);outline-offset:1px;border-color:var(--film);}
+  .field-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+  .upload-btn{display:block;text-align:center;border:1px dashed var(--film);color:var(--film);padding:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:14px;border-radius:var(--radius);cursor:pointer;transition:background .15s,color .15s;}
+  .upload-btn:hover{background:var(--film);color:#10161a;}
+  .upload-btn input{display:none;}
+
+  button.action{width:100%;padding:12px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--pass);background:transparent;color:var(--pass);border-radius:var(--radius);cursor:pointer;transition:background .15s,color .15s;margin-top:6px;}
+  button.action:hover:not(:disabled){background:var(--pass);color:#10161a;}
+  button.action:disabled{opacity:.4;cursor:not-allowed;}
+  button.action:focus-visible{outline:2px solid var(--text);outline-offset:2px;}
+
+  .stage{background:var(--panel);border:1px solid var(--rule);border-radius:var(--radius);padding:16px;}
+  .lightbox{position:relative;width:100%;min-height:320px;border-radius:var(--radius);overflow:hidden;
+    background-color:#e8e4da;
+    background-image:linear-gradient(45deg,#d7d2c4 25%,transparent 25%),linear-gradient(-45deg,#d7d2c4 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d7d2c4 75%),linear-gradient(-45deg,transparent 75%,#d7d2c4 75%);
+    background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0;
+    display:flex;align-items:center;justify-content:center;}
+  .lightbox canvas{max-width:100%;max-height:420px;display:block;}
+  .lightbox .empty-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:#6b6558;text-align:center;padding:20px;}
+
+  .status-line{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);margin-top:10px;min-height:1.2em;}
+
+  /* Tira de inspección: filmstrip con perforaciones */
+  .filmstrip{margin-top:20px;background:#0c1215;border:1px solid var(--rule);border-radius:var(--radius);padding:10px 0;display:none;}
+  .filmstrip.visible{display:block;}
+  .sprockets{display:flex;justify-content:space-between;padding:0 14px;margin-bottom:6px;}
+  .sprockets span{width:8px;height:8px;background:var(--bg);border-radius:1px;}
+  .frame{display:grid;grid-template-columns:26px 1fr 90px;align-items:center;gap:12px;padding:10px 20px;border-top:1px solid #1c262a;opacity:0;transform:translateX(-6px);transition:opacity .4s ease,transform .4s ease;}
+  .frame.visible{opacity:1;transform:translateX(0);}
+  .frame:first-of-type{border-top:none;}
+  .stamp{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;}
+  .stamp.ok{border:2px solid var(--pass);color:var(--pass);}
+  .stamp.bad{border:2px solid var(--warn);color:var(--warn);}
+  .frame-name{font-size:13px;}
+  .frame-detail{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);grid-column:2 / 3;margin-top:2px;}
+  .frame-score{font-family:'JetBrains Mono',monospace;font-size:13px;text-align:right;color:var(--text-dim);}
+
+  /* Marcador de puntaje */
+  .score-row{display:flex;align-items:center;gap:18px;margin-top:18px;padding-top:16px;border-top:1px solid var(--rule);}
+  .dial{flex:none;}
+  .score-copy .grade{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;}
+  .score-copy .grade.ok{color:var(--pass);}
+  .score-copy .grade.warn{color:var(--warn);}
+  .score-copy .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);margin-top:2px;}
+
+  /* Nota del técnico (comentarios guardados, sin IA) */
+  .note{margin-top:20px;position:relative;background:#fbf8f1;color:#2a2620;border-radius:2px;padding:18px 18px 16px;box-shadow:0 6px 14px #0006;transform:rotate(-0.4deg);display:none;}
+  .note.visible{display:block;}
+  .note:before{content:"";position:absolute;top:-9px;left:24px;width:34px;height:16px;background:#c98a3ecc;border-radius:2px;box-shadow:0 2px 4px #0004;}
+  .note-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#7a5320;margin-bottom:8px;}
+  .note-body{font-size:13.5px;line-height:1.6;white-space:pre-wrap;}
+  .note-body.loading{color:#8a8370;font-style:italic;}
+
+  .advisor-btn{margin-top:14px;}
+
+  .res-warning{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--film);margin-top:4px;grid-column:2/3;}
+
+  .fix-block{margin-top:18px;padding-top:16px;border-top:1px solid var(--rule);display:none;}
+  .fix-block.visible{display:block;}
+
+  .after-section{margin-top:22px;display:none;}
+  .after-section.visible{display:block;}
+  .after-label{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .after-label .line{flex:1;height:1px;background:var(--rule);}
+  .after-label span{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--pass);}
+
+  button.download-btn{border-color:var(--pass);color:var(--pass);margin-top:16px;}
+
+  footer{margin-top:36px;color:var(--text-dim);font-size:11.5px;font-family:'JetBrains Mono',monospace;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Inspección previa a impresión &mdash; archivos DTF</div>
+    <h1>Mesa de <span>inspección</span> para pliegos DTF</h1>
+    <p class="hero-sub">Sube tu PNG, indica el tamaño físico al que se imprimirá, y revisa cinco condiciones que determinan si el diseño va a transferir bien sobre la película: resolución efectiva, bordes con halo de transparencia, detalle demasiado fino para el weeding, densidad de tinta y elementos aislados que se pueden despegar.</p>
+  </header>
+
+  <div class="grid">
+    <!-- Panel de control -->
+    <div>
+      <div class="panel">
+        <div class="panel-title">Ficha técnica</div>
+
+        <div class="field">
+          <label for="fileInput">Archivo PNG</label>
+          <label class="upload-btn" for="fileInput" id="uploadLabel">Cargar imagen</label>
+          <input type="file" id="fileInput" accept="image/png" />
+        </div>
+
+        <div class="field-pair">
+          <div class="field">
+            <label for="wcm">Ancho (cm)</label>
+            <input type="number" id="wcm" step="0.1" min="0" value="25" />
+          </div>
+          <div class="field">
+            <label for="hcm">Alto (cm)</label>
+            <input type="number" id="hcm" step="0.1" min="0" value="25" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="minFeature">Detalle mínimo aceptable (mm)</label>
+          <input type="number" id="minFeature" step="0.1" min="0.2" value="1.2" />
+        </div>
+
+        <div class="field">
+          <label for="minIsland">Isla aislada mínima (mm, lado del cuadrado)</label>
+          <input type="number" id="minIsland" step="0.1" min="0.3" value="1.2" />
+        </div>
+
+        <button class="action" id="btnAnalyze" disabled>Analizar pliego</button>
+        <div class="status-line" id="statusLine">Esperando archivo PNG…</div>
+      </div>
+    </div>
+
+    <!-- Escenario visual + resultados -->
+    <div>
+      <div class="stage">
+        <div class="lightbox" id="lightbox">
+          <div class="empty-msg" id="emptyMsg">Sin imagen cargada.<br>La mesa de luz mostrará aquí la transparencia real del PNG.</div>
+          <canvas id="previewCanvas" style="display:none;"></canvas>
+        </div>
+
+        <div class="filmstrip" id="filmstrip">
+          <div class="sprockets" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div id="framesHost"></div>
+        </div>
+
+        <div class="score-row" id="scoreRow" style="display:none;">
+          <svg class="dial" width="76" height="76" viewBox="0 0 76 76" id="dialSvg" aria-hidden="true">
+            <circle cx="38" cy="38" r="32" fill="none" stroke="#2b383d" stroke-width="7"/>
+            <circle cx="38" cy="38" r="32" fill="none" stroke="#5fae9d" stroke-width="7" stroke-linecap="round"
+                    id="dialArc" transform="rotate(-90 38 38)" stroke-dasharray="201" stroke-dashoffset="201"/>
+            <text x="38" y="43" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="18" fill="#eae6dd" id="dialNum">0</text>
+          </svg>
+          <div class="score-copy">
+            <div class="grade" id="gradeText">&mdash;</div>
+            <div class="num" id="scoreDetailText">&mdash;</div>
+          </div>
+        </div>
+
+        <button class="action advisor-btn" id="btnAdvisor" style="display:none;border-color:var(--film);color:var(--film);">Ver nota del técnico</button>
+        <div class="note" id="note">
+          <div class="note-title">Nota del técnico</div>
+          <div class="note-body" id="noteBody"></div>
+        </div>
+
+        <button class="action advisor-btn" id="btnVisionAdvisor" style="display:none;border-color:#7b9fc9;color:#7b9fc9;">Ver checklist de revisión manual</button>
+        <div class="note" id="visionNote" style="transform:rotate(0.3deg);">
+          <div class="note-title" style="color:#3d5a80;">Puntos a revisar a mano</div>
+          <div class="note-body" id="visionNoteBody"></div>
+        </div>
+
+        <div class="fix-block" id="fixBlock">
+          <button class="action" id="btnFix" style="border-color:var(--film);color:var(--film);">Corregir automáticamente</button>
+          <div class="status-line" id="fixStatus"></div>
+        </div>
+
+        <div class="after-section" id="afterSection">
+          <div class="after-label"><span>Después de corregir</span><div class="line"></div></div>
+
+          <div class="lightbox" id="lightboxAfter" style="min-height:220px;">
+            <canvas id="afterCanvas" style="display:block;"></canvas>
+          </div>
+
+          <div class="filmstrip visible" id="filmstripAfter">
+            <div class="sprockets" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div id="framesHostAfter"></div>
+          </div>
+
+          <div class="score-row" id="scoreRowAfter">
+            <svg class="dial" width="76" height="76" viewBox="0 0 76 76" id="dialSvgAfter" aria-hidden="true">
+              <circle cx="38" cy="38" r="32" fill="none" stroke="#2b383d" stroke-width="7"/>
+              <circle cx="38" cy="38" r="32" fill="none" stroke="#5fae9d" stroke-width="7" stroke-linecap="round"
+                      id="dialArcAfter" transform="rotate(-90 38 38)" stroke-dasharray="201" stroke-dashoffset="201"/>
+              <text x="38" y="43" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="18" fill="#eae6dd" id="dialNumAfter">0</text>
+            </svg>
+            <div class="score-copy">
+              <div class="grade" id="gradeTextAfter">&mdash;</div>
+              <div class="num" id="scoreDetailTextAfter">&mdash;</div>
+            </div>
+          </div>
+
+          <button class="action download-btn" id="btnDownload" style="display:none;">Descargar PNG corregido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Todo el análisis de imagen corre en tu navegador. Al pedir la "nota del técnico" o la "lectura visual del diseño", tu navegador le habla a tu propio servidor (no directo a Anthropic); el servidor guarda la API key y reenvía la solicitud.</footer>
+</div>
+
+<script>
+/* =========================================================================
+ * MÓDULO: DTFCore
+ * -------------------------------------------------------------------------
+ * Problema: convertir un archivo PNG en estructuras de datos manipulables
+ * (canvas, ImageData, máscara binaria) y ofrecer las dos primitivas de
+ * morfología/geometría que el resto de la app necesita: una transformada
+ * de distancia (para erosión rápida) y un etiquetado de componentes
+ * conexas (para detectar islas de tinta).
+ *
+ * Decisiones de rendimiento:
+ * - Para el análisis (no para la vista) se trabaja sobre una copia
+ *   reescalada a un lado máximo de 700px. Esto evita operar sobre
+ *   millones de píxeles en imágenes de imprenta de alta resolución,
+ *   sin afectar la fidelidad de los checks (que son estadísticos).
+ * - La transformada de distancia usa un algoritmo de dos pasadas
+ *   (ida y vuelta) con métrica "chessboard/manhattan" aproximada:
+ *   O(W*H) en vez de erosión iterativa clásica O(radio * W * H).
+ * ========================================================================= */
+const DTFCore = (() => {
+
+  // Lee el chunk "pHYs" del PNG, si existe: es la etiqueta de DPI que
+  // muchos editores gráficos escriben por defecto (a veces 72, a veces
+  // 300) SIN considerar el tamaño físico real al que se va a imprimir.
+  // Es un dato meramente informativo del archivo, no una medida de
+  // calidad de impresión. Se muestra junto al DPI efectivo (el que sí
+  // importa) para que no parezcan cifras contradictorias.
+  function readEmbeddedDpi(arrayBuffer) {
+    try {
+      const view = new DataView(arrayBuffer);
+      // Firma PNG: 8 bytes fijos. Los chunks empiezan justo después.
+      const sig = [137, 80, 78, 71, 13, 10, 26, 10];
+      for (let i = 0; i < 8; i++) if (view.getUint8(i) !== sig[i]) return null;
+
+      let offset = 8;
+      while (offset + 8 <= view.byteLength) {
+        const length = view.getUint32(offset);
+        const type = String.fromCharCode(
+          view.getUint8(offset + 4), view.getUint8(offset + 5),
+          view.getUint8(offset + 6), view.getUint8(offset + 7)
+        );
+        const dataStart = offset + 8;
+        if (type === 'pHYs' && dataStart + 9 <= view.byteLength) {
+          const ppuX = view.getUint32(dataStart);
+          const ppuY = view.getUint32(dataStart + 4);
+          const unit = view.getUint8(dataStart + 8); // 1 = metro, 0 = desconocido
+          if (unit === 1 && ppuX > 0) {
+            return { dpiX: Math.round(ppuX * 0.0254), dpiY: Math.round(ppuY * 0.0254) };
+          }
+          return null;
+        }
+        if (type === 'IDAT' || type === 'IEND') return null; // pHYs siempre va antes
+        offset = dataStart + length + 4; // +4 del CRC
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  function loadPngToCanvas(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        file.arrayBuffer()
+          .then(buf => resolve({ canvas, ctx, width: canvas.width, height: canvas.height, embeddedDpi: readEmbeddedDpi(buf) }))
+          .catch(() => resolve({ canvas, ctx, width: canvas.width, height: canvas.height, embeddedDpi: null }));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo decodificar el PNG.')); };
+      img.src = url;
+    });
+  }
+
+  // Reescala a un lado máximo dado y devuelve un ImageData nuevo, más
+  // barato de analizar. Guarda el factor de escala para reconvertir
+  // medidas físicas (mm/px) a este espacio reducido.
+  function downsampleForAnalysis(sourceCanvas, maxSide) {
+    const { width, height } = sourceCanvas;
+    const scale = Math.min(1, maxSide / Math.max(width, height));
+    const w = Math.max(1, Math.round(width * scale));
+    const h = Math.max(1, Math.round(height * scale));
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(sourceCanvas, 0, 0, w, h);
+    return { imageData: ctx.getImageData(0, 0, w, h), width: w, height: h, scale };
+  }
+
+  // Máscara binaria de "tinta presente" a partir del canal alfa.
+  function alphaMask(imageData, alphaThreshold = 20) {
+    const { data, width, height } = imageData;
+    const mask = new Uint8Array(width * height);
+    for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+      mask[p] = data[i + 3] >= alphaThreshold ? 1 : 0;
+    }
+    return mask;
+  }
+
+  // Transformada de distancia Manhattan de dos pasadas sobre la máscara
+  // (distancia de cada píxel de tinta al píxel de fondo más cercano).
+  // Pasada 1: arriba-izquierda -> abajo-derecha. Pasada 2: inversa.
+  function distanceTransform(mask, width, height) {
+    const INF = width + height;
+    const dist = new Int32Array(width * height).fill(INF);
+    for (let i = 0; i < mask.length; i++) if (!mask[i]) dist[i] = 0;
+
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const idx = y * width + x;
+        if (dist[idx] === 0) continue;
+        let best = dist[idx];
+        if (x > 0) best = Math.min(best, dist[idx - 1] + 1);
+        if (y > 0) best = Math.min(best, dist[idx - width] + 1);
+        dist[idx] = best;
+      }
+    }
+    for (let y = height - 1; y >= 0; y--) {
+      for (let x = width - 1; x >= 0; x--) {
+        const idx = y * width + x;
+        if (dist[idx] === 0) continue;
+        let best = dist[idx];
+        if (x < width - 1) best = Math.min(best, dist[idx + 1] + 1);
+        if (y < height - 1) best = Math.min(best, dist[idx + width] + 1);
+        dist[idx] = best;
+      }
+    }
+    return dist;
+  }
+
+  // Erosiona la máscara: un píxel sobrevive si su distancia al fondo
+  // es mayor al radio pedido (en px del espacio de análisis).
+  function erodeByRadius(mask, width, height, radiusPx) {
+    const dist = distanceTransform(mask, width, height);
+    const out = new Uint8Array(mask.length);
+    for (let i = 0; i < mask.length; i++) out[i] = dist[i] > radiusPx ? 1 : 0;
+    return out;
+  }
+
+  // Etiquetado de componentes conexas (4-vecindad) por inundación
+  // iterativa (pila explícita, sin recursión) para evitar overflow.
+  function labelComponents(mask, width, height) {
+    const labels = new Int32Array(mask.length).fill(-1);
+    const areas = [];
+    let nextLabel = 0;
+    const stack = new Int32Array(mask.length);
+
+    for (let start = 0; start < mask.length; start++) {
+      if (!mask[start] || labels[start] !== -1) continue;
+      let sp = 0;
+      stack[sp++] = start;
+      labels[start] = nextLabel;
+      let area = 0;
+      while (sp > 0) {
+        const idx = stack[--sp];
+        area++;
+        const x = idx % width, y = (idx / width) | 0;
+        const neighbors = [
+          x > 0 ? idx - 1 : -1,
+          x < width - 1 ? idx + 1 : -1,
+          y > 0 ? idx - width : -1,
+          y < height - 1 ? idx + width : -1
+        ];
+        for (const n of neighbors) {
+          if (n >= 0 && mask[n] && labels[n] === -1) {
+            labels[n] = nextLabel;
+            stack[sp++] = n;
+          }
+        }
+      }
+      areas.push(area);
+      nextLabel++;
+    }
+    return { labels, areas, count: nextLabel };
+  }
+
+  return { loadPngToCanvas, downsampleForAnalysis, alphaMask, distanceTransform, erodeByRadius, labelComponents };
+})();
+
+/* =========================================================================
+ * MÓDULO: DTFChecks
+ * -------------------------------------------------------------------------
+ * Cinco analizadores independientes. Cada uno recibe datos de imagen ya
+ * preparados por DTFCore y devuelve un veredicto uniforme:
+ *   { id, name, pass, score(0-100), detail }
+ * El "score" de cada check es continuo (no solo pass/fail) para que el
+ * módulo de Scoring pueda ponderar severidad, no solo un booleano.
+ * ========================================================================= */
+const DTFChecks = (() => {
+
+  // 1) Resolución efectiva: píxeles por pulgada real dado el tamaño físico.
+  // embeddedDpi es la etiqueta de metadatos que trae el propio PNG (si la
+  // trae) — se muestra solo como aclaración, porque muchos "checadores"
+  // simples se conforman con leer esa etiqueta y no calculan nada; esa
+  // etiqueta NO sabe a qué tamaño físico se va a imprimir, así que puede
+  // decir "300 DPI ✅" en un archivo que a 25×25cm en realidad rinde
+  // mucho menos. El número que de verdad importa es el efectivo.
+  function checkResolution(pxWidth, pxHeight, cmWidth, cmHeight, embeddedDpi) {
+    const inW = cmWidth / 2.54, inH = cmHeight / 2.54;
+    const dpiW = pxWidth / inW, dpiH = pxHeight / inH;
+    const effectiveDpi = Math.min(dpiW, dpiH);
+    const target = 300;
+    const floor = 100;
+    let score = ((effectiveDpi - floor) / (target - floor)) * 100;
+    score = Math.max(0, Math.min(100, score));
+    const pass = effectiveDpi >= target * 0.9;
+
+    let metaNote = '';
+    if (embeddedDpi && embeddedDpi.dpiX) {
+      const metaDpi = embeddedDpi.dpiX;
+      if (Math.abs(metaDpi - effectiveDpi) > target * 0.15) {
+        metaNote = ` (el archivo trae una etiqueta interna de ${metaDpi} DPI, pero esa etiqueta no considera el tamaño de impresión — no es un dato confiable de calidad, ignórala)`;
+      }
+    }
+
+    return {
+      id: 'resolucion', name: 'Resolución efectiva', pass, score,
+      detail: `${effectiveDpi.toFixed(0)} DPI efectivos (meta ≥ ${target} DPI) a ${cmWidth}×${cmHeight} cm${metaNote}`,
+      effectiveDpi
+    };
+  }
+
+  // 2) Integridad del canal alfa: busca "halo" de semitransparencia en los
+  // bordes, que en DTF puede imprimirse como anillo blanquecino visible.
+  //
+  // OJO: el antialiasing normal de 1 píxel (el que tiene CUALQUIER curva,
+  // letra o línea diagonal renderizada con suavizado) también produce
+  // píxeles con alfa intermedio en el borde — y eso es normal, esperado,
+  // e inofensivo al imprimir. Un halo problemático de verdad es una BANDA
+  // ANCHA de semitransparencia (varios píxeles de transición gradual, típico
+  // de sombras difuminadas o capas mal aplanadas), no un solo píxel suave.
+  // Por eso este check ya no cuenta "hay algún vecino semitransparente"
+  // (eso da falsos positivos en casi cualquier diseño con curvas/tipografía),
+  // sino que distingue: un píxel semitransparente que toca, a 1 paso de
+  // distancia, tanto un píxel totalmente opaco como uno totalmente vacío,
+  // es una transición fina de 1px (antialiasing normal). Si NO toca ambos
+  // extremos tan cerca, es parte de una banda más ancha (halo real).
+  function checkAlphaIntegrity(imageData) {
+    const { data, width, height } = imageData;
+    let semiCount = 0, haloCount = 0;
+    const alphaAt = (x, y) => data[(y * width + x) * 4 + 3];
+
+    for (let y = 1; y < height - 1; y++) {
+      for (let x = 1; x < width - 1; x++) {
+        const a = alphaAt(x, y);
+        const isSemi = a > 25 && a < 235;
+        if (!isSemi) continue;
+        semiCount++;
+
+        let touchesOpaque = false, touchesTransparent = false;
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            if (dx === 0 && dy === 0) continue;
+            const na = alphaAt(x + dx, y + dy);
+            if (na >= 235) touchesOpaque = true;
+            if (na <= 20) touchesTransparent = true;
+          }
+        }
+        // Si NO toca ambos extremos a 1 paso, es una transición ancha real.
+        if (!(touchesOpaque && touchesTransparent)) haloCount++;
+      }
+    }
+    const haloRatio = semiCount > 0 ? haloCount / semiCount : 0;
+    const score = Math.max(0, 100 - haloRatio * 220);
+    const pass = haloRatio < 0.25;
+    return {
+      id: 'alpha', name: 'Bordes y transparencia', pass, score,
+      detail: semiCount > 0
+        ? `${(haloRatio * 100).toFixed(1)}% de los píxeles con transparencia parcial forman una banda ancha (halo real); el resto es antialiasing normal de 1px`
+        : `Sin píxeles con transparencia parcial en los bordes`,
+      haloRatio
+    };
+  }
+
+  // 3) Detalle mínimo: erosiona la máscara al radio físico pedido y mide
+  // qué fracción del área se perdería (trazos demasiado finos para el weeding).
+  // Además reporta el grosor mínimo REAL detectado (en px de la imagen
+  // original), como diagnóstico — este check ya NO se corrige engrosando
+  // el trazo automáticamente, solo se señala para que se ajuste a mano.
+  function checkMinFeature(mask, width, height, effectiveDpi, minFeatureMm, scale) {
+    const pxPerMm = (effectiveDpi / 25.4) * scale; // ajustado al espacio reescalado
+    const radiusPx = Math.max(1, (minFeatureMm / 2) * pxPerMm);
+    const eroded = DTFCore.erodeByRadius(mask, width, height, radiusPx);
+    let original = 0, survived = 0;
+    for (let i = 0; i < mask.length; i++) { original += mask[i]; survived += eroded[i]; }
+    const lossRatio = original > 0 ? 1 - (survived / original) : 0;
+    const score = Math.max(0, 100 - lossRatio * 260);
+    const pass = lossRatio < 0.18;
+
+    // Grosor mínimo real: para cada componente conexo, su "medio-ancho"
+    // máximo (distancia al fondo más lejana dentro de esa forma) es el
+    // radio del punto más grueso de esa forma. El componente con el
+    // medio-ancho máximo MÁS CHICO es la forma más delgada del diseño.
+    const distToBg = DTFCore.distanceTransform(mask, width, height);
+    const { labels, count } = DTFCore.labelComponents(mask, width, height);
+    let minThicknessDetail = null;
+    if (count > 0) {
+      const maxHalfWidthPerLabel = new Float32Array(count);
+      for (let i = 0; i < mask.length; i++) {
+        if (mask[i] && labels[i] >= 0 && distToBg[i] > maxHalfWidthPerLabel[labels[i]]) {
+          maxHalfWidthPerLabel[labels[i]] = distToBg[i];
+        }
+      }
+      let minHalfWidthPxAnalysis = Infinity;
+      for (let l = 0; l < count; l++) minHalfWidthPxAnalysis = Math.min(minHalfWidthPxAnalysis, maxHalfWidthPerLabel[l]);
+      const minWidthPxAnalysis = minHalfWidthPxAnalysis * 2;
+      const minWidthPxFull = minWidthPxAnalysis / scale; // a resolución original
+      const minWidthMm = minWidthPxAnalysis / pxPerMm;
+      minThicknessDetail = { minWidthPxFull, minWidthMm };
+    }
+
+    // El marcador visual sigue el MISMO veredicto que el resto del check
+    // (basado en qué tanto área del diseño depende de trazos finos), para
+    // no mostrar un ✓ general y un ❌ suelto contradictorio en la misma
+    // línea. El grosor mínimo se muestra siempre como dato informativo.
+    const thicknessLine = minThicknessDetail
+      ? ` — Grosor mínimo detectado: ${Math.round(minThicknessDetail.minWidthPxFull)} px (~${minThicknessDetail.minWidthMm.toFixed(2)} mm)${pass ? '' : ' ❌'}`
+      : '';
+
+    return {
+      id: 'detalle', name: 'Detalle mínimo', pass, score,
+      detail: `${(lossRatio * 100).toFixed(1)}% del área depende de trazos más finos que ${minFeatureMm} mm${thicknessLine}`,
+      lossRatio,
+      minThicknessDetail
+    };
+  }
+
+  // 4) Densidad de tinta: proxy de carga de colorante en zonas opacas
+  // (áreas muy oscuras y muy extensas curan peor y tienden a cuartearse).
+  function checkInkDensity(imageData, mask) {
+    const { data } = imageData;
+    let fg = 0, denseSum = 0;
+    for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+      if (!mask[p]) continue;
+      fg++;
+      const lum = (data[i] + data[i + 1] + data[i + 2]) / (3 * 255);
+      denseSum += (1 - lum);
+    }
+    const avgDensity = fg > 0 ? denseSum / fg : 0;
+    const foregroundShare = fg / mask.length;
+    // Penaliza cuando hay mucha superficie Y esa superficie es muy densa a la vez.
+    const risk = avgDensity * foregroundShare;
+    const score = Math.max(0, 100 - risk * 260);
+    const pass = risk < 0.28;
+    return {
+      id: 'tinta', name: 'Densidad de tinta', pass, score,
+      detail: `Carga de color promedio ${(avgDensity * 100).toFixed(0)}% sobre ${(foregroundShare * 100).toFixed(0)}% del pliego`,
+      avgDensity
+    };
+  }
+
+  // 5) Islas aisladas: componentes conexas por debajo de un área física
+  // mínima (riesgo de despegarse al hacer weeding o en el lavado).
+  // minIslandMm es configurable por el usuario: un diseño con tipografía
+  // o elementos decorativos pequeños (letras sueltas, estrellas, líneas
+  // punteadas) puede tener MUCHAS formas legítimas por debajo de 3x3mm,
+  // así que ese umbral ya no viene fijo en el código.
+  function checkIsolatedIslands(labelResult, effectiveDpi, scale, minIslandMm = 3) {
+    const pxPerMm = (effectiveDpi / 25.4) * scale;
+    const minAreaPx = Math.pow(pxPerMm * minIslandMm, 2);
+    const { areas } = labelResult;
+    const small = areas.filter(a => a < minAreaPx);
+    const smallRatio = areas.length > 0 ? small.length / areas.length : 0;
+    const score = Math.max(0, 100 - smallRatio * 180);
+    const pass = smallRatio < 0.35 || areas.length <= 1;
+    return {
+      id: 'islas', name: 'Elementos aislados', pass, score,
+      detail: `${small.length} de ${areas.length} formas son más pequeñas que ${minIslandMm}×${minIslandMm} mm`,
+      smallRatio, totalIslands: areas.length
+    };
+  }
+
+  return { checkResolution, checkAlphaIntegrity, checkMinFeature, checkInkDensity, checkIsolatedIslands };
+})();
+
+/* =========================================================================
+ * MÓDULO: DTFScoring
+ * -------------------------------------------------------------------------
+ * Combina los cinco veredictos en un puntaje interpretable. Los pesos
+ * reflejan una prioridad propia: resolución y detalle mínimo determinan
+ * la nitidez final y pesan más que la densidad de tinta.
+ * ========================================================================= */
+const DTFScoring = (() => {
+  const WEIGHTS = { resolucion: 0.25, alpha: 0.20, detalle: 0.25, tinta: 0.10, islas: 0.20 };
+
+  function aggregate(results) {
+    let total = 0;
+    for (const r of results) total += (WEIGHTS[r.id] ?? 0) * r.score;
+    total = Math.round(total);
+    let grade, ok;
+    if (total >= 90) { grade = 'Listo para imprimir'; ok = true; }
+    else if (total >= 70) { grade = 'Aceptable con ajustes'; ok = true; }
+    else if (total >= 50) { grade = 'Requiere correcciones'; ok = false; }
+    else { grade = 'No recomendado para DTF'; ok = false; }
+    return { total, grade, ok };
+  }
+
+  return { aggregate, WEIGHTS };
+})();
+
+/* =========================================================================
+ * MÓDULO: DTFAdvisor
+ * -------------------------------------------------------------------------
+ * Genera la "nota del técnico" SIN ningún servicio externo ni IA: arma
+ * el texto combinando comentarios guardados de antemano, elegidos según
+ * qué checks pasaron/fallaron y qué tan mal. Cada situación tiene varias
+ * variantes (banco de frases) para que la nota no se sienta repetida
+ * entre corridas parecidas; la elección entre variantes es aleatoria,
+ * pero el CONTENIDO depende siempre de los datos reales del análisis.
+ * ========================================================================= */
+const DTFAdvisor = (() => {
+  // Pequeño helper: elige una frase al azar de un banco de variantes.
+  function pick(bank) { return bank[Math.floor(Math.random() * bank.length)]; }
+
+  // Comentarios por check, separados en "falla" y "aprueba". Cada uno
+  // recibe el resultado del check (r) para poder citar su detalle
+  // numérico exacto y sonar específico en vez de genérico.
+  const COMMENTS = {
+    resolucion: {
+      fail: r => pick([
+        `La resolución efectiva no alcanza para el tamaño de impresión (${r.detail}); esto no se corrige con software, así que hay que reducir el tamaño físico o pedir el archivo en mayor resolución.`,
+        `Falta resolución para imprimir a este tamaño (${r.detail}). No hay atajo aquí: o se imprime más chico, o se consigue el original con más píxeles.`,
+        `El archivo se ve corto de resolución para las medidas indicadas (${r.detail}). Antes de mandarlo a máquina, confirma el tamaño real con el cliente o reduce el pliego.`
+      ]),
+      pass: r => pick([
+        `La resolución efectiva está bien para el tamaño solicitado (${r.detail}).`,
+        `En resolución no hay drama: alcanza de sobra para este tamaño de impresión (${r.detail}).`
+      ])
+    },
+    alpha: {
+      fail: r => pick([
+        `Se detectó halo de transparencia en los bordes (${r.detail}); ya se corrige solo al aplicar la corrección automática, así que no hace falta tocarlo a mano.`,
+        `Los bordes traían semitransparencia (${r.detail}). Es de las cosas que sí arregla el corrector automático sin afectar el diseño, así que no te preocupes por esto.`
+      ]),
+      pass: r => pick([
+        `Los bordes están limpios, sin halo de transparencia (${r.detail}).`,
+        `Alpha en buen estado: los bordes van a cortar bien en el weeding (${r.detail}).`
+      ])
+    },
+    detalle: {
+      fail: r => pick([
+        `Hay trazos por debajo del grosor mínimo (${r.detail}). Esto ya NO se engrosa automático porque eso cambiaría letras y firmas del arte original; hay que reforzarlo a mano en el archivo fuente si se quiere conservar tal cual.`,
+        `Detalle demasiado fino para el weeding (${r.detail}). El sistema lo deja como diagnóstico nada más — corregirlo bien significa editar el vector o el trazo original, no inventar grosor por software.`,
+        `Algunos trazos van a costar trabajo en el weeding por lo finos que están (${r.detail}). Si el diseño lo permite, engruésalos manualmente antes de imprimir.`
+      ]),
+      pass: r => pick([
+        `El detalle mínimo está por encima del umbral, no debería haber problema en el weeding (${r.detail}).`,
+        `Los trazos más finos igual aguantan el corte (${r.detail}).`
+      ])
+    },
+    tinta: {
+      fail: r => pick([
+        `La densidad de tinta en zonas opacas es alta (${r.detail}), lo que sube el riesgo de cuarteo al doblar la prenda. Esto ya no se aclara automático porque deslava el color; es decisión de taller: más pasadas, curva de RIP, o aceptar el riesgo si la prenda no se dobla mucho en esa zona.`,
+        `Riesgo de cuarteo por densidad de tinta (${r.detail}). El corrector ya no toca el color por su cuenta — si quieres bajar el riesgo, ajústalo en el RIP antes de imprimir, no en este archivo.`
+      ]),
+      pass: r => pick([
+        `Densidad de tinta dentro de rango, bajo riesgo de cuarteo (${r.detail}).`,
+        `La carga de color no debería dar problema de cuarteo (${r.detail}).`
+      ])
+    },
+    islas: {
+      fail: r => pick([
+        `Hay elementos aislados por debajo del tamaño mínimo configurado (${r.detail}); el corrector automático los descarta (alfa a 0) para que no se despeguen solos en la transferencia.`,
+        `Se encontraron islas de tinta muy pequeñas para sobrevivir al weeding (${r.detail}). Ya se eliminan solas al corregir, pero vale la pena confirmar que ninguna era una letra suelta o un punto de una í.`
+      ]),
+      pass: r => pick([
+        `No hay elementos aislados en riesgo de despegarse (${r.detail}).`,
+        `Todas las piezas del diseño tienen tamaño suficiente para no perderse en el weeding (${r.detail}).`
+      ])
+    }
+  };
+
+  // Cierre según el veredicto global, también con variantes.
+  const CLOSINGS = {
+    'Listo para imprimir': [
+      'En general el archivo está listo para imprimir tal cual.',
+      'Con esto ya se puede mandar a máquina sin más vueltas.'
+    ],
+    'Aceptable con ajustes': [
+      'Se puede imprimir, pero conviene revisar antes los puntos marcados arriba.',
+      'Pasa, aunque con algunos ajustes menores quedaría más seguro.'
+    ],
+    'Requiere correcciones': [
+      'Antes de imprimir conviene resolver al menos los puntos que fallaron.',
+      'Yo no lo mandaría a máquina todavía sin corregir lo de arriba.'
+    ],
+    'No recomendado para DTF': [
+      'Tal como está, no lo recomiendo para DTF; hay que corregir varios puntos primero.',
+      'Este archivo necesita trabajo antes de pasar a impresión.'
+    ]
+  };
+
+  function buildNote(results, scoreInfo) {
+    // Ordena: primero los que fallaron (peor score primero), luego los
+    // que pasaron, para que la nota priorice lo urgente como haría un
+    // técnico real revisando la ficha.
+    const failed = results.filter(r => !r.pass).sort((a, b) => a.score - b.score);
+    const passed = results.filter(r => r.pass);
+
+    const sentences = [];
+    for (const r of failed) sentences.push(COMMENTS[r.id].fail(r));
+    // Si algo pasó, se menciona brevemente solo si no hay demasiadas fallas
+    // (para no alargar la nota quejándose de lo mismo dos veces).
+    if (failed.length === 0) {
+      for (const r of passed) sentences.push(COMMENTS[r.id].pass(r));
+    } else if (passed.length > 0 && failed.length <= 2) {
+      sentences.push(pick([
+        `Lo demás está en orden (${passed.map(r => r.name.toLowerCase()).join(', ')}).`,
+        `El resto de los checks pasó sin novedad (${passed.map(r => r.name.toLowerCase()).join(', ')}).`
+      ]));
+    }
+    sentences.push(pick(CLOSINGS[scoreInfo.grade] || CLOSINGS['Aceptable con ajustes']));
+
+    return sentences.join(' ');
+  }
+
+  // Se mantiene async por compatibilidad con el código que la llama,
+  // aunque ya no hay ninguna espera real de red.
+  async function requestNote(results, scoreInfo) {
+    return buildNote(results, scoreInfo);
+  }
+
+  return { requestNote, buildNote };
+})();
+
+/* =========================================================================
+ * MÓDULO: DTFVisionAdvisor
+ * -------------------------------------------------------------------------
+ * Antes mandaba la imagen a un servicio de IA con visión. Ahora es un
+ * checklist de revisión MANUAL: no mira el diseño de verdad (esto no es
+ * IA), sino que arma, con comentarios guardados, una lista de puntos que
+ * SIEMPRE conviene revisar a simple vista porque los checks automáticos
+ * solo ven geometría, no significado (no distinguen una letra suelta de
+ * una mancha, ni un logo chico de basura gráfica). Qué comentarios entran
+ * depende de qué checks geométricos fallaron.
+ * ========================================================================= */
+const DTFVisionAdvisor = (() => {
+  function pick(bank) { return bank[Math.floor(Math.random() * bank.length)]; }
+
+  const CHECKLIST = {
+    islas: {
+      fail: () => pick([
+        'Antes de aceptar la corrección automática, confirma a simple vista que ninguna de las islas eliminadas era en realidad una letra suelta, un punto de una í o un ñ, o un elemento decorativo intencional.',
+        'Revisa el diseño original contra el corregido: si desapareció algo que era texto o firma legítima, hay que restaurarlo a mano en vez de dejarlo fuera.'
+      ]),
+      pass: () => pick([
+        'No se detectaron elementos aislados sospechosos, pero igual vale un vistazo rápido a letras pequeñas o puntos sueltos si el diseño tiene tipografía fina.'
+      ])
+    },
+    detalle: {
+      fail: () => pick([
+        'Los trazos finos marcados como "detalle mínimo" pueden ser parte intencional de una firma o de una tipografía delgada; revísalos antes de decidir si se engruesan a mano.',
+        'Verifica si el trazo fino detectado es un rasgo de diseño (serifas, líneas decorativas) antes de asumir que es un defecto a corregir.'
+      ]),
+      pass: () => pick([
+        'El detalle mínimo pasó el check geométrico; aun así, si el diseño tiene texto muy pequeño conviene confirmar que siga siendo legible impreso.'
+      ])
+    },
+    alpha: {
+      fail: () => pick([
+        'El halo de transparencia ya se corrige solo, pero conviene revisar que el borde corregido no haya dejado un contorno duro donde antes había un degradado intencional (sombras suaves, glow, etc.).'
+      ]),
+      pass: () => pick([
+        'Los bordes se ven limpios; si el diseño usa sombras o degradados suaves cerca del borde, confírmalos tras la corrección de todos modos.'
+      ])
+    },
+    tinta: {
+      fail: () => pick([
+        'La zona de alta densidad de tinta puede coincidir con colores muy saturados a propósito (negros profundos, colores de marca); antes de pedir que se aclaren en el RIP, confirma que no es una decisión de diseño.'
+      ]),
+      pass: () => pick([
+        'Densidad de tinta sin alertas; no debería haber sorpresas de color al imprimir.'
+      ])
+    },
+    resolucion: {
+      fail: () => pick([
+        'Si el tamaño no se puede reducir, revisa si hay elementos muy pequeños (texto, íconos) que dependan de esa resolución faltante para seguir siendo legibles al tamaño final.'
+      ]),
+      pass: () => pick([
+        'Resolución suficiente; no debería haber pérdida de nitidez visible en texto o detalles pequeños.'
+      ])
+    }
+  };
+
+  const GENERIC_REMINDERS = [
+    'Recuerda que este checklist es una guía de qué mirar, no un análisis visual real del archivo: la decisión final siempre es del ojo humano.',
+    'Este listado no reemplaza abrir el archivo a tamaño real y revisarlo con calma antes de imprimir.'
+  ];
+
+  function buildChecklist(results, scoreInfo) {
+    const sentences = [];
+    for (const r of results) {
+      const entry = CHECKLIST[r.id];
+      if (!entry) continue;
+      sentences.push(r.pass ? entry.pass() : entry.fail());
+    }
+    sentences.push(pick(GENERIC_REMINDERS));
+    return sentences.join(' ');
+  }
+
+  // Se mantiene la firma con "canvas" por compatibilidad, aunque ya no
+  // se usa: no hay envío de imagen a ningún servicio.
+  async function requestVisualNote(canvas, results, scoreInfo) {
+    return buildChecklist(results, scoreInfo);
+  }
+
+  return { requestVisualNote, buildChecklist };
+})();
+
+
+/* =========================================================================
+ * MÓDULO: DTFFixes
+ * -------------------------------------------------------------------------
+ * Corrección automática de lo que DTFChecks detecta como problemático.
+ * Cada función es una operación de imagen aislada y reversible sobre un
+ * ImageData de resolución completa (no la copia reescalada de análisis),
+ * para que el PNG exportado conserve el detalle original.
+ *
+ * Estrategia por defecto (propia, no la de ningún producto de terceros):
+ *   1) Bordes/alpha  -> binarizar el canal alfa (fuera el halo gris).
+ *   2) Detalle mínimo -> NO se corrige automáticamente. Engrosar un trazo
+ *      significa inventar forma que no estaba en el arte original (cambia
+ *      letras, líneas y firmas). Queda solo como diagnóstico en el check;
+ *      si falla, se reporta el grosor real detectado para corregirlo a
+ *      mano en el archivo fuente. (fixMinFeature() se deja implementada
+ *      por si se quiere activar de forma explícita, pero applyAll() ya
+ *      no la llama.)
+ *   3) Islas aisladas -> se eliminan (alfa a 0) los componentes conexos
+ *      por debajo del área física mínima.
+ *   4) Densidad de tinta -> NO se corrige automáticamente. Aclarar la
+ *      tinta (data[i] = 255 - (255-data[i])*factor) para bajar el riesgo
+ *      de cuarteo apaga/deslava el color real del diseño, que es la
+ *      calidad visual que se quiere preservar. Queda solo como
+ *      diagnóstico en el check; si falla, es una decisión de material
+ *      (más pasadas de tinta, ajuste de curva en el RIP, etc.), no algo
+ *      que este corrector deba tocar por su cuenta. (fixInkDensity() se
+ *      deja implementada por si se quiere activar de forma explícita,
+ *      pero applyAll() ya no la llama.)
+ * La resolución NO se "corrige" (no se puede inventar detalle): en su
+ * lugar se informa el tamaño físico máximo recomendado a 300 DPI.
+ * ========================================================================= */
+const DTFFixes = (() => {
+
+  // Umbral duro de alfa: por debajo de 128 se descarta, por encima se
+  // vuelve opaco. Elimina el anillo de semitransparencia en los bordes.
+  function fixAlphaHalo(imageData) {
+    const data = imageData.data;
+    for (let i = 3; i < data.length; i += 4) {
+      data[i] = data[i] >= 128 ? 255 : 0;
+    }
+    return imageData;
+  }
+
+  // Campo de "vecino de tinta más cercano" por propagación de dos
+  // pasadas (misma idea que la transformada de distancia de DTFCore,
+  // pero además arrastra el índice del píxel de origen). O(W*H).
+  function nearestInkField(mask, width, height) {
+    const N = width * height;
+    const INF = width + height;
+    const dist = new Int32Array(N).fill(INF);
+    const nearest = new Int32Array(N).fill(-1);
+    for (let i = 0; i < N; i++) if (mask[i]) { dist[i] = 0; nearest[i] = i; }
+
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const idx = y * width + x;
+        if (x > 0) { const n = idx - 1; if (dist[n] + 1 < dist[idx]) { dist[idx] = dist[n] + 1; nearest[idx] = nearest[n]; } }
+        if (y > 0) { const n = idx - width; if (dist[n] + 1 < dist[idx]) { dist[idx] = dist[n] + 1; nearest[idx] = nearest[n]; } }
+      }
+    }
+    for (let y = height - 1; y >= 0; y--) {
+      for (let x = width - 1; x >= 0; x--) {
+        const idx = y * width + x;
+        if (x < width - 1) { const n = idx + 1; if (dist[n] + 1 < dist[idx]) { dist[idx] = dist[n] + 1; nearest[idx] = nearest[n]; } }
+        if (y < height - 1) { const n = idx + width; if (dist[n] + 1 < dist[idx]) { dist[idx] = dist[n] + 1; nearest[idx] = nearest[n]; } }
+      }
+    }
+    return { dist, nearest };
+  }
+
+  // Cuánto del déficit real se corrige (1.0 = hasta el ancho mínimo
+  // exacto; menos que eso deja el trazo todavía algo fino pero visible-
+  // mente casi igual al original). Se prioriza un refuerzo sutil.
+  const REINFORCEMENT_STRENGTH = 0.55;
+
+  // Solo engruesa los trazos que de verdad son más finos que el mínimo,
+  // y únicamente lo necesario en cada punto: se mide el "medio-ancho"
+  // real de cada píxel de tinta (distancia al fondo más cercano) y solo
+  // se agrega la diferencia contra el radio objetivo -- no un relleno
+  // parejo de radio completo. Un trazo que ya mide, por ejemplo, el 80%
+  // del mínimo casi no cambia; uno de 1 px sí necesita más para sobrevivir
+  // al weeding, pero se atenúa con REINFORCEMENT_STRENGTH para no volverlo
+  // desproporcionado frente al diseño original.
+  function fixMinFeature(imageData, mask, width, height, radiusPx) {
+    if (radiusPx < 0.5) return imageData;
+
+    // distToBg: para cada píxel de tinta, distancia al fondo más cercano
+    // (equivale a su medio-ancho local en ese punto del trazo).
+    const distToBg = DTFCore.distanceTransform(mask, width, height);
+    const { labels, count } = DTFCore.labelComponents(mask, width, height);
+    const hasCore = new Uint8Array(count);
+    for (let i = 0; i < mask.length; i++) {
+      if (mask[i] && distToBg[i] > radiusPx && labels[i] >= 0) hasCore[labels[i]] = 1;
+    }
+
+    // Solo los componentes sin núcleo (demasiado finos) participan, y
+    // cada uno de sus píxeles carga su propio déficit de grosor.
+    const thinMask = new Uint8Array(mask.length);
+    const requiredGrowth = new Float32Array(mask.length);
+    let anyThin = false;
+    for (let i = 0; i < mask.length; i++) {
+      if (mask[i] && labels[i] >= 0 && !hasCore[labels[i]]) {
+        thinMask[i] = 1;
+        requiredGrowth[i] = Math.max(0, (radiusPx - distToBg[i]) * REINFORCEMENT_STRENGTH);
+        anyThin = true;
+      }
+    }
+    if (!anyThin) return imageData; // nada por debajo del mínimo: no se toca nada
+
+    const { dist, nearest } = nearestInkField(thinMask, width, height);
+    const data = imageData.data;
+    for (let i = 0; i < mask.length; i++) {
+      if (mask[i]) continue;
+      const srcIdx = nearest[i];
+      if (srcIdx < 0) continue;
+      if (dist[i] > requiredGrowth[srcIdx]) continue; // ya alcanza el refuerzo objetivo, no se rellena de más
+      const src = srcIdx * 4, dst = i * 4;
+      data[dst] = data[src]; data[dst + 1] = data[src + 1]; data[dst + 2] = data[src + 2]; data[dst + 3] = 255;
+    }
+    return imageData;
+  }
+
+  function fixIsolatedIslands(imageData, mask, width, height, minAreaPx) {
+    const { labels, areas } = DTFCore.labelComponents(mask, width, height);
+    const data = imageData.data;
+    for (let i = 0; i < labels.length; i++) {
+      const lbl = labels[i];
+      if (lbl >= 0 && areas[lbl] < minAreaPx) data[i * 4 + 3] = 0;
+    }
+    return imageData;
+  }
+
+  function fixInkDensity(imageData, mask, factor) {
+    if (factor >= 0.999) return imageData;
+    const data = imageData.data;
+    for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+      if (!mask[p]) continue;
+      data[i] = 255 - (255 - data[i]) * factor;
+      data[i + 1] = 255 - (255 - data[i + 1]) * factor;
+      data[i + 2] = 255 - (255 - data[i + 2]) * factor;
+    }
+    return imageData;
+  }
+
+  // Tamaño físico máximo recomendable a un DPI objetivo, dado que la
+  // resolución de píxeles no se puede corregir por software.
+  function recommendedMaxSizeCm(pxWidth, pxHeight, targetDpi = 300) {
+    return { maxWcm: (pxWidth / targetDpi) * 2.54, maxHcm: (pxHeight / targetDpi) * 2.54 };
+  }
+
+  // Orquesta el pipeline completo de corrección sobre una copia a
+  // resolución completa del canvas original. Devuelve el ImageData
+  // corregido listo para pintarse o exportarse.
+  function applyAll(sourceCanvas, effectiveDpi, minFeatureMm, minIslandMm = 3) {
+    const width = sourceCanvas.width, height = sourceCanvas.height;
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.canvas.width = width; ctx.canvas.height = height;
+    ctx.drawImage(sourceCanvas, 0, 0);
+    let imageData = ctx.getImageData(0, 0, width, height);
+
+    // 1) Bordes / halo de transparencia
+    fixAlphaHalo(imageData);
+
+    // 2) Detalle mínimo: YA NO se engrosa automáticamente. Engordar trazos
+    // altera el arte original (cambia la forma real de letras/líneas), así
+    // que este check se dejó como diagnóstico puro: si falla, se reporta
+    // el grosor mínimo real detectado para que se corrija a mano en el
+    // diseño original, en vez de que el sistema "invente" grosor.
+    let mask = DTFCore.alphaMask(imageData);
+    const pxPerMm = effectiveDpi / 25.4;
+
+    // 3) Islas aisladas por debajo del umbral configurado por el usuario
+    // (antes venía fijo en 3x3mm, lo que borraba letras y formas pequeñas
+    // legítimas de diseños con tipografía o detalles decorativos).
+    mask = DTFCore.alphaMask(imageData);
+    const minAreaPx = Math.pow(pxPerMm * minIslandMm, 2);
+    fixIsolatedIslands(imageData, mask, width, height, minAreaPx);
+
+    // 4) Densidad de tinta: YA NO se corrige automáticamente. Aclarar el
+    // color para bajar el riesgo de cuarteo apaga/deslava el diseño
+    // original, así que este check también se dejó como diagnóstico puro
+    // (igual que el detalle mínimo): si falla, se reporta en el
+    // filmstrip para decidirlo a mano (más tinta, curva del RIP), sin que
+    // el sistema toque los colores por su cuenta.
+
+    return { imageData, width, height };
+  }
+
+  return { fixAlphaHalo, fixMinFeature, fixIsolatedIslands, fixInkDensity, recommendedMaxSizeCm, applyAll };
+})();
+
+/* =========================================================================
+ * MÓDULO: DTFApp
+ * -------------------------------------------------------------------------
+ * Orquestación de estado y UI. No contiene lógica de imagen: solo llama
+ * a Core/Checks/Scoring/Advisor y refleja el resultado en el DOM.
+ * ========================================================================= */
+const DTFApp = (() => {
+  const ANALYSIS_MAX_SIDE = 700;
+
+  const el = {
+    fileInput: document.getElementById('fileInput'),
+    btnAnalyze: document.getElementById('btnAnalyze'),
+    statusLine: document.getElementById('statusLine'),
+    lightbox: document.getElementById('lightbox'),
+    emptyMsg: document.getElementById('emptyMsg'),
+    previewCanvas: document.getElementById('previewCanvas'),
+    filmstrip: document.getElementById('filmstrip'),
+    framesHost: document.getElementById('framesHost'),
+    scoreRow: document.getElementById('scoreRow'),
+    dialArc: document.getElementById('dialArc'),
+    dialNum: document.getElementById('dialNum'),
+    gradeText: document.getElementById('gradeText'),
+    scoreDetailText: document.getElementById('scoreDetailText'),
+    btnAdvisor: document.getElementById('btnAdvisor'),
+    note: document.getElementById('note'),
+    noteBody: document.getElementById('noteBody'),
+    btnVisionAdvisor: document.getElementById('btnVisionAdvisor'),
+    visionNote: document.getElementById('visionNote'),
+    visionNoteBody: document.getElementById('visionNoteBody'),
+    wcm: document.getElementById('wcm'),
+    hcm: document.getElementById('hcm'),
+    minFeature: document.getElementById('minFeature'),
+    minIsland: document.getElementById('minIsland'),
+    fixBlock: document.getElementById('fixBlock'),
+    btnFix: document.getElementById('btnFix'),
+    fixStatus: document.getElementById('fixStatus'),
+    afterSection: document.getElementById('afterSection'),
+    afterCanvas: document.getElementById('afterCanvas'),
+    filmstripAfter: document.getElementById('filmstripAfter'),
+    framesHostAfter: document.getElementById('framesHostAfter'),
+    scoreRowAfter: document.getElementById('scoreRowAfter'),
+    dialArcAfter: document.getElementById('dialArcAfter'),
+    dialNumAfter: document.getElementById('dialNumAfter'),
+    gradeTextAfter: document.getElementById('gradeTextAfter'),
+    scoreDetailTextAfter: document.getElementById('scoreDetailTextAfter'),
+    btnDownload: document.getElementById('btnDownload'),
+  };
+
+  let state = { loaded: null, lastResults: null, lastScore: null, correctedCanvas: null };
+
+  function setStatus(msg) { el.statusLine.textContent = msg; }
+
+  async function handleFile(file) {
+    if (!file || file.type !== 'image/png') {
+      setStatus('El archivo debe ser un PNG.');
+      return;
+    }
+    setStatus('Cargando imagen…');
+    try {
+      const loaded = await DTFCore.loadPngToCanvas(file);
+      state.loaded = loaded;
+      el.emptyMsg.style.display = 'none';
+      el.previewCanvas.style.display = 'block';
+      el.previewCanvas.width = loaded.width;
+      el.previewCanvas.height = loaded.height;
+      el.previewCanvas.getContext('2d').drawImage(loaded.canvas, 0, 0);
+      el.btnAnalyze.disabled = false;
+      resetResults();
+      setStatus(`Imagen cargada: ${loaded.width}×${loaded.height} px.`);
+    } catch (e) {
+      setStatus('Error al leer el PNG: ' + e.message);
+    }
+  }
+
+  function resetResults() {
+    el.filmstrip.classList.remove('visible');
+    el.framesHost.innerHTML = '';
+    el.scoreRow.style.display = 'none';
+    el.btnAdvisor.style.display = 'none';
+    el.note.classList.remove('visible');
+    el.noteBody.textContent = '';
+    el.btnVisionAdvisor.style.display = 'none';
+    el.visionNote.classList.remove('visible');
+    el.visionNoteBody.textContent = '';
+    el.fixBlock.classList.remove('visible');
+    el.fixStatus.textContent = '';
+    el.afterSection.classList.remove('visible');
+    el.framesHostAfter.innerHTML = '';
+    el.btnDownload.style.display = 'none';
+    state.lastResults = null;
+    state.lastScore = null;
+    state.correctedCanvas = null;
+  }
+
+  function runAnalysis() {
+    if (!state.loaded) return;
+    resetResults();
+    setStatus('Analizando…');
+    el.btnAnalyze.disabled = true;
+
+    // Se difiere un frame para que el navegador pinte el estado "Analizando…"
+    requestAnimationFrame(() => {
+      try {
+        const cmW = parseFloat(el.wcm.value) || 1;
+        const cmH = parseFloat(el.hcm.value) || 1;
+        const minFeatureMm = parseFloat(el.minFeature.value) || 1.0;
+        const minIslandMm = parseFloat(el.minIsland.value) || 1.2;
+
+        const { imageData, width, height, scale } = DTFCore.downsampleForAnalysis(state.loaded.canvas, ANALYSIS_MAX_SIDE);
+        const mask = DTFCore.alphaMask(imageData);
+        const labelResult = DTFCore.labelComponents(mask, width, height);
+
+        const resResult = DTFChecks.checkResolution(state.loaded.width, state.loaded.height, cmW, cmH, state.loaded.embeddedDpi);
+        const alphaResult = DTFChecks.checkAlphaIntegrity(imageData);
+        const featResult = DTFChecks.checkMinFeature(mask, width, height, resResult.effectiveDpi, minFeatureMm, scale);
+        const inkResult = DTFChecks.checkInkDensity(imageData, mask);
+        const islandsResult = DTFChecks.checkIsolatedIslands(labelResult, resResult.effectiveDpi, scale, minIslandMm);
+
+        const results = [resResult, alphaResult, featResult, inkResult, islandsResult];
+        const scoreInfo = DTFScoring.aggregate(results);
+
+        state.lastResults = results;
+        state.lastScore = scoreInfo;
+        state.effectiveDpi = resResult.effectiveDpi;
+        state.minFeatureMm = minFeatureMm;
+        state.minIslandMm = minIslandMm;
+
+        let resolutionNote = null;
+        if (!resResult.pass) {
+          const rec = DTFFixes.recommendedMaxSizeCm(state.loaded.width, state.loaded.height);
+          resolutionNote = `No es corregible por software. Tamaño máximo recomendado a 300 DPI: ${rec.maxWcm.toFixed(1)}×${rec.maxHcm.toFixed(1)} cm.`;
+        }
+
+        renderFilmstrip(results, el.framesHost, el.filmstrip, resolutionNote);
+        renderScore(scoreInfo, el.dialArc, el.dialNum, el.gradeText, el.scoreDetailText, el.scoreRow);
+        el.btnAdvisor.style.display = 'block';
+        el.btnVisionAdvisor.style.display = 'block';
+        el.fixBlock.classList.add('visible');
+        setStatus('Análisis completo.');
+      } catch (e) {
+        setStatus('Error durante el análisis: ' + e.message);
+      } finally {
+        el.btnAnalyze.disabled = false;
+      }
+    });
+  }
+
+  function renderFilmstrip(results, host, stripEl, resolutionNote) {
+    host.innerHTML = '';
+    stripEl.classList.add('visible');
+    results.forEach((r, i) => {
+      const frame = document.createElement('div');
+      frame.className = 'frame';
+      const extraNote = (r.id === 'resolucion' && resolutionNote) ? `<div class="res-warning">${resolutionNote}</div>` : '';
+      frame.innerHTML = `
+        <div class="stamp ${r.pass ? 'ok' : 'bad'}">${r.pass ? '✓' : '✕'}</div>
+        <div>
+          <div class="frame-name">${r.name}</div>
+          <div class="frame-detail">${r.detail}</div>
+          ${extraNote}
+        </div>
+        <div class="frame-score">${r.score.toFixed(0)}/100</div>
+      `;
+      host.appendChild(frame);
+      setTimeout(() => frame.classList.add('visible'), 90 * i);
+    });
+  }
+
+  function renderScore(scoreInfo, dialArc, dialNum, gradeText, scoreDetailText, scoreRow) {
+    scoreRow.style.display = 'flex';
+    const circumference = 2 * Math.PI * 32;
+    const offset = circumference * (1 - scoreInfo.total / 100);
+    dialArc.setAttribute('stroke-dasharray', circumference.toFixed(1));
+    dialArc.setAttribute('stroke', scoreInfo.ok ? '#5fae9d' : '#c1503f');
+    dialArc.style.transition = 'none';
+    dialArc.setAttribute('stroke-dashoffset', circumference.toFixed(1));
+    requestAnimationFrame(() => { dialArc.style.transition = 'stroke-dashoffset .6s ease'; dialArc.setAttribute('stroke-dashoffset', offset.toFixed(1)); });
+    dialNum.textContent = scoreInfo.total;
+    gradeText.textContent = scoreInfo.grade;
+    gradeText.className = 'grade ' + (scoreInfo.ok ? 'ok' : 'warn');
+    scoreDetailText.textContent = `Puntaje ponderado sobre 5 checks`;
+  }
+
+  async function requestAdvisorNote() {
+    if (!state.lastResults) return;
+    el.note.classList.add('visible');
+    el.noteBody.className = 'note-body loading';
+    el.noteBody.textContent = 'Redactando nota…';
+    el.btnAdvisor.disabled = true;
+    try {
+      const text = await DTFAdvisor.requestNote(state.lastResults, state.lastScore);
+      el.noteBody.className = 'note-body';
+      el.noteBody.textContent = text;
+    } catch (e) {
+      el.noteBody.className = 'note-body';
+      el.noteBody.textContent = 'No se pudo generar la nota del técnico (' + e.message + '). Los resultados numéricos arriba siguen siendo válidos.';
+    } finally {
+      el.btnAdvisor.disabled = false;
+    }
+  }
+
+  async function requestVisionAdvisorNote() {
+    if (!state.lastResults || !state.loaded) return;
+    el.visionNote.classList.add('visible');
+    el.visionNoteBody.className = 'note-body loading';
+    el.visionNoteBody.textContent = 'Armando checklist…';
+    el.btnVisionAdvisor.disabled = true;
+    try {
+      const text = await DTFVisionAdvisor.requestVisualNote(state.loaded.canvas, state.lastResults, state.lastScore);
+      el.visionNoteBody.className = 'note-body';
+      el.visionNoteBody.textContent = text;
+    } catch (e) {
+      el.visionNoteBody.className = 'note-body';
+      el.visionNoteBody.textContent = 'No se pudo generar el checklist (' + e.message + ').';
+    } finally {
+      el.btnVisionAdvisor.disabled = false;
+    }
+  }
+
+  function runFix() {
+    if (!state.loaded || !state.lastResults) return;
+    el.btnFix.disabled = true;
+    el.fixStatus.textContent = 'Aplicando correcciones…';
+    el.afterSection.classList.remove('visible');
+    el.btnDownload.style.display = 'none';
+
+    requestAnimationFrame(() => {
+      try {
+        const { imageData, width, height } = DTFFixes.applyAll(state.loaded.canvas, state.effectiveDpi, state.minFeatureMm, state.minIslandMm);
+
+        const correctedCanvas = document.createElement('canvas');
+        correctedCanvas.width = width; correctedCanvas.height = height;
+        correctedCanvas.getContext('2d').putImageData(imageData, 0, 0);
+        state.correctedCanvas = correctedCanvas;
+
+        el.afterCanvas.width = width; el.afterCanvas.height = height;
+        el.afterCanvas.getContext('2d').drawImage(correctedCanvas, 0, 0);
+
+        // Re-analiza la imagen corregida con los mismos parámetros físicos
+        const cmW = parseFloat(el.wcm.value) || 1;
+        const cmH = parseFloat(el.hcm.value) || 1;
+        const { imageData: analysisData, width: aw, height: ah, scale } = DTFCore.downsampleForAnalysis(correctedCanvas, ANALYSIS_MAX_SIDE);
+        const mask = DTFCore.alphaMask(analysisData);
+        const labelResult = DTFCore.labelComponents(mask, aw, ah);
+
+        const resResult = DTFChecks.checkResolution(width, height, cmW, cmH, state.loaded.embeddedDpi);
+        const alphaResult = DTFChecks.checkAlphaIntegrity(analysisData);
+        const featResult = DTFChecks.checkMinFeature(mask, aw, ah, resResult.effectiveDpi, state.minFeatureMm, scale);
+        const inkResult = DTFChecks.checkInkDensity(analysisData, mask);
+        const islandsResult = DTFChecks.checkIsolatedIslands(labelResult, resResult.effectiveDpi, scale, state.minIslandMm);
+
+        const afterResults = [resResult, alphaResult, featResult, inkResult, islandsResult];
+        const afterScore = DTFScoring.aggregate(afterResults);
+
+        let resolutionNote = null;
+        if (!resResult.pass) {
+          const rec = DTFFixes.recommendedMaxSizeCm(width, height);
+          resolutionNote = `No es corregible por software. Tamaño máximo recomendado a 300 DPI: ${rec.maxWcm.toFixed(1)}×${rec.maxHcm.toFixed(1)} cm.`;
+        }
+
+        renderFilmstrip(afterResults, el.framesHostAfter, el.filmstripAfter, resolutionNote);
+        renderScore(afterScore, el.dialArcAfter, el.dialNumAfter, el.gradeTextAfter, el.scoreDetailTextAfter, el.scoreRowAfter);
+
+        el.afterSection.classList.add('visible');
+        el.btnDownload.style.display = 'block';
+        el.fixStatus.textContent = `Puntaje corregido: ${afterScore.total}/100 (antes ${state.lastScore.total}/100).`;
+      } catch (e) {
+        el.fixStatus.textContent = 'No se pudo corregir automáticamente: ' + e.message;
+      } finally {
+        el.btnFix.disabled = false;
+      }
+    });
+  }
+
+  function downloadCorrected() {
+    if (!state.correctedCanvas) return;
+    state.correctedCanvas.toBlob(blob => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pliego-dtf-corregido.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  }
+
+  function init() {
+    el.fileInput.addEventListener('change', e => handleFile(e.target.files && e.target.files[0]));
+    el.btnAnalyze.addEventListener('click', runAnalysis);
+    el.btnAdvisor.addEventListener('click', requestAdvisorNote);
+    el.btnVisionAdvisor.addEventListener('click', requestVisionAdvisorNote);
+    el.btnFix.addEventListener('click', runFix);
+    el.btnDownload.addEventListener('click', downloadCorrected);
+  }
+
+  return { init };
+})();
+
+document.addEventListener('DOMContentLoaded', DTFApp.init);
+</script>
+</body>
+</html>
