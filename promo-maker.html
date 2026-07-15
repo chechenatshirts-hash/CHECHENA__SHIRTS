@@ -988,6 +988,7 @@ BLANCO: { label:'blanco', front:"https://i.ibb.co/n87QBJtv/Dise-o-sin-t-tulo-4.p
     shirtDesignScale: '45%',
     shirtDesignX: '50%',
     shirtDesignY: '40%',
+    _mockupReq: 0,
     bgDesignScale: '150',
     bgDesignX: '10',
     bgDesignY: '50',
@@ -1215,19 +1216,39 @@ BLANCO: { label:'blanco', front:"https://i.ibb.co/n87QBJtv/Dise-o-sin-t-tulo-4.p
     if (!c) { S.mockupB64 = null; renderCards(); return; }
     const url = S.view === 'back' ? c.back : c.front;
     if (!url || url.startsWith('data:')) { S.mockupB64 = url || null; renderCards(); return; }
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const cv = document.createElement('canvas');
-        cv.width = img.naturalWidth; cv.height = img.naturalHeight;
-        cv.getContext('2d').drawImage(img, 0, 0);
-        S.mockupB64 = cv.toDataURL('image/png');
-      } catch(e) { S.mockupB64 = url; }
-      renderCards();
-    };
-    img.onerror = () => { S.mockupB64 = url; renderCards(); };
-    img.src = url;
+
+    const requestId = ++S._mockupReq;
+    const applyIfCurrent = (val) => { if (requestId === S._mockupReq) { S.mockupB64 = val; renderCards(); } };
+
+    // Preferred method: fetch the bytes directly and base64-encode them.
+    // This avoids the canvas.toDataURL() "tainted canvas" failure mode that
+    // some browsers (notably Safari) hit more readily than Chrome, which
+    // was silently leaving the mockup as a remote (non-embeddable) URL and
+    // making the shirt image disappear from the exported file.
+    fetch(url, { mode: 'cors', cache: 'force-cache' })
+      .then(res => { if (!res.ok) throw new Error('bad response'); return res.blob(); })
+      .then(blob => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      }))
+      .then(dataUrl => applyIfCurrent(dataUrl))
+      .catch(() => {
+        // Fallback: old canvas-based approach, then finally the raw URL.
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          try {
+            const cv = document.createElement('canvas');
+            cv.width = img.naturalWidth; cv.height = img.naturalHeight;
+            cv.getContext('2d').drawImage(img, 0, 0);
+            applyIfCurrent(cv.toDataURL('image/png'));
+          } catch (e) { applyIfCurrent(url); }
+        };
+        img.onerror = () => applyIfCurrent(url);
+        img.src = url;
+      });
   }
 
   /* ── FILES ── */
@@ -1496,6 +1517,23 @@ BLANCO: { label:'blanco', front:"https://i.ibb.co/n87QBJtv/Dise-o-sin-t-tulo-4.p
     updateHeaderCount();
   }
 
+  async function waitForImagesReady(node) {
+    const imgs = Array.from(node.querySelectorAll('img'));
+    await Promise.all(imgs.map(img => {
+      // decode() guarantees the frame is fully decoded and paint-ready.
+      // Safari in particular can fire "load" before the bitmap is actually
+      // ready to be read into a canvas/SVG snapshot, which is what causes
+      // images (design / shirt mockup) to come out blank on export.
+      const waitLoad = img.complete
+        ? Promise.resolve()
+        : new Promise(r => { img.onload = r; img.onerror = r; });
+      return waitLoad.then(() => {
+        if (img.decode) return img.decode().catch(() => {});
+        return Promise.resolve();
+      });
+    }));
+  }
+
   async function captureDesign(idx) {
     const design = S.designs[idx];
     if (!design || !window.htmlToImage) throw new Error('htmlToImage no disponible');
@@ -1503,13 +1541,23 @@ BLANCO: { label:'blanco', front:"https://i.ibb.co/n87QBJtv/Dise-o-sin-t-tulo-4.p
     node.style.cssText = 'width:1080px;height:1080px;background:#0a0a0c;position:fixed;top:0;left:0;z-index:-9999;pointer-events:none;overflow:hidden;';
     node.innerHTML = buildCanvasHTML(design.url);
     document.body.appendChild(node);
-    await Promise.all(Array.from(node.querySelectorAll('img')).map(img =>
-      img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
-    ));
-    await document.fonts.ready;
-    await new Promise(r => setTimeout(r, 80));
     try {
-      const dataUrl = await window.htmlToImage.toJpeg(node, { quality: 0.92, pixelRatio: 1.5, backgroundColor: S.bgColor1 });
+      await waitForImagesReady(node);
+      await document.fonts.ready;
+      await new Promise(r => setTimeout(r, 120));
+
+      const opts = { quality: 0.92, pixelRatio: 1.5, backgroundColor: S.bgColor1, cacheBust: true };
+
+      // Warm-up pass: on Safari the first html-to-image render frequently
+      // omits <img> elements (design/shirt) even though everything else
+      // (text, gradients) renders fine. Throwing away one render and doing
+      // a second pass reliably fixes it, since by then the images are
+      // already inlined/cached by the library.
+      await window.htmlToImage.toJpeg(node, opts).catch(() => {});
+      await waitForImagesReady(node);
+      await new Promise(r => setTimeout(r, 60));
+
+      const dataUrl = await window.htmlToImage.toJpeg(node, opts);
       const arr = dataUrl.split(',');
       const bstr = atob(arr[1]);
       const u8 = new Uint8Array(bstr.length);
