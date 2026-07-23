@@ -132,13 +132,10 @@ nav .wrap{display:flex;align-items:center;width:100%;}
   border-bottom:2px solid rgba(0,0,0,.12);
   background:#0a0a0c;
 }
-/* Fondo: niebla negra con velas de luz */
+/* Fondo: niebla negra con velas de luz (visible mientras el video carga) */
 .hero::before{
   content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 60% 55% at 50% -10%, rgba(60,0,80,.75) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 15% 110%, rgba(30,0,40,.6) 0%, transparent 55%),
-    radial-gradient(ellipse 30% 30% at 88% 90%, rgba(40,0,20,.5) 0%, transparent 50%);
+  background:#0a0a0c;
   pointer-events:none;z-index:0;
 }
 /* Líneas de cuadrícula tenue tipo manuscrito gótico */
@@ -151,6 +148,24 @@ nav .wrap{display:flex;align-items:center;width:100%;}
   pointer-events:none;z-index:0;
 }
 .hero .wrap{position:relative;z-index:1;}
+
+/* Video de fondo — solo en el hero */
+.hero-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  z-index:0;
+  opacity:.55;
+  filter:saturate(1.1) contrast(1.05);
+}
+.hero-video-overlay{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% -10%, rgba(60,0,80,.6) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 15% 110%, rgba(30,0,40,.55) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 30% at 88% 90%, rgba(40,0,20,.45) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(10,10,12,.55) 0%, rgba(10,10,12,.35) 40%, rgba(10,10,12,.85) 100%);
+  pointer-events:none;
+}
 
 .reg-mark{width:13px;height:13px;flex-shrink:0;}
 .reg-mark circle{fill:none;stroke:currentColor;stroke-width:1.4;}
@@ -336,15 +351,62 @@ nav .wrap{display:flex;align-items:center;width:100%;}
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(265px,1fr));
   gap:14px;
+  counter-reset:toolnum;
 }
 .tcard{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  background:
+    radial-gradient(circle at 8px 8px, rgba(100,90,140,.10) 1px, transparent 1.4px) 0 0/14px 14px,
+    var(--surface);
+  border:1px solid var(--border);border-radius:var(--r-md);
   padding:22px;display:flex;flex-direction:column;position:relative;overflow:hidden;
-  transition:border-color .25s,background .25s,transform .25s,box-shadow .25s;
+  transition:border-color .25s,background-color .25s,transform .25s,box-shadow .25s,clip-path .3s;
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   box-shadow:0 2px 12px rgba(100,90,140,.06);
+  counter-increment:toolnum;
+  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%);
 }
-.tcard:hover{border-color:rgba(108,99,255,.35);background:var(--surface-2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(108,99,255,.12);}
+.tcard:hover{
+  border-color:rgba(108,99,255,.35);background-color:var(--surface-2);
+  transform:translateY(-3px);
+  box-shadow:
+    0 10px 32px rgba(108,99,255,.16),
+    0 0 0 1px rgba(176,74,255,.10) inset;
+}
+
+/* Pliegue decorativo tipo "muestra de tela" en la esquina superior derecha */
+.tcard::before{
+  content:'';position:absolute;top:0;right:0;width:0;height:0;z-index:2;
+  border-style:solid;border-width:0 22px 22px 0;
+  border-color:transparent var(--bg) transparent transparent;
+  filter:drop-shadow(-1px 1px 1px rgba(100,90,140,.18));
+  transition:border-color .3s;
+}
+.tcard:hover::before{
+  border-color:transparent var(--magenta) transparent transparent;
+  filter:drop-shadow(-1px 1px 6px rgba(176,74,255,.45));
+}
+
+/* Numeral de fondo, decorativo, marca cada herramienta como una pieza de catálogo */
+.tcard::after{
+  content:counter(toolnum,decimal-leading-zero);
+  position:absolute;right:10px;bottom:-14px;z-index:-1;
+  font-family:var(--f-display);font-size:76px;line-height:1;
+  color:rgba(100,90,140,.055);
+  transition:color .3s,transform .3s;
+  pointer-events:none;
+}
+.tcard:hover::after{color:rgba(108,99,255,.10);transform:translateY(-4px);}
+
+/* Anillo giratorio decorativo alrededor del ícono, motivo de engranaje/mecanismo */
+.tcard-icon{position:relative;}
+.tcard-icon::before{
+  content:'';position:absolute;inset:-5px;border-radius:12px;
+  border:1px dashed rgba(108,99,255,.28);
+  opacity:0;transform:rotate(0deg) scale(.85);
+  transition:opacity .3s,transform .6s ease;
+  pointer-events:none;
+}
+.tcard:hover .tcard-icon::before{opacity:1;transform:rotate(90deg) scale(1);}
 .tcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:18px;}
 .tcard-icon{
   width:42px;height:42px;border-radius:10px;background:rgba(108,99,255,.07);border:1px solid rgba(108,99,255,.16);
@@ -615,6 +677,10 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
 
 <!-- ════════════════════════ HERO ════════════════════════ -->
 <section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="">
+    <source src="goyo.mp4" type="video/mp4">
+  </video>
+  <div class="hero-video-overlay"></div>
   <div class="wrap">
     <div class="hero-eyebrow">
       <svg class="reg-mark" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="1" x2="12" y2="23"/><line x1="1" y1="12" x2="23" y2="12"/></svg>
@@ -709,12 +775,13 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div>
             <div class="tcard-meta"><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
+                      <span class="badge badge-popular badge-legend">NUEVO</span>
           </div>
           <div class="tcard-title">SEMITONO PARA DIFERENTES COLORES</div>
           <div class="tcard-sub">Halftone Generator</div>
           <p class="tcard-desc">Genera semitonos con calidad profesional y control total sobre frecuencia, ángulo y forma.</p>
           <div class="tcard-actions">
-            <a href=".html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="SEMISHIRTS.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>proximamente</a>
           </div>
         </div>
@@ -957,7 +1024,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Revisión de archivos</div>
           <p class="tcard-desc">Revisa resolución y transparencia de tus archivos antes de imprimir.</p>
           <div class="tcard-actions">
-            <a href="ESCANER PERFECTO.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="mantenimiento (2).html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7652988026900974869?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1140,6 +1207,22 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           </div>
         </div>
 
+
+                <div class="tcard" data-id="m-promo">
+          <div class="tcard-top">
+            <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-tshirt"/></svg></div>
+                          <div>
+            <span class="badge badge-popular badge-legend">nuevo</span>
+        </div>
+          </div>
+          <div class="tcard-title">Publicidad para playeras</div>
+          <div class="tcard-sub">Mockup Promo Studio</div>
+          <p class="tcard-desc">Crea imágenes promocionales impactantes para redes sociales y tu tienda en minutos de ambos lados</p>
+          <div class="tcard-actions">
+            <a href="vista2.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>pendiente</a>
+          </div>
+        </div>
         
         <div class="tcard" data-id="m-promo">
           <div class="tcard-top">
