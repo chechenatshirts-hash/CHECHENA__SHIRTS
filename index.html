@@ -1387,41 +1387,16 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 }
 </style>
 
-<!-- CUPÓN SEMANAL (fecha automática, siempre vigente) -->
-<div id="cupon-banner" style="background:linear-gradient(90deg,#111,#1a0a2e,#111); border-bottom:1px solid #2a1a4a; padding:10px 16px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px; text-align:center;">
-  <span style="font-size:16px;">🎟️</span>
-  <span style="font-family:var(--font-body); font-size:12.5px; color:#e5e5e5; letter-spacing:.02em;">
-    Código <strong style="color:var(--accent2);">CHECHENA50</strong> — $50 MXN / $2.50 USD de descuento en tu megapack ·
-    <span id="cupon-vence-texto">válido esta semana</span>
-  </span>
-  <button onclick="navigator.clipboard.writeText('CHECHENA50'); this.textContent='✓ Copiado'; setTimeout(()=>this.textContent='Copiar código',2000)"
-    style="background:var(--accent); color:#fff; border:none; font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:.08em; text-transform:uppercase; padding:6px 14px; border-radius:3px;">Copiar código</button>
-  <button onclick="document.getElementById('cupon-banner').style.display='none'" style="background:none; border:none; color:#888; font-size:14px; padding:4px;" title="Cerrar">✕</button>
-</div>
-<script>
-(function(){
-  // Calcula el domingo de la semana actual a las 23:59 para que el cupón nunca se muestre vencido
-  const hoy = new Date();
-  const diasHastaDomingo = 7 - hoy.getDay() === 7 ? 0 : (7 - hoy.getDay()) % 7;
-  const finSemana = new Date(hoy);
-  finSemana.setDate(hoy.getDate() + diasHastaDomingo);
-  finSemana.setHours(23,59,0,0);
-  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  const el = document.getElementById('cupon-vence-texto');
-  if (el) el.textContent = `válido hasta el ${finSemana.getDate()} de ${meses[finSemana.getMonth()]}`;
-})();
-</script>
-
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-inner">
-    <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +50,000 DISEÑOS DTF</span>
-    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +40,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
+    <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +66,756 DISEÑOS DTF</span>
+    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +50,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
     <span class="ticker-item"><span class="ticker-icon">🔥</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
     <span class="ticker-item"><span class="ticker-icon">💀</span> ÚNETE A NUESTRO GRUPO DE WHATSAPP</span>
     <span class="ticker-item"><span class="ticker-icon">✅</span> ACCESO INMEDIATO — HERRAMIENTAS GRATIS INCLUIDAS</span>
-    <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +50,000 DISEÑOS DTF</span>
-    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +40,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
+    <span class="ticker-item"><span class="ticker-icon">⚡</span> MEGAPACK OJITO — +66,756 DISEÑOS DTF</span>
+    <span class="ticker-item"><span class="ticker-icon">🎁</span> MEGAPACK CHECHENA — +50,000 DISEÑOS LISTOS PARA IMPRIMIR</span>
     <span class="ticker-item"><span class="ticker-icon">🔥</span> NUEVOS DISEÑOS CADA SEMANA — DESCARGA INMEDIATA</span>
     <span class="ticker-item"><span class="ticker-icon">💀</span> ÚNETE A NUESTRO GRUPO DE WHATSAPP</span>
     <span class="ticker-item"><span class="ticker-icon">✅</span> ACCESO INMEDIATO — HERRAMIENTAS GRATIS INCLUIDAS</span>
@@ -1463,16 +1438,16 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
     <button onclick="doSearch()">Buscar</button>
   </div>
 <div class="nav-links-row">
-  <a href="#" class="active">HOME</a>
-  <a href="#megapacks">MEGAPACKS</a>
-  <a href="#tiktok-videos">TIKTOKS</a>
-<a href="herramientas.html" class="nav-link">HERRAMIENTAS</a>
-<a href="GUIA.html" class="nav-link">GUIAS</a>
-<a href="PROM.html" class="nav-link">PROMTS IA</a>
-<a href="plantillas-chechena.html" class="nav-link">PLANTILLAS DE CANVA</a>
-<a href="ACTUALIZACIONES.html" class="nav-link">NUEVOS DISEÑOS</a>
-<a href="BOR.html" class="nav-link">GALLERY</a>
-  <a href="#contacto">CONTACTO</a>
+  <a href="#" class="active" style="border-bottom:2px solid var(--accent2);">HOME</a>
+  <a href="#megapacks" style="border-bottom:2px solid #7c3aed;">MEGAPACKS</a>
+  <a href="#tiktok-videos" style="border-bottom:2px solid #22c55e;">TIKTOKS</a>
+<a href="herramientas.html" class="nav-link" style="background:linear-gradient(135deg, #f5d576, #d4af37 45%, #a8791f); color:#1a1000 !important; font-weight:800; border-radius:4px; margin:6px 4px; padding:10px 16px; box-shadow:0 0 12px rgba(212,175,55,0.5); border:1px solid #f0dca0;">HERRAMIENTAS</a>
+<a href="GUIA.html" class="nav-link" style="border-bottom:2px solid #38bdf8;">GUIAS</a>
+<a href="PROM.html" class="nav-link" style="border-bottom:2px solid #f472b6;">PROMTS IA</a>
+<a href="plantillas-chechena.html" class="nav-link" style="border-bottom:2px solid #fb923c;">PLANTILLAS DE CANVA</a>
+<a href="ACTUALIZACIONES.html" class="nav-link" style="border-bottom:2px solid #ef4444;">NUEVOS DISEÑOS</a>
+<a href="BOR.html" class="nav-link" style="border-bottom:2px solid #a3a3a3;">GALLERY</a>
+  <a href="#contacto" style="border-bottom:2px solid #eab308;">CONTACTO</a>
 </div>
 
 <div class="mobile-nav" id="mob-nav">
@@ -1539,6 +1514,64 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 </section>
 
 
+<!-- MEGAPACKS -->
+<section id="megapacks" class="megapacks">
+  <div class="megapacks-header">
+    <span class="megapacks-tag">⭐ Mejor valorado por nuestros clientes</span>
+    <h2 class="megapacks-title">MEGAPACKS MÁS VENDIDOS</h2>
+  </div>
+
+  <div class="megapacks-grid">
+
+    <!-- CARD 1 -->
+    <div class="mpack-card">
+      <div class="mpack-img-wrap">
+        <span class="mpack-badge">Más Vendido</span>
+        <img src="pack1.png" alt="Megapack Chechena" class="mpack-img" />
+        <span class="mpack-offer">Oferta</span>
+      </div>
+      <div class="mpack-info">
+        <h3 class="mpack-name">MEGAPACK CHECHENA</h3>
+        <p class="mpack-desc">Sublimación, Serigrafía, DTF & DTG</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">+50,000 diseños</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Multiformato</span>
+        </div>
+        <div class="mpack-prices">
+<span class="mpack-old" data-mxn="439"> $ 439 MXN</span>
+<span class="mpack-new" data-mxn="250"> $ 250 MXN</span>
+        </div>
+        <a href="pack-chechena.html" class="mpack-btn">COMPRAR Y DESCARGAR</a>
+        <p style="font-size:11px; color:#666; margin-top:8px; text-align:center;">⚡ Descarga inmediata al pagar</p>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="mpack-card" style="border: 2px solid #d4af37; box-shadow: 0 0 18px rgba(212,175,55,0.35), inset 0 0 0 1px rgba(212,175,55,0.15); position: relative;">
+      <div class="mpack-img-wrap">
+        <span class="mpack-badge" style="background: linear-gradient(135deg, #f5d576, #d4af37 45%, #a8791f); color: #1a1000; border: 1px solid #f0dca0; font-weight:800;">✨ Premium</span>
+        <img src="pack2.png" alt="Megapack Ojito" class="mpack-img" />
+        <span class="mpack-offer" style="background: linear-gradient(135deg, #f5d576, #d4af37 45%, #a8791f); color:#1a1000;">Oferta</span>
+      </div>
+      <div class="mpack-info">
+        <h3 class="mpack-name" style="color:#d4af37;">MEGAPACK OJITO</h3>
+        <p class="mpack-desc">Diseños DTF DTG 2026</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+          <span style="background:var(--black4); border:1px solid #d4af37; border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#f0dca0;">+66,756 diseños</span>
+          <span style="background:var(--black4); border:1px solid #d4af37; border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#f0dca0;">Tendencias 2026</span>
+        </div>
+        <div class="mpack-prices">
+<span class="mpack-old" data-mxn="800"> $ 800 MXN</span>
+<span class="mpack-new" data-mxn="400"> $ 400 MXN</span>
+        </div>
+        <a href="pack-ojito.html" class="mpack-btn">COMPRAR Y DESCARGAR</a>
+        <p style="font-size:11px; color:#666; margin-top:8px; text-align:center;">⚡ Descarga inmediata al pagar</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- TRUST SECTION -->
 <section class="trust-bar" style="background:var(--black3); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:clamp(36px,5vw,56px) 20px;">
   <div style="max-width:1200px; margin:0 auto;">
@@ -1551,7 +1584,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
       </div>
       <div>
         <div style="font-size:30px; margin-bottom:8px;">👕</div>
-        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">+40,000 Diseños</h3>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">+50,000 Diseños</h3>
         <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">Actualizados cada semana. Nunca te quedas sin ideas.</p>
       </div>
       <div>
@@ -1603,63 +1636,6 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
   </div>
 </section>
 
-<!-- MEGAPACKS -->
-<section id="megapacks" class="megapacks">
-  <div class="megapacks-header">
-    <span class="megapacks-tag">⭐ Mejor valorado por nuestros clientes</span>
-    <h2 class="megapacks-title">MEGAPACKS MÁS VENDIDOS</h2>
-  </div>
-
-  <div class="megapacks-grid">
-
-    <!-- CARD 1 -->
-    <div class="mpack-card">
-      <div class="mpack-img-wrap">
-        <span class="mpack-badge">Más Vendido</span>
-        <img src="pack1.jpg" alt="Megapack Chechena" class="mpack-img" />
-        <span class="mpack-offer">Oferta</span>
-      </div>
-      <div class="mpack-info">
-        <h3 class="mpack-name">MEGAPACK CHECHENA</h3>
-        <p class="mpack-desc">Sublimación, Serigrafía, DTF & DTG</p>
-        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">+40,000 diseños</span>
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Multiformato</span>
-        </div>
-        <div class="mpack-prices">
-<span class="mpack-old" data-mxn="439"> $ 439 MXN</span>
-<span class="mpack-new" data-mxn="250"> $ 250 MXN</span>
-        </div>
-        <a href="pack-chechena.html" class="mpack-btn">COMPRAR Y DESCARGAR</a>
-        <p style="font-size:11px; color:#666; margin-top:8px; text-align:center;">⚡ Descarga inmediata al pagar</p>
-      </div>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="mpack-card">
-      <div class="mpack-img-wrap">
-        <span class="mpack-badge">Actualizado</span>
-        <img src="pack2.jpg" alt="Megapack Ojito" class="mpack-img" />
-        <span class="mpack-offer">Oferta</span>
-      </div>
-      <div class="mpack-info">
-        <h3 class="mpack-name">MEGAPACK OJITO</h3>
-        <p class="mpack-desc">Diseños DTF DTG 2026</p>
-        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">+50,000 diseños</span>
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Tendencias 2026</span>
-        </div>
-        <div class="mpack-prices">
-<span class="mpack-old" data-mxn="800"> $ 800 MXN</span>
-<span class="mpack-new" data-mxn="400"> $ 400 MXN</span>
-        </div>
-        <a href="pack-ojito.html" class="mpack-btn">COMPRAR Y DESCARGAR</a>
-        <p style="font-size:11px; color:#666; margin-top:8px; text-align:center;">⚡ Descarga inmediata al pagar</p>
-      </div>
-    </div>
-
-  </div>
-</section>
 <!-- MEGAPACKS -->
 <section id="megapacks" class="megapacks">
   <div class="megapacks-header">
@@ -1833,7 +1809,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 40,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 50,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
@@ -1869,7 +1845,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 50,000 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 66,756 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
@@ -1979,7 +1955,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 40,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 50,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
@@ -2015,7 +1991,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 50,000 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
+  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 66,756 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
