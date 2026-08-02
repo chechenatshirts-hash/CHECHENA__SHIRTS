@@ -8,19 +8,20 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black:   #000000;
-      --black2:  #0a0a0a;
-      --black3:  #111111;
-      --black4:  #181818;
-      --white:   #f5f5f5;
-      --grey:    #777777;
-      --grey2:   #444444;
-      --border:  #1e1e1e;
-      --border2: #2a2a2a;
+      --black:   #ffffff;
+      --black2:  #f7f5fb;
+      --black3:  #ffffff;
+      --black4:  #f2edfa;
+      --white:   #1a1625;
+      --grey:    #6b6775;
+      --grey2:   #9a96a6;
+      --muted:   #6b6775;
+      --border:  #ece5f7;
+      --border2: #e2d9f2;
       --accent:  #7c3aed;      /* violeta principal */
       --accent2: #a855f7;      /* violeta claro     */
-      --green:   #22c55e;      /* verde éxito       */
-      --green2:  #16a34a;
+      --green:   #16a34a;      /* verde éxito       */
+      --green2:  #15803d;
       --blue:    #3b82f6;
       --font-gothic: 'UnifrakturMaguntia', cursive;
       --font-ui:     'Syne', sans-serif;
@@ -35,17 +36,17 @@
     button { cursor: pointer; font-family: var(--font-ui); }
 
     /* TICKER */
-    .ticker-wrap { background: linear-gradient(90deg,#0a0a0a,#111,#0a0a0a); border-bottom: 1px solid #222; overflow: hidden; white-space: nowrap; padding: 10px 0; }
+    .ticker-wrap { background: linear-gradient(90deg,#faf8fe,#ffffff,#faf8fe); border-bottom: 1px solid #ece5f7; overflow: hidden; white-space: nowrap; padding: 10px 0; }
     .ticker-inner { display: inline-flex; animation: marquee 40s linear infinite; }
-    .ticker-item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #d1d5db; padding: 0 52px; }
-    .ticker-icon { color: #a78bfa; }
-    .ticker-item.cupon { color: #22c55e; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #4b4656; padding: 0 52px; }
+    .ticker-icon { color: #8b5cf6; }
+    .ticker-item.cupon { color: #15803d; }
     @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     /* NAVBAR */
-    .navbar { background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 500; }
+    .navbar { background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 500; box-shadow: 0 1px 0 rgba(124,58,237,0.04); }
     .nav-top { display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 68px; position: relative; }
-    .nav-search-btn { background: none; border: none; color: #aaa; font-size: 18px; padding: 6px; line-height: 1; transition: color .2s; }
+    .nav-search-btn { background: none; border: none; color: #6b6775; font-size: 18px; padding: 6px; line-height: 1; transition: color .2s; }
     .nav-search-btn:hover { color: var(--white); }
     .nav-logo { font-family: var(--font-gothic); font-size: clamp(1.7rem, 3.5vw, 2.6rem); color: var(--white); letter-spacing: .02em; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
@@ -56,9 +57,9 @@
     .cart-dot { position: absolute; top: -2px; right: -2px; background: var(--accent); color: #fff; width: 16px; height: 16px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); }
     .hamburger { display: none; background: none; border: none; color: var(--white); font-size: 22px; line-height: 1; }
     .nav-links-row { display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--border); }
-    .nav-links-row a { font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #888; padding: 12px 18px; border-right: 1px solid var(--border); transition: color .2s, background .2s; }
+    .nav-links-row a { font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #6b6775; padding: 12px 18px; border-right: 1px solid var(--border); transition: color .2s, background .2s; }
     .nav-links-row a:first-child { border-left: 1px solid var(--border); }
-    .nav-links-row a.active, .nav-links-row a:hover { color: var(--white); background: var(--black3); }
+    .nav-links-row a.active, .nav-links-row a:hover { color: var(--white); background: var(--black4); }
     .mobile-nav { display: none; flex-direction: column; background: var(--black2); border-top: 1px solid var(--border); position: absolute; width: 100%; z-index: 499; top: 100%; }
     .mobile-nav.open { display: flex; }
     .mobile-nav a { font-family: var(--font-body); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 14px 20px; border-bottom: 1px solid var(--border); color: #aaa; transition: color .2s; }
@@ -143,14 +144,14 @@
     /* PROMO 4X3 */
     .promo-band { background: linear-gradient(135deg, #0f0f1a 0%, #1a0a2e 50%, #0a1a0f 100%); border-top: 1px solid #2a1a4a; border-bottom: 1px solid #2a1a4a; display: grid; grid-template-columns: 1fr auto; }
     .promo-band-text { padding: 24px 40px; }
-    .promo-band-text h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .05em; background: linear-gradient(135deg, #fff, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 6px; }
+    .promo-band-text h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .05em; background: linear-gradient(135deg, #221a38, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 6px; }
     .promo-band-text p { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); }
     .promo-band-btn { background: linear-gradient(135deg, #7b2ff7, #c026d3); color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .15em; text-transform: uppercase; border: none; padding: 0 40px; white-space: nowrap; transition: opacity .2s, transform .2s; }
     .promo-band-btn:hover { opacity: 0.88; transform: scale(1.02); }
 
     /* SECTION TITLES */
     .sec-head { text-align: center; padding: 56px 20px 32px; }
-    .sec-head h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .08em; background: linear-gradient(135deg, #fff 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .sec-head h2 { font-family: var(--font-ui); font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.4rem); text-transform: uppercase; letter-spacing: .08em; background: linear-gradient(135deg, #221a38 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .sec-head p { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); margin-top: 8px; }
 
     /* PRODUCTS */
@@ -351,8 +352,9 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background: var(--black);
-  color: var(--white);
+  background: rgba(20,16,34,.82);
+  color: #fff;
+  backdrop-filter: blur(2px);
   font-family: var(--font-ui);
   font-size: 10px;
   font-weight: 700;
@@ -449,7 +451,7 @@
 .grupo-btn:hover { opacity: 0.88; transform: translateY(-2px); }
 
 .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.social-btn { display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; padding: 13px 10px; font-size: 0.88rem; font-weight: 500; border: 1px solid var(--border); color: var(--white); background: #141414; transition: background 0.2s, border-color 0.2s, transform 0.15s; border-radius: 2px; }
+.social-btn { display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; padding: 13px 10px; font-size: 0.88rem; font-weight: 500; border: 1px solid var(--border); color: var(--white); background: #ffffff; transition: background 0.2s, border-color 0.2s, transform 0.15s; border-radius: 2px; box-shadow: 0 2px 10px rgba(124,58,237,.05); }
 .social-btn:hover { transform: translateY(-2px); }
 .social-btn.whatsapp:hover { background: rgba(37,211,102,0.12); border-color: #25D366; color: #25D366; }
 .social-btn.instagram:hover { background: rgba(168,85,247,0.12); border-color: var(--accent2); color: var(--accent2); }
@@ -462,8 +464,8 @@
 /* CONTACTO */
 
 .contacto{
-  background:#080808;
-  color:#f5f5f5;
+  background:#f7f5fb;
+  color:#1a1625;
   padding:80px 20px;
   font-family: var(--font-body);
 }
@@ -488,7 +490,7 @@
 
 .contacto .sub{
   text-align:center;
-  color:#aaa;
+  color:#6b6775;
   margin-bottom:35px;
   animation:fadeUp 1.2s ease;
 }
@@ -505,11 +507,11 @@
 
 .form-contacto input,
 .form-contacto textarea{
-  background:#151515;
-  border:1px solid #2a2a2a;
+  background:#ffffff;
+  border:1px solid #e2d9f2;
   padding:13px;
   border-radius:6px;
-  color:#fff;
+  color:#1a1625;
   font-size:14px;
   transition:all .25s ease;
 }
@@ -550,7 +552,7 @@
 
 .whatsapp{
   text-align:center;
-  color:#888;
+  color:#6b6775;
   font-size:13px;
   margin:15px 0 25px;
 }
@@ -559,7 +561,7 @@
 
 .linea{
   height:1px;
-  background:#1f1f1f;
+  background:#ece5f7;
   margin:20px 0 10px;
 }
 
@@ -582,7 +584,7 @@
 /* TARJETA GRUPO */
 
 .grupo-box{
-  background:#121212;
+  background:#f4fbf6;
   border:1px solid #25D366;
   border-radius:10px;
   padding:22px;
@@ -592,7 +594,7 @@
 
 .grupo-box:hover{
   transform:translateY(-6px);
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  box-shadow:0 10px 30px rgba(37,211,102,.15);
 }
 
 .badge{
@@ -609,7 +611,7 @@
 }
 
 .grupo-box p{
-  color:#aaa;
+  color:#5b5665;
   font-size:13px;
 }
 
@@ -649,13 +651,13 @@
 
 .red-btn{
   display:block;
-  border:1px solid #2a2a2a;
-  background:#121212;
+  border:1px solid #e2d9f2;
+  background:#ffffff;
   padding:12px;
   border-radius:6px;
   margin-bottom:10px;
   text-decoration:none;
-  color:#ddd;
+  color:#2a2438;
   transition:all .25s ease;
 }
 
@@ -696,17 +698,18 @@
   display:flex;
   align-items:center;
   gap:10px;
-  border:1px solid #2a2a2a;
-  background:#121212;
+  border:1px solid #e2d9f2;
+  background:#ffffff;
   padding:13px 16px;
   border-radius:8px;
   margin-bottom:12px;
   text-decoration:none;
-  color:#ddd;
+  color:#2a2438;
   font-weight:600;
   transition:all .3s ease;
   position:relative;
   overflow:hidden;
+  box-shadow:0 2px 10px rgba(124,58,237,.05);
 }
 
 /* ICONOS */
@@ -794,8 +797,9 @@
 font-size:15px;
 padding:10px 16px;
 border-radius:8px;
-border:1px solid #ddd;
-background:#000000;
+border:1px solid #e2d9f2;
+background:#ffffff;
+color:#1a1625;
 }
 
 
@@ -809,7 +813,9 @@ background:#000000;
   display:none;
   position:absolute;
   top:30px;
-  background:#111;
+  background:#ffffff;
+  border:1px solid #ece5f7;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
   border-radius:8px;
   overflow:hidden;
   min-width:180px;
@@ -818,12 +824,12 @@ background:#000000;
 .dropdown-content a{
   display:block;
   padding:10px 15px;
-  color:white;
+  color:#1a1625;
   text-decoration:none;
 }
 
 .dropdown-content a:hover{
-  background:#222;
+  background:#f2edfa;
 }
 
 .dropdown:hover .dropdown-content{
@@ -1073,8 +1079,8 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 
 /* Grupo box - better styling */
 .grupo-box {
-  background: #0c0c0c;
-  border: 1px solid rgba(124,58,237,.35);
+  background: #faf7ff;
+  border: 1px solid rgba(124,58,237,.25);
   border-radius: 10px;
   padding: 22px;
   transition: all .3s ease;
@@ -1184,8 +1190,8 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
    BANNER CUPÓN DE DESCUENTO
 ══════════════════════════════════ */
 .cupon-banner {
-  background: linear-gradient(135deg, #1a0533 0%, #2d0a5e 40%, #0a1f0a 100%);
-  border-bottom: 1px solid #3d1a7a;
+  background: linear-gradient(135deg, #f3e9ff 0%, #ede0ff 40%, #e9f9ee 100%);
+  border-bottom: 1px solid #e2d3fa;
   padding: 18px 20px;
   position: relative;
   overflow: hidden;
@@ -1197,8 +1203,8 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(123,47,247,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 50%, rgba(34,197,94,0.12) 0%, transparent 60%);
+    radial-gradient(ellipse at 20% 50%, rgba(123,47,247,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(34,197,94,0.06) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -1236,7 +1242,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
   font-weight: 700;
   letter-spacing: .22em;
   text-transform: uppercase;
-  color: #a78bfa;
+  color: #7c3aed;
   margin-bottom: 2px;
 }
 
@@ -1246,7 +1252,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
   font-size: clamp(1rem, 2.5vw, 1.4rem);
   text-transform: uppercase;
   letter-spacing: .06em;
-  color: #fff;
+  color: #1a1625;
   line-height: 1.1;
 }
 
@@ -1259,8 +1265,8 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 }
 
 .cupon-precio-box {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(124,58,237,0.06);
+  border: 1px solid rgba(124,58,237,0.18);
   border-radius: 8px;
   padding: 8px 18px;
   text-align: center;
@@ -1287,14 +1293,14 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 .cupon-precio-unit {
   font-family: var(--font-ui);
   font-size: 10px;
-  color: #888;
+  color: #6b6775;
   text-transform: uppercase;
   letter-spacing: .1em;
 }
 
 .cupon-sep {
   font-size: 18px;
-  color: #555;
+  color: #9a96a6;
 }
 
 .cupon-codigo-wrap {
@@ -1309,7 +1315,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
   font-size: 10px;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: #888;
+  color: #6b6775;
 }
 
 .cupon-codigo {
@@ -1476,7 +1482,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
       <h1 style="font-family:var(--font-ui); font-weight:800; font-size:clamp(1.8rem,4vw,2.9rem); text-transform:uppercase; line-height:1.08; letter-spacing:.02em; margin:14px 0 16px; color:var(--white);">
         DEJA DE PERDER HORAS DISEÑANDO<span style="color:var(--accent2);">.</span><br>IMPRIME HOY MISMO
       </h1>
-      <p style="font-family:var(--font-body); font-size:clamp(13px,1.6vw,15px); color:#b3b3b3; line-height:1.65; max-width:520px; margin-bottom:24px;">
+      <p style="font-family:var(--font-body); font-size:clamp(13px,1.6vw,15px); color:#4a4557; line-height:1.65; max-width:520px; margin-bottom:24px;">
         Miles de diseños listos para imprimir en DTF, DTG, sublimación y serigrafía. Los compras, los descargas al instante y los mandas directo a tu máquina.
       </p>
 
@@ -1484,7 +1490,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
       <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px;">
         <div style="display:flex; align-items:center; gap:8px; background:var(--black3); border:1px solid var(--border2); border-radius:8px; padding:9px 14px;">
           <span style="font-size:16px;">👕</span>
-          <span style="font-family:var(--font-body); font-size:12px; color:#ddd;"><strong style="color:#fff;">40,000+</strong> diseños</span>
+          <span style="font-family:var(--font-body); font-size:12px; color:#4a4557;"><strong style="color:#7c3aed;">40,000+</strong> diseños</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; background:var(--accent); border-radius:8px; padding:9px 14px;">
           <span style="font-size:16px;">⚡</span>
@@ -1492,7 +1498,7 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
         </div>
         <div style="display:flex; align-items:center; gap:8px; background:var(--black3); border:1px solid var(--border2); border-radius:8px; padding:9px 14px;">
           <span style="font-size:16px;">🔄</span>
-          <span style="font-family:var(--font-body); font-size:12px; color:#ddd;">Diseños <strong style="color:#fff;">nuevos cada semana</strong></span>
+          <span style="font-family:var(--font-body); font-size:12px; color:#4a4557;">Diseños <strong style="color:#7c3aed;">nuevos cada semana</strong></span>
         </div>
       </div>
 
@@ -1534,8 +1540,8 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
         <h3 class="mpack-name">MEGAPACK CHECHENA</h3>
         <p class="mpack-desc">Sublimación, Serigrafía, DTF & DTG</p>
         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">+50,000 diseños</span>
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Multiformato</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#4a4557;">+50,000 diseños</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#4a4557;">Multiformato</span>
         </div>
         <div class="mpack-prices">
 <span class="mpack-old" data-mxn="439"> $ 439 MXN</span>
@@ -1579,23 +1585,23 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:28px; text-align:center; margin-bottom:44px;">
       <div>
         <div style="font-size:30px; margin-bottom:8px;">⚡</div>
-        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">Descarga Inmediata</h3>
-        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">Recibe tus diseños al instante después del pago.</p>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#1a1625; margin-bottom:4px;">Descarga Inmediata</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#5f5a6c; line-height:1.5;">Recibe tus diseños al instante después del pago.</p>
       </div>
       <div>
         <div style="font-size:30px; margin-bottom:8px;">👕</div>
-        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">+50,000 Diseños</h3>
-        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">Actualizados cada semana. Nunca te quedas sin ideas.</p>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#1a1625; margin-bottom:4px;">+50,000 Diseños</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#5f5a6c; line-height:1.5;">Actualizados cada semana. Nunca te quedas sin ideas.</p>
       </div>
       <div>
         <div style="font-size:30px; margin-bottom:8px;">🔒</div>
-        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">Pago Seguro</h3>
-        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">Tarjeta, PayPal o transferencia. Sin sorpresas.</p>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#1a1625; margin-bottom:4px;">Pago Seguro</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#5f5a6c; line-height:1.5;">Tarjeta, PayPal o transferencia. Sin sorpresas.</p>
       </div>
       <div>
         <div style="font-size:30px; margin-bottom:8px;">💬</div>
-        <h3 style="font-family:var(--font-ui); font-size:15px; color:#fff; margin-bottom:4px;">Soporte Directo</h3>
-        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.5;">¿Dudas? Te contestamos por WhatsApp.</p>
+        <h3 style="font-family:var(--font-ui); font-size:15px; color:#1a1625; margin-bottom:4px;">Soporte Directo</h3>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#5f5a6c; line-height:1.5;">¿Dudas? Te contestamos por WhatsApp.</p>
       </div>
     </div>
 
@@ -1605,31 +1611,31 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
           <div style="width:38px; height:38px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900;">J</div>
           <div>
-            <strong style="font-family:var(--font-body); font-size:13px; color:#fff;">Juan Pérez</strong>
+            <strong style="font-family:var(--font-body); font-size:13px; color:#1a1625;">Juan Pérez</strong>
             <div style="color:#a78bfa; font-size:11px;">★★★★★</div>
           </div>
         </div>
-        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.6; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#5f5a6c; line-height:1.6; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
       </div>
       <div style="background:var(--black2); border:1px solid var(--border2); border-radius:12px; padding:20px;">
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
           <div style="width:38px; height:38px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900;">A</div>
           <div>
-            <strong style="font-family:var(--font-body); font-size:13px; color:#fff;">Yazminarellano</strong>
+            <strong style="font-family:var(--font-body); font-size:13px; color:#1a1625;">Yazminarellano</strong>
             <div style="color:#a78bfa; font-size:11px;">★★★★★</div>
           </div>
         </div>
-        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.6; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#5f5a6c; line-height:1.6; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
       </div>
       <div style="background:var(--black2); border:1px solid var(--border2); border-radius:12px; padding:20px;">
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
           <div style="width:38px; height:38px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900;">F</div>
           <div>
-            <strong style="font-family:var(--font-body); font-size:13px; color:#fff;">Fernanda Ríos</strong>
+            <strong style="font-family:var(--font-body); font-size:13px; color:#1a1625;">Fernanda Ríos</strong>
             <div style="color:#a78bfa; font-size:11px;">★★★★★</div>
           </div>
         </div>
-        <p style="font-family:var(--font-body); font-size:12.5px; color:#999; line-height:1.6; margin:0;">Muy buena calidad de imagen y variedad de diseños para imprimir.</p>
+        <p style="font-family:var(--font-body); font-size:12.5px; color:#5f5a6c; line-height:1.6; margin:0;">Muy buena calidad de imagen y variedad de diseños para imprimir.</p>
       </div>
     </div>
 
@@ -1656,9 +1662,9 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
         <h3 class="mpack-name">PAQUETE EMPRENDEDOR</h3>
         <p class="mpack-desc">8 playeras premium con los diseños que tú eliges + etiqueta de cuello personalizada con tu marca. Envío gratis a todo México.</p>
         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">8 playeras</span>
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Tú eliges diseños</span>
-          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#ccc;">Envío gratis</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#4a4557;">8 playeras</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#4a4557;">Tú eliges diseños</span>
+          <span style="background:var(--black4); border:1px solid var(--border2); border-radius:4px; padding:4px 10px; font-family:var(--font-body); font-size:11px; color:#4a4557;">Envío gratis</span>
         </div>
         <div class="mpack-prices">
 <span class="mpack-old" data-mxn="3000"> $ 3000 MXN</span>
@@ -1750,13 +1756,13 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
   }
 </style>
 
-<div id="reviews" style="max-width:1600px; margin:0 auto; padding: 64px 40px 80px; border-top: 1px solid #1f1f1f; overflow:hidden;">
+<div id="reviews" style="max-width:1600px; margin:0 auto; padding: 64px 40px 80px; border-top: 1px solid #ece5f7; overflow:hidden;">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:40px;">
     </div>
     <div>
-<h2 style="font-family:'Bebas Neue', sans-serif; font-size:36px; font-weight:900; color:#e0e0e0; margin:0; letter-spacing:2px;">
+<h2 style="font-family:'Bebas Neue', sans-serif; font-size:36px; font-weight:900; color:#1c1830; margin:0; letter-spacing:2px;">
   OPINIONES REALES DE 
-  <span style="color:#00ff9d;">IMPRESORES COMO TÚ</span>
+  <span style="color:#15803d;">IMPRESORES COMO TÚ</span>
 </h2>
     </div>
   </div>
@@ -1765,293 +1771,293 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
     <div class="scroller-track" style="display:flex; gap:24px; width:max-content;">
 
       <!-- TARJETA 1 -->
-      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+      <div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
           <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
           <div>
-            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Juan Pérez</h4>
+            <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Juan Pérez</h4>
             <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
-        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
+        <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
       </div>
 
       <!-- TARJETA 2 -->
-      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+      <div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
           <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">A</div>
           <div>
-            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Yazminarellano</h4>
+            <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Yazminarellano</h4>
             <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
-        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
+        <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
       </div>
 
 <!-- RESEÑA: Fernanda -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">F</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Fernanda Ríos</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Fernanda Ríos</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Sandra Reyes</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Sandra Reyes</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 50,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 50,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(34,197,94,0.2); color:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">O</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Omar Estampados GDL</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Omar Estampados GDL</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">T</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Taller Textil Monterrey</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Taller Textil Monterrey</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(99,102,241,0.2); color:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">G</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Gabriela (Print House)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Gabriela (Print House)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 66,756 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">El Megapack Ojito es una locura. Más de 66,756 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(20,184,166,0.2); color:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">R</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Raúl (DTG Express CDMX)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Raúl (DTG Express CDMX)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(234,179,8,0.2); color:#eab308; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">I</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Imprenta Ibarra</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Imprenta Ibarra</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
 </div>
 
 <!-- RESEÑA: Calculadora DTF -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(168,85,247,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">J</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Jesús Velázquez</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Jesús Velázquez</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
 </div>
 
 <!-- RESEÑA: Calculadora DTF -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(249,115,22,0.2); color:#f97316; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">L</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Lupita (Estampados Puebla)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Lupita (Estampados Puebla)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
 </div>
 
 <!-- RESEÑA: Calculadora DTF -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">E</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Eduardo (Taller EG)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Eduardo (Taller EG)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
 </div>
 
       <!-- DUPLICADOS para loop infinito -->
       <!-- TARJETA 1 duplicada -->
       <!-- TARJETA 1 -->
-      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+      <div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
           <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">C</div>
           <div>
-            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Juan Pérez</h4>
+            <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Juan Pérez</h4>
             <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
-        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
+        <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Excelente megapack. Recuperé mi inversión en la primera semana.</p>
       </div>
 
       <!-- TARJETA 2 -->
-      <div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+      <div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
         <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
           <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">A</div>
           <div>
-            <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Yazminarellano</h4>
+            <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Yazminarellano</h4>
             <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
           </div>
         </div>
-        <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
+        <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Imágenes increíbles y super fácil de usar. Mucha variedad para escoger.</p>
       </div>
 
 <!-- RESEÑA: Fernanda -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(236,72,153,0.2); color:#ec4899; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">F</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Fernanda Ríos</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Fernanda Ríos</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Uso el generador de mockups para mis stories y la diferencia es brutal. Mis clientes ahora piden el diseño en camiseta antes de confirmar y eso me cierra más ventas. Súper recomendado para el que vende por redes. 🙌</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(124,58,237,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">S</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Sandra Reyes</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Sandra Reyes</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 50,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Compré el Megapack Chechena y no lo podía creer. Más de 50,000 diseños listos para DTF y sublimación por solo $250 pesos. Los descargué al instante y ya los estoy usando en el taller. Vale muchísimo más de lo que cobran. 🔥</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(34,197,94,0.2); color:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">O</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Omar Estampados GDL</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Omar Estampados GDL</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">El Megapack Chechena tiene de todo: urbano, corridos, anime, deportivo. Llevo dos semanas usándolo y todavía no termino de explorar todo lo que trae. Para sublimacion y DTF funciona perfecto, los archivos vienen limpios y listos. 100% recomendado. ✅</p>
 </div>
 
 <!-- RESEÑA: Megapack Chechena -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">T</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Taller Textil Monterrey</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Taller Textil Monterrey</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Tenía miedo de que fueran diseños genéricos que se ven en todos lados, pero el Chechena trae cosas que no encuentras en ningún otro lado. Mis clientes me preguntan dónde consigo esos diseños y yo solo sonrío jaja. Los $250 mejor gastados del mes. 😏</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(99,102,241,0.2); color:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">G</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Gabriela (Print House)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Gabriela (Print House)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">El Megapack Ojito es una locura. Más de 66,756 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">El Megapack Ojito es una locura. Más de 66,756 diseños actualizados para 2026, pensé que iba a tardar días en descargarse pero fue inmediato. Para DTF y DTG funcionan perfectísimo. Con esto tengo diseños para todo el año sin preocuparme. 🙌</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(20,184,166,0.2); color:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">R</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Raúl (DTG Express CDMX)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Raúl (DTG Express CDMX)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Compré el Ojito porque vi los TikToks y no me arrepiento para nada. $400 pesos por más de 50 mil diseños del 2026 es un precio absurdamente bajo. Ya recuperé la inversión con las primeras 5 playeras que vendí ese mismo fin de semana. 💪</p>
 </div>
 
 <!-- RESEÑA: Megapack Ojito -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(234,179,8,0.2); color:#eab308; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">I</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Imprenta Ibarra</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Imprenta Ibarra</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Lo que me convenció del Ojito fue que son diseños del 2026, no colecciones viejas que ya todo el mundo tiene. Mis clientes ven algo fresco y diferente. Para DTG los colores salen increíbles, bien saturados. Descarga al instante, cero esperas. ⚡</p>
 </div>
 
 <!-- RESEÑA: Calculadora DTF -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(168,85,247,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">J</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Jesús Velázquez</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Jesús Velázquez</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">La calculadora DTF me cambió la forma de cotizar. Antes le ponía precio a ojo y a veces salía perdiendo sin darme cuenta. Ahora meto mis costos y me dice exacto cuánto cobrar por playera. Ya subí mis precios y gano más sin perder clientes. 💰</p>
 </div>
 
 <!-- RESEÑA: Calculadora DTF -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(249,115,22,0.2); color:#f97316; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">L</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Lupita (Estampados Puebla)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Lupita (Estampados Puebla)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Llevaba meses cobrando de más en algunos pedidos y de menos en otros sin saberlo. Con la calculadora DTF de Chechena ya sé exactamente cuánto me cuesta cada playera y cuánto cobrar. Herramienta sencilla pero que hace una diferencia enorme en el negocio. 🎯</p>
 </div>
 
 <!-- RESEÑA: Calculadora DTF -->
-<div style="width:350px; background:#0f0f0f; border:1px solid #1f1f1f; border-radius:16px; padding:24px; flex-shrink:0;">
+<div style="width:350px; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; padding:24px; flex-shrink:0; box-shadow:0 4px 18px rgba(124,58,237,.06);">
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
     <div style="width:40px; height:40px; border-radius:50%; background:rgba(59,130,246,0.2); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">E</div>
     <div>
-      <h4 style="font-weight:700; font-size:14px; color:#f8fafc; margin:0;">Eduardo (Taller EG)</h4>
+      <h4 style="font-weight:700; font-size:14px; color:#1c1830; margin:0;">Eduardo (Taller EG)</h4>
       <div style="color:#a78bfa; font-size:10px; margin-top:2px;">★★★★★</div>
     </div>
   </div>
-  <p style="font-size:12px; line-height:1.6; color:#8b8b8b; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
+  <p style="font-size:12px; line-height:1.6; color:#6e6a7a; margin:0;">Le mostré la calculadora a un amigo que también tiene taller y quedó impactado. Metes el costo de tu film, tu playera, la tinta y te da el precio final con ganancia incluida. Ya no hay pretexto para no saber cuánto cobrar. Eso es dinero que antes se me iba sin darme cuenta. 📊</p>
 </div>
 
     </div>
@@ -2294,15 +2300,15 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 </script>
 
 <!-- ====================== ACADEMIA CHECHENA ====================== -->
-<section id="academia-chechena" style="background:#050505; padding:90px 20px; border-top:1px solid #1a1a1a;">
+<section id="academia-chechena" style="background:#faf9fd; padding:90px 20px; border-top:1px solid #ece5f7;">
   <div style="max-width:1200px; margin:0 auto;">
 
     <div style="text-align:center; margin-bottom:70px;">
-      <span style="display:inline-block; background:#111; border:1px solid #1f1f1f; font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:#777; padding:8px 20px; margin-bottom:16px;">KNOWLEDGE BASE</span>
-      <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin-bottom:14px;">
-        RECURSOS <span style="color:#9d0000;">CHECHENA</span>
+      <span style="display:inline-block; background:rgba(124,58,237,.08); border:1px solid rgba(124,58,237,.25); font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:#7c3aed; padding:8px 20px; margin-bottom:16px;">KNOWLEDGE BASE</span>
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#1a1625; margin-bottom:14px;">
+        RECURSOS <span style="color:#a855f7;">CHECHENA</span>
       </h2>
-      <p style="font-family:'Inter',sans-serif; font-size:15px; color:#aaa; max-width:520px; margin:0 auto; line-height:1.6;">
+      <p style="font-family:'Inter',sans-serif; font-size:15px; color:#6b6775; max-width:520px; margin:0 auto; line-height:1.6;">
         Todo lo que necesitas saber para imprimir como profesional
       </p>
     </div>
@@ -2352,19 +2358,20 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 
 <!-- ==================== MODAL ==================== -->
 <div id="modal-academia" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:99999; align-items:center; justify-content:center; padding:20px;">
-  <div style="background:#0f0f0f; border:1px solid #222; width:100%; max-width:620px; border-radius:12px; overflow:hidden; box-shadow:0 25px 50px -12px rgb(0 0 0 / 0.8);">
-    <div style="padding:20px 28px; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center;">
-      <h3 id="modal-titulo" style="font-family:'Space Grotesk',sans-serif; font-size:21px; color:#fff; margin:0; text-transform:uppercase;"></h3>
+  <div style="background:#ffffff; border:1px solid #ece5f7; width:100%; max-width:620px; border-radius:12px; overflow:hidden; box-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);">
+    <div style="padding:20px 28px; border-bottom:1px solid #ece5f7; display:flex; justify-content:space-between; align-items:center;">
+      <h3 id="modal-titulo" style="font-family:'Space Grotesk',sans-serif; font-size:21px; color:#1a1625; margin:0; text-transform:uppercase;"></h3>
       <button onclick="cerrarGuia()" style="background:none; border:none; font-size:30px; color:#666; cursor:pointer;">×</button>
     </div>
-    <div id="modal-cuerpo" style="padding:32px; overflow-y:auto; max-height:70vh; color:#ddd; line-height:1.8; font-size:15.2px;"></div>
+    <div id="modal-cuerpo" style="padding:32px; overflow-y:auto; max-height:70vh; color:#4a4557; line-height:1.8; font-size:15.2px;"></div>
   </div>
 </div>
 
 <style>
 .guia-card {
-  background:#0f0f0f;
-  border:1px solid #1f1f1f;
+  background:#ffffff;
+  border:1px solid #ece5f7;
+  box-shadow:0 4px 18px rgba(124,58,237,.06);
   border-radius:12px;
   padding:34px 28px;
   cursor:pointer;
@@ -2382,8 +2389,8 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
 
 .guia-card .icon {
   width:70px; height:70px;
-  background:#1a1a1a;
-  border:1px solid #333;
+  background:#f2edfa;
+  border:1px solid #e2d9f2;
   border-radius:12px;
   display:flex;
   align-items:center;
@@ -2398,9 +2405,9 @@ h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 800; }
   transform:scale(1.15) rotate(15deg);
 }
 
-.guia-card h3 { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; text-transform:uppercase; color:#fff; margin:0; }
-.guia-card p { color:#999; line-height:1.65; margin:0; flex-grow:1; }
-.guia-card .link { color:#00ffa2; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+.guia-card h3 { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; text-transform:uppercase; color:#1a1625; margin:0; }
+.guia-card p { color:#6b6775; line-height:1.65; margin:0; flex-grow:1; }
+.guia-card .link { color:#15803d; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
 </style>
 
 <script>
@@ -2461,28 +2468,28 @@ document.addEventListener('keydown', (e) => {
 
 
 <!-- PACK GRATIS DE LA SEMANA -->
-<section id="regalo-semana" style="max-width:1200px; margin:0 auto; padding:60px 40px 80px; border-top:1px solid #2c2c2c;">
+<section id="regalo-semana" style="max-width:1200px; margin:0 auto; padding:60px 40px 80px; border-top:1px solid #ece5f7;">
 
   <!-- HEADER -->
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:32px;">
 
     </div>
     <div>
-      <h2 style="font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin:0 0 4px 0;">
+      <h2 style="font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#1a1625; margin:0 0 4px 0;">
         DISEÑOS GRATIS <span style="color:#a855f7;">ENTRA AL GRUPO DE WHATSAPP</span>
       </h2>
-      <p style="font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin:0;">
+      <p style="font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#6b6775; margin:0;">
         ¿Quieres más diseños listos para imprimir? Arriba tienes los megapacks disponibles.
       </p>
     </div>
   </div>
 
   <!-- CARD PRINCIPAL -->
-  <div style="display:flex; flex-direction:row; background:#0a0a0a; border:1px solid #2c2c2c; border-radius:16px; overflow:hidden; transition:border-color .3s;"
-       onmouseover="this.style.borderColor='#a855f7'" onmouseout="this.style.borderColor='#1e1e1e'">
+  <div style="display:flex; flex-direction:row; background:#ffffff; border:1px solid #ece5f7; border-radius:16px; overflow:hidden; transition:border-color .3s; box-shadow:0 4px 20px rgba(124,58,237,.06);"
+       onmouseover="this.style.borderColor='#a855f7'" onmouseout="this.style.borderColor='#ece5f7'">
 
     <!-- IMAGEN -->
-    <div class="regalo-img-col" style="width:380px; min-width:380px; overflow:hidden; border-right:1px solid #222;">
+    <div class="regalo-img-col" style="width:380px; min-width:380px; overflow:hidden; border-right:1px solid #ece5f7;">
       <img src="DI.png" alt="Pack Semanal"
            style="width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s;"
            onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
@@ -2495,11 +2502,11 @@ document.addEventListener('keydown', (e) => {
         <i class="fa-solid fa-clock" style="margin-right:4px;"></i>GRATUITOS 
       </span>
 
-      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:700; text-transform:uppercase; color:#fff; margin:0 0 12px 0;">
+      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:700; text-transform:uppercase; color:#1a1625; margin:0 0 12px 0;">
         DISEÑOS GRATIS
       </h3>
 
-      <p style="font-size:13px; color:#888; line-height:1.7; margin:0 0 32px 0; max-width:520px;">
+      <p style="font-size:13px; color:#5f5a6c; line-height:1.7; margin:0 0 32px 0; max-width:520px;">
         @CHECHENA_SHIRTS
       </p>
 
@@ -2549,7 +2556,7 @@ document.addEventListener('keydown', (e) => {
     <blockquote class="tiktok-embed"
       cite="https://www.tiktok.com/@chechena_shirts/video/7599722002890427668"
       data-video-id="7599722002890427668"
-      style="max-width:100%;min-width:0;border:1px solid #1f1f1f;background:#111;">
+      style="max-width:100%;min-width:0;border:1px solid #ece5f7;background:#faf9fd;">
       <section>
         <a target="_blank" title="@chechena_shirts" href="https://www.tiktok.com/@chechena_shirts?refer=embed">@chechena_shirts</a>
         DISEÑOS para dtf
@@ -2561,7 +2568,7 @@ document.addEventListener('keydown', (e) => {
     <blockquote class="tiktok-embed"
       cite="https://www.tiktok.com/@chechena_shirts/video/7597229567505452344"
       data-video-id="7597229567505452344"
-      style="max-width:100%;min-width:0;border:1px solid #1f1f1f;background:#111;">
+      style="max-width:100%;min-width:0;border:1px solid #ece5f7;background:#faf9fd;">
       <section>
         <a target="_blank" title="@chechena_shirts" href="https://www.tiktok.com/@chechena_shirts?refer=embed">@chechena_shirts</a>
         EFECTO BORDADO · DTF TEXTIL · PAQUETE DE DISEÑOS
@@ -2573,7 +2580,7 @@ document.addEventListener('keydown', (e) => {
     <blockquote class="tiktok-embed"
       cite="https://www.tiktok.com/@chechena_shirts/photo/7594941900004609298"
       data-video-id="7594941900004609298"
-      style="max-width:100%;min-width:0;border:1px solid #1f1f1f;background:#111;">
+      style="max-width:100%;min-width:0;border:1px solid #ece5f7;background:#faf9fd;">
       <section>
         <a target="_blank" title="@chechena_shirts" href="https://www.tiktok.com/@chechena_shirts?refer=embed">@chechena_shirts</a>
       </section>
@@ -2584,7 +2591,7 @@ document.addEventListener('keydown', (e) => {
 
   <div style="text-align:center;padding-bottom:40px;">
     <a href="https://www.tiktok.com/@chechena_shirts" target="_blank"
-      style="display:inline-block;background:#1a1a1a;border:1px solid #333;color:#f5f5f5;font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:13px 32px;text-decoration:none;transition:border-color .2s;">
+      style="display:inline-block;background:var(--accent);border:1px solid var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:13px 32px;text-decoration:none;transition:background .2s;">
       Ver más en TikTok →
     </a>
   </div>
@@ -2593,68 +2600,68 @@ document.addEventListener('keydown', (e) => {
 <!-- ═══════════════════════════════════════════════════════ -->
 <!-- SECCIÓN: PREGUNTAS FRECUENTES                         -->
 <!-- ═══════════════════════════════════════════════════════ -->
-<section id="preguntas-frecuentes" style="background:#0a0a0a; padding:70px 20px; border-top:1px solid #2c2c2c;">
+<section id="preguntas-frecuentes" style="background:#faf9fd; padding:70px 20px; border-top:1px solid #ece5f7;">
   <div style="max-width:900px; margin:0 auto;">
 
     <div style="text-align:center; margin-bottom:48px;">
-      <span style="display:inline-block; background:#1a1a1a; border:1px solid #333; font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#888; padding:5px 16px; margin-bottom:16px;">Soporte</span>
-      <h2 style="font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:#fff; margin-bottom:8px;">PREGUNTAS <span style="color:#a855f7;">FRECUENTES</span></h2>
+      <span style="display:inline-block; background:rgba(124,58,237,.08); border:1px solid rgba(124,58,237,.25); font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#7c3aed; padding:5px 16px; margin-bottom:16px;">Soporte</span>
+      <h2 style="font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:#1a1625; margin-bottom:8px;">PREGUNTAS <span style="color:#a855f7;">FRECUENTES</span></h2>
       <p style="font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#888;">Todo lo que necesitas saber sobre nuestros paquetes y descargas</p>
     </div>
 
     <div style="display:flex; flex-direction:column; gap:4px;" id="faq-lista">
 
-      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+      <div class="faq-item" style="border:1px solid #ece5f7; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(124,58,237,.04);">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#ffffff; border:1px solid #ece5f7; color:#1a1625; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s, border-color .2s;" onmouseover="this.style.background='#f7f2fe'; this.style.borderColor='#d9c8f5'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#ece5f7'">
           <span>¿En qué formato vienen los diseños?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
-        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
-          <p style="font-size:13px; color:#888; line-height:1.7;">Todos los diseños vienen en <strong style="color:#fff;">PNG con fondo transparente</strong> a 300 DPI, listos para mandar directo al RIP o a cualquier programa de diseño. También incluimos versiones optimizadas con semitonos para camisetas oscuras.</p>
+        <div class="faq-resp" style="display:none; background:#ffffff; padding:16px 22px; border:1px solid #ece5f7; border-top:none; margin-top:-1px;">
+          <p style="font-size:13px; color:#5b5665; line-height:1.7;">Todos los diseños vienen en <strong style="color:#fff;">PNG con fondo transparente</strong> a 300 DPI, listos para mandar directo al RIP o a cualquier programa de diseño. También incluimos versiones optimizadas con semitonos para camisetas oscuras.</p>
         </div>
       </div>
 
-      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+      <div class="faq-item" style="border:1px solid #ece5f7; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(124,58,237,.04);">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#ffffff; border:1px solid #ece5f7; color:#1a1625; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s, border-color .2s;" onmouseover="this.style.background='#f7f2fe'; this.style.borderColor='#d9c8f5'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#ece5f7'">
           <span>¿Cómo descargo mis diseños después de pagar?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
-        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
-          <p style="font-size:13px; color:#888; line-height:1.7;">Recibes un <strong style="color:#fff;">enlace de descarga inmediata</strong> directamente en tu correo al momento de pagar. El archivo ZIP se descarga sin necesidad de crear una cuenta. Si tienes problemas, escríbenos por WhatsApp y te ayudamos al instante.</p>
+        <div class="faq-resp" style="display:none; background:#ffffff; padding:16px 22px; border:1px solid #ece5f7; border-top:none; margin-top:-1px;">
+          <p style="font-size:13px; color:#5b5665; line-height:1.7;">Recibes un <strong style="color:#fff;">enlace de descarga inmediata</strong> directamente en tu correo al momento de pagar. El archivo ZIP se descarga sin necesidad de crear una cuenta. Si tienes problemas, escríbenos por WhatsApp y te ayudamos al instante.</p>
         </div>
       </div>
 
-      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+      <div class="faq-item" style="border:1px solid #ece5f7; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(124,58,237,.04);">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#ffffff; border:1px solid #ece5f7; color:#1a1625; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s, border-color .2s;" onmouseover="this.style.background='#f7f2fe'; this.style.borderColor='#d9c8f5'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#ece5f7'">
           <span>¿Puedo usar los diseños comercialmente?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
-        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
-          <p style="font-size:13px; color:#888; line-height:1.7;">Sí. Al comprar cualquier megapack obtienes <strong style="color:#fff;">licencia comercial</strong> para estampar y vender prendas con esos diseños. No puedes revender los archivos digitales originales ni incluirlos en otro pack de diseños.</p>
+        <div class="faq-resp" style="display:none; background:#ffffff; padding:16px 22px; border:1px solid #ece5f7; border-top:none; margin-top:-1px;">
+          <p style="font-size:13px; color:#5b5665; line-height:1.7;">Sí. Al comprar cualquier megapack obtienes <strong style="color:#fff;">licencia comercial</strong> para estampar y vender prendas con esos diseños. No puedes revender los archivos digitales originales ni incluirlos en otro pack de diseños.</p>
         </div>
       </div>
 
-      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+      <div class="faq-item" style="border:1px solid #ece5f7; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(124,58,237,.04);">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#ffffff; border:1px solid #ece5f7; color:#1a1625; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s, border-color .2s;" onmouseover="this.style.background='#f7f2fe'; this.style.borderColor='#d9c8f5'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#ece5f7'">
           <span>¿Cada cuánto agregan diseños nuevos?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
-        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
-          <p style="font-size:13px; color:#888; line-height:1.7;">Subimos <strong style="color:#fff;">diseños nuevos cada semana</strong>. Si ya compraste un megapack, únete a nuestro grupo de WhatsApp para enterarte cuando salen los nuevos packs y acceder a ofertas exclusivas para clientes.</p>
+        <div class="faq-resp" style="display:none; background:#ffffff; padding:16px 22px; border:1px solid #ece5f7; border-top:none; margin-top:-1px;">
+          <p style="font-size:13px; color:#5b5665; line-height:1.7;">Subimos <strong style="color:#fff;">diseños nuevos cada semana</strong>. Si ya compraste un megapack, únete a nuestro grupo de WhatsApp para enterarte cuando salen los nuevos packs y acceder a ofertas exclusivas para clientes.</p>
         </div>
       </div>
 
-      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+      <div class="faq-item" style="border:1px solid #ece5f7; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(124,58,237,.04);">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#ffffff; border:1px solid #ece5f7; color:#1a1625; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s, border-color .2s;" onmouseover="this.style.background='#f7f2fe'; this.style.borderColor='#d9c8f5'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#ece5f7'">
           <span>¿Qué métodos de pago aceptan?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
-        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
-          <p style="font-size:13px; color:#888; line-height:1.7;">Aceptamos <strong style="color:#fff;">tarjeta de crédito/débito, PayPal y transferencia bancaria</strong>. Todos los pagos son 100% seguros. Si prefieres otro método de pago, contáctanos por WhatsApp y coordinamos.</p>
+        <div class="faq-resp" style="display:none; background:#ffffff; padding:16px 22px; border:1px solid #ece5f7; border-top:none; margin-top:-1px;">
+          <p style="font-size:13px; color:#5b5665; line-height:1.7;">Aceptamos <strong style="color:#fff;">tarjeta de crédito/débito, PayPal y transferencia bancaria</strong>. Todos los pagos son 100% seguros. Si prefieres otro método de pago, contáctanos por WhatsApp y coordinamos.</p>
         </div>
       </div>
 
-      <div class="faq-item" style="border:1px solid #2c2c2c; border-radius:3px; overflow:hidden;">
-        <button onclick="toggleFaq(this)" style="width:100%; background:#111; border:none; color:#fff; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'">
+      <div class="faq-item" style="border:1px solid #ece5f7; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(124,58,237,.04);">
+        <button onclick="toggleFaq(this)" style="width:100%; background:#ffffff; border:1px solid #ece5f7; color:#1a1625; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:18px 22px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s, border-color .2s;" onmouseover="this.style.background='#f7f2fe'; this.style.borderColor='#d9c8f5'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#ece5f7'">
           <span>¿Los diseños sirven para sublimación también?</span><span style="font-size:18px; transition:transform .3s;">+</span>
         </button>
-        <div class="faq-resp" style="display:none; background:#0d0d0d; padding:16px 22px; border-top:1px solid #222;">
-          <p style="font-size:13px; color:#888; line-height:1.7;">La mayoría sí. Los diseños sin fondo son ideales para DTF. Para sublimación recomendamos usar los diseños con fondo completo o agregarles un fondo de color en Photoshop antes de imprimir. Nuestros archivos a 300 DPI garantizan calidad profesional en ambas técnicas.</p>
+        <div class="faq-resp" style="display:none; background:#ffffff; padding:16px 22px; border:1px solid #ece5f7; border-top:none; margin-top:-1px;">
+          <p style="font-size:13px; color:#5b5665; line-height:1.7;">La mayoría sí. Los diseños sin fondo son ideales para DTF. Para sublimación recomendamos usar los diseños con fondo completo o agregarles un fondo de color en Photoshop antes de imprimir. Nuestros archivos a 300 DPI garantizan calidad profesional en ambas técnicas.</p>
         </div>
       </div>
 
@@ -2672,8 +2679,8 @@ document.addEventListener('keydown', (e) => {
 <style>
 /* COMUNIDAD SECTION */
 .comunidad-section {
-  background: #080808;
-  border-top: 1px solid #2c2c2c;
+  background: #ffffff;
+  border-top: 1px solid #ece5f7;
   padding: clamp(48px, 8vw, 80px) clamp(16px, 5vw, 48px);
 }
 .comunidad-header {
@@ -2699,7 +2706,7 @@ document.addEventListener('keydown', (e) => {
   font-size: clamp(1.6rem, 3.5vw, 2.6rem);
   text-transform: uppercase;
   letter-spacing: .06em;
-  color: #fff;
+  color: #1a1625;
   margin-bottom: 8px;
 }
 .comunidad-header p {
@@ -2707,7 +2714,7 @@ document.addEventListener('keydown', (e) => {
   font-size: 13px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: #666;
+  color: #6b6775;
 }
 .comunidad-grid {
   display: grid;
@@ -2728,14 +2735,14 @@ document.addEventListener('keydown', (e) => {
   transform: translateY(-6px);
 }
 .com-card.whatsapp-card {
-  background: #0d1f14;
+  background: #f2fbf5;
   border: 1px solid #25D366;
 }
 .com-card.whatsapp-card:hover {
   box-shadow: 0 14px 40px rgba(37,211,102,.2);
 }
 .com-card.telegram-card {
-  background: #0d1829;
+  background: #eff8ff;
   border: 1px solid #2AABEE;
 }
 .com-card.telegram-card:hover {
@@ -2771,14 +2778,14 @@ document.addEventListener('keydown', (e) => {
   font-weight: 700;
   font-size: clamp(1.1rem, 2.5vw, 1.4rem);
   text-transform: uppercase;
-  color: #fff;
+  color: #1a1625;
   line-height: 1.2;
   margin: 0;
 }
 .com-card p {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
-  color: #999;
+  color: #5f5a6c;
   line-height: 1.65;
   margin: 0;
   flex: 1;
@@ -2839,9 +2846,9 @@ document.addEventListener('keydown', (e) => {
     <div class="bottom-grid">
 
       <!-- Formulario / WhatsApp directo -->
-      <div class="grupo-box" style="border-color:#333;">
+      <div class="grupo-box" style="border-color:rgba(124,58,237,.3);">
         <span class="badge" style="background:rgba(124,58,237,.18);color:#a855f7;">SOPORTE DIRECTO</span>
-        <h3 style="color:#fff;">ESCRÍBENOS<br>POR WHATSAPP</h3>
+        <h3 style="color:#1a1625;">ESCRÍBENOS<br>POR WHATSAPP</h3>
         <p>Resolvemos tus dudas sobre pedidos, descargas o diseños. Respuesta rápida garantizada.</p>
         <a href="https://wa.me/529212337934" target="_blank" class="btn-grupo" style="background:#25D366;">
           💬 CHATEAR AHORA
@@ -3053,7 +3060,7 @@ const guiasData = {
     cuerpo: `<p><strong style="color:#fff;">Algodón 100%</strong><br>Temperatura: 160–165 °C &nbsp;|&nbsp; Tiempo: 15–20 seg &nbsp;|&nbsp; Presión: Media/Alta<br>Retiro del film: frío o caliente según tu tipo de film.</p>
     <p style="margin-top:12px;"><strong style="color:#fff;">Poliéster 100%</strong><br>Temperatura: 150–155 °C &nbsp;|&nbsp; Tiempo: 10-12 seg &nbsp;|&nbsp; Presión: Media<br>(Temperatura baja para evitar marcas de plancha)</p>
     <p style="margin-top:12px;"><strong style="color:#fff;">Mezclas 50/50</strong><br>Temperatura: 150 °C &nbsp;|&nbsp; Tiempo: 12 seg</p>
-    <p style="margin-top:16px; font-size:12px; color:#555; border-top:1px solid #222; padding-top:12px;">💡 <em>Tip Pro: siempre haz una segunda planchada de 5 segundos cubriendo el diseño con papel teflón para fijar la textura.</em></p>`
+    <p style="margin-top:16px; font-size:12px; color:#555; border-top:1px solid #ece5f7; padding-top:12px;">💡 <em>Tip Pro: siempre haz una segunda planchada de 5 segundos cubriendo el diseño con papel teflón para fijar la textura.</em></p>`
   },
   cmyk: {
     titulo: '🎨 CMYK vs RGB',
@@ -3071,7 +3078,7 @@ const guiasData = {
     <li>☀️ <strong style="color:#fff;">Secar a la sombra:</strong> evita secadoras automáticas, el calor extremo cuartea el diseño.</li>
     <li>♨️ <strong style="color:#fff;">Planchado:</strong> nunca planchar directamente sobre el diseño.</li>
     </ul>
-    <p style="margin-top:16px; font-size:12px; color:#555; border-top:1px solid #222; padding-top:12px;">💡 Puedes imprimir estas instrucciones y entregarlas a tus clientes.</p>`
+    <p style="margin-top:16px; font-size:12px; color:#555; border-top:1px solid #ece5f7; padding-top:12px;">💡 Puedes imprimir estas instrucciones y entregarlas a tus clientes.</p>`
   },
   semitonos: {
     titulo: '🔵 Qué son los Semitonos',
