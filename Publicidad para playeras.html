@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup Promo Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Bungee&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+:root{
+--cream:#F5F2EB; --white:#FFFFFF; --ink:#111111; --taupe:#D6C5B4;
+--taupe-dark:#b8987a; --taupe-soft:#ece3d8; --accent:#e2543a;
+--line:#e6e0d4; --radius-md:14px; --shadow-soft:0 10px 26px rgba(17,17,17,.07);
+--shadow-pop:0 22px 50px rgba(17,17,17,.18); --sidebar-w:408px; --header-h:66px;
+}
+*{box-sizing:border-box;} html,body{height:100%;}
+body{margin:0; font-family:'Poppins',system-ui,sans-serif; background:var(--cream); color:var(--ink); overflow:hidden; -webkit-font-smoothing:antialiased;}
+button{font-family:inherit;cursor:pointer;} input,select,textarea{font-family:inherit;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:#d8cfc0;border-radius:10px;} ::-webkit-scrollbar-track{background:transparent;}
+.app-shell{display:grid; grid-template-columns:var(--sidebar-w) 1fr; grid-template-rows:var(--header-h) 1fr; height:100vh; width:100vw;}
+.app-header{grid-column:1/3; display:flex;align-items:center;gap:18px; padding:0 20px; background:var(--white); border-bottom:1px solid var(--line); z-index:20;}
+.brand{display:flex;align-items:center;gap:10px;margin-right:8px;}
+.brand-mark{width:36px;height:36px;border-radius:11px; background:linear-gradient(135deg,var(--ink),#3a3a3a); display:flex;align-items:center;justify-content:center; color:var(--taupe);font-family:'Bungee',cursive;font-size:15px; flex-shrink:0;}
+.brand-text{display:flex;flex-direction:column;line-height:1.15;}
+.brand-text b{font-size:14.5px;font-weight:700;letter-spacing:.2px;}
+.brand-text span{font-size:10.5px;color:#9a9284;font-weight:500;}
+.header-tools{display:flex;align-items:center;gap:6px;margin-left:6px;}
+.header-divider{width:1px;height:26px;background:var(--line);margin:0 8px;}
+.hbtn{display:flex;align-items:center;gap:6px; border:1px solid var(--line);background:var(--white); padding:8px 12px;border-radius:10px;font-size:12.5px;font-weight:600; color:var(--ink);transition:all .15s ease;}
+.hbtn:hover{border-color:var(--ink);transform:translateY(-1px);box-shadow:var(--shadow-soft);}
+.hbtn:disabled{opacity:.35;pointer-events:none;}
+.hbtn.icon-only{padding:8px;width:36px;justify-content:center;}
+.hbtn svg{width:15px;height:15px;flex-shrink:0;}
+.header-spacer{flex:1;}
+.export-btn{background:var(--ink);color:var(--white);border:1px solid var(--ink); padding:9px 18px;border-radius:11px;font-weight:700;font-size:13px; display:flex;align-items:center;gap:8px; box-shadow:0 8px 20px rgba(17,17,17,.22);}
+.export-btn:hover{background:#2a2a2a;transform:translateY(-1px);}
+.export-btn svg{width:15px;height:15px;}
+.sidebar{grid-row:2/3; background:var(--white); border-right:1px solid var(--line); display:flex;flex-direction:column; overflow:hidden;}
+.tabbar{display:flex;overflow-x:auto;flex-shrink:0; border-bottom:1px solid var(--line); padding:10px 10px 10px; gap:4px; scrollbar-width:thin; scrollbar-color:var(--taupe-dark) var(--cream);}
+.tabbar::-webkit-scrollbar{height:7px;display:block;}
+.tabbar::-webkit-scrollbar-track{background:var(--cream);border-radius:10px;margin:0 10px;}
+.tabbar::-webkit-scrollbar-thumb{background:var(--taupe-dark);border-radius:10px;border:1.5px solid var(--cream);}
+.tabbar::-webkit-scrollbar-thumb:hover{background:var(--ink);}
+.tab-btn{display:flex;flex-direction:column;align-items:center;gap:5px; min-width:64px;padding:9px 8px 10px; border:none;background:transparent;border-radius:12px 12px 0 0; color:#9a9284;font-size:10.5px;font-weight:600;white-space:nowrap; transition:all .15s ease;position:relative;}
+.tab-btn svg{width:17px;height:17px;}
+.tab-btn.active{color:var(--ink);background:var(--cream);}
+.tab-btn.active::after{content:'';position:absolute;bottom:-1px;left:10%;right:10%;height:2px;background:var(--ink);}
+.tab-btn:hover:not(.active){color:var(--ink);}
+.panels{flex:1;overflow-y:auto;padding:22px 22px 44px;}
+.panel{display:none;animation:fadein .18s ease;}
+.panel.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.field-group{margin-bottom:20px;} .field-group:last-child{margin-bottom:4px;}
+.persp-group{border-top:1.5px dashed var(--line);padding-top:18px;margin-top:4px;}
+.fg-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase; color:#8a8377;margin:0 0 10px;display:flex;align-items:center;justify-content:space-between;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:12px;font-weight:600;color:#5c5648;margin-bottom:6px;}
+.field-row{display:flex;gap:8px;} .field-row .field{flex:1;}
+.row-inline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.row-inline label{font-size:12px;font-weight:600;color:#5c5648;}
+input[type=text],input[type=tel],input[type=number],textarea,select{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px; font-size:13px;background:var(--cream);color:var(--ink);outline:none;transition:border .15s;}
+textarea{resize:vertical;min-height:52px;line-height:1.4;}
+input[type=text]:focus,input[type=tel]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--ink);background:var(--white);}
+input[type=range]{width:100%;accent-color:var(--ink);height:4px;}
+input[type=color]{-webkit-appearance:none;width:34px;height:34px;border:none;border-radius:50%; padding:0;overflow:hidden;cursor:pointer;border:2px solid var(--white);box-shadow:0 0 0 1.5px var(--line); flex-shrink:0;}
+input[type=color]::-webkit-color-swatch-wrapper{padding:0;} input[type=color]::-webkit-color-swatch{border:none;border-radius:50%;}
+.upload-zone{border:1.6px dashed var(--taupe-dark);border-radius:var(--radius-md); padding:16px;text-align:center;background:var(--cream); display:flex;flex-direction:column;align-items:center;gap:6px; transition:all .15s ease;position:relative;}
+.upload-zone:hover{background:var(--taupe-soft);border-color:var(--ink);}
+.upload-zone svg{width:20px;height:20px;color:var(--taupe-dark);}
+.upload-zone span{font-size:12px;font-weight:600;color:#6b6455;}
+.upload-zone small{font-size:10.5px;color:#a39c8c;}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+.chip-btn{border:1.5px solid var(--line);background:var(--white);border-radius:9px; padding:7px 11px;font-size:12px;font-weight:600;color:var(--ink); transition:all .15s;display:flex;align-items:center;gap:6px;}
+.chip-btn:hover{border-color:var(--ink);}
+.chip-btn.danger{color:#b3402c;border-color:#f0d8d2;} .chip-btn.danger:hover{border-color:#b3402c;background:#fbeeec;}
+.chip-btn.full{width:100%;justify-content:center;}
+.chip-btn.dark{background:var(--ink);color:var(--white);border-color:var(--ink);} .chip-btn.dark:hover{background:#2a2a2a;}
+.chip-btn svg{width:13px;height:13px;}
+.seg{display:flex;background:var(--cream);border-radius:10px;padding:3px;gap:2px;}
+.seg button{flex:1;border:none;background:transparent;padding:8px 6px;border-radius:8px; font-size:12px;font-weight:600;color:#8a8377;transition:all .15s;}
+.seg button.active{background:var(--white);color:var(--ink);box-shadow:var(--shadow-soft);}
+.swatch-list{display:flex;flex-direction:column;gap:8px;}
+.swatch-row{display:flex;align-items:center;gap:9px;background:var(--cream); border-radius:10px;padding:7px 9px;}
+.swatch-row input[type=text]{flex:1;padding:5px 8px;font-size:11.5px;background:var(--white);}
+.swatch-row .remove-x{width:22px;height:22px;border-radius:50%;border:none;background:var(--white); color:#b3402c;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center; flex-shrink:0;}
+.swatch-row .remove-x:hover{background:#fbeeec;}
+.icon-picker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.icon-picker-grid .chip-btn{flex-direction:column;justify-content:center;align-items:center;gap:7px; padding:14px 6px;border-radius:13px;border-width:1.5px;text-align:center;line-height:1.2; box-shadow:0 2px 6px rgba(17,17,17,.03);}
+.icon-picker-grid .chip-btn svg{width:19px;height:19px;}
+.icon-picker-grid .chip-btn:hover{background:var(--taupe-soft);transform:translateY(-2px);box-shadow:var(--shadow-soft);}
+.extra-icon-list{display:flex;flex-direction:column;gap:10px;}
+.extra-icon-row{display:flex;align-items:center;gap:11px;background:var(--cream); border-radius:12px;padding:10px 12px;border:1px solid var(--line);}
+.extra-icon-row .ei-icon{width:24px;height:24px;flex-shrink:0;color:#5c5648;background:var(--white);border-radius:8px;padding:4px;box-shadow:0 1px 3px rgba(17,17,17,.06);}
+.extra-icon-row .ei-icon svg{width:100%;height:100%;}
+.extra-icon-row input[type=text]{flex:1;padding:7px 10px;font-size:12px;background:var(--white);border-radius:8px;}
+.size-chip-editor{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;}
+.size-chip-editor .sz{display:flex;align-items:center;gap:6px;background:var(--cream);border-radius:8px;padding:5px 6px 5px 10px;}
+.size-chip-editor .sz input{width:44px;padding:4px 5px;font-size:12px;text-align:center;background:var(--white);}
+.size-chip-editor .sz button{width:18px;height:18px;border:none;background:var(--white);border-radius:50%;color:#b3402c;font-size:12px; display:flex;align-items:center;justify-content:center;}
+.font-select-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.font-opt{border:1.6px solid var(--line);border-radius:10px;padding:9px 4px;text-align:center;font-size:13px; background:var(--white);color:var(--ink);}
+.font-opt.active{border-color:var(--ink);background:var(--cream);}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+.preset-card{border:1.6px solid var(--line);border-radius:var(--radius-md);padding:12px 8px;text-align:center; background:var(--white);transition:all .15s;}
+.preset-card.active{border-color:var(--ink);background:var(--cream);box-shadow:var(--shadow-soft);}
+.preset-card .shape{margin:0 auto 8px;background:var(--taupe-soft);border:1px solid var(--taupe);border-radius:4px;}
+.preset-card b{display:block;font-size:12px;} .preset-card span{font-size:10px;color:#9a9284;}
+.hint-box{background:var(--taupe-soft);border-radius:10px;padding:10px 12px;font-size:11.5px;color:#6b6455; line-height:1.5;} .hint-box b{color:var(--ink);}
+.lib-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;max-height:340px;overflow-y:auto; padding-right:2px;}
+.lib-item{border:1.6px solid var(--line);border-radius:10px;background:var(--cream); padding:6px 4px 7px;display:flex;flex-direction:column;align-items:center;gap:4px; transition:all .15s ease;position:relative;}
+.lib-item:hover{border-color:var(--ink);transform:translateY(-1px);box-shadow:var(--shadow-soft);}
+.lib-item.active{border-color:var(--accent);background:var(--taupe-soft);}
+.lib-item img{width:100%;height:52px;object-fit:contain;background:var(--white);border-radius:6px;}
+.lib-item span{font-size:9.5px;font-weight:600;color:#6b6455;text-align:center;line-height:1.2; overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
+.lib-item .lib-view-tag{position:absolute;top:3px;right:3px;background:var(--ink);color:#fff;font-size:8px;font-weight:700; padding:1.5px 4px;border-radius:4px;letter-spacing:.03em;text-transform:uppercase;}
+.lib-loading{grid-column:1/4;text-align:center;font-size:11.5px;color:#a39c8c;padding:14px 6px;}
+/* Lista de diseños múltiples */
+.designs-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.design-item{display:flex;align-items:center;gap:10px;background:var(--cream); border-radius:10px;padding:8px;cursor:pointer;transition:all .15s;border:1.5px solid transparent;}
+.design-item:hover{border-color:var(--line);}
+.design-item.selected{border-color:var(--accent);background:var(--taupe-soft);}
+.design-item .di-thumb{width:44px;height:44px;border-radius:6px;background:var(--white); border:1px solid var(--line);flex-shrink:0;background-size:contain;background-position:center;background-repeat:no-repeat;}
+.design-item .di-info{flex:1;min-width:0;}
+.design-item .di-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.design-item .di-meta{font-size:10px;color:#9a9284;margin-top:2px;}
+.design-item .di-actions{display:flex;gap:4px;}
+.design-item .di-actions button{width:26px;height:26px;border:none;background:var(--white); border-radius:6px;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.design-item .di-actions button:hover{background:var(--taupe-soft);}
+.design-item .di-actions .del-btn{color:#b3402c;}
+.template-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;}
+.template-item{display:flex;align-items:center;gap:10px;background:var(--cream);border-radius:10px;padding:8px;}
+.template-item .t-thumb{width:36px;height:45px;border-radius:6px;background:var(--white);border:1px solid var(--line); flex-shrink:0;background-size:cover;background-position:center;}
+.template-item .t-name{flex:1;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.template-item .t-actions{display:flex;gap:4px;}
+.template-item button{width:24px;height:24px;border:none;background:var(--white);border-radius:6px;font-size:11px; display:flex;align-items:center;justify-content:center;}
+.empty-note{font-size:11.5px;color:#a39c8c;text-align:center;padding:14px 6px;}
+.stage-area{grid-row:2/3;position:relative;overflow:auto; background: radial-gradient(circle at 1px 1px, #e2dccd 1px, transparent 0) 0 0/22px 22px, var(--cream); display:flex;align-items:center;justify-content:center;padding:40px;}
+.zoom-controls{position:absolute;bottom:18px;left:18px;display:flex;align-items:center;gap:4px; background:var(--white);border:1px solid var(--line);border-radius:12px;padding:5px; box-shadow:var(--shadow-soft);z-index:15;}
+.zoom-controls button{width:28px;height:28px;border:none;background:transparent;border-radius:8px;font-size:14px;font-weight:700; display:flex;align-items:center;justify-content:center;color:var(--ink);}
+.zoom-controls button:hover{background:var(--cream);}
+.zoom-controls span{font-size:11px;font-weight:600;color:#8a8377;padding:0 6px;min-width:40px;text-align:center;}
+.selection-hint{position:absolute;top:18px;left:50%;transform:translateX(-50%); background:var(--ink);color:var(--white);font-size:11.5px;font-weight:600; padding:8px 16px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .2s; z-index:30;display:flex;align-items:center;gap:8px;}
+.selection-hint.show{opacity:.92;}
+.selection-hint button{background:rgba(255,255,255,.16);border:none;color:#fff;border-radius:6px;padding:3px 8px;font-size:10.5px;font-weight:700;}
+#stageScale{transform-origin:top left;position:relative;}
+#stage{position:relative;background:#ccc;overflow:hidden;border-radius:2px; box-shadow:var(--shadow-pop);}
+.bg-color-layer,.bg-image-layer,.bg-overlay-dark,.bg-noise,.bg-texture{position:absolute;inset:0;}
+.bg-image-layer{background-size:cover;background-position:center;}
+.bg-image-layer.blurred{position:absolute;top:-6%;left:-6%;right:-6%;bottom:-6%;}
+.bg-overlay-dark{background:#000;pointer-events:none;}
+.bg-noise{pointer-events:none;mix-blend-mode:overlay; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); background-size:180px 180px;}
+.bg-texture{pointer-events:none;}
+.bg-texture.tex-dots{background-image:radial-gradient(rgba(17,17,17,.5) 1.4px, transparent 1.4px);background-size:18px 18px;}
+.bg-texture.tex-lines{background-image:repeating-linear-gradient(45deg, rgba(17,17,17,.35) 0 1.5px, transparent 1.5px 16px);}
+.bg-texture.tex-grid{background-image:linear-gradient(rgba(17,17,17,.28) 1px,transparent 1px),linear-gradient(90deg,rgba(17,17,17,.28) 1px,transparent 1px);background-size:26px 26px;}
+.bg-texture.tex-none{display:none;}
+.layer{position:absolute;touch-action:none;user-select:none;}
+.layer .layer-body{width:100%;height:100%;display:block;position:relative;}
+.layer img{width:100%;height:100%;display:block;pointer-events:none;object-fit:contain;}
+.layer.selected .layer-body{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+.layer:not(.selected) .handle{display:none;}
+.handle{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--white); border:2px solid var(--accent);display:flex;align-items:center;justify-content:center; box-shadow:0 3px 8px rgba(0,0,0,.25);z-index:5;}
+.handle svg{width:11px;height:11px;color:var(--accent);pointer-events:none;}
+.handle-resize{right:-11px;bottom:-11px;cursor:nwse-resize;}
+.handle-rotate{left:50%;top:-34px;transform:translateX(-50%);cursor:grab;}
+.handle-rotate::after{content:'';position:absolute;top:20px;left:50%;width:2px;height:14px;background:var(--accent);transform:translateX(-50%); z-index:-1;}
+#perspDesignsContainer{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+#perspDesignsContainer .layer{position:absolute;pointer-events:auto;cursor:move;}
+#perspDesignsContainer .layer img{object-fit:contain;}
+#topCardLayer{cursor:move;}
+.promo-card{background:rgba(214,197,180,0.88); backdrop-filter:blur(2px); padding:16px 18px;border-radius:12px; min-width:220px;}
+.promo-card .pc-block{margin-bottom:11px;} .promo-card .pc-block:last-child{margin-bottom:0;}
+.promo-card .pc-title{font-weight:800;text-transform:uppercase;line-height:1.1;margin-bottom:2px;font-style:italic;}
+.promo-card .pc-line{font-weight:400;line-height:1.35;}
+.promo-card .pc-sizes-row{display:flex;gap:8px;flex-wrap:wrap;}
+.promo-card .pc-colors-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:2px;}
+.promo-card .pc-dot{border-radius:50%;border:1.5px solid rgba(255,255,255,.7);flex-shrink:0;}
+#thumbLayer img{background:transparent;}
+/* BARRA INFERIOR - ASEGURADA VISIBLE */
+#bottomBar{position:absolute;left:0;right:0;bottom:0; display:grid !important;grid-template-columns:1fr auto 1fr;align-items:center; padding:16px 26px; z-index:10;}
+#bottomBar .bb-col{display:flex;align-items:center;gap:10px;}
+#bottomBar .bb-col.center{justify-content:center;}
+#bottomBar .bb-col.right{justify-content:flex-end;}
+#bottomBar .bb-icon{width:26px;height:26px;flex-shrink:0;}
+#bottomBar .bb-icon svg{width:100%;height:100%;}
+#bottomBar .bb-sep{width:1.5px;align-self:stretch;background:rgba(255,255,255,.35);margin:0 4px;}
+#bottomBar .bb-logo-img{height:34px;width:auto;object-fit:contain;flex-shrink:0;}
+#bottomBar .bb-text b{display:block;} #bottomBar .bb-text small{display:block;opacity:.85;font-weight:500;}
+.placeholder-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center; color:#b3aa99;gap:8px;pointer-events:none;}
+.placeholder-empty svg{width:46px;height:46px;opacity:.5;}
+.placeholder-empty span{font-size:13px;font-weight:600;}
+@media (max-width:920px){
+.app-shell{grid-template-columns:1fr;grid-template-rows:var(--header-h) 40vh 1fr;}
+.sidebar{grid-row:2/3;border-right:none;border-bottom:1px solid var(--line);}
+.stage-area{grid-row:3/4;} :root{--sidebar-w:100%;}
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+<header class="app-header">
+<div class="brand">
+<div class="brand-mark">M</div>
+<div class="brand-text"><b>Mockup Promo Studio</b><span>Publicidad para playeras</span></div>
+</div>
+<div class="header-divider"></div>
+<div class="header-tools">
+<button class="hbtn icon-only" id="btnUndo" title="Deshacer">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
+</button>
+<button class="hbtn icon-only" id="btnRedo" title="Rehacer">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg>
+</button>
+<div class="header-divider"></div>
+<button class="hbtn" id="btnDuplicate" title="Duplicar plantilla">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+Duplicar
+</button>
+</div>
+<div class="header-spacer"></div>
+<button class="export-btn" id="btnExportQuick">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+Descargar
+</button>
+</header>
+<aside class="sidebar">
+<nav class="tabbar" id="tabbar">
+<button class="tab-btn active" data-tab="fondo">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L9 18"/></svg>
+Fondo
+</button>
+<button class="tab-btn" data-tab="mockup">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3 4 6v3l3-1v11a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8l3 1V6l-4-3-2 2h-4Z"/></svg>
+Mockup
+</button>
+<button class="tab-btn" data-tab="design">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+Diseños
+</button>
+<button class="tab-btn" data-tab="panel">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="14" height="10" rx="2"/><path d="M7 17h6M7 20h9"/></svg>
+Panel
+</button>
+<button class="tab-btn" data-tab="thumb">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="10" r="2"/><path d="m20 15-4-4-9 9"/></svg>
+Miniatura
+</button>
+<button class="tab-btn" data-tab="bar">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 14v-2M12 14V9M17 14v-5"/></svg>
+Barra
+</button>
+<button class="tab-btn" data-tab="export">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+Descargar
+</button>
+<button class="tab-btn" data-tab="extras">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+Extras
+</button>
+</nav>
+<div class="panels">
+<section class="panel active" data-panel="fondo">
+<div class="field-group">
+<div class="fg-title">Tipo de fondo</div>
+<div class="seg" id="bgTypeSeg">
+<button data-val="color" class="active">Color</button>
+<button data-val="gradient">Degradado</button>
+<button data-val="image">Imagen</button>
+</div>
+</div>
+<div class="field-group" id="bgColorGroup">
+<div class="fg-title">Color sólido</div>
+<div class="field-row" style="align-items:center;">
+<input type="color" id="bgColorPick" value="#F5F2EB">
+<input type="text" id="bgColorHex" value="#F5F2EB">
+</div>
+</div>
+<div class="field-group" id="bgGradientGroup" style="display:none;">
+<div class="fg-title">Degradado</div>
+<div class="field-row">
+<div class="field"><label>Desde</label><input type="color" id="bgGradFrom" value="#F5F2EB"></div>
+<div class="field"><label>Hasta</label><input type="color" id="bgGradTo" value="#D6C5B4"></div>
+</div>
+<div class="field"><label>Ángulo</label><input type="range" id="bgGradAngle" min="0" max="360" value="135"></div>
+</div>
+<div class="field-group" id="bgImageGroup" style="display:none;">
+<div class="fg-title">Subir fondo</div>
+<label class="upload-zone" id="bgImageZone">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+<span>Subir imagen de fondo</span><small>JPG o PNG</small>
+<input type="file" id="bgImageInput" accept="image/*">
+</label>
+</div>
+<div class="field-group">
+<div class="fg-title">Ajustes</div>
+<div class="field"><label>Desenfoque</label><input type="range" id="bgBlur" min="0" max="30" value="0"></div>
+<div class="field"><label>Oscurecer</label><input type="range" id="bgDarken" min="0" max="80" value="0"></div>
+<div class="field"><label>Brillo</label><input type="range" id="bgBrightness" min="40" max="160" value="100"></div>
+<div class="field"><label>Ruido</label><input type="range" id="bgNoise" min="0" max="60" value="0"></div>
+</div>
+<div class="field-group">
+<div class="fg-title">Textura</div>
+<div class="btn-row">
+<button class="chip-btn active" data-tex="none">Ninguna</button>
+<button class="chip-btn" data-tex="dots">Puntos</button>
+<button class="chip-btn" data-tex="lines">Líneas</button>
+<button class="chip-btn" data-tex="grid">Cuadrícula</button>
+</div>
+</div>
+</section>
+<section class="panel" data-panel="mockup">
+<div class="field-group">
+<div class="fg-title">Playera / mockup</div>
+<label class="upload-zone" id="mockupZone">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3 4 6v3l3-1v11a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8l3 1V6l-4-3-2 2h-4Z"/></svg>
+<span>Subir imagen del mockup</span><small>PNG recomendado</small>
+<input type="file" id="mockupInput" accept="image/*">
+</label>
+</div>
+<div class="field-group">
+<div class="fg-title">Biblioteca de mockups<span id="libCount" style="font-weight:600;color:#b3aa99;text-transform:none;letter-spacing:0;"></span></div>
+<div class="field"><label>Categoría</label><select id="libCategorySelect"></select></div>
+<div class="lib-grid" id="libGrid"></div>
+</div>
+<div class="field-group">
+<div class="row-inline"><label>Mostrar</label>
+<div class="seg" style="width:110px;" id="mockupVisSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field"><label>Escala</label><input type="range" id="mockupScale" min="150" max="2200" value="620"></div>
+<div class="field"><label>Rotación</label><input type="range" id="mockupRot" min="-45" max="45" value="0"></div>
+<div class="field-row">
+<div class="field"><label>Posición X</label><input type="range" id="mockupX" min="0" max="1080" value="540"></div>
+<div class="field"><label>Posición Y</label><input type="range" id="mockupY" min="0" max="1350" value="660"></div>
+</div>
+<button class="chip-btn full" id="mockupCenter">Centrar imagen</button>
+</div>
+<div class="field-group">
+<div class="fg-title">Sombra</div>
+<div class="row-inline"><label>Activar sombra</label>
+<div class="seg" style="width:110px;" id="mockupShadowSeg"><button data-val="0" class="active">No</button><button data-val="1">Sí</button></div>
+</div>
+<div class="field"><label>Intensidad</label><input type="range" id="mockupShadowStrength" min="0" max="100" value="35"></div>
+</div>
+<div class="field-group persp-group">
+<div class="fg-title">Agregar perspectiva</div>
+<div class="hint-box">
+Agrega una segunda vista del mockup (ej. frontal) como capa aparte, en círculo o cuadrado, editable igual que el resto del diseño.
+</div>
+<div class="row-inline"><label>Mostrar</label>
+<div class="seg" style="width:110px;" id="perspVisSeg"><button data-val="0" class="active">No</button><button data-val="1">Sí</button></div>
+</div>
+<label class="upload-zone" id="perspZone" style="margin-top:10px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3 4 6v3l3-1v11a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8l3 1V6l-4-3-2 2h-4Z"/></svg>
+<span>Subir imagen de la perspectiva</span><small>PNG recomendado</small>
+<input type="file" id="perspInput" accept="image/*">
+</label>
+<div class="field-group" style="margin-top:14px;">
+<div class="fg-title">Elegir mockup de la biblioteca<span id="libCountPersp" style="font-weight:600;color:#b3aa99;text-transform:none;letter-spacing:0;"></span></div>
+<div class="field"><label>Categoría</label><select id="libCategorySelectPersp"></select></div>
+<div class="lib-grid" id="libGridPersp"></div>
+</div>
+<div class="field" style="margin-top:6px;"><label>Escala</label><input type="range" id="perspScale" min="60" max="1600" value="380"></div>
+<div class="field"><label>Rotación</label><input type="range" id="perspRot" min="-45" max="45" value="0"></div>
+<div class="field-row">
+<div class="field"><label>Posición X</label><input type="range" id="perspX" min="0" max="1080" value="540"></div>
+<div class="field"><label>Posición Y</label><input type="range" id="perspY" min="0" max="1350" value="675"></div>
+</div>
+<div class="fg-title" style="margin-top:12px;">Estilo</div>
+<div class="row-inline"><label>Forma</label>
+<div class="seg" style="width:150px;" id="perspShapeSeg"><button data-val="circle" class="active">Círculo</button><button data-val="square">Cuadrada</button></div>
+</div>
+<div class="field" id="perspRadiusField" style="display:none;"><label>Bordes redondos</label><input type="range" id="perspRadius" min="0" max="150" value="16"></div>
+<div class="row-inline"><label>Sombra</label>
+<div class="seg" style="width:110px;" id="perspShadowSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="row-inline"><label>Anillo de color</label>
+<div class="seg" style="width:110px;" id="perspRingSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field-row" id="perspRingFields" style="display:flex;">
+<div class="field"><label>Color del anillo</label><input type="color" id="perspRingColor" value="#FFFFFF"></div>
+<div class="field"><label>Grosor</label><input type="range" id="perspRingWidth" min="0" max="30" value="10"></div>
+</div>
+<div class="fg-title" style="margin-top:16px;">Diseños dentro de la perspectiva</div>
+<label class="upload-zone" id="perspDesignZone">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+<span>Subir diseño (PNG recomendado)</span>
+<small>Puedes subir varios, se recortan dentro de la forma</small>
+<input type="file" id="perspDesignInput" accept="image/*" multiple>
+</label>
+<div class="field-group" style="margin-top:10px;">
+<div class="fg-title">Diseños agregados <span id="perspDesignCount" style="font-weight:600;color:#b3aa99;text-transform:none;letter-spacing:0;">0</span></div>
+<div class="designs-list" id="perspDesignsList">
+<div class="empty-note">Aún no has agregado diseños a la perspectiva.</div>
+</div>
+</div>
+<div class="field-group" id="perspDesignControls" style="display:none;">
+<div class="fg-title">Editar diseño seleccionado</div>
+<div class="row-inline"><label>Visible</label>
+<div class="seg" style="width:110px;" id="perspDesignVisSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field"><label>Escala</label><input type="range" id="perspDesignScale" min="4" max="300" value="50"></div>
+<div class="field"><label>Rotación</label><input type="range" id="perspDesignRot" min="-180" max="180" value="0"></div>
+<div class="field-row">
+<div class="field"><label>Posición X</label><input type="range" id="perspDesignX" min="0" max="100" value="50"></div>
+<div class="field"><label>Posición Y</label><input type="range" id="perspDesignY" min="0" max="100" value="50"></div>
+</div>
+<div class="field-row">
+<button class="chip-btn full" id="perspDesignCenter">Centrar</button>
+<button class="chip-btn full danger" id="perspDesignDelete">🗑 Eliminar</button>
+</div>
+</div>
+</div>
+</section>
+<!-- PANEL DE DISEÑOS MÚLTIPLES -->
+<section class="panel" data-panel="design">
+<div class="field-group">
+<div class="fg-title">Agregar diseños</div>
+<label class="upload-zone" id="designZone">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+<span>Subir diseños (PNG recomendado)</span>
+<small>Puedes subir varios diseños</small>
+<input type="file" id="designInput" accept="image/*" multiple>
+</label>
+</div>
+<div class="field-group">
+<div class="fg-title">Diseños agregados <span id="designCount" style="font-weight:600;color:#b3aa99;text-transform:none;letter-spacing:0;">0</span></div>
+<div class="designs-list" id="designsList">
+<div class="empty-note">Aún no has agregado diseños. Sube uno o varios arriba.</div>
+</div>
+</div>
+<div class="field-group" id="designControls" style="display:none;">
+<div class="fg-title">Editar diseño seleccionado</div>
+<div class="row-inline"><label>Visible</label>
+<div class="seg" style="width:110px;" id="designVisSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field"><label>Escala</label><input type="range" id="designScale" min="30" max="1200" value="300"></div>
+<div class="field"><label>Rotación</label><input type="range" id="designRot" min="-180" max="180" value="0"></div>
+<div class="field-row">
+<div class="field"><label>Posición X</label><input type="range" id="designX" min="0" max="1080" value="540"></div>
+<div class="field"><label>Posición Y</label><input type="range" id="designY" min="0" max="1350" value="660"></div>
+</div>
+<div class="field-row">
+<button class="chip-btn full" id="designCenter">Centrar</button>
+<button class="chip-btn full danger" id="designDelete">🗑 Eliminar</button>
+</div>
+</div>
+</section>
+<section class="panel" data-panel="panel">
+<div class="row-inline"><label>Mostrar tarjeta</label>
+<div class="seg" style="width:110px;" id="cardVisSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field-group">
+<div class="fg-title">Material</div>
+<div class="field"><label>Título</label><input type="text" id="matTitle" value="MATERIAL"></div>
+<div class="field"><label>Línea 1</label><input type="text" id="matLine1" value="100% algodón"></div>
+<div class="field"><label>Línea 2</label><input type="text" id="matLine2" value="modern fit"></div>
+</div>
+<div class="field-group">
+<div class="fg-title">Tallas</div>
+<div class="field"><label>Título</label><input type="text" id="sizeTitle" value="TALLAS"></div>
+<div class="size-chip-editor" id="sizeEditor"></div>
+<button class="chip-btn" id="addSize">+ Agregar talla</button>
+</div>
+<div class="field-group">
+<div class="fg-title">Colores</div>
+<div class="field"><label>Título</label><input type="text" id="colorTitle" value="COLORES"></div>
+<div class="swatch-list" id="colorEditor"></div>
+<button class="chip-btn full" id="addColor" style="margin-top:8px;">+ Agregar color</button>
+</div>
+<div class="field-group">
+<div class="fg-title">Estilo del texto</div>
+<div class="field">
+<label>Fuente</label>
+<div class="font-select-grid" id="cardFontGrid">
+<button class="font-opt active" data-font="Poppins" style="font-family:Poppins">Poppins</button>
+<button class="font-opt" data-font="Fredoka" style="font-family:Fredoka">Fredoka</button>
+<button class="font-opt" data-font="Baloo 2" style="font-family:'Baloo 2'">Baloo 2</button>
+<button class="font-opt" data-font="Quicksand" style="font-family:Quicksand">Quicksand</button>
+</div>
+</div>
+<div class="field-row">
+<div class="field"><label>Color texto</label><input type="color" id="cardTextColor" value="#111111"></div>
+<div class="field"><label>Fondo tarjeta</label><input type="color" id="cardBgColor" value="#D6C5B4"></div>
+</div>
+<div class="field"><label>Tamaño de fuente</label><input type="range" id="cardFontSize" min="9" max="48" value="13"></div>
+<div class="field"><label>Espaciado de letras</label><input type="range" id="cardLetterSpacing" min="0" max="4" value="0" step="0.1"></div>
+</div>
+<div class="field-group">
+<div class="fg-title">Posición</div>
+<div class="field-row">
+<div class="field"><label>X</label><input type="range" id="cardX" min="0" max="1080" value="200"></div>
+<div class="field"><label>Y</label><input type="range" id="cardY" min="0" max="1350" value="150"></div>
+</div>
+</div>
+</section>
+<section class="panel" data-panel="thumb">
+<div class="hint-box">
+Aquí puedes subir tu <b>logo</b> para que aparezca dentro del círculo del mockup.
+</div>
+<div class="field-group">
+<div class="fg-title">Imagen frontal / miniatura</div>
+<label class="upload-zone" id="thumbZone">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="10" r="2"/><path d="m20 15-4-4-9 9"/></svg>
+<span>Subir miniatura</span><small>Se ubica arriba a la derecha</small>
+<input type="file" id="thumbInput" accept="image/*">
+</label>
+</div>
+<div class="row-inline"><label>Mostrar</label>
+<div class="seg" style="width:110px;" id="thumbVisSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field-group">
+<div class="field"><label>Escala</label><input type="range" id="thumbScale" min="60" max="900" value="200"></div>
+<div class="field"><label>Rotación</label><input type="range" id="thumbRot" min="-45" max="45" value="0"></div>
+<div class="field-row">
+<div class="field"><label>Posición X</label><input type="range" id="thumbX" min="0" max="1080" value="900"></div>
+<div class="field"><label>Posición Y</label><input type="range" id="thumbY" min="0" max="1350" value="990"></div>
+</div>
+</div>
+<div class="field-group">
+<div class="fg-title">Estilo</div>
+<div class="row-inline"><label>Forma</label>
+<div class="seg" style="width:150px;" id="thumbShapeSeg"><button data-val="circle" class="active">Círculo</button><button data-val="square">Cuadrada</button></div>
+</div>
+<div class="field" id="thumbRadiusField" style="display:none;"><label>Bordes redondos</label><input type="range" id="thumbRadius" min="0" max="150" value="16"></div>
+<div class="row-inline"><label>Sombra</label>
+<div class="seg" style="width:110px;" id="thumbShadowSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="row-inline"><label>Anillo de color</label>
+<div class="seg" style="width:110px;" id="thumbRingSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field-row" id="thumbRingFields" style="display:flex;">
+<div class="field"><label>Color del anillo</label><input type="color" id="thumbRingColor" value="#FFFFFF"></div>
+<div class="field"><label>Grosor</label><input type="range" id="thumbRingWidth" min="0" max="30" value="10"></div>
+</div>
+</div>
+</section>
+<!-- PANEL DE BARRA INFERIOR (ASEGURADO) -->
+<section class="panel" data-panel="bar">
+<div class="row-inline"><label>Mostrar barra</label>
+<div class="seg" style="width:110px;" id="barVisSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field-group">
+<div class="fg-title">WhatsApp (columna izquierda)</div>
+<div class="field"><label>Número</label><input type="text" id="barWhats" value="921 233 79 34"></div>
+</div>
+<div class="field-group">
+<div class="fg-title">Envíos (columna central)</div>
+<div class="field"><label>Texto</label><input type="text" id="barShipping" value="Envíos a todo MÉXICO"></div>
+</div>
+<div class="field-group">
+<div class="fg-title">Redes sociales (opcional)</div>
+<div class="icon-picker-grid" id="extraIconPicker">
+<button type="button" class="chip-btn" data-addicon="instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>Instagram</button>
+<button type="button" class="chip-btn" data-addicon="facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.8 8.44-4.95 8.44-9.94z"/></svg>Facebook</button>
+<button type="button" class="chip-btn" data-addicon="tiktok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3c.4 2.1 1.9 3.7 4.1 3.9v2.7c-1.5 0-2.9-.5-4.1-1.3v6.6c0 3.4-2.7 6.1-6.1 6.1S4.4 18.3 4.4 14.9c0-3.3 2.6-6 5.9-6.1v2.8c-1.7.1-3.1 1.5-3.1 3.3 0 1.8 1.5 3.3 3.3 3.3s3.3-1.5 3.3-3.3V3h2.8z"/></svg>TikTok</button>
+<button type="button" class="chip-btn" data-addicon="web"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.6 3.6 5.7 3.6 9s-1.2 6.4-3.6 9c-2.4-2.6-3.6-5.7-3.6-9s1.2-6.4 3.6-9z"/></svg>Sitio web</button>
+<button type="button" class="chip-btn" data-addicon="email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 6.5 8 6 8-6"/></svg>Correo</button>
+<button type="button" class="chip-btn" data-addicon="location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5C5 5.9 8.1 3 12 3s7 2.9 7 6.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>Ubicación</button>
+<button type="button" class="chip-btn" data-addicon="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h3l2 5-2.5 1.8a12 12 0 0 0 6.2 6.2L15.5 14l5 2v3c0 1.1-.9 2-2 2C9.6 21 3 14.4 3 6c0-1.1.9-2 2-2z"/></svg>Teléfono</button>
+<button type="button" class="chip-btn" data-addicon="twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7l-5.5-7.2L4.5 22H1.4l8.1-9.3L1 2h7.2l5 6.6L18.9 2zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20z"/></svg>X / Twitter</button>
+<button type="button" class="chip-btn" data-addicon="youtube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.3-.4-4.8c-.2-.9-.9-1.6-1.8-1.8C18.1 5 12 5 12 5s-6.1 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.7 2 12 2 12s0 3.3.4 4.8c.2.9.9 1.6 1.8 1.8C5.9 19 12 19 12 19s6.1 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.5.4-4.8.4-4.8z"/><path d="M10 15.2V8.8L15.8 12z" fill="var(--white,#fff)"/></svg>YouTube</button>
+<button type="button" class="chip-btn" data-addicon="pinterest"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2.5 5.9 2.5 10.7c0 3.1 1.8 5.9 4.5 7.1.05-.6.09-1.5 0-2.1-.14-.6-.9-3.8-.9-3.8s-.23-.46-.23-1.14c0-1.07.62-1.87 1.4-1.87.66 0 .98.5.98 1.1 0 .67-.43 1.68-.65 2.61-.19.78.39 1.42 1.16 1.42 1.39 0 2.46-1.47 2.46-3.58 0-1.87-1.34-3.18-3.26-3.18-2.22 0-3.52 1.66-3.52 3.38 0 .67.26 1.39.58 1.78.06.08.07.15.05.23-.06.24-.19.78-.22.89-.03.14-.11.17-.26.1-.98-.45-1.59-1.88-1.59-3.02 0-2.46 1.79-4.72 5.15-4.72 2.7 0 4.8 1.93 4.8 4.5 0 2.68-1.69 4.84-4.04 4.84-.79 0-1.53-.41-1.78-.9l-.48 1.85c-.18.68-.66 1.53-.98 2.05.74.23 1.52.35 2.34.35 5.52 0 9.5-3.9 9.5-8.7C21.5 5.9 17.5 2 12.02 2z"/></svg>Pinterest</button>
+<button type="button" class="chip-btn" data-addicon="telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5 2.9 11.7c-1.1.44-1.1 1.06-.2 1.34l4.8 1.5 1.8 5.5c.22.5.4.7.75.7.35 0 .5-.16.7-.36l1.9-1.85 4 2.95c.7.4 1.2.19 1.4-.65l2.5-11.9c.28-1.05-.4-1.53-1.05-1.09zM8.5 14.2l9.3-5.9c.45-.27.86-.12.52.18l-7.9 7.15-.3 3.2-1.4-4.6z"/></svg>Telegram</button>
+<button type="button" class="chip-btn" data-addicon="linkedin"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 2H3.6C2.7 2 2 2.7 2 3.6v16.8c0 .9.7 1.6 1.6 1.6h16.8c.9 0 1.6-.7 1.6-1.6V3.6c0-.9-.7-1.6-1.6-1.6zM8.3 18.5H5.5V9.7h2.8v8.8zM6.9 8.5c-.9 0-1.6-.7-1.6-1.6s.7-1.6 1.6-1.6 1.6.7 1.6 1.6-.7 1.6-1.6 1.6zm11.6 10H15.7v-4.3c0-1 0-2.4-1.5-2.4s-1.7 1.1-1.7 2.3v4.4H9.7V9.7h2.7v1.2h.04c.37-.7 1.28-1.5 2.63-1.5 2.8 0 3.3 1.85 3.3 4.25v5.03z"/></svg>LinkedIn</button>
+<button type="button" class="chip-btn" data-addicon="snapchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c2.6 0 4 2 4 4.3 0 1.3-.1 2 .1 2.3.2.35.9.5 1.5.6.4.06.9.5.4 1-.3.3-.9.5-1.4.75-.3.15-.35.4-.2.7.35.75 1.15 1.55 2.4 1.8.3.06.35.45.05.6-.5.25-1.2.4-1.7.5-.15.03-.25.12-.28.3-.03.2-.07.45-.13.65-.07.25-.3.3-.55.27-.4-.05-.9-.15-1.5-.15-.85 0-1.4.5-2.6.5s-1.75-.5-2.6-.5c-.6 0-1.1.1-1.5.15-.25.03-.48-.02-.55-.27a5 5 0 0 1-.13-.65c-.03-.18-.13-.27-.28-.3-.5-.1-1.2-.25-1.7-.5-.3-.15-.25-.54.05-.6 1.25-.25 2.05-1.05 2.4-1.8.15-.3.1-.55-.2-.7-.5-.25-1.1-.45-1.4-.75-.5-.5 0-.94.4-1 .6-.1 1.3-.25 1.5-.6.2-.3.1-1 .1-2.3C8 5 9.4 3 12 3z"/></svg>Snapchat</button>
+</div>
+<div class="extra-icon-list" id="extraIconList"></div>
+</div>
+<div class="field-group">
+<div class="fg-title">Negocio (columna derecha)</div>
+<div class="field"><label>Nombre del negocio</label><input type="text" id="barBusiness" value="CHECHENA SHIRTS"></div>
+<label class="upload-zone" id="barLogoZone">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+<span>Subir logo (opcional)</span><small>Si no subes uno, se usa solo el texto</small>
+<input type="file" id="barLogoInput" accept="image/*">
+</label>
+<button class="chip-btn full" id="removeLogo" style="margin-top:8px;">Quitar logo</button>
+</div>
+<div class="field-group">
+<div class="fg-title">Estilo de la barra</div>
+<div class="field-row">
+<div class="field"><label>Color de fondo</label><input type="color" id="barBg" value="#111111"></div>
+<div class="field"><label>Color de texto</label><input type="color" id="barText" value="#FFFFFF"></div>
+</div>
+<div class="field">
+<label>Fuente</label>
+<div class="font-select-grid" id="barFontGrid">
+<button class="font-opt active" data-font="Poppins" style="font-family:Poppins">Poppins</button>
+<button class="font-opt" data-font="Fredoka" style="font-family:Fredoka">Fredoka</button>
+<button class="font-opt" data-font="Baloo 2" style="font-family:'Baloo 2'">Baloo 2</button>
+<button class="font-opt" data-font="Quicksand" style="font-family:Quicksand">Quicksand</button>
+</div>
+</div>
+<div class="row-inline"><label>Separadores</label>
+<div class="seg" style="width:110px;" id="barSepSeg"><button data-val="1" class="active">Sí</button><button data-val="0">No</button></div>
+</div>
+<div class="field"><label>Tamaño</label><input type="range" id="barFontSize" min="10" max="42" value="15"></div>
+</div>
+</section>
+<section class="panel" data-panel="export">
+<div class="field-group">
+<div class="fg-title">Tamaño de descarga</div>
+<div class="preset-grid" id="presetGrid">
+<button class="preset-card active" data-preset="1080x1350"><div class="shape" style="width:34px;height:42px;"></div><b>1080 × 1350</b><span>Feed vertical</span></button>
+<button class="preset-card" data-preset="1080x1080"><div class="shape" style="width:38px;height:38px;"></div><b>1080 × 1080</b><span>Cuadrado</span></button>
+<button class="preset-card" data-preset="1200x1500"><div class="shape" style="width:34px;height:42px;"></div><b>1200 × 1500</b><span>Alta calidad</span></button>
+<button class="preset-card" data-preset="2048x2048"><div class="shape" style="width:38px;height:38px;"></div><b>2048 × 2048</b><span>Máxima calidad</span></button>
+</div>
+</div>
+<button class="chip-btn dark full" id="btnExportMain" style="padding:14px;font-size:14px;font-weight:700;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:6px;"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+Descargar PNG
+</button>
+<div class="hint-box" style="margin-top:14px;">
+La descarga usa <b>html-to-image</b> y genera un archivo <b>PNG</b> en alta resolución con la composición completa, tal como se ve en el lienzo.
+</div>
+</section>
+<section class="panel" data-panel="extras">
+<div class="field-group">
+<div class="fg-title">Historial</div>
+<div class="btn-row">
+<button class="chip-btn" id="btnUndo2">↶ Deshacer</button>
+<button class="chip-btn" id="btnRedo2">↷ Rehacer</button>
+</div>
+</div>
+<div class="field-group">
+<div class="fg-title">Plantilla</div>
+<div class="btn-row">
+<button class="chip-btn" id="btnDuplicate2">Duplicar plantilla actual</button>
+<button class="chip-btn danger" id="btnReset">Reiniciar todo</button>
+</div>
+</div>
+<div class="field-group">
+<div class="fg-title">Librería de plantillas guardadas</div>
+<div class="template-list" id="templateList"></div>
+</div>
+</section>
+</div>
+</aside>
+<main class="stage-area" id="stageArea">
+<div class="selection-hint" id="selectionHint">
+<span id="selectionLabel">Elemento seleccionado</span>
+<button id="deselectBtn">Listo</button>
+</div>
+<div id="stageScale">
+<div id="stage">
+<div class="bg-color-layer" id="bgColorLayer"></div>
+<div class="bg-image-layer blurred" id="bgImageBlurLayer" style="display:none;"></div>
+<div class="bg-overlay-dark" id="bgDarkOverlay" style="opacity:0;"></div>
+<div class="bg-noise" id="bgNoiseLayer" style="opacity:0;"></div>
+<div class="bg-texture tex-none" id="bgTextureLayer"></div>
+<div class="layer" id="mockupLayer">
+<div class="layer-body">
+<img id="mockupImg" src="" alt="mockup" draggable="false" crossorigin="anonymous">
+<div class="placeholder-empty" id="mockupPlaceholder">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3 4 6v3l3-1v11a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8l3 1V6l-4-3-2 2h-4Z"/></svg>
+<span>Sube tu mockup</span>
+</div>
+<div class="handle handle-rotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
+<div class="handle handle-resize"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+</div>
+</div>
+<!-- Contenedor donde se inyectan los diseños dinámicamente -->
+<div id="designsContainer"></div>
+<div class="layer" id="topCardLayer">
+<div class="layer-body">
+<div class="promo-card" id="promoCard"></div>
+<div class="handle handle-resize" style="display:none;"></div>
+</div>
+</div>
+<div class="layer" id="thumbLayer">
+<div class="layer-body">
+<img id="thumbImg" src="" alt="thumbnail" draggable="false">
+<div class="placeholder-empty" id="thumbPlaceholder" style="gap:4px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="10" r="2"/><path d="m20 15-4-4-9 9"/></svg>
+<span style="font-size:10.5px;">Miniatura</span>
+</div>
+<div class="handle handle-rotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
+<div class="handle handle-resize"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+</div>
+</div>
+<div class="layer" id="perspLayer">
+<div class="layer-body">
+<img id="perspImg" src="" alt="perspectiva" draggable="false">
+<div class="placeholder-empty" id="perspPlaceholder" style="gap:4px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3 4 6v3l3-1v11a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8l3 1V6l-4-3-2 2h-4Z"/></svg>
+<span style="font-size:10.5px;">Perspectiva</span>
+</div>
+<div id="perspDesignsContainer"></div>
+<div class="handle handle-rotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
+<div class="handle handle-resize"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+</div>
+</div>
+<!-- BARRA INFERIOR (SIEMPRE VISIBLE Y EDITABLE) -->
+<div id="bottomBar">
+<div class="bb-col left">
+<div class="bb-icon" id="bbWhatsIcon">
+<svg viewBox="0 0 32 32" fill="currentColor"><path d="M16.02 3C9.4 3 4 8.36 4 15c0 2.35.68 4.55 1.87 6.4L4 29l7.8-1.83A11.9 11.9 0 0 0 16.02 27C22.63 27 28 21.64 28 15S22.63 3 16.02 3zm0 21.7c-1.98 0-3.83-.55-5.4-1.5l-.39-.23-4.62 1.08 1.1-4.5-.25-.4A9.62 9.62 0 0 1 6.3 15c0-5.35 4.36-9.7 9.72-9.7S25.74 9.65 25.74 15s-4.36 9.7-9.72 9.7z"/><path d="M21.2 17.7c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5-.17 0-.37-.03-.57-.03-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.87 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z"/></svg>
+</div>
+<div class="bb-text" id="bbWhatsText"><b>921 233 79 34</b></div>
+</div>
+<div class="bb-col center">
+<div class="bb-sep" id="sepLeft"></div>
+<div class="bb-icon" id="bbShipIcon">
+<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9h14v11H4zM18 14h6l4 4v2h-2M18 20h2"/><circle cx="10" cy="24" r="2.2"/><circle cx="23" cy="24" r="2.2"/></svg>
+</div>
+<div class="bb-text" id="bbShipText"><b>Envíos a todo MÉXICO</b></div>
+<div class="bb-sep" id="sepRight"></div>
+</div>
+<div class="bb-col right">
+<img id="bbLogoImg" class="bb-logo-img" src="" style="display:none;">
+<div class="bb-text" id="bbBusinessText" style="text-align:right;"><b>CHECHENA SHIRTS</b></div>
+</div>
+</div>
+</div>
+</div>
+<div class="zoom-controls">
+<button id="zoomOut">–</button>
+<span id="zoomLabel">100%</span>
+<button id="zoomIn">+</button>
+<button id="zoomFit" title="Ajustar">⤢</button>
+</div>
+</main>
+</div>
+<script>
+const FONT_STACK = { 'Poppins':"'Poppins',sans-serif", 'Fredoka':"'Fredoka',sans-serif", 'Baloo 2':"'Baloo 2',sans-serif", 'Quicksand':"'Quicksand',sans-serif" };
+const EXTRA_ICONS = {
+instagram:{ label:'Instagram', placeholder:'@tunegocio', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>' },
+facebook:{ label:'Facebook', placeholder:'/tunegocio', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.8 8.44-4.95 8.44-9.94z"/></svg>' },
+tiktok:{ label:'TikTok', placeholder:'@tunegocio', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3c.4 2.1 1.9 3.7 4.1 3.9v2.7c-1.5 0-2.9-.5-4.1-1.3v6.6c0 3.4-2.7 6.1-6.1 6.1S4.4 18.3 4.4 14.9c0-3.3 2.6-6 5.9-6.1v2.8c-1.7.1-3.1 1.5-3.1 3.3 0 1.8 1.5 3.3 3.3 3.3s3.3-1.5 3.3-3.3V3h2.8z"/></svg>' },
+web:{ label:'Sitio web', placeholder:'www.tunegocio.com', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.6 3.6 5.7 3.6 9s-1.2 6.4-3.6 9c-2.4-2.6-3.6-5.7-3.6-9s1.2-6.4 3.6-9z"/></svg>' },
+email:{ label:'Correo', placeholder:'contacto@tunegocio.com', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 6.5 8 6 8-6"/></svg>' },
+location:{ label:'Ubicación', placeholder:'Tu ciudad', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5C5 5.9 8.1 3 12 3s7 2.9 7 6.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>' },
+phone:{ label:'Teléfono', placeholder:'921 233 79 34', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h3l2 5-2.5 1.8a12 12 0 0 0 6.2 6.2L15.5 14l5 2v3c0 1.1-.9 2-2 2C9.6 21 3 14.4 3 6c0-1.1.9-2 2-2z"/></svg>' },
+twitter:{ label:'X / Twitter', placeholder:'@tunegocio', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7l-5.5-7.2L4.5 22H1.4l8.1-9.3L1 2h7.2l5 6.6L18.9 2zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20z"/></svg>' },
+youtube:{ label:'YouTube', placeholder:'/tunegocio', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.3-.4-4.8c-.2-.9-.9-1.6-1.8-1.8C18.1 5 12 5 12 5s-6.1 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.7 2 12 2 12s0 3.3.4 4.8c.2.9.9 1.6 1.8 1.8C5.9 19 12 19 12 19s6.1 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.5.4-4.8.4-4.8z"/><path d="M10 15.2V8.8L15.8 12z" fill="#fff"/></svg>' },
+pinterest:{ label:'Pinterest', placeholder:'@tunegocio', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2.5 5.9 2.5 10.7c0 3.1 1.8 5.9 4.5 7.1.05-.6.09-1.5 0-2.1-.14-.6-.9-3.8-.9-3.8s-.23-.46-.23-1.14c0-1.07.62-1.87 1.4-1.87.66 0 .98.5.98 1.1 0 .67-.43 1.68-.65 2.61-.19.78.39 1.42 1.16 1.42 1.39 0 2.46-1.47 2.46-3.58 0-1.87-1.34-3.18-3.26-3.18-2.22 0-3.52 1.66-3.52 3.38 0 .67.26 1.39.58 1.78.06.08.07.15.05.23-.06.24-.19.78-.22.89-.03.14-.11.17-.26.1-.98-.45-1.59-1.88-1.59-3.02 0-2.46 1.79-4.72 5.15-4.72 2.7 0 4.8 1.93 4.8 4.5 0 2.68-1.69 4.84-4.04 4.84-.79 0-1.53-.41-1.78-.9l-.48 1.85c-.18.68-.66 1.53-.98 2.05.74.23 1.52.35 2.34.35 5.52 0 9.5-3.9 9.5-8.7C21.5 5.9 17.5 2 12.02 2z"/></svg>' },
+telegram:{ label:'Telegram', placeholder:'@tunegocio', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5 2.9 11.7c-1.1.44-1.1 1.06-.2 1.34l4.8 1.5 1.8 5.5c.22.5.4.7.75.7.35 0 .5-.16.7-.36l1.9-1.85 4 2.95c.7.4 1.2.19 1.4-.65l2.5-11.9c.28-1.05-.4-1.53-1.05-1.09zM8.5 14.2l9.3-5.9c.45-.27.86-.12.52.18l-7.9 7.15-.3 3.2-1.4-4.6z"/></svg>' },
+linkedin:{ label:'LinkedIn', placeholder:'/tunegocio', svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 2H3.6C2.7 2 2 2.7 2 3.6v16.8c0 .9.7 1.6 1.6 1.6h16.8c.9 0 1.6-.7 1.6-1.6V3.6c0-.9-.7-1.6-1.6-1.6zM8.3 18.5H5.5V9.7h2.8v8.8zM6.9 8.5c-.9 0-1.6-.7-1.6-1.6s.7-1.6 1.6-1.6 1.6.7 1.6 1.6-.7 1.6-1.6 1.6zm11.6 10H15.7v-4.3c0-1 0-2.4-1.5-2.4s-1.7 1.1-1.7 2.3v4.4H9.7V9.7h2.7v1.2h.04c.37-.7 1.28-1.5 2.63-1.5 2.8 0 3.3 1.85 3.3 4.25v5.03z"/></svg>' },
+snapchat:{ label:'Snapchat', placeholder:'@tunegocio', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c2.6 0 4 2 4 4.3 0 1.3-.1 2 .1 2.3.2.35.9.5 1.5.6.4.06.9.5.4 1-.3.3-.9.5-1.4.75-.3.15-.35.4-.2.7.35.75 1.15 1.55 2.4 1.8.3.06.35.45.05.6-.5.25-1.2.4-1.7.5-.15.03-.25.12-.28.3-.03.2-.07.45-.13.65-.07.25-.3.3-.55.27-.4-.05-.9-.15-1.5-.15-.85 0-1.4.5-2.6.5s-1.75-.5-2.6-.5c-.6 0-1.1.1-1.5.15-.25.03-.48-.02-.55-.27a5 5 0 0 1-.13-.65c-.03-.18-.13-.27-.28-.3-.5-.1-1.2-.25-1.7-.5-.3-.15-.25-.54.05-.6 1.25-.25 2.05-1.05 2.4-1.8.15-.3.1-.55-.2-.7-.5-.25-1.1-.45-1.4-.75-.5-.5 0-.94.4-1 .6-.1 1.3-.25 1.5-.6.2-.3.1-1 .1-2.3C8 5 9.4 3 12 3z"/></svg>' }
+};
+const MOCKUP_MODELS = {
+oversize:   { label:'Oversize', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Over_blanca_frente.png?v=1770611266", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Over_Blanca_espalda.png?v=1770611264" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/over_negra_frente.png?v=1770611282", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/over_negra_espalda.png?v=1770611283" }, hueso: { label:'Hueso', front:"https://i.ibb.co/wZvtMLd1/hueso-front.png", back:"https://i.ibb.co/qMC8TScs/hueso-back.png" }, gris: { label:'Gris', front:"https://i.ibb.co/B1H6DZ9/gris-front.png", back:"https://i.ibb.co/9mLSrdYV/gris-back.png" } }},
+oversize2:  { label:'Oversize 2', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/LimitedMX_RemoverFondo_300DPI_2026-01-28-07-26-40.png?v=1769585236", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Espalda_blanca_ov_nueva.png?v=1770157262" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/2mkp_oversize.png?v=1769562951", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Espalda_negra.png?v=1770156858" }, acidwash: { label:'Acid Wash', front:"https://i.ibb.co/7JCvcn70/acidwash-frente.png", back:"https://i.ibb.co/svNXvWb5/acidwash-espalda.png" } }},
+boxyfit:    { label:'Boxy Fit', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Boxy_Blanca_Frente.png?v=1770611269", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Boxy_Blanca_Espalda.png?v=1770611268" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Box_Negro_1_frente.png?v=1770617022", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camiseta_boxy_fit_negra_espalda.png?v=1770617022" } }},
+regular:    { label:'Regular', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/CAMISETA_BLANCA_FRENTE.png?v=1770611278", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/CAMISETA_BLANCA_ESPALDA.png?v=1770611278" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camisa_regular_frente_negro.png?v=1770612123", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camisa_regular_espalda_negro.png?v=1770612123" }, azul_claro: { label:'Azul claro', front:"https://i.ibb.co/Zzx44khT/azul-claro-front.png", back:"https://i.ibb.co/Y48GkjWz/azul-claro-back.png" }, azul_oscuro: { label:'Azul oscuro', front:"https://i.ibb.co/VWc5mrTq/azul-oscuro-front.png", back:"https://i.ibb.co/WvCDnppS/azul-oscuro-back.png" }, beige: { label:'Beige', front:"https://i.ibb.co/M4phBpF/beige-front.png", back:"https://i.ibb.co/zTBfL8Fz/beige-back.png" }, crema: { label:'Crema', front:"https://i.ibb.co/C3mrY8GZ/crema-front.png", back:"https://i.ibb.co/ZpMktmCw/crema-back.png" }, verde_militar: { label:'Verde militar', front:"https://i.ibb.co/cc34cY4n/verde-militar-front.png", back:"https://i.ibb.co/VYyk31Tx/verde-militar-back.png" }, gris_claro: { label:'Gris claro', front:"https://i.ibb.co/fW5bKV8/gris-claro-front.png", back:"https://i.ibb.co/BHNxTR1Q/gris-claro-back.png" } }},
+longsleeve: { label:'M. Larga', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_blanco_frente.png?v=1770611287", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_blanco_espalda.png?v=1770611288" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_Negro_frente.png?v=1770611278", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_largaNegro_espalda.png?v=1770611280" } }},
+polo:       { label:'Polo', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Blanca_Frente.png?v=1770611272", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Blanca_Espalda.png?v=1770611268" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Negra_Frente.png?v=1770611288", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Negra_Espalda.png?v=1770611287" } }},
+socks:      { label:'Calcetín', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Blanco.png?v=1770611268", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Blanco.png?v=1770611268" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Negro.png?v=1770611277", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Negro.png?v=1770611277" } }},
+tank:       { label:'Sin Manga', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_blanca_frente.png?v=1770611285", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_blanca_espalda.png?v=1770611285" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_negra_frente.png?v=1770611286", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_negra_espalda.png?v=1770611285" } }},
+croptop:    { label:'Crop Top', colors:{ blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Frente_Blanco.png?v=1770611285", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Espalda_Blanco.png?v=1770611283" }, negro: { label:'Negro', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Frente_Negro.png?v=1770611284", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Negro_Espalda.png?v=1770611284" } }},
+short:      { label:'Short', colors:{ negro: { label:'Negro', front:"https://i.ibb.co/0R84b6wG/SHORT.png" } }},
+pants:      { label:'Pants', colors:{ negro: { label:'Negro', front:"https://i.ibb.co/8J03yZN/SHORT-19.png" }, blanco: { label:'Blanco', front:"https://i.ibb.co/BHzNg0TJ/SHORT-20.png" } }},
+GORRA:      { label:'Gorra', colors:{ negro: { label:'Negro', front:"https://i.ibb.co/yckT7ht5/SHORT-21.png" }, negro_subli: { label:'Negro sublimado', front:"https://i.ibb.co/Mkm5M6QZ/SHORT-22.png" }, azul: { label:'Azul', front:"https://i.ibb.co/nt1ZdqM/SHORT-23.png" } }},
+tote_bag:   { label:'Tote Bag', colors:{ crema: { label:'Crema', front:"https://i.ibb.co/MxDthKF6/SHORT-25.png" } }},
+MANDIL:     { label:'Mandil', colors:{ BLANCO: { label:'Blanco', front:"https://i.ibb.co/n87QBJtv/Dise-o-sin-t-tulo-4.png" }, NEGRO: { label:'Negro', front:"https://i.ibb.co/wZbyswft/Dise-o-sin-t-tulo-5.png" } }}
+};
+function buildMockupLibraryFlat(){
+const flat = [];
+for(const catKey in MOCKUP_MODELS){
+const cat = MOCKUP_MODELS[catKey];
+for(const colorKey in cat.colors){
+const c = cat.colors[colorKey];
+if(c.front) flat.push({ category:catKey, categoryLabel:cat.label, label:c.label, view:'Frente', url:c.front });
+if(c.back)  flat.push({ category:catKey, categoryLabel:cat.label, label:c.label, view:'Espalda', url:c.back });
+}
+}
+return flat;
+}
+const MOCKUP_LIBRARY_FLAT = buildMockupLibraryFlat();
+function defaultState(){
+return {
+canvas:{ preset:'1080x1350' },
+background:{ type:'color', color:'#e4e4e4', gradFrom:'#F5F2EB', gradTo:'#D6C5B4', gradAngle:135, image:null, blur:0, darken:0, brightness:100, noise:0, texture:'dots' },
+mockup:{ src:null, x:540, y:660, w:620, rotation:0, visible:true, shadow:false, shadowStrength:35 },
+designs: [], // ARRAY DE DISEÑOS MÚLTIPLES
+selectedDesignId: null,
+selectedPerspDesignId: null,
+topCard:{ visible:true, x:200, y:150, matTitle:'MATERIAL', matLine1:'100% algodón', matLine2:'modern fit', sizeTitle:'TALLAS', sizes:['S','M','L','XL','XXL'], colorTitle:'COLORES', colors:['#FFFFFF','#F3E9C9','#B7E3C0','#F7D774','#F2A8B4','#111111'], font:'Poppins', fontSize:13, textColor:'#111111', bgColor:'#D6C5B4', letterSpacing:0 },
+thumbnail:{ src:null, x:800, y:170, w:230, rotation:0, visible:true, shadow:true, radius:100, shape:'circle', ring:true, ringColor:'#FFFFFF', ringWidth:10 },
+perspective:{ src:null, x:540, y:675, w:380, rotation:0, visible:false, shadow:true, radius:100, shape:'circle', ring:true, ringColor:'#FFFFFF', ringWidth:10, designs:[] },
+bottomBar:{ visible:true, whatsapp:'921 233 79 34', shipping:'Envíos a todo MÉXICO', business:'CHECHENA SHIRTS', logo:null, bg:'#111111', text:'#FFFFFF', font:'Poppins', separators:true, fontSize:15, extra:[] }
+};
+}
+let state = defaultState();
+let history = [ JSON.stringify(state) ];
+let historyIndex = 0;
+function commitHistory(){
+const snap = JSON.stringify(state);
+if(snap === history[historyIndex]) return;
+history = history.slice(0, historyIndex+1);
+history.push(snap);
+if(history.length > 60) history.shift();
+historyIndex = history.length-1;
+updateHistoryButtons();
+}
+function undo(){ if(historyIndex<=0) return; historyIndex--; state = JSON.parse(history[historyIndex]); renderAll(); syncAllInputs(); updateHistoryButtons(); }
+function redo(){ if(historyIndex>=history.length-1) return; historyIndex++; state = JSON.parse(history[historyIndex]); renderAll(); syncAllInputs(); updateHistoryButtons(); }
+function updateHistoryButtons(){
+document.getElementById('btnUndo').disabled = historyIndex<=0;
+document.getElementById('btnRedo').disabled = historyIndex>=history.length-1;
+}
+function getPresetDims(){
+const parts = String(state.canvas.preset||'1080x1350').split('x');
+return { w: parseInt(parts[0],10) || 1080, h: parseInt(parts[1],10) || 1350 };
+}
+function getLogicalDims(){
+const {w,h} = getPresetDims();
+const scale = Math.min(1080/Math.max(w,h), 1);
+return { w:Math.round(w*scale), h:Math.round(h*scale), scale };
+}
+let previewScale = 1;
+function applyStageSize(){
+const L = getLogicalDims();
+const stage = document.getElementById('stage');
+stage.style.width = L.w+'px'; stage.style.height = L.h+'px';
+document.getElementById('mockupX').max = L.w; document.getElementById('mockupY').max = L.h;
+document.getElementById('designX').max = L.w; document.getElementById('designY').max = L.h;
+document.getElementById('thumbX').max = L.w; document.getElementById('thumbY').max = L.h;
+document.getElementById('perspX').max = L.w; document.getElementById('perspY').max = L.h;
+document.getElementById('cardX').max = L.w; document.getElementById('cardY').max = L.h;
+fitStageToViewport();
+}
+function fitStageToViewport(customScale){
+const L = getLogicalDims();
+const area = document.getElementById('stageArea');
+const availW = area.clientWidth - 80; const availH = area.clientHeight - 80;
+const fit = Math.min(availW/L.w, availH/L.h, 1);
+previewScale = customScale || fit;
+document.getElementById('stageScale').style.transform = `scale(${previewScale})`;
+document.getElementById('stageScale').style.width = (L.w*previewScale)+'px';
+document.getElementById('stageScale').style.height = (L.h*previewScale)+'px';
+document.getElementById('zoomLabel').textContent = Math.round(previewScale*100)+'%';
+}
+window.addEventListener('resize', ()=>fitStageToViewport());
+function renderAll(){ applyStageSize(); renderBackground(); renderMockup(); renderDesigns(); renderTopCard(); renderThumbnail(); renderPerspective(); renderBottomBar(); }
+function renderBackground(){
+const b = state.background;
+const colorLayer = document.getElementById('bgColorLayer');
+const imgBlur = document.getElementById('bgImageBlurLayer');
+const dark = document.getElementById('bgDarkOverlay');
+const noise = document.getElementById('bgNoiseLayer');
+const tex = document.getElementById('bgTextureLayer');
+if(b.type==='color'){ colorLayer.style.background = b.color; imgBlur.style.display = 'none'; }
+else if(b.type==='gradient'){ colorLayer.style.background = `linear-gradient(${b.gradAngle}deg, ${b.gradFrom}, ${b.gradTo})`; imgBlur.style.display = 'none'; }
+else if(b.type==='image'){
+colorLayer.style.background = '#ddd';
+if(b.image){ imgBlur.style.display = 'block'; imgBlur.style.backgroundImage = `url(${b.image})`; imgBlur.style.filter = `blur(${b.blur}px) brightness(${b.brightness}%)`; }
+else { imgBlur.style.display = 'none'; }
+}
+dark.style.opacity = (b.darken/100); noise.style.opacity = (b.noise/100); tex.className = 'bg-texture tex-'+b.texture;
+}
+function applyLayerBox(el, obj){
+el.style.left = obj.x+'px'; el.style.top = obj.y+'px'; el.style.width = obj.w+'px';
+el.style.transform = `translate(-50%,-50%) rotate(${obj.rotation||0}deg)`;
+el.style.display = obj.visible===false ? 'none' : 'block';
+}
+function renderMockup(){
+const m = state.mockup; const layer = document.getElementById('mockupLayer');
+const img = document.getElementById('mockupImg'); const ph = document.getElementById('mockupPlaceholder');
+applyLayerBox(layer, m); layer.style.height = 'auto';
+if(m.src){ img.src = m.src; img.style.display='block'; ph.style.display='none'; img.style.filter = m.shadow ? `drop-shadow(0 ${8+m.shadowStrength/4}px ${14+m.shadowStrength/2}px rgba(0,0,0,${(m.shadowStrength/100*0.5).toFixed(2)}))` : 'none'; }
+else { img.style.display='none'; ph.style.display='flex'; layer.style.height = (m.w*1.15)+'px'; }
+}
+// ============ RENDERIZADO DE MÚLTIPLES DISEÑOS ============
+function renderDesigns(){
+const container = document.getElementById('designsContainer');
+container.innerHTML = '';
+state.designs.forEach(d => {
+const layer = document.createElement('div');
+layer.className = 'layer';
+layer.dataset.designId = d.id;
+if(state.selectedDesignId === d.id) layer.classList.add('selected');
+layer.innerHTML = `
+<div class="layer-body">
+<img src="${d.src}" alt="design" draggable="false" crossorigin="anonymous" style="width:100%;height:auto;display:block;pointer-events:none;object-fit:contain;">
+<div class="handle handle-rotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
+<div class="handle handle-resize"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+</div>
+`;
+// Aplicar estilos de posición
+layer.style.left = d.x+'px';
+layer.style.top = d.y+'px';
+layer.style.width = d.w+'px';
+layer.style.height = 'auto';
+layer.style.transform = `translate(-50%,-50%) rotate(${d.rotation||0}deg)`;
+layer.style.display = d.visible===false ? 'none' : 'block';
+layer.style.cursor = 'move';
+// Interacciones
+setupDesignLayerInteraction(layer, d);
+container.appendChild(layer);
+});
+}
+function setupDesignLayerInteraction(layer, designObj){
+const resizeHandle = layer.querySelector('.handle-resize');
+const rotateHandle = layer.querySelector('.handle-rotate');
+layer.addEventListener('pointerdown', (e)=>{
+if(e.target===resizeHandle || resizeHandle.contains(e.target)) return;
+if(e.target===rotateHandle || rotateHandle.contains(e.target)) return;
+state.selectedDesignId = designObj.id;
+renderDesigns();
+syncDesignControls();
+selectLayer(layer.id || 'design-'+designObj.id, 'Diseño');
+const startX = e.clientX, startY = e.clientY; const ox = designObj.x, oy = designObj.y;
+function move(ev){ designObj.x = ox + (ev.clientX-startX)/previewScale; designObj.y = oy + (ev.clientY-startY)/previewScale; renderDesigns(); }
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+resizeHandle.addEventListener('pointerdown', (e)=>{
+e.stopPropagation(); const startX = e.clientX; const ow = designObj.w;
+function move(ev){ designObj.w = Math.max(30, Math.min(1200, ow + (ev.clientX-startX)/previewScale*1.6)); renderDesigns(); }
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+rotateHandle.addEventListener('pointerdown', (e)=>{
+e.stopPropagation();
+function move(ev){
+const rect = layer.getBoundingClientRect();
+let angle = Math.atan2(ev.clientY-(rect.top+rect.height/2), ev.clientX-(rect.left+rect.width/2))*180/Math.PI + 90;
+if(angle>180) angle-=360; if(angle<-180) angle+=360;
+designObj.rotation = Math.round(angle); renderDesigns();
+}
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+}
+function renderDesignsList(){
+const list = document.getElementById('designsList');
+const count = document.getElementById('designCount');
+count.textContent = state.designs.length;
+if(!state.designs.length){
+list.innerHTML = '<div class="empty-note">Aún no has agregado diseños. Sube uno o varios arriba.</div>';
+document.getElementById('designControls').style.display = 'none';
+return;
+}
+list.innerHTML = '';
+state.designs.forEach((d, idx) => {
+const item = document.createElement('div');
+item.className = 'design-item' + (state.selectedDesignId === d.id ? ' selected' : '');
+item.innerHTML = `
+<div class="di-thumb" style="background-image:url(${d.src})"></div>
+<div class="di-info">
+<div class="di-name">Diseño ${idx+1}</div>
+<div class="di-meta">${d.visible ? 'Visible' : 'Oculto'} · ${Math.round(d.w)}px</div>
+</div>
+<div class="di-actions">
+<button class="vis-btn" title="${d.visible ? 'Ocultar' : 'Mostrar'}">${d.visible ? '👁' : '🚫'}</button>
+<button class="del-btn" title="Eliminar">🗑</button>
+</div>
+`;
+item.addEventListener('click', (e) => {
+if(e.target.closest('.di-actions')) return;
+state.selectedDesignId = d.id;
+renderDesigns();
+renderDesignsList();
+syncDesignControls();
+});
+item.querySelector('.vis-btn').addEventListener('click', (e) => {
+e.stopPropagation();
+d.visible = !d.visible;
+renderDesigns();
+renderDesignsList();
+commitHistory();
+});
+item.querySelector('.del-btn').addEventListener('click', (e) => {
+e.stopPropagation();
+state.designs = state.designs.filter(x => x.id !== d.id);
+if(state.selectedDesignId === d.id){
+state.selectedDesignId = state.designs.length ? state.designs[0].id : null;
+}
+renderDesigns();
+renderDesignsList();
+syncDesignControls();
+commitHistory();
+});
+list.appendChild(item);
+});
+}
+function syncDesignControls(){
+const controls = document.getElementById('designControls');
+if(!state.selectedDesignId){
+controls.style.display = 'none';
+return;
+}
+const d = state.designs.find(x => x.id === state.selectedDesignId);
+if(!d){ controls.style.display = 'none'; return; }
+controls.style.display = 'block';
+document.querySelectorAll('#designVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(d.visible?'1':'0')));
+document.getElementById('designScale').value = d.w;
+document.getElementById('designRot').value = d.rotation;
+document.getElementById('designX').value = d.x;
+document.getElementById('designY').value = d.y;
+}
+function getSelectedDesign(){
+return state.designs.find(x => x.id === state.selectedDesignId);
+}
+// Subir múltiples diseños
+document.getElementById('designInput').addEventListener('change', async (e) => {
+const files = Array.from(e.target.files);
+if(!files.length) return;
+const L = getLogicalDims();
+for(const f of files){
+const src = await readFileAsDataURL(f);
+const newDesign = {
+id: 'd'+Date.now()+Math.floor(Math.random()*1000),
+src: src,
+x: L.w/2,
+y: L.h/2,
+w: 300,
+rotation: 0,
+visible: true
+};
+state.designs.push(newDesign);
+state.selectedDesignId = newDesign.id;
+}
+e.target.value = '';
+renderDesigns();
+renderDesignsList();
+syncDesignControls();
+commitHistory();
+});
+segSetup('designVisSeg', v => {
+const d = getSelectedDesign();
+if(!d) return;
+d.visible = v==='1';
+renderDesigns();
+renderDesignsList();
+commitHistory();
+});
+bindRange('designScale', null, null, () => {
+const d = getSelectedDesign(); if(!d) return;
+d.w = +document.getElementById('designScale').value;
+renderDesigns(); renderDesignsList();
+});
+document.getElementById('designScale').addEventListener('change', commitHistory);
+bindRange('designRot', null, null, () => {
+const d = getSelectedDesign(); if(!d) return;
+d.rotation = +document.getElementById('designRot').value;
+renderDesigns();
+});
+document.getElementById('designRot').addEventListener('change', commitHistory);
+bindRange('designX', null, null, () => {
+const d = getSelectedDesign(); if(!d) return;
+d.x = +document.getElementById('designX').value;
+renderDesigns();
+});
+document.getElementById('designX').addEventListener('change', commitHistory);
+bindRange('designY', null, null, () => {
+const d = getSelectedDesign(); if(!d) return;
+d.y = +document.getElementById('designY').value;
+renderDesigns();
+});
+document.getElementById('designY').addEventListener('change', commitHistory);
+document.getElementById('designCenter').addEventListener('click', () => {
+const d = getSelectedDesign(); if(!d) return;
+const L = getLogicalDims();
+d.x = L.w/2; d.y = L.h/2; d.rotation = 0;
+renderDesigns(); syncDesignControls(); commitHistory();
+});
+document.getElementById('designDelete').addEventListener('click', () => {
+const d = getSelectedDesign(); if(!d) return;
+state.designs = state.designs.filter(x => x.id !== d.id);
+state.selectedDesignId = state.designs.length ? state.designs[0].id : null;
+renderDesigns(); renderDesignsList(); syncDesignControls(); commitHistory();
+});
+function renderThumbnail(){
+const t = state.thumbnail; const layer = document.getElementById('thumbLayer');
+const img = document.getElementById('thumbImg'); const ph = document.getElementById('thumbPlaceholder');
+applyLayerBox(layer, t); layer.style.height = t.w+'px';
+const radius = t.shape==='circle' ? 9999 : t.radius;
+const ringShadow = t.ring ? `0 0 0 ${t.ringWidth}px ${t.ringColor}` : '';
+const dropShadow = t.shadow ? '0 14px 28px rgba(0,0,0,.28)' : '';
+const combined = [ringShadow, dropShadow].filter(Boolean).join(', ') || 'none';
+img.style.borderRadius = radius+'px'; img.style.boxShadow = combined;
+if(t.src){ img.src = t.src; img.style.display='block'; ph.style.display='none'; }
+else { img.style.display='none'; ph.style.display='flex'; ph.style.borderRadius=radius+'px'; ph.style.background='#fff'; ph.style.boxShadow = combined; }
+}
+function renderPerspective(){
+const p = state.perspective; const layer = document.getElementById('perspLayer');
+const img = document.getElementById('perspImg'); const ph = document.getElementById('perspPlaceholder');
+const designsBox = document.getElementById('perspDesignsContainer');
+applyLayerBox(layer, p); layer.style.height = p.w+'px';
+const radius = p.shape==='circle' ? 9999 : p.radius;
+const ringShadow = p.ring ? `0 0 0 ${p.ringWidth}px ${p.ringColor}` : '';
+const dropShadow = p.shadow ? '0 14px 28px rgba(0,0,0,.28)' : '';
+const combined = [ringShadow, dropShadow].filter(Boolean).join(', ') || 'none';
+img.style.borderRadius = radius+'px'; img.style.boxShadow = combined; img.style.objectFit = 'cover';
+designsBox.style.borderRadius = radius+'px';
+if(p.src){ img.src = p.src; img.style.display='block'; ph.style.display='none'; }
+else { img.style.display='none'; ph.style.display='flex'; ph.style.borderRadius=radius+'px'; ph.style.background='#fff'; ph.style.boxShadow = combined; }
+renderPerspDesigns();
+}
+function renderPerspDesigns(){
+const container = document.getElementById('perspDesignsContainer');
+if(!container) return;
+container.innerHTML = '';
+(state.perspective.designs||[]).forEach(d=>{
+const layer = document.createElement('div');
+layer.className = 'layer'; layer.dataset.perspDesignId = d.id;
+if(state.selectedPerspDesignId === d.id) layer.classList.add('selected');
+layer.innerHTML = `
+<div class="layer-body">
+<img src="${d.src}" alt="diseño" draggable="false" crossorigin="anonymous" style="width:100%;height:auto;display:block;pointer-events:none;">
+<div class="handle handle-rotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
+<div class="handle handle-resize"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+</div>
+`;
+layer.style.left = (d.x*100)+'%'; layer.style.top = (d.y*100)+'%'; layer.style.width = (d.w*100)+'%'; layer.style.height = 'auto';
+layer.style.transform = `translate(-50%,-50%) rotate(${d.rotation||0}deg)`;
+layer.style.display = d.visible===false ? 'none' : 'block';
+setupPerspDesignInteraction(layer, d);
+container.appendChild(layer);
+});
+}
+function setupPerspDesignInteraction(layer, d){
+const resizeHandle = layer.querySelector('.handle-resize');
+const rotateHandle = layer.querySelector('.handle-rotate');
+layer.addEventListener('pointerdown', (e)=>{
+e.stopPropagation();
+if(e.target===resizeHandle || resizeHandle.contains(e.target)) return;
+if(e.target===rotateHandle || rotateHandle.contains(e.target)) return;
+state.selectedPerspDesignId = d.id; renderPerspDesigns(); renderPerspDesignsList(); syncPerspDesignControls();
+selectLayer('perspLayer','Perspectiva');
+const startX = e.clientX, startY = e.clientY; const ox = d.x, oy = d.y;
+function move(ev){
+const box = state.perspective.w || 1;
+d.x = ox + ((ev.clientX-startX)/previewScale)/box;
+d.y = oy + ((ev.clientY-startY)/previewScale)/box;
+renderPerspDesigns();
+}
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+resizeHandle.addEventListener('pointerdown', (e)=>{
+e.stopPropagation(); const startX = e.clientX; const ow = d.w;
+function move(ev){
+const box = state.perspective.w || 1;
+d.w = Math.max(0.04, Math.min(3, ow + ((ev.clientX-startX)/previewScale*1.6)/box));
+renderPerspDesigns(); renderPerspDesignsList();
+}
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+rotateHandle.addEventListener('pointerdown', (e)=>{
+e.stopPropagation();
+function move(ev){
+const rect = layer.getBoundingClientRect();
+let angle = Math.atan2(ev.clientY-(rect.top+rect.height/2), ev.clientX-(rect.left+rect.width/2))*180/Math.PI + 90;
+if(angle>180) angle-=360; if(angle<-180) angle+=360;
+d.rotation = Math.round(angle); renderPerspDesigns();
+}
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+}
+function renderPerspDesignsList(){
+const list = document.getElementById('perspDesignsList'); if(!list) return;
+const count = document.getElementById('perspDesignCount'); if(count) count.textContent = (state.perspective.designs||[]).length;
+const list_ = state.perspective.designs||[];
+if(!list_.length){
+list.innerHTML = '<div class="empty-note">Aún no has agregado diseños a la perspectiva.</div>';
+const ctr = document.getElementById('perspDesignControls'); if(ctr) ctr.style.display = 'none';
+return;
+}
+list.innerHTML = '';
+list_.forEach((d, idx)=>{
+const item = document.createElement('div');
+item.className = 'design-item' + (state.selectedPerspDesignId===d.id ? ' selected':'');
+item.innerHTML = `
+<div class="di-thumb" style="background-image:url(${d.src})"></div>
+<div class="di-info">
+<div class="di-name">Diseño ${idx+1}</div>
+<div class="di-meta">${d.visible ? 'Visible':'Oculto'}</div>
+</div>
+<div class="di-actions">
+<button class="vis-btn" title="${d.visible?'Ocultar':'Mostrar'}">${d.visible?'👁':'🚫'}</button>
+<button class="del-btn" title="Eliminar">🗑</button>
+</div>
+`;
+item.addEventListener('click', (e)=>{
+if(e.target.closest('.di-actions')) return;
+state.selectedPerspDesignId = d.id; renderPerspDesigns(); renderPerspDesignsList(); syncPerspDesignControls();
+});
+item.querySelector('.vis-btn').addEventListener('click', (e)=>{
+e.stopPropagation(); d.visible = !d.visible; renderPerspDesigns(); renderPerspDesignsList(); commitHistory();
+});
+item.querySelector('.del-btn').addEventListener('click', (e)=>{
+e.stopPropagation();
+state.perspective.designs = state.perspective.designs.filter(x=>x.id!==d.id);
+if(state.selectedPerspDesignId===d.id){ state.selectedPerspDesignId = state.perspective.designs.length ? state.perspective.designs[0].id : null; }
+renderPerspDesigns(); renderPerspDesignsList(); syncPerspDesignControls(); commitHistory();
+});
+list.appendChild(item);
+});
+}
+function syncPerspDesignControls(){
+const controls = document.getElementById('perspDesignControls'); if(!controls) return;
+if(!state.selectedPerspDesignId){ controls.style.display = 'none'; return; }
+const d = getSelectedPerspDesign();
+if(!d){ controls.style.display = 'none'; return; }
+controls.style.display = 'block';
+document.querySelectorAll('#perspDesignVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(d.visible?'1':'0')));
+document.getElementById('perspDesignScale').value = Math.round(d.w*100);
+document.getElementById('perspDesignRot').value = d.rotation;
+document.getElementById('perspDesignX').value = Math.round(d.x*100);
+document.getElementById('perspDesignY').value = Math.round(d.y*100);
+}
+function getSelectedPerspDesign(){ return (state.perspective.designs||[]).find(x=>x.id===state.selectedPerspDesignId); }
+function renderTopCard(){
+const c = state.topCard; const layer = document.getElementById('topCardLayer'); const card = document.getElementById('promoCard');
+layer.style.left = c.x+'px'; layer.style.top = c.y+'px'; layer.style.width = 'auto'; layer.style.height = 'auto';
+layer.style.transform = 'translate(-50%,-50%)'; layer.style.display = c.visible===false ? 'none':'block';
+card.style.fontFamily = FONT_STACK[c.font] || FONT_STACK.Poppins; card.style.color = c.textColor;
+card.style.background = hexToRgba(c.bgColor, 0.88); card.style.fontSize = c.fontSize+'px'; card.style.letterSpacing = c.letterSpacing+'px';
+const sizesHtml = c.sizes.map(s=>`<span>${escapeHtml(s)}</span>`).join('');
+const colorsHtml = c.colors.map(hex=>`<span class="pc-dot" style="width:${Math.max(14,c.fontSize+8)}px;height:${Math.max(14,c.fontSize+8)}px;background:${hex}"></span>`).join('');
+card.innerHTML = `<div class="pc-block"><div class="pc-title" style="font-size:${c.fontSize+1}px;">${escapeHtml(c.matTitle)}</div><div class="pc-line">${escapeHtml(c.matLine1)}</div><div class="pc-line">${escapeHtml(c.matLine2)}</div></div><div class="pc-block"><div class="pc-title" style="font-size:${c.fontSize+1}px;">${escapeHtml(c.sizeTitle)}</div><div class="pc-sizes-row">${sizesHtml}</div></div><div class="pc-block"><div class="pc-title" style="font-size:${c.fontSize+1}px;">${escapeHtml(c.colorTitle)}</div><div class="pc-colors-row">${colorsHtml}</div></div>`;
+}
+function renderBottomBar(){
+const b = state.bottomBar; const bar = document.getElementById('bottomBar');
+// ASEGURAR QUE LA BARRA SIEMPRE SE RENDERICE
+bar.style.display = b.visible===false ? 'none':'grid';
+bar.style.background = b.bg; bar.style.color = b.text;
+bar.style.fontFamily = FONT_STACK[b.font] || FONT_STACK.Poppins; const bfs = b.fontSize || 15; bar.style.fontSize = bfs+'px';
+document.getElementById('bbWhatsText').innerHTML = `<b>${escapeHtml(b.whatsapp)}</b>`;
+document.getElementById('bbShipText').innerHTML = `<b>${escapeHtml(b.shipping)}</b>`;
+document.getElementById('bbBusinessText').innerHTML = `<b>${escapeHtml(b.business)}</b>`;
+const centerCol = document.querySelector('#bottomBar .bb-col.center'); const sepRight = document.getElementById('sepRight');
+centerCol.querySelectorAll('.bb-extra-item').forEach(n=>n.remove());
+(b.extra||[]).forEach(item=>{
+const def = EXTRA_ICONS[item.icon]; if(!def) return;
+const wrap = document.createElement('div'); wrap.className = 'bb-extra-item'; wrap.style.display = 'flex'; wrap.style.alignItems = 'center'; wrap.style.gap = '10px';
+wrap.innerHTML = `<div class="bb-icon">${def.svg}</div><div class="bb-text"><b>${escapeHtml(item.text||'')}</b></div>`;
+centerCol.insertBefore(wrap, sepRight);
+});
+document.querySelectorAll('#bottomBar .bb-icon').forEach(ic=>{ ic.style.width = (bfs*1.75)+'px'; ic.style.height = (bfs*1.75)+'px'; });
+const logo = document.getElementById('bbLogoImg'); logo.style.height = (bfs*2.2)+'px';
+if(b.logo){ logo.src=b.logo; logo.style.display='block'; } else { logo.style.display='none'; }
+const sepDisplay = b.separators ? 'block':'none';
+document.getElementById('sepLeft').style.display = sepDisplay; document.getElementById('sepRight').style.display = sepDisplay;
+}
+function addExtraIcon(type){
+if(!EXTRA_ICONS[type]) return;
+state.bottomBar.extra = state.bottomBar.extra || [];
+state.bottomBar.extra.push({ id: 'ei'+Date.now()+Math.floor(Math.random()*1000), icon: type, text: EXTRA_ICONS[type].placeholder });
+renderBottomBar(); renderExtraIconList(); commitHistory();
+}
+function removeExtraIcon(id){
+state.bottomBar.extra = (state.bottomBar.extra||[]).filter(x=>x.id!==id);
+renderBottomBar(); renderExtraIconList(); commitHistory();
+}
+function renderExtraIconList(){
+const wrap = document.getElementById('extraIconList'); if(!wrap) return;
+const list = state.bottomBar.extra || [];
+if(!list.length){ wrap.innerHTML = '<div class="empty-note">Aún no agregaste íconos. Toca uno de arriba para añadirlo.</div>'; return; }
+wrap.innerHTML = '';
+list.forEach(item=>{
+const def = EXTRA_ICONS[item.icon] || { svg:'', placeholder:'' };
+const row = document.createElement('div'); row.className = 'extra-icon-row';
+const iconEl = document.createElement('div'); iconEl.className = 'ei-icon'; iconEl.innerHTML = def.svg;
+const input = document.createElement('input'); input.type = 'text'; input.value = item.text; input.placeholder = def.placeholder;
+input.addEventListener('input', ()=>{ item.text = input.value; renderBottomBar(); });
+input.addEventListener('change', commitHistory);
+const del = document.createElement('button'); del.className = 'remove-x'; del.type='button'; del.textContent = '×';
+del.addEventListener('click', ()=>removeExtraIcon(item.id));
+row.appendChild(iconEl); row.appendChild(input); row.appendChild(del); wrap.appendChild(row);
+});
+}
+document.querySelectorAll('#extraIconPicker [data-addicon]').forEach(btn=>{ btn.addEventListener('click', ()=>addExtraIcon(btn.dataset.addicon)); });
+function escapeHtml(str){ return (str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
+function hexToRgba(hex, alpha){
+hex = hex.replace('#',''); if(hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), bl = parseInt(hex.substring(4,6),16);
+return `rgba(${r},${g},${bl},${alpha})`;
+}
+function readFileAsDataURL(file){ return new Promise((res,rej)=>{ const r = new FileReader(); r.onload = ()=>res(r.result); r.onerror = rej; r.readAsDataURL(file); }); }
+async function loadRemoteImageAsDataURL(url){
+const resp = await fetch(url, { mode:'cors' }); if(!resp.ok) throw new Error('No se pudo descargar la imagen ('+resp.status+')');
+const blob = await resp.blob(); return new Promise((res,rej)=>{ const r = new FileReader(); r.onload = ()=>res(r.result); r.onerror = rej; r.readAsDataURL(blob); });
+}
+function setupImageLayerInteraction(layerId, stateObj, opts){
+const layer = document.getElementById(layerId);
+const resizeHandle = layer.querySelector('.handle-resize');
+const rotateHandle = layer.querySelector('.handle-rotate');
+layer.addEventListener('pointerdown', (e)=>{
+if(e.target===resizeHandle || resizeHandle.contains(e.target)) return;
+if(e.target===rotateHandle || rotateHandle.contains(e.target)) return;
+selectLayer(layerId, opts.label);
+const startX = e.clientX, startY = e.clientY; const ox = stateObj.x, oy = stateObj.y;
+function move(ev){ stateObj.x = ox + (ev.clientX-startX)/previewScale; stateObj.y = oy + (ev.clientY-startY)/previewScale; opts.render(); }
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+resizeHandle.addEventListener('pointerdown', (e)=>{
+e.stopPropagation(); const startX = e.clientX; const ow = stateObj.w;
+function move(ev){ stateObj.w = Math.max(opts.minW||40, Math.min(opts.maxW||1400, ow + (ev.clientX-startX)/previewScale*1.6)); opts.render(); }
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+rotateHandle.addEventListener('pointerdown', (e)=>{
+e.stopPropagation();
+function move(ev){
+const rect = layer.getBoundingClientRect();
+let angle = Math.atan2(ev.clientY-(rect.top+rect.height/2), ev.clientX-(rect.left+rect.width/2))*180/Math.PI + 90;
+if(angle>180) angle-=360; if(angle<-180) angle+=360;
+stateObj.rotation = Math.round(angle); opts.render();
+}
+function up(){ document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); commitHistory(); }
+document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+});
+}
+function setupCardLayerInteraction(){
+const layer = document.getElementById('topCardLayer');
+layer.addEventListener('pointerdown', (e)=>{
+selectLayer('topCardLayer','Panel superior');
+const startX=e.clientX, startY=e.clientY; const ox=state.topCard.x, oy=state.topCard.y;
+function move(ev){ state.topCard.x = ox+(ev.clientX-startX)/previewScale; state.topCard.y = oy+(ev.clientY-startY)/previewScale; renderTopCard(); syncRangeQuiet('cardX', state.topCard.x); syncRangeQuiet('cardY', state.topCard.y); }
+function up(){ document.removeEventListener('pointermove',move); document.removeEventListener('pointerup',up); commitHistory(); }
+document.addEventListener('pointermove',move); document.addEventListener('pointerup',up);
+});
+}
+let selectedLayerId = null;
+function selectLayer(id, label){
+document.querySelectorAll('.layer').forEach(l=>l.classList.remove('selected'));
+const el = document.getElementById(id);
+if(el) el.classList.add('selected');
+selectedLayerId = id;
+document.getElementById('selectionLabel').textContent = label+' seleccionado — arrastra para mover';
+document.getElementById('selectionHint').classList.add('show');
+}
+function deselectAll(){
+document.querySelectorAll('.layer').forEach(l=>l.classList.remove('selected')); selectedLayerId = null;
+document.getElementById('selectionHint').classList.remove('show');
+}
+document.getElementById('stage').addEventListener('pointerdown', (e)=>{ if(e.target.id==='stage' || e.target.classList.contains('bg-color-layer')) deselectAll(); });
+document.getElementById('deselectBtn').addEventListener('click', deselectAll);
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+btn.addEventListener('click', ()=>{
+document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.dataset.panel===btn.dataset.tab));
+});
+});
+function segSetup(segId, onPick){
+document.getElementById(segId).querySelectorAll('button').forEach(b=>{
+b.addEventListener('click', ()=>{
+document.getElementById(segId).querySelectorAll('button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); onPick(b.dataset.val);
+});
+});
+}
+segSetup('bgTypeSeg', (val)=>{
+state.background.type = val;
+document.getElementById('bgColorGroup').style.display = val==='color'?'block':'none';
+document.getElementById('bgGradientGroup').style.display = val==='gradient'?'block':'none';
+document.getElementById('bgImageGroup').style.display = val==='image'?'block':'none';
+renderBackground(); commitHistory();
+});
+document.getElementById('bgColorPick').addEventListener('input', e=>{ state.background.color = e.target.value; document.getElementById('bgColorHex').value = e.target.value; renderBackground(); });
+document.getElementById('bgColorPick').addEventListener('change', commitHistory);
+document.getElementById('bgColorHex').addEventListener('change', e=>{ state.background.color = e.target.value; document.getElementById('bgColorPick').value = e.target.value; renderBackground(); commitHistory(); });
+document.getElementById('bgGradFrom').addEventListener('input', e=>{ state.background.gradFrom=e.target.value; renderBackground(); });
+document.getElementById('bgGradTo').addEventListener('input', e=>{ state.background.gradTo=e.target.value; renderBackground(); });
+document.getElementById('bgGradAngle').addEventListener('input', e=>{ state.background.gradAngle=+e.target.value; renderBackground(); });
+[...document.querySelectorAll('#bgGradientGroup input')].forEach(i=>i.addEventListener('change', commitHistory));
+document.getElementById('bgImageInput').addEventListener('change', async e=>{ const f = e.target.files[0]; if(!f) return; state.background.image = await readFileAsDataURL(f); renderBackground(); commitHistory(); });
+['bgBlur','bgDarken','bgBrightness','bgNoise'].forEach(id=>{
+document.getElementById(id).addEventListener('input', e=>{ state.background[id.replace('bg','').toLowerCase()]=+e.target.value; renderBackground(); });
+document.getElementById(id).addEventListener('change', commitHistory);
+});
+document.querySelectorAll('[data-tex]').forEach(b=>{
+b.addEventListener('click', ()=>{
+document.querySelectorAll('[data-tex]').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+state.background.texture = b.dataset.tex; renderBackground(); commitHistory();
+});
+});
+function centerMockup(){
+const L = getLogicalDims(); state.mockup.x = L.w/2; state.mockup.y = L.h/2; state.mockup.rotation = 0;
+syncRangeQuiet('mockupX', state.mockup.x); syncRangeQuiet('mockupY', state.mockup.y); syncRangeQuiet('mockupRot', state.mockup.rotation);
+}
+document.getElementById('mockupInput').addEventListener('change', async e=>{ const f = e.target.files[0]; if(!f) return; state.mockup.src = await readFileAsDataURL(f); centerMockup(); renderMockup(); commitHistory(); });
+function initMockupLibrary(){
+const catSelect = document.getElementById('libCategorySelect');
+Object.keys(MOCKUP_MODELS).forEach(key=>{ const opt = document.createElement('option'); opt.value = key; opt.textContent = MOCKUP_MODELS[key].label; catSelect.appendChild(opt); });
+document.getElementById('libCount').textContent = ' · '+MOCKUP_LIBRARY_FLAT.length+' imágenes';
+catSelect.addEventListener('change', renderMockupLibraryGrid); renderMockupLibraryGrid();
+
+// Biblioteca de perspectiva
+const catSelectPersp = document.getElementById('libCategorySelectPersp');
+Object.keys(MOCKUP_MODELS).forEach(key=>{ const opt = document.createElement('option'); opt.value = key; opt.textContent = MOCKUP_MODELS[key].label; catSelectPersp.appendChild(opt); });
+document.getElementById('libCountPersp').textContent = ' · '+MOCKUP_LIBRARY_FLAT.length+' imágenes';
+catSelectPersp.addEventListener('change', renderPerspLibraryGrid); renderPerspLibraryGrid();
+}
+function renderLibraryGridGeneric(opts){
+const cat = document.getElementById(opts.selectId).value; const grid = document.getElementById(opts.gridId);
+const items = MOCKUP_LIBRARY_FLAT.filter(it=>it.category===cat);
+if(!items.length){ grid.innerHTML = '<div class="lib-loading">Sin mockups en esta categoría.</div>'; return; }
+grid.innerHTML = '';
+items.forEach(it=>{
+const card = document.createElement('button'); card.className = 'lib-item'+(opts.stateObj.src===it.url ? ' active':''); card.type = 'button';
+card.innerHTML = `<span class="lib-view-tag">${it.view}</span><img src="${it.url}" crossorigin="anonymous" loading="lazy" alt="${it.label}"><span>${it.label}</span>`;
+card.addEventListener('click', async ()=>{
+grid.querySelectorAll('.lib-item').forEach(x=>x.classList.remove('active')); card.classList.add('active');
+const prevLabel = card.querySelector('span:last-child').textContent; card.querySelector('span:last-child').textContent = 'Cargando…';
+try{ opts.stateObj.src = await loadRemoteImageAsDataURL(it.url); } catch(err){ console.error(err); opts.stateObj.src = it.url; }
+card.querySelector('span:last-child').textContent = prevLabel; opts.onPick(); commitHistory();
+});
+grid.appendChild(card);
+});
+}
+function renderMockupLibraryGrid(){
+renderLibraryGridGeneric({ selectId:'libCategorySelect', gridId:'libGrid', stateObj:state.mockup, onPick:()=>{ centerMockup(); renderMockup(); } });
+}
+function renderPerspLibraryGrid(){
+renderLibraryGridGeneric({ selectId:'libCategorySelectPersp', gridId:'libGridPersp', stateObj:state.perspective, onPick:()=>{ 
+  state.perspective.visible = true; 
+  // Centrar la perspectiva al elegir de la biblioteca
+  const L = getLogicalDims();
+  state.perspective.x = L.w/2;
+  state.perspective.y = L.h/2;
+  document.querySelectorAll('#perspVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val==='1')); 
+  renderPerspective(); 
+} });
+}
+segSetup('mockupVisSeg', v=>{ state.mockup.visible = v==='1'; renderMockup(); commitHistory(); });
+segSetup('mockupShadowSeg', v=>{ state.mockup.shadow = v==='1'; renderMockup(); commitHistory(); });
+function bindRange(id, obj, key, renderFn, isFloat){
+const el = document.getElementById(id);
+el.addEventListener('input', ()=>{ if(obj && key){ obj[key] = isFloat? parseFloat(el.value): +el.value; } if(renderFn) renderFn(); });
+el.addEventListener('change', commitHistory);
+}
+bindRange('mockupScale', state.mockup,'w', renderMockup); bindRange('mockupRot', state.mockup,'rotation', renderMockup);
+bindRange('mockupX', state.mockup,'x', renderMockup); bindRange('mockupY', state.mockup,'y', renderMockup);
+bindRange('mockupShadowStrength', state.mockup,'shadowStrength', renderMockup);
+document.getElementById('mockupCenter').addEventListener('click', ()=>{ centerMockup(); renderMockup(); commitHistory(); });
+segSetup('cardVisSeg', v=>{ state.topCard.visible = v==='1'; renderTopCard(); commitHistory(); });
+function bindText(id, obj, key, renderFn){ const el = document.getElementById(id); el.addEventListener('input', ()=>{ obj[key]=el.value; renderFn(); }); el.addEventListener('change', commitHistory); }
+bindText('matTitle', state.topCard,'matTitle', renderTopCard); bindText('matLine1', state.topCard,'matLine1', renderTopCard);
+bindText('matLine2', state.topCard,'matLine2', renderTopCard); bindText('sizeTitle', state.topCard,'sizeTitle', renderTopCard);
+bindText('colorTitle', state.topCard,'colorTitle', renderTopCard);
+function renderSizeEditor(){
+const wrap = document.getElementById('sizeEditor'); wrap.innerHTML = '';
+state.topCard.sizes.forEach((sz, i)=>{
+const row = document.createElement('div'); row.className='sz';
+const input = document.createElement('input'); input.type='text'; input.value=sz;
+input.addEventListener('input', ()=>{ state.topCard.sizes[i]=input.value; renderTopCard(); });
+input.addEventListener('change', commitHistory);
+const rm = document.createElement('button'); rm.textContent='×';
+rm.addEventListener('click', ()=>{ state.topCard.sizes.splice(i,1); renderSizeEditor(); renderTopCard(); commitHistory(); });
+row.appendChild(input); row.appendChild(rm); wrap.appendChild(row);
+});
+}
+document.getElementById('addSize').addEventListener('click', ()=>{ state.topCard.sizes.push('XL'); renderSizeEditor(); renderTopCard(); commitHistory(); });
+function renderColorEditor(){
+const wrap = document.getElementById('colorEditor'); wrap.innerHTML = '';
+state.topCard.colors.forEach((hex,i)=>{
+const row = document.createElement('div'); row.className='swatch-row';
+const pick = document.createElement('input'); pick.type='color'; pick.value=hex;
+pick.addEventListener('input', ()=>{ state.topCard.colors[i]=pick.value; txt.value=pick.value; renderTopCard(); });
+pick.addEventListener('change', commitHistory);
+const txt = document.createElement('input'); txt.type='text'; txt.value=hex;
+txt.addEventListener('change', ()=>{ state.topCard.colors[i]=txt.value; pick.value=txt.value; renderTopCard(); commitHistory(); });
+const rm = document.createElement('button'); rm.className='remove-x'; rm.textContent='×';
+rm.addEventListener('click', ()=>{ state.topCard.colors.splice(i,1); renderColorEditor(); renderTopCard(); commitHistory(); });
+row.appendChild(pick); row.appendChild(txt); row.appendChild(rm); wrap.appendChild(row);
+});
+}
+document.getElementById('addColor').addEventListener('click', ()=>{ state.topCard.colors.push('#F5F2EB'); renderColorEditor(); renderTopCard(); commitHistory(); });
+document.querySelectorAll('#cardFontGrid .font-opt').forEach(b=>{
+b.addEventListener('click', ()=>{
+document.querySelectorAll('#cardFontGrid .font-opt').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+state.topCard.font = b.dataset.font; renderTopCard(); commitHistory();
+});
+});
+document.getElementById('cardTextColor').addEventListener('input', e=>{ state.topCard.textColor=e.target.value; renderTopCard(); });
+document.getElementById('cardBgColor').addEventListener('input', e=>{ state.topCard.bgColor=e.target.value; renderTopCard(); });
+['cardTextColor','cardBgColor'].forEach(id=>document.getElementById(id).addEventListener('change', commitHistory));
+bindRange('cardFontSize', state.topCard,'fontSize', renderTopCard); bindRange('cardLetterSpacing', state.topCard,'letterSpacing', renderTopCard, true);
+bindRange('cardX', state.topCard,'x', renderTopCard); bindRange('cardY', state.topCard,'y', renderTopCard);
+document.getElementById('thumbInput').addEventListener('change', async e=>{ const f = e.target.files[0]; if(!f) return; state.thumbnail.src = await readFileAsDataURL(f); renderThumbnail(); commitHistory(); });
+segSetup('thumbVisSeg', v=>{ state.thumbnail.visible = v==='1'; renderThumbnail(); commitHistory(); });
+segSetup('thumbShadowSeg', v=>{ state.thumbnail.shadow = v==='1'; renderThumbnail(); commitHistory(); });
+segSetup('thumbShapeSeg', v=>{ state.thumbnail.shape = v; document.getElementById('thumbRadiusField').style.display = v==='square' ? 'block':'none'; renderThumbnail(); commitHistory(); });
+segSetup('thumbRingSeg', v=>{ state.thumbnail.ring = v==='1'; document.getElementById('thumbRingFields').style.display = v==='1' ? 'flex':'none'; renderThumbnail(); commitHistory(); });
+document.getElementById('thumbRingColor').addEventListener('input', e=>{ state.thumbnail.ringColor = e.target.value; renderThumbnail(); });
+document.getElementById('thumbRingColor').addEventListener('change', commitHistory);
+bindRange('thumbRingWidth', state.thumbnail,'ringWidth', renderThumbnail);
+bindRange('thumbScale', state.thumbnail,'w', renderThumbnail); bindRange('thumbRot', state.thumbnail,'rotation', renderThumbnail);
+bindRange('thumbX', state.thumbnail,'x', renderThumbnail); bindRange('thumbY', state.thumbnail,'y', renderThumbnail);
+bindRange('thumbRadius', state.thumbnail,'radius', renderThumbnail);
+// AGREGAR PERSPECTIVA - capa extra editable con forma círculo/cuadrada, dentro del panel Mockup
+document.getElementById('perspInput').addEventListener('change', async e=>{ 
+  const f = e.target.files[0]; 
+  if(!f) return; 
+  state.perspective.src = await readFileAsDataURL(f); 
+  state.perspective.visible = true; 
+  // Centrar la perspectiva al subir imagen
+  const L = getLogicalDims();
+  state.perspective.x = L.w/2;
+  state.perspective.y = L.h/2;
+  document.querySelectorAll('#perspVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val==='1')); 
+  renderPerspective(); 
+  commitHistory(); 
+});
+segSetup('perspVisSeg', v=>{ 
+  state.perspective.visible = v==='1'; 
+  // Cuando se activa "Sí", centrar la perspectiva en el lienzo
+  if(v==='1'){
+    const L = getLogicalDims();
+    state.perspective.x = L.w/2;
+    state.perspective.y = L.h/2;
+    // Sincronizar los sliders con la nueva posición centrada
+    syncRangeQuiet('perspX', state.perspective.x);
+    syncRangeQuiet('perspY', state.perspective.y);
+  }
+  renderPerspective(); 
+  commitHistory(); 
+});
+segSetup('perspShadowSeg', v=>{ state.perspective.shadow = v==='1'; renderPerspective(); commitHistory(); });
+segSetup('perspShapeSeg', v=>{ state.perspective.shape = v; document.getElementById('perspRadiusField').style.display = v==='square' ? 'block':'none'; renderPerspective(); commitHistory(); });
+segSetup('perspRingSeg', v=>{ state.perspective.ring = v==='1'; document.getElementById('perspRingFields').style.display = v==='1' ? 'flex':'none'; renderPerspective(); commitHistory(); });
+document.getElementById('perspRingColor').addEventListener('input', e=>{ state.perspective.ringColor = e.target.value; renderPerspective(); });
+document.getElementById('perspRingColor').addEventListener('change', commitHistory);
+bindRange('perspRingWidth', state.perspective,'ringWidth', renderPerspective);
+bindRange('perspScale', state.perspective,'w', renderPerspective); bindRange('perspRot', state.perspective,'rotation', renderPerspective);
+bindRange('perspX', state.perspective,'x', renderPerspective); bindRange('perspY', state.perspective,'y', renderPerspective);
+bindRange('perspRadius', state.perspective,'radius', renderPerspective);
+// DISEÑOS DENTRO DE LA PERSPECTIVA
+document.getElementById('perspDesignInput').addEventListener('change', async (e)=>{
+const files = Array.from(e.target.files); if(!files.length) return;
+for(const f of files){
+const src = await readFileAsDataURL(f);
+const newDesign = { id:'pd'+Date.now()+Math.floor(Math.random()*1000), src, x:0.5, y:0.5, w:0.5, rotation:0, visible:true };
+state.perspective.designs.push(newDesign);
+state.selectedPerspDesignId = newDesign.id;
+}
+e.target.value = '';
+renderPerspDesigns(); renderPerspDesignsList(); syncPerspDesignControls(); commitHistory();
+});
+segSetup('perspDesignVisSeg', v=>{ const d = getSelectedPerspDesign(); if(!d) return; d.visible = v==='1'; renderPerspDesigns(); renderPerspDesignsList(); commitHistory(); });
+bindRange('perspDesignScale', null, null, ()=>{ const d = getSelectedPerspDesign(); if(!d) return; d.w = +document.getElementById('perspDesignScale').value/100; renderPerspDesigns(); renderPerspDesignsList(); });
+document.getElementById('perspDesignScale').addEventListener('change', commitHistory);
+bindRange('perspDesignRot', null, null, ()=>{ const d = getSelectedPerspDesign(); if(!d) return; d.rotation = +document.getElementById('perspDesignRot').value; renderPerspDesigns(); });
+document.getElementById('perspDesignRot').addEventListener('change', commitHistory);
+bindRange('perspDesignX', null, null, ()=>{ const d = getSelectedPerspDesign(); if(!d) return; d.x = +document.getElementById('perspDesignX').value/100; renderPerspDesigns(); });
+document.getElementById('perspDesignX').addEventListener('change', commitHistory);
+bindRange('perspDesignY', null, null, ()=>{ const d = getSelectedPerspDesign(); if(!d) return; d.y = +document.getElementById('perspDesignY').value/100; renderPerspDesigns(); });
+document.getElementById('perspDesignY').addEventListener('change', commitHistory);
+document.getElementById('perspDesignCenter').addEventListener('click', ()=>{ const d = getSelectedPerspDesign(); if(!d) return; d.x=0.5; d.y=0.5; d.rotation=0; renderPerspDesigns(); syncPerspDesignControls(); commitHistory(); });
+document.getElementById('perspDesignDelete').addEventListener('click', ()=>{
+const d = getSelectedPerspDesign(); if(!d) return;
+state.perspective.designs = state.perspective.designs.filter(x=>x.id!==d.id);
+state.selectedPerspDesignId = state.perspective.designs.length ? state.perspective.designs[0].id : null;
+renderPerspDesigns(); renderPerspDesignsList(); syncPerspDesignControls(); commitHistory();
+});
+// BARRA INFERIOR - CONTROLES ASEGURADOS
+segSetup('barVisSeg', v=>{ state.bottomBar.visible = v==='1'; renderBottomBar(); commitHistory(); });
+bindText('barWhats', state.bottomBar,'whatsapp', renderBottomBar); bindText('barShipping', state.bottomBar,'shipping', renderBottomBar);
+bindText('barBusiness', state.bottomBar,'business', renderBottomBar);
+document.getElementById('barLogoInput').addEventListener('change', async e=>{ const f = e.target.files[0]; if(!f) return; state.bottomBar.logo = await readFileAsDataURL(f); renderBottomBar(); commitHistory(); });
+document.getElementById('removeLogo').addEventListener('click', ()=>{ state.bottomBar.logo = null; renderBottomBar(); commitHistory(); });
+document.getElementById('barBg').addEventListener('input', e=>{ state.bottomBar.bg=e.target.value; renderBottomBar(); });
+document.getElementById('barText').addEventListener('input', e=>{ state.bottomBar.text=e.target.value; renderBottomBar(); });
+['barBg','barText'].forEach(id=>document.getElementById(id).addEventListener('change', commitHistory));
+document.querySelectorAll('#barFontGrid .font-opt').forEach(b=>{
+b.addEventListener('click', ()=>{
+document.querySelectorAll('#barFontGrid .font-opt').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+state.bottomBar.font = b.dataset.font; renderBottomBar(); commitHistory();
+});
+});
+segSetup('barSepSeg', v=>{ state.bottomBar.separators = v==='1'; renderBottomBar(); commitHistory(); });
+bindRange('barFontSize', state.bottomBar,'fontSize', renderBottomBar);
+document.querySelectorAll('#presetGrid .preset-card').forEach(b=>{
+b.addEventListener('click', ()=>{
+document.querySelectorAll('#presetGrid .preset-card').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+state.canvas.preset = b.dataset.preset; applyStageSize(); renderAll(); commitHistory();
+});
+});
+function dataUrlToBlob(dataUrl){
+const [meta, b64] = dataUrl.split(','); const mime = meta.match(/:(.*?);/)[1];
+const bin = atob(b64); const arr = new Uint8Array(bin.length);
+for(let i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+return new Blob([arr], {type:mime});
+}
+function downloadBlob(blob, filename){
+const url = URL.createObjectURL(blob); const a = document.createElement('a');
+a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+setTimeout(()=>URL.revokeObjectURL(url), 4000);
+}
+async function exportImage(){
+deselectAll(); const stage = document.getElementById('stage'); const L = getLogicalDims(); const dims = getPresetDims();
+const ratio = dims.w / L.w;
+const btns = [document.getElementById('btnExportMain'), document.getElementById('btnExportQuick')];
+btns.forEach(b=>{ b.dataset.orig=b.innerHTML; b.innerHTML='Generando…'; b.disabled=true; });
+try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
+await new Promise(r=>setTimeout(r, 150));
+const clone = stage.cloneNode(true); clone.id = 'stage-clone-export'; clone.style.position = 'absolute';
+clone.style.left = '-9999px'; clone.style.top = '-9999px'; clone.style.transform = 'none';
+clone.style.width = L.w + 'px'; clone.style.height = L.h + 'px'; clone.style.zIndex = '-9999';
+document.body.appendChild(clone);
+const baseOptions = { pixelRatio: ratio, backgroundColor: state.background.type==='color' ? state.background.color : '#ffffff', cacheBust: true, fetchRequestInit: { mode: 'cors' } };
+let dataUrl = null;
+if(window.htmlToImage){ try { dataUrl = await htmlToImage.toPng(clone, baseOptions); } catch(err) { console.warn('htmlToImage falló, intentando html2canvas...', err); } }
+if(!dataUrl && window.html2canvas){
+try{
+const canvas = await html2canvas(clone, { backgroundColor: baseOptions.backgroundColor, scale: ratio, useCORS: true, allowTaint: false, logging: false, width: L.w, height: L.h });
+dataUrl = canvas.toDataURL('image/png');
+}catch(err){ console.warn('html2canvas también falló.', err); }
+}
+document.body.removeChild(clone);
+if(dataUrl){
+const blob = dataUrlToBlob(dataUrl); const filename = `mockup-promo-${dims.w}x${dims.h}.png`;
+downloadBlob(blob, filename); btns.forEach(b=>{ b.innerHTML=b.dataset.orig; b.disabled=false; }); return;
+}
+btns.forEach(b=>{ b.innerHTML=b.dataset.orig; b.disabled=false; });
+alert('No se pudo generar la descarga automática. Intenta subir tu propia imagen de mockup manualmente para evitar bloqueos de CORS.');
+}
+document.getElementById('btnExportMain').addEventListener('click', exportImage);
+document.getElementById('btnExportQuick').addEventListener('click', exportImage);
+document.getElementById('btnUndo').addEventListener('click', undo); document.getElementById('btnRedo').addEventListener('click', redo);
+document.getElementById('btnUndo2').addEventListener('click', undo); document.getElementById('btnRedo2').addEventListener('click', redo);
+document.addEventListener('keydown', e=>{
+if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='z' && !e.shiftKey){ e.preventDefault(); undo(); }
+if((e.ctrlKey||e.metaKey) && (e.key.toLowerCase()==='y' || (e.shiftKey && e.key.toLowerCase()==='z'))){ e.preventDefault(); redo(); }
+});
+function duplicateTemplate(){
+const list = JSON.parse(localStorage.getItem('mps_templates')||'[]');
+list.unshift({ id: Date.now(), name:'Plantilla '+(list.length+1), state: JSON.parse(JSON.stringify(state)) });
+localStorage.setItem('mps_templates', JSON.stringify(list.slice(0,20))); renderTemplateList();
+}
+document.getElementById('btnDuplicate').addEventListener('click', duplicateTemplate);
+document.getElementById('btnDuplicate2').addEventListener('click', duplicateTemplate);
+document.getElementById('btnReset').addEventListener('click', ()=>{
+if(!confirm('¿Reiniciar todo el diseño actual?')) return;
+state = defaultState(); renderAll(); syncAllInputs(); commitHistory();
+});
+function renderTemplateList(){
+const list = JSON.parse(localStorage.getItem('mps_templates')||'[]'); const wrap = document.getElementById('templateList');
+if(!list.length){ wrap.innerHTML = '<div class="empty-note">Aún no has guardado plantillas. Usa "Duplicar plantilla actual".</div>'; return; }
+wrap.innerHTML = '';
+list.forEach(item=>{
+const row = document.createElement('div'); row.className='template-item';
+const thumb = document.createElement('div'); thumb.className='t-thumb';
+if(item.state.mockup && item.state.mockup.src) thumb.style.backgroundImage = `url(${item.state.mockup.src})`;
+const name = document.createElement('div'); name.className='t-name'; name.textContent = item.name;
+const actions = document.createElement('div'); actions.className='t-actions';
+const loadBtn = document.createElement('button'); loadBtn.textContent='↺'; loadBtn.title='Cargar';
+loadBtn.addEventListener('click', ()=>{ state = JSON.parse(JSON.stringify(item.state)); renderAll(); syncAllInputs(); commitHistory(); });
+const delBtn = document.createElement('button'); delBtn.textContent='×'; delBtn.title='Eliminar';
+delBtn.addEventListener('click', ()=>{
+const l2 = JSON.parse(localStorage.getItem('mps_templates')||'[]').filter(x=>x.id!==item.id);
+localStorage.setItem('mps_templates', JSON.stringify(l2)); renderTemplateList();
+});
+actions.appendChild(loadBtn); actions.appendChild(delBtn); row.appendChild(thumb); row.appendChild(name); row.appendChild(actions); wrap.appendChild(row);
+});
+}
+document.getElementById('zoomIn').addEventListener('click', ()=>fitStageToViewport(Math.min(previewScale+0.1,2)));
+document.getElementById('zoomOut').addEventListener('click', ()=>fitStageToViewport(Math.max(previewScale-0.1,0.15)));
+document.getElementById('zoomFit').addEventListener('click', ()=>fitStageToViewport());
+function syncRangeQuiet(id, val){ document.getElementById(id).value = val; }
+function syncAllInputs(){
+const b = state.background;
+document.querySelectorAll('#bgTypeSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===b.type));
+document.getElementById('bgColorGroup').style.display = b.type==='color'?'block':'none';
+document.getElementById('bgGradientGroup').style.display = b.type==='gradient'?'block':'none';
+document.getElementById('bgImageGroup').style.display = b.type==='image'?'block':'none';
+document.getElementById('bgColorPick').value=b.color; document.getElementById('bgColorHex').value=b.color;
+document.getElementById('bgGradFrom').value=b.gradFrom; document.getElementById('bgGradTo').value=b.gradTo; document.getElementById('bgGradAngle').value=b.gradAngle;
+document.getElementById('bgBlur').value=b.blur; document.getElementById('bgDarken').value=b.darken;
+document.getElementById('bgBrightness').value=b.brightness; document.getElementById('bgNoise').value=b.noise;
+document.querySelectorAll('[data-tex]').forEach(x=>x.classList.toggle('active', x.dataset.tex===b.texture));
+const m = state.mockup;
+document.querySelectorAll('#mockupVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(m.visible?'1':'0')));
+document.querySelectorAll('#mockupShadowSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(m.shadow?'1':'0')));
+document.getElementById('mockupScale').value=m.w; document.getElementById('mockupRot').value=m.rotation;
+document.getElementById('mockupX').value=m.x; document.getElementById('mockupY').value=m.y; document.getElementById('mockupShadowStrength').value=m.shadowStrength;
+const c = state.topCard;
+document.querySelectorAll('#cardVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(c.visible?'1':'0')));
+document.getElementById('matTitle').value=c.matTitle; document.getElementById('matLine1').value=c.matLine1; document.getElementById('matLine2').value=c.matLine2;
+document.getElementById('sizeTitle').value=c.sizeTitle; document.getElementById('colorTitle').value=c.colorTitle;
+document.querySelectorAll('#cardFontGrid .font-opt').forEach(x=>x.classList.toggle('active', x.dataset.font===c.font));
+document.getElementById('cardTextColor').value=c.textColor; document.getElementById('cardBgColor').value=c.bgColor;
+document.getElementById('cardFontSize').value=c.fontSize; document.getElementById('cardLetterSpacing').value=c.letterSpacing;
+document.getElementById('cardX').value=c.x; document.getElementById('cardY').value=c.y;
+renderSizeEditor(); renderColorEditor();
+const t = state.thumbnail;
+document.querySelectorAll('#thumbVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(t.visible?'1':'0')));
+document.querySelectorAll('#thumbShadowSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(t.shadow?'1':'0')));
+document.querySelectorAll('#thumbShapeSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(t.shape||'circle')));
+document.getElementById('thumbRadiusField').style.display = (t.shape==='square') ? 'block':'none';
+document.querySelectorAll('#thumbRingSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(t.ring?'1':'0')));
+document.getElementById('thumbRingFields').style.display = t.ring ? 'flex':'none';
+document.getElementById('thumbRingColor').value = t.ringColor || '#FFFFFF';
+document.getElementById('thumbRingWidth').value = t.ringWidth!=null ? t.ringWidth : 10;
+document.getElementById('thumbScale').value=t.w; document.getElementById('thumbRot').value=t.rotation;
+document.getElementById('thumbX').value=t.x; document.getElementById('thumbY').value=t.y; document.getElementById('thumbRadius').value=t.radius;
+const p = state.perspective;
+document.querySelectorAll('#perspVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(p.visible?'1':'0')));
+document.querySelectorAll('#perspShadowSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(p.shadow?'1':'0')));
+document.querySelectorAll('#perspShapeSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(p.shape||'circle')));
+document.getElementById('perspRadiusField').style.display = (p.shape==='square') ? 'block':'none';
+document.querySelectorAll('#perspRingSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(p.ring?'1':'0')));
+document.getElementById('perspRingFields').style.display = p.ring ? 'flex':'none';
+document.getElementById('perspRingColor').value = p.ringColor || '#FFFFFF';
+document.getElementById('perspRingWidth').value = p.ringWidth!=null ? p.ringWidth : 10;
+document.getElementById('perspScale').value=p.w; document.getElementById('perspRot').value=p.rotation;
+document.getElementById('perspX').value=p.x; document.getElementById('perspY').value=p.y; document.getElementById('perspRadius').value=p.radius;
+const bb = state.bottomBar;
+document.querySelectorAll('#barVisSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(bb.visible?'1':'0')));
+document.getElementById('barWhats').value=bb.whatsapp; document.getElementById('barShipping').value=bb.shipping; document.getElementById('barBusiness').value=bb.business;
+document.getElementById('barBg').value=bb.bg; document.getElementById('barText').value=bb.text;
+document.querySelectorAll('#barFontGrid .font-opt').forEach(x=>x.classList.toggle('active', x.dataset.font===bb.font));
+document.querySelectorAll('#barSepSeg button').forEach(x=>x.classList.toggle('active', x.dataset.val===(bb.separators?'1':'0')));
+document.getElementById('barFontSize').value = bb.fontSize || 15;
+renderExtraIconList();
+document.querySelectorAll('#presetGrid .preset-card').forEach(x=>x.classList.toggle('active', x.dataset.preset===state.canvas.preset));
+// Sincronizar lista de diseños
+renderDesignsList();
+syncDesignControls();
+renderPerspDesignsList();
+syncPerspDesignControls();
+}
+function init(){
+setupImageLayerInteraction('mockupLayer', state.mockup, {render:renderMockup, label:'Mockup', minW:150, maxW:2600});
+setupImageLayerInteraction('thumbLayer', state.thumbnail, {render:renderThumbnail, label:'Miniatura', minW:60, maxW:1100});
+setupImageLayerInteraction('perspLayer', state.perspective, {render:renderPerspective, label:'Perspectiva', minW:60, maxW:1600});
+setupCardLayerInteraction();
+renderSizeEditor(); renderColorEditor(); renderTemplateList(); renderExtraIconList();
+initMockupLibrary(); renderDesignsList(); renderPerspDesignsList(); renderAll(); updateHistoryButtons();
+}
+init();
+</script>
+</body>
+</html>

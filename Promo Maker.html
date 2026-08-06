@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&display=swap" rel="stylesheet" crossorigin="anonymous" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promo Maker Pro · Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --bg2: #ede8df;
+      --surface: #faf7f2;
+      --surface2: #f2ede4;
+      --surface3: #e8e2d8;
+      --border: #ddd7cc;
+      --border2: #ccc5b8;
+      --text: #2d2820;
+      --text2: #6b6358;
+      --text3: #a09890;
+      --accent: #7c6ff7;
+      --accent2: #5b51e8;
+      --accent-lt: rgba(124,111,247,.1);
+      --accent-glow: rgba(124,111,247,.25);
+      --green: #2a9d6e;
+      --red: #d94f4f;
+      --orange: #e07830;
+      --yellow: #d4a017;
+      --r-sm: 6px;
+      --r: 10px;
+      --r-lg: 16px;
+      --r-xl: 22px;
+      --sh: 0 2px 12px rgba(0,0,0,.08);
+      --sh-lg: 0 8px 32px rgba(0,0,0,.12);
+      --font-head: 'Bebas Neue', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-w: 320px;
+      --tr: .18s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 14px; scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; height: 100vh; }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+
+    /* HEADER */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 52px;
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--font-head);
+      font-size: 1.4rem;
+      letter-spacing: .06em;
+      color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 30px; height: 30px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-size: .65rem; font-weight: 700;
+      color: #fff; letter-spacing: .04em;
+    }
+
+    .badge {
+      font-size: .6rem; font-weight: 600;
+      background: var(--accent-lt); color: var(--accent);
+      border: 1px solid rgba(124,111,247,.3);
+      border-radius: 20px; padding: 2px 8px;
+      letter-spacing: .08em; text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+    .design-count-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 5px 12px;
+      font-family: var(--font-mono); font-size: .72rem; color: var(--text2);
+    }
+
+    .design-count-badge strong { color: var(--accent); }
+
+    .icon-btn {
+      width: 34px; height: 34px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; transition: all var(--tr); color: var(--text2);
+    }
+    .icon-btn:hover { background: var(--surface3); border-color: var(--border2); color: var(--text); }
+
+    /* MAIN LAYOUT */
+    .app-layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      overflow: hidden;
+      height: calc(100vh - 52px);
+    }
+
+    @media (max-width: 860px) {
+      .app-layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
+      body { height: auto; overflow: auto; }
+    }
+
+    /* SIDEBAR */
+    aside {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow: visible;
+    }
+
+    .sidebar-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 6px 6px 0;
+      gap: 2px;
+    }
+
+    .stab {
+      flex: 1; padding: 8px 6px; text-align: center;
+      font-size: .6rem; font-weight: 600; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--text3);
+      cursor: pointer; 
+      border-radius: var(--r-sm) var(--r-sm) 0 0;
+      border: 1px solid transparent;
+      border-bottom: none;
+      transition: all var(--tr); font-family: var(--font-mono);
+      background: transparent;
+    }
+    .stab.active { 
+      color: var(--text); 
+      background: var(--surface);
+      border-color: var(--border);
+      border-bottom-color: var(--surface);
+      position: relative; top: 1px;
+    }
+    .stab:hover:not(.active) { color: var(--text2); background: rgba(255,255,255,.03); }
+
+    .sidebar-panel { display: none; flex: 1; flex-direction: column; overflow: visible; }
+    .sidebar-panel.active { display: flex; }
+
+    .sidebar-scroll {
+      flex: 1; overflow-y: auto; padding: 14px;
+      display: flex; flex-direction: column; gap: 12px;
+      height: 0; /* forces flex child to respect overflow */
+    }
+
+    /* Section group divider label */
+    .sec-group-label {
+      font-size: .58rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--text3);
+      font-family: var(--font-mono); padding: 4px 4px 0;
+      border-top: 1px solid var(--border); margin-top: 4px;
+    }
+    .sec-group-label:first-child { border-top: none; margin-top: 0; }
+
+    /* UPLOAD ZONE */
+    .upload-zone {
+      border: 2px dashed var(--border2);
+      border-radius: var(--r-lg);
+      padding: 20px 14px; text-align: center;
+      cursor: pointer;
+      transition: all var(--tr);
+      position: relative; background: var(--bg2);
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--accent); background: var(--accent-lt);
+    }
+    .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-zone-icon {
+      width: 38px; height: 38px; background: rgba(124,111,247,.12);
+      border-radius: 10px; margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; border: 1px solid rgba(124,111,247,.2);
+    }
+    .upload-zone p { font-size: .78rem; color: var(--text2); font-weight: 500; }
+    .upload-zone small { font-size: .62rem; color: var(--text3); margin-top: 4px; display: block; font-family: var(--font-mono); letter-spacing: .04em; }
+
+    /* SECTION CARD */
+    .sec {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); overflow: hidden;
+      transition: border-color var(--tr), box-shadow var(--tr);
+      box-shadow: var(--sh);
+    }
+    .sec.open {
+      border-color: var(--border2);
+      box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    }
+    .sec-head {
+      display: flex; align-items: center; gap: 9px;
+      padding: 12px 14px; cursor: default;
+      font-size: .68rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text);
+      font-family: var(--font-mono);
+      border-bottom: 1px solid var(--border);
+      transition: all var(--tr); user-select: none;
+      background: var(--surface2);
+    }
+    .sec-head:hover { background: var(--surface2); }
+    .sec.open .sec-head { 
+      border-bottom-color: var(--border); 
+      background: var(--surface2);
+    }
+    .sec-icon {
+      width: 26px; height: 26px; border-radius: 7px;
+      background: var(--accent-lt); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; flex-shrink: 0;
+      border: 1px solid rgba(124,111,247,.15);
+    }
+    .sec-title { flex: 1; }
+    .sec-chev { display: none; }
+    .sec.open .sec-chev { transform: rotate(180deg); background: var(--accent-lt); color: var(--accent); border-color: rgba(124,111,247,.2); }
+    .sec-body { display: flex; padding: 14px; flex-direction: column; gap: 14px; background: var(--surface); }
+
+    /* FORM CONTROLS */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .lbl {
+      font-size: .6rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--text3);
+      font-family: var(--font-mono);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    input[type="text"], select, textarea {
+      font-family: var(--font-body); font-size: .82rem;
+      color: var(--text); background: var(--bg);
+      border: 1px solid var(--border2); border-radius: var(--r-sm);
+      padding: 8px 10px; outline: none; width: 100%;
+      transition: border-color var(--tr), box-shadow var(--tr);
+    }
+    select option { background: var(--surface); color: var(--text); }
+    input[type="text"]:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-lt);
+    }
+
+    /* SEGMENTED BUTTONS */
+    .seg { display: flex; background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--r-sm); padding: 2px; gap: 2px; }
+    .seg-btn {
+      flex: 1; font-family: var(--font-mono); font-size: .62rem;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
+      padding: 5px 6px; border: none; border-radius: 4px;
+      cursor: pointer; background: transparent; color: var(--text3);
+      transition: all var(--tr);
+    }
+    .seg-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.1); border: 1px solid var(--border); }
+
+    /* COLOR BUTTONS */
+    #colorBtnGroup { flex-wrap: wrap; gap: 4px; }
+    #colorBtnGroup .seg-btn { flex: none; min-width: 44px; }
+
+    /* RANGE */
+    .range-row { display: flex; flex-direction: column; gap: 6px; }
+    .range-head { display: flex; justify-content: space-between; align-items: center; }
+    .range-head span:first-child { font-size: .6rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text3); font-family: var(--font-mono); }
+    .range-val { font-size: .65rem; font-weight: 700; color: var(--accent); background: var(--accent-lt); padding: 2px 7px; border-radius: 20px; font-family: var(--font-mono); border: 1px solid rgba(124,111,247,.2); }
+    input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--border2); border-radius: 10px; outline: none; cursor: pointer; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 0 3px var(--accent-lt); transition: transform .15s; }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+
+    /* TOGGLE */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+    .toggle-row .tl { font-size: .78rem; font-weight: 500; color: var(--text2); }
+    .toggle { position: relative; width: 36px; height: 20px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .ttrack { position: absolute; inset: 0; background: var(--border2); border-radius: 20px; cursor: pointer; transition: background var(--tr); }
+    .ttrack::after { content: ''; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; left: 3px; top: 3px; transition: left var(--tr); box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+    .toggle input:checked + .ttrack { background: var(--accent); }
+    .toggle input:checked + .ttrack::after { left: 19px; }
+
+    /* LOGO UPLOAD */
+    .logo-upload-label {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border: 1px dashed var(--border2);
+      border-radius: var(--r-sm); cursor: pointer;
+      transition: all var(--tr); position: relative; color: var(--text2);
+    }
+    .logo-upload-label:hover { border-color: var(--accent); background: var(--accent-lt); }
+    .logo-upload-label input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .logo-upload-label span { font-size: .75rem; font-weight: 500; }
+
+    /* COLOR PRESETS (fondo) */
+    .color-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cp {
+      width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+      border: 2px solid transparent; transition: all var(--tr);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+    }
+    .cp.active { border-color: var(--text); box-shadow: 0 0 0 3px var(--accent-lt); }
+
+    /* TEXT PRESETS */
+    .text-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tp {
+      font-family: var(--font-mono); font-size: .6rem; font-weight: 600;
+      padding: 4px 8px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer; color: var(--text2);
+      transition: all var(--tr); letter-spacing: .04em;
+    }
+    .tp:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+
+    /* SIDEBAR FOOTER */
+    .sidebar-footer {
+      padding: 12px 12px; border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 8px;
+      background: var(--bg2);
+    }
+
+    /* BUTTONS */
+    .btn {
+      font-family: var(--font-body); font-size: .8rem; font-weight: 600;
+      cursor: pointer; border: none; border-radius: var(--r-sm);
+      padding: 10px 16px; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+      transition: all var(--tr);
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent2);
+      box-shadow: 0 4px 20px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover:not(:disabled) { background: var(--surface3); border-color: var(--border2); }
+    .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+    .btn-ghost:hover:not(:disabled) { background: var(--surface2); }
+    .btn:disabled { opacity: .35; cursor: not-allowed; }
+
+    /* PREVIEW AREA */
+    .preview-area {
+      background: var(--bg);
+      overflow-y: auto; padding: 20px;
+      position: relative;
+    }
+
+    /* TOOLBAR BAR */
+    .preview-toolbar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .preview-toolbar h2 {
+      font-family: var(--font-head); font-size: 1.3rem;
+      letter-spacing: .06em; color: var(--text);
+    }
+    .toolbar-right { margin-left: auto; display: flex; gap: 8px; }
+
+    /* GRID MODES */
+    .grid-mode-btn {
+      width: 30px; height: 30px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; color: var(--text2); transition: all var(--tr);
+    }
+    .grid-mode-btn.active { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+
+    /* EMPTY STATE */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 400px;
+      border: 2px dashed var(--border); border-radius: var(--r-xl);
+      cursor: pointer; transition: all var(--tr); position: relative;
+    }
+    .empty-state:hover { border-color: var(--accent); background: var(--accent-lt); }
+    .empty-state input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .empty-icon { font-size: 3.5rem; margin-bottom: 16px; opacity: .3; }
+    .empty-state h3 { font-family: var(--font-head); font-size: 1.5rem; letter-spacing: .06em; color: var(--text3); margin-bottom: 8px; }
+    .empty-state p { font-size: .78rem; color: var(--text3); text-align: center; font-family: var(--font-mono); }
+
+    /* CARD GRID */
+    .card-grid { display: grid; gap: 16px; }
+    .card-grid.grid-2 { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    .card-grid.grid-3 { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .card-grid.grid-1 { grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); }
+
+    /* PREVIEW CARD */
+    .preview-card {
+      position: relative; border-radius: var(--r);
+      overflow: hidden; background: #0a0a0c;
+      aspect-ratio: 1; cursor: pointer;
+      transition: all var(--tr);
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+    }
+    .preview-card:hover { transform: translateY(-2px); box-shadow: var(--sh-lg); border-color: var(--border2); }
+
+    .card-canvas-wrapper {
+      position: absolute; top: 0; left: 0;
+      width: 1080px; height: 1080px;
+      transform-origin: top left; pointer-events: none;
+    }
+
+    .card-actions {
+      position: absolute; top: 8px; right: 8px;
+      display: flex; gap: 5px; opacity: 0;
+      transition: opacity var(--tr);
+    }
+    .preview-card:hover .card-actions { opacity: 1; }
+    .card-btn {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.1);
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: .8rem; color: var(--text);
+      transition: all var(--tr);
+    }
+    .card-btn:hover { background: rgba(0,0,0,.9); }
+    .card-btn.del:hover { background: var(--red); border-color: var(--red); }
+    .card-btn.dl:hover { background: var(--accent); border-color: var(--accent); }
+
+    .card-num {
+      position: absolute; bottom: 8px; left: 10px;
+      font-family: var(--font-head); font-size: 1.3rem;
+      letter-spacing: .06em; color: rgba(255,255,255,.2);
+      pointer-events: none; user-select: none;
+    }
+
+    /* EXPORT OVERLAY */
+    .export-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(13,13,15,.92); backdrop-filter: blur(12px);
+      z-index: 200; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+    }
+    .export-overlay.visible { display: flex; }
+    .export-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-xl); padding: 36px 44px;
+      text-align: center; box-shadow: var(--sh-lg); min-width: 280px;
+    }
+    .export-spinner {
+      width: 44px; height: 44px; border: 2px solid var(--border2);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin .7s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .export-card h3 { font-family: var(--font-head); font-size: 1.2rem; letter-spacing: .06em; margin-bottom: 6px; }
+    .export-card p { font-size: .75rem; color: var(--text2); font-family: var(--font-mono); }
+    .export-bar { width: 100%; height: 3px; background: var(--border); border-radius: 10px; overflow: hidden; margin-top: 16px; }
+    .export-bar-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: width .3s; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.92); z-index: 300;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-close {
+      position: fixed; top: 20px; right: 20px;
+      width: 36px; height: 36px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text); font-size: 1rem;
+      z-index: 301; transition: all var(--tr);
+    }
+    .modal-close:hover { background: var(--red); border-color: var(--red); }
+    .modal-canvas {
+      max-width: min(700px, calc(100vw - 40px));
+      max-height: calc(100vh - 40px);
+      aspect-ratio: 1; position: relative;
+      border-radius: var(--r-lg); overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .modal-canvas .card-canvas-wrapper { position: absolute; top: 0; left: 0; }
+
+    /* CANVAS STYLES */
+    .c-line1 { font-family: 'Bebas Neue', sans-serif; font-size: 74px; font-weight: 400; color: #fff; line-height: 1; letter-spacing: .04em; text-transform: uppercase; text-shadow: 0 6px 24px rgba(0,0,0,.7); }
+    .c-line2-wrap { display: inline-block; background: #fff; padding: 5px 14px; margin-top: -8px; margin-left: 6px; box-shadow: 0 8px 28px rgba(0,0,0,.45); }
+    .c-line2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: #111; letter-spacing: .05em; text-transform: uppercase; line-height: 1; }
+    .c-brand-text { font-family: 'Space Grotesk', sans-serif; font-size: 38px; font-weight: 700; color: #fff; letter-spacing: .06em; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,.5); opacity: .85; }
+    .c-brand-logo { height: 60px; width: auto; max-width: 250px; object-fit: contain; opacity: .85; }
+
+    /* NOTIFICATION */
+    .notif {
+      position: fixed; bottom: 20px; right: 20px; z-index: 400;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: .78rem; font-weight: 500; color: var(--text);
+      box-shadow: var(--sh-lg); transform: translateY(100px);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      max-width: 280px;
+    }
+    .notif.show { transform: translateY(0); }
+    .notif.success { border-left: 3px solid var(--green); }
+    .notif.error { border-left: 3px solid var(--red); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp .25s ease both; }
+
+    /* HISTORY TAB */
+    .hist-list { display: flex; flex-direction: column; gap: 6px; }
+    .hist-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer; transition: all var(--tr);
+    }
+    .hist-item:hover { border-color: var(--border2); background: var(--surface2); }
+    .hist-icon { font-size: .9rem; }
+    .hist-info { flex: 1; min-width: 0; }
+    .hist-name { font-size: .75rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hist-time { font-size: .62rem; color: var(--text3); font-family: var(--font-mono); }
+    .hist-apply { font-size: .65rem; padding: 3px 8px; background: var(--accent-lt); color: var(--accent); border: none; border-radius: 4px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .app-layout { grid-template-columns: 1fr; }
+      aside { max-height: 50vh; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    @media (max-width: 600px) {
+      header { padding: 0 12px; }
+      .design-count-badge { display: none; }
+    }
+
+    /* En tu <style> o archivo .css */
+.sec + .sec {
+  margin-top: 16px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="#" class="logo">
+      <div class="logo-icon">PM</div>
+      PROMO MAKER
+    </a>
+    <span class="badge">Pro Studio</span>
+    <div class="header-right">
+      <div class="design-count-badge">
+        <span>Diseños:</span>
+        <strong id="headerCount">0</strong>
+      </div>
+      <button class="icon-btn" title="Limpiar todo" onclick="clearAll()">🗑</button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="app-layout">
+
+<aside>
+  <div class="sidebar-tabs">
+    <div class="stab active" onclick="switchTab('design')">🎨 Diseño</div>
+    <div class="stab" onclick="switchTab('text')">✏️ Texto</div>
+    <div class="stab" onclick="switchTab('brand')">🏷 Marca</div>
+    <div class="stab" onclick="switchTab('fondo')">🖼 Fondo</div>
+    <div class="stab" onclick="switchTab('history')">⏱ Historial</div>
+  </div>
+
+  <!-- TAB: DESIGN -->
+  <div class="sidebar-panel active" id="tab-design">
+    <div class="sidebar-scroll">
+
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" multiple />
+        <div class="upload-zone-icon">📁</div>
+        <p>Arrastra diseños o <strong>haz clic</strong></p>
+        <small>PNG · JPG · WEBP · Múltiples</small>
+      </div>
+
+      <div class="sec open" id="secPrenda">
+        <div class="sec-head" onclick="toggleSec('secPrenda')">
+          <div class="sec-icon">👕</div>
+          <span class="sec-title">Prenda</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="field">
+            <label class="lbl">Estilo</label>
+            <select id="modelSelect"></select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field">
+              <label class="lbl">Color</label>
+              <div class="seg" id="colorBtnGroup"></div>
+            </div>
+            <div class="field">
+              <label class="lbl">Vista</label>
+              <div class="seg">
+                <button class="seg-btn active" id="btnViewFront" onclick="setView('front')">Frente</button>
+                <button class="seg-btn" id="btnViewBack" onclick="setView('back')">Atrás</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec open" id="secShirt">
+        <div class="sec-head" onclick="toggleSec('secShirt')">
+          <div class="sec-icon">🖼</div>
+          <span class="sec-title">Ajuste en Playera</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="range-row">
+            <div class="range-head"><span>Escala</span><span class="range-val" id="valShirtScale">45%</span></div>
+            <input type="range" id="shirtScale" min="10" max="80" value="45" oninput="onRange(this,'valShirtScale','shirtDesignScale')" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Posición Y</span><span class="range-val" id="valShirtY">40%</span></div>
+            <input type="range" id="shirtY" min="10" max="80" value="40" oninput="onRange(this,'valShirtY','shirtDesignY')" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Posición X</span><span class="range-val" id="valShirtX">50%</span></div>
+            <input type="range" id="shirtX" min="20" max="80" value="50" oninput="onRange(this,'valShirtX','shirtDesignX')" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip" disabled onclick="handleExportZip()">
+        📦 <span id="btnZipText">Exportar Todos (ZIP)</span>
+      </button>
+      <button class="btn btn-ghost" onclick="saveToHistory()">💾 Guardar configuración</button>
+    </div>
+  </div>
+
+  <!-- TAB: TEXT -->
+  <div class="sidebar-panel" id="tab-text">
+    <div class="sidebar-scroll">
+      <div class="sec open" id="secTextos">
+        <div class="sec-head" onclick="toggleSec('secTextos')">
+          <div class="sec-icon">✏️</div>
+          <span class="sec-title">Textos</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="field">
+            <label class="lbl">Línea 1 (Título)</label>
+            <input type="text" id="textLine1" value="VECTORES" oninput="onTextChange()" />
+          </div>
+          <div class="field">
+            <label class="lbl">Línea 2 (Etiqueta)</label>
+            <input type="text" id="textLine2" value="EDITABLES" oninput="onTextChange()" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Tamaño título</span><span class="range-val" id="valFontSize">74px</span></div>
+            <input type="range" id="fontSize" min="30" max="120" value="74" oninput="onRange(this,'valFontSize','fontSize','px')" />
+          </div>
+          <div class="field">
+            <label class="lbl">Color de texto</label>
+            <input type="color" id="textColor" value="#ffffff" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="onTextColorChange(this.value)" />
+          </div>
+          <div class="field">
+            <label class="lbl">Presets rápidos</label>
+            <div class="text-presets" id="textPresets"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip2" disabled onclick="handleExportZip()">
+        📦 Exportar Todos (ZIP)
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB: BRAND -->
+  <div class="sidebar-panel" id="tab-brand">
+    <div class="sidebar-scroll">
+      <div class="sec open" id="secMarca">
+        <div class="sec-head" onclick="toggleSec('secMarca')">
+          <div class="sec-icon">🏷</div>
+          <span class="sec-title">Tu Marca</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="seg">
+            <button class="seg-btn active" id="btnBrandText" onclick="setBrandType('text')">Texto</button>
+            <button class="seg-btn" id="btnBrandLogo" onclick="setBrandType('logo')">Logo</button>
+            <button class="seg-btn" id="btnBrandNone" onclick="setBrandType('none')">Ninguno</button>
+          </div>
+          <div id="brandTextWrap">
+            <div class="field">
+              <label class="lbl">Nombre de Marca</label>
+              <input type="text" id="brandText" placeholder="EJ. MI MARCA" oninput="onBrandTextChange()" />
+            </div>
+          </div>
+          <div id="brandLogoWrap" style="display:none">
+            <label class="logo-upload-label">
+              <span>📤</span>
+              <span id="logoUploadTxt">Subir Logo (PNG)</span>
+              <input type="file" id="logoInput" accept="image/png" onchange="onLogoUpload(event)" />
+            </label>
+          </div>
+          <div class="field">
+            <label class="lbl">Posición de Marca</label>
+            <div class="seg">
+              <button class="seg-btn active" id="btnBrandTR" onclick="setBrandPos('tr')">↗ Arr. Der.</button>
+              <button class="seg-btn" id="btnBrandTL" onclick="setBrandPos('tl')">↖ Arr. Izq.</button>
+              <button class="seg-btn" id="btnBrandBR" onclick="setBrandPos('br')">↘ Ab. Der.</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip3" disabled onclick="handleExportZip()">
+        📦 Exportar Todos (ZIP)
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB: FONDO -->
+  <div class="sidebar-panel" id="tab-fondo">
+    <div class="sidebar-scroll">
+
+      <div class="sec open" id="secBgColor">
+        <div class="sec-head" onclick="toggleSec('secBgColor')">
+          <div class="sec-icon">🎨</div>
+          <span class="sec-title">Color de Fondo</span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="color-presets" id="bgColorPresets"></div>
+          <div class="field">
+            <label class="lbl">Color personalizado</label>
+            <input type="color" id="customBgColor" value="#111111" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="setCustomBgColor(this.value)" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Gradiente (ángulo)</span><span class="range-val" id="valGradAngle">135°</span></div>
+            <input type="range" id="gradAngle" min="0" max="360" value="135" oninput="onRange(this,'valGradAngle','gradAngle','°')" />
+          </div>
+          <div class="field">
+            <label class="lbl">Color 2 (gradiente)</label>
+            <input type="color" id="customBgColor2" value="#1a1a2e" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;padding:2px 4px;" oninput="setCustomBgColor2(this.value)" />
+          </div>
+        </div>
+      </div>
+
+      <div class="sec open" id="secBg">
+        <div class="sec-head" onclick="toggleSec('secBg')">
+          <div class="sec-icon">🌌</div>
+          <span class="sec-title">Arte de Fondo <span style="font-size:.55rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">(detrás)</span></span>
+          <span class="sec-chev">▾</span>
+        </div>
+        <div class="sec-body">
+          <div style="font-size:.65rem;color:var(--text3);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-mono);line-height:1.5;">
+            💡 Tu diseño se usa como arte decorativo <strong style="color:var(--text2);">detrás</strong> de la playera, sin tapar el estilo.
+          </div>
+          <div class="toggle-row">
+            <span class="tl">Blanco y Negro</span>
+            <label class="toggle">
+              <input type="checkbox" id="bgGrayscale" checked onchange="onBgGrayscale()" />
+              <span class="ttrack"></span>
+            </label>
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Opacidad</span><span class="range-val" id="valBgOpacity">25%</span></div>
+            <input type="range" id="bgOpacity" min="0" max="100" value="25" oninput="onRange(this,'valBgOpacity','bgOpacity')" />
+          </div>
+          <div class="range-row">
+            <div class="range-head"><span>Escala</span><span class="range-val" id="valBgScale">150%</span></div>
+            <input type="range" id="bgScale" min="50" max="300" value="150" oninput="onRange(this,'valBgScale','bgDesignScale')" />
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="range-row">
+              <div class="range-head"><span>Eje X</span></div>
+              <input type="range" id="bgX" min="-50" max="150" value="10" oninput="onRange(this,null,'bgDesignX')" />
+            </div>
+            <div class="range-row">
+              <div class="range-head"><span>Eje Y</span></div>
+              <input type="range" id="bgY" min="-50" max="150" value="50" oninput="onRange(this,null,'bgDesignY')" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" id="btnExportZip4" disabled onclick="handleExportZip()">
+        📦 Exportar Todos (ZIP)
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB: HISTORY -->
+  <div class="sidebar-panel" id="tab-history">
+    <div class="sidebar-scroll">
+      <p style="font-size:.72rem;color:var(--text3);font-family:var(--font-mono);text-align:center;padding:8px 0;">Guarda configuraciones para reutilizarlas</p>
+      <div class="hist-list" id="histList"></div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-ghost" onclick="clearHistory()">🗑 Borrar historial</button>
+    </div>
+  </div>
+
+</aside>
+    <!-- PREVIEW -->
+    <main class="preview-area">
+      <div class="preview-toolbar">
+        <h2>VISTA PREVIA</h2>
+        <div class="toolbar-right">
+          <button class="grid-mode-btn" onclick="setGridMode(1)" title="Grande">◻</button>
+          <button class="grid-mode-btn active" onclick="setGridMode(2)" title="Mediano">⊞</button>
+          <button class="grid-mode-btn" onclick="setGridMode(3)" title="Pequeño">⊟</button>
+        </div>
+      </div>
+      <div id="previewArea"></div>
+    </main>
+
+  </div>
+
+  <!-- EXPORT OVERLAY -->
+  <div class="export-overlay" id="exportOverlay">
+    <div class="export-card">
+      <div class="export-spinner"></div>
+      <h3 id="exportTitle">Procesando…</h3>
+      <p id="exportSub">Por favor espera</p>
+      <div class="export-bar"><div class="export-bar-fill" id="exportProgressBar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- MODAL PREVIEW -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-close" onclick="closeModal()">✕</div>
+    <div class="modal-canvas" id="modalCanvas"></div>
+  </div>
+
+  <!-- NOTIFICATION -->
+  <div class="notif" id="notif"></div>
+
+  <script>
+  /* ── MODELS (original with all images) ── */
+  const MODELS = {
+    oversize:   { label:'Oversize',   defaultScale:42, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Over_blanca_frente.png?v=1770611266",    back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Over_Blanca_espalda.png?v=1770611264" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/over_negra_frente.png?v=1770611282",     back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/over_negra_espalda.png?v=1770611283" },
+      hueso:  { label:'Hueso',  front:"https://i.ibb.co/wZvtMLd1/hueso-front.png", 
+      back:"https://i.ibb.co/qMC8TScs/hueso-back.png" },
+      gris:  { label:'Gris',  front:"https://i.ibb.co/B1H6DZ9/gris-front.png"
+            , back:"https://i.ibb.co/9mLSrdYV/gris-back.png" },
+    }},
+    oversize2:  { label:'Oversize 2', defaultScale:42, defaultY:50, baseScale:1.0,  colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/LimitedMX_RemoverFondo_300DPI_2026-01-28-07-26-40.png?v=1769585236", back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Espalda_blanca_ov_nueva.png?v=1770157262" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/2mkp_oversize.png?v=1769562951",         back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Espalda_negra.png?v=1770156858" },
+acidwash: { 
+  label: 'Acid Wash', 
+  front: "https://i.ibb.co/7JCvcn70/acidwash-frente.png", 
+  back:  "https://i.ibb.co/svNXvWb5/acidwash-espalda.png" 
+},
+    }},
+    boxyfit:    { label:'Boxy Fit',   defaultScale:42, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Boxy_Blanca_Frente.png?v=1770611269",      back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Boxy_Blanca_Espalda.png?v=1770611268" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Box_Negro_1_frente.png?v=1770617022",      back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camiseta_boxy_fit_negra_espalda.png?v=1770617022" },
+    }},
+    regular:    { label:'Regular',    defaultScale:38, defaultY:48, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/CAMISETA_BLANCA_FRENTE.png?v=1770611278",            back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/CAMISETA_BLANCA_ESPALDA.png?v=1770611278" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camisa_regular_frente_negro.png?v=1770612123",       back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/camisa_regular_espalda_negro.png?v=1770612123" },
+      azul_claro:  { label:'azul_claro',  front:"https://i.ibb.co/Zzx44khT/azul-claro-front.png",
+       back:"https://i.ibb.co/Y48GkjWz/azul-claro-back.png" },
+    azul_oscuro:  { label:'azul_oscuro',  front:"https://i.ibb.co/VWc5mrTq/azul-oscuro-front.png",
+     back:"https://i.ibb.co/WvCDnppS/azul-oscuro-back.png" },
+      beige:  { label:'beige',  front:"https://i.ibb.co/M4phBpF/beige-front.png",
+     back:"https://i.ibb.co/zTBfL8Fz/beige-back.png" },
+      crema:  { label:'crema',  front:"https://i.ibb.co/C3mrY8GZ/crema-front.png",
+     back:"https://i.ibb.co/ZpMktmCw/crema-back.png" },
+           verde_militar:  { label:'verde_militar',  front:"https://i.ibb.co/cc34cY4n/verde-militar-front.png",
+     back:"https://i.ibb.co/VYyk31Tx/verde-militar-back.png" },
+          gris_claro:  { label:'gris_claro',  front:"https://i.ibb.co/fW5bKV8/gris-claro-front.png",
+     back:"https://i.ibb.co/BHNxTR1Q/gris-claro-back.png" },
+
+    
+  
+      }},
+    longsleeve: { label:'M. Larga',   defaultScale:36, defaultY:48, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_blanco_frente.png?v=1770611287",         back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_blanco_espalda.png?v=1770611288" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_larga_Negro_frente.png?v=1770611278",          back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/manga_largaNegro_espalda.png?v=1770611280" },
+    }},
+    polo:       { label:'Polo',        defaultScale:38, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Blanca_Frente.png?v=1770611272",                back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Blanca_Espalda.png?v=1770611268" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Negra_Frente.png?v=1770611288",                 back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Polo_Negra_Espalda.png?v=1770611287" },
+    }},
+    socks:      { label:'Calcetín',    defaultScale:30, defaultY:50, baseScale:1.4,  colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Blanco.png?v=1770611268",                   back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Blanco.png?v=1770611268" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Negro.png?v=1770611277",                    back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Calcetin_Negro.png?v=1770611277" },
+    }},
+    tank:       { label:'Sin Manga',   defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_blanca_frente.png?v=1770611285",  back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_blanca_espalda.png?v=1770611285" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_negra_frente.png?v=1770611286",   back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Camiseta_Sin_Manga_negra_espalda.png?v=1770611285" },
+    }},
+    croptop:    { label:'Crop Top',    defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+      blanco: { label:'Blanco', front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Frente_Blanco.png?v=1770611285",            back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Espalda_Blanco.png?v=1770611283" },
+      negro:  { label:'Negro',  front:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Frente_Negro.png?v=1770611284",             back:"https://cdn.shopify.com/s/files/1/0686/6658/9357/files/Crop_Top_Negro_Espalda.png?v=1770611284" },
+    }},
+    short: { label:'Short', defaultScale:25, defaultY:60, baseScale:0.85, colors:{
+  negro: { label:'Negro', front:"https://i.ibb.co/0R84b6wG/SHORT.png", },
+}},
+
+pants: { label:'Pants', defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+  negro: { label:'Negro', front:"https://i.ibb.co/8J03yZN/SHORT-19.png", },
+    blanco: { label:'blanco', front:"https://i.ibb.co/BHzNg0TJ/SHORT-20.png", },
+}},
+
+GORRA: { label:'GORRA', defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+  negro: { label:'Negro', front:"https://i.ibb.co/yckT7ht5/SHORT-21.png", },
+  negro_subli: { label:'negro_subli', front:"https://i.ibb.co/Mkm5M6QZ/SHORT-22.png", },
+   azul: { label:'azul', front:"https://i.ibb.co/nt1ZdqM/SHORT-23.png", },
+}},
+
+tote_bag: { label:'tote_bag', defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+  crema: { label:'Negro', front:"https://i.ibb.co/MxDthKF6/SHORT-25.png", },
+}},
+
+MANDIL: { label:'Mandil', defaultScale:35, defaultY:50, baseScale:1.35, colors:{
+BLANCO: { label:'blanco', front:"https://i.ibb.co/n87QBJtv/Dise-o-sin-t-tulo-4.png", },
+    NEGRO: { label:'Negro', front:"https://i.ibb.co/wZbyswft/Dise-o-sin-t-tulo-5.png", },
+}},
+
+  };
+
+  const DUMMY = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+  /* ── BG COLOR PRESETS ── */
+  const BG_PRESETS = [
+    { c1:'#0d0d0d', c2:'#1a1a1a', label:'Obsidian' },
+    { c1:'#0f0c29', c2:'#302b63', label:'Night' },
+    { c1:'#1a0533', c2:'#4a0072', label:'Morado' },
+    { c1:'#000428', c2:'#004e92', label:'Azul' },
+    { c1:'#0f2027', c2:'#2c5364', label:'Teal' },
+    { c1:'#1a1a2e', c2:'#16213e', label:'Dark Blue' },
+    { c1:'#16002d', c2:'#800080', label:'Neon Viol.' },
+    { c1:'#1f0000', c2:'#7f0000', label:'Rojo' },
+    { c1:'#0a3300', c2:'#1a6600', label:'Verde' },
+    { c1:'#1a0f00', c2:'#664400', label:'Café' },
+    { c1:'#111111', c2:'#333333', label:'Gris' },
+    { c1:'#ffffff', c2:'#dddddd', label:'Blanco' },
+  ];
+
+  /* ── TEXT PRESETS ── */
+  const TEXT_PRESETS = [
+    { l1:'NUEVA', l2:'COLECCIÓN', name:'Nueva Col.' },
+    { l1:'EDICIÓN', l2:'LIMITADA', name:'Ed. Limitada' },
+    { l1:'DISPONIBLE', l2:'AHORA', name:'Disponible' },
+    { l1:'SALE', l2:'50% OFF', name:'Sale' },
+    { l1:'EXCLUSIVO', l2:'ONLINE', name:'Exclusivo' },
+    { l1:'AGOTÁNDOSE', l2:'RÁPIDO', name:'Agotándose' },
+    { l1:'LANZAMIENTO', l2:'ESPECIAL', name:'Lanzamiento' },
+    { l1:'VECTORES', l2:'EDITABLES', name:'Vectores' },
+  ];
+
+  /* ── STATE ── */
+  const S = {
+    designs: [],
+    model: 'oversize2',
+    color: 'blanco',
+    view: 'front',
+    line1: 'VECTORES',
+    line2: 'EDITABLES',
+    fontSize: 74,
+    textColor: '#ffffff',
+    brandType: 'text',
+    brandText: '',
+    brandLogo: null,
+    brandPos: 'tr',
+    shirtDesignScale: '45%',
+    shirtDesignX: '50%',
+    shirtDesignY: '40%',
+    _mockupReq: 0,
+    bgDesignScale: '150',
+    bgDesignX: '10',
+    bgDesignY: '50',
+    bgOpacity: '.25',
+    bgFilter: 'grayscale(100%)',
+    bgColor1: '#0d0d0d',
+    bgColor2: '#1a1a1a',
+    gradAngle: 135,
+    mockupB64: null,
+    isExporting: false,
+    gridMode: 2,
+    history: [],
+  };
+
+  /* ── TABS ── */
+  function switchTab(name) {
+    document.querySelectorAll('.stab').forEach((t,i) => {
+      const tabs = ['design','text','brand','history'];
+      t.classList.toggle('active', tabs[i] === name);
+    });
+    document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  /* ── SECTION TOGGLE ── */
+  function toggleSec(id) { /* secciones siempre abiertas */ }
+
+  /* ── GRID MODE ── */
+  function setGridMode(n) {
+    S.gridMode = n;
+    document.querySelectorAll('.grid-mode-btn').forEach((b,i) => b.classList.toggle('active', i+1 === n));
+    const grid = document.querySelector('.card-grid');
+    if (grid) { grid.className = 'card-grid grid-' + n; updateCardScales(); }
+  }
+
+  /* ── BG COLOR PRESETS ── */
+  function initBgColorPresets() {
+    const cont = document.getElementById('bgColorPresets');
+    BG_PRESETS.forEach((p,i) => {
+      const btn = document.createElement('div');
+      btn.className = 'cp' + (i===0 ? ' active' : '');
+      btn.title = p.label;
+      btn.style.background = `linear-gradient(135deg, ${p.c1}, ${p.c2})`;
+      btn.onclick = () => {
+        document.querySelectorAll('.cp').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        S.bgColor1 = p.c1; S.bgColor2 = p.c2;
+        document.getElementById('customBgColor').value = p.c1;
+        document.getElementById('customBgColor2').value = p.c2;
+        renderCards();
+      };
+      cont.appendChild(btn);
+    });
+  }
+
+  function setCustomBgColor(v) { S.bgColor1 = v; renderCards(); }
+  function setCustomBgColor2(v) { S.bgColor2 = v; renderCards(); }
+
+  /* ── TEXT PRESETS ── */
+  function initTextPresets() {
+    const cont = document.getElementById('textPresets');
+    TEXT_PRESETS.forEach(p => {
+      const btn = document.createElement('div');
+      btn.className = 'tp';
+      btn.textContent = p.name;
+      btn.onclick = () => {
+        S.line1 = p.l1; S.line2 = p.l2;
+        document.getElementById('textLine1').value = p.l1;
+        document.getElementById('textLine2').value = p.l2;
+        renderCards();
+        notify('Texto aplicado: ' + p.name, 'success');
+      };
+      cont.appendChild(btn);
+    });
+  }
+
+  /* ── HISTORY ── */
+  function saveToHistory() {
+    const snap = {
+      id: Date.now(),
+      time: new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}),
+      label: S.line1 + ' · ' + MODELS[S.model].label,
+      state: JSON.stringify({...S, designs:[], mockupB64:null})
+    };
+    S.history.unshift(snap);
+    if (S.history.length > 20) S.history.pop();
+    renderHistory();
+    notify('Configuración guardada', 'success');
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('histList');
+    list.innerHTML = '';
+    if (!S.history.length) {
+      list.innerHTML = '<p style="font-size:.72rem;color:var(--text3);font-family:var(--font-mono);text-align:center;padding:20px 0;">Sin guardados aún</p>';
+      return;
+    }
+    S.history.forEach(h => {
+      const item = document.createElement('div');
+      item.className = 'hist-item';
+      item.innerHTML = `
+        <div class="hist-icon">💾</div>
+        <div class="hist-info">
+          <div class="hist-name">${h.label}</div>
+          <div class="hist-time">${h.time}</div>
+        </div>
+        <button class="hist-apply" onclick="applyHistory(${h.id})">Aplicar</button>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  function applyHistory(id) {
+    const h = S.history.find(x => x.id === id);
+    if (!h) return;
+    const saved = JSON.parse(h.state);
+    Object.assign(S, saved);
+    // sync UI
+    document.getElementById('textLine1').value = S.line1;
+    document.getElementById('textLine2').value = S.line2;
+    document.getElementById('modelSelect').value = S.model;
+    document.getElementById('fontSize').value = S.fontSize;
+    document.getElementById('textColor').value = S.textColor;
+    renderColorButtons(); applyModelDefaults(); preloadMockup(); renderCards();
+    notify('Configuración aplicada', 'success');
+  }
+
+  function clearHistory() {
+    S.history = [];
+    renderHistory();
+    notify('Historial borrado', 'success');
+  }
+
+  /* ── NOTIFICATION ── */
+  let _notifT;
+  function notify(msg, type='success') {
+    const n = document.getElementById('notif');
+    n.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
+    n.className = 'notif ' + type + ' show';
+    clearTimeout(_notifT);
+    _notifT = setTimeout(() => n.classList.remove('show'), 2800);
+  }
+
+  /* ── MODEL SELECT ── */
+  function initModelSelect() {
+    const sel = document.getElementById('modelSelect');
+    for (const [key, m] of Object.entries(MODELS)) {
+      const opt = document.createElement('option');
+      opt.value = key; opt.textContent = m.label;
+      sel.appendChild(opt);
+    }
+    sel.value = S.model;
+    sel.addEventListener('change', e => {
+      S.model = e.target.value;
+      const m = MODELS[S.model];
+      S.color = m.colors ? Object.keys(m.colors)[0] : 'blanco';
+      renderColorButtons(); applyModelDefaults(); preloadMockup();
+    });
+    renderColorButtons();
+  }
+
+  function renderColorButtons() {
+    const m = MODELS[S.model];
+    const cont = document.getElementById('colorBtnGroup');
+    cont.innerHTML = '';
+    if (!m.colors) return;
+    for (const [key, c] of Object.entries(m.colors)) {
+      const btn = document.createElement('button');
+      btn.className = 'seg-btn' + (key === S.color ? ' active' : '');
+      btn.textContent = c.label || key;
+      btn.onclick = () => {
+        S.color = key;
+        cont.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        preloadMockup();
+      };
+      cont.appendChild(btn);
+    }
+  }
+
+  function applyModelDefaults() {
+    const m = MODELS[S.model];
+    if (!m) return;
+    const scale = m.defaultScale || 42;
+    const y = m.defaultY || 50;
+    S.shirtDesignScale = scale + '%';
+    S.shirtDesignY = y + '%';
+    document.getElementById('shirtScale').value = scale;
+    document.getElementById('valShirtScale').textContent = scale + '%';
+    document.getElementById('shirtY').value = y;
+    document.getElementById('valShirtY').textContent = y + '%';
+    renderCards();
+  }
+
+  function setView(v) {
+    S.view = v;
+    document.getElementById('btnViewFront').classList.toggle('active', v==='front');
+    document.getElementById('btnViewBack').classList.toggle('active', v==='back');
+    preloadMockup();
+  }
+
+  /* ── BRAND POS ── */
+  function setBrandPos(p) {
+    S.brandPos = p;
+    ['tr','tl','br'].forEach(x => document.getElementById('btnBrand'+x.toUpperCase()).classList.toggle('active', x===p));
+    renderCards();
+  }
+
+  /* ── BRAND TYPE ── */
+  function setBrandType(t) {
+    S.brandType = t;
+    document.getElementById('btnBrandText').classList.toggle('active', t==='text');
+    document.getElementById('btnBrandLogo').classList.toggle('active', t==='logo');
+    document.getElementById('btnBrandNone').classList.toggle('active', t==='none');
+    document.getElementById('brandTextWrap').style.display = t==='text' ? '' : 'none';
+    document.getElementById('brandLogoWrap').style.display = t==='logo' ? '' : 'none';
+    renderCards();
+  }
+
+  /* ── PRELOAD MOCKUP ── */
+  function preloadMockup() {
+    const m = MODELS[S.model];
+    if (!m || !m.colors) { S.mockupB64 = null; renderCards(); return; }
+    const c = m.colors[S.color];
+    if (!c) { S.mockupB64 = null; renderCards(); return; }
+    const url = S.view === 'back' ? c.back : c.front;
+    if (!url || url.startsWith('data:')) { S.mockupB64 = url || null; renderCards(); return; }
+
+    const requestId = ++S._mockupReq;
+    const applyIfCurrent = (val) => { if (requestId === S._mockupReq) { S.mockupB64 = val; renderCards(); } };
+
+    // Preferred method: fetch the bytes directly and base64-encode them.
+    // This avoids the canvas.toDataURL() "tainted canvas" failure mode that
+    // some browsers (notably Safari) hit more readily than Chrome, which
+    // was silently leaving the mockup as a remote (non-embeddable) URL and
+    // making the shirt image disappear from the exported file.
+    fetch(url, { mode: 'cors', cache: 'force-cache' })
+      .then(res => { if (!res.ok) throw new Error('bad response'); return res.blob(); })
+      .then(blob => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      }))
+      .then(dataUrl => applyIfCurrent(dataUrl))
+      .catch(() => {
+        // Fallback: old canvas-based approach, then finally the raw URL.
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          try {
+            const cv = document.createElement('canvas');
+            cv.width = img.naturalWidth; cv.height = img.naturalHeight;
+            cv.getContext('2d').drawImage(img, 0, 0);
+            applyIfCurrent(cv.toDataURL('image/png'));
+          } catch (e) { applyIfCurrent(url); }
+        };
+        img.onerror = () => applyIfCurrent(url);
+        img.src = url;
+      });
+  }
+
+  /* ── FILES ── */
+  function handleFiles(files) {
+    const accepted = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (!accepted.length) return;
+    let loaded = 0;
+    accepted.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        S.designs.push({ url: e.target.result, name: file.name });
+        loaded++;
+        if (loaded === accepted.length) {
+          renderPreview();
+          updateHeaderCount();
+          notify(`${accepted.length} diseño(s) añadido(s)`, 'success');
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function clearAll() {
+    if (!S.designs.length) return;
+    if (!confirm('¿Eliminar todos los diseños?')) return;
+    S.designs = [];
+    renderPreview(); updateHeaderCount();
+    notify('Todo limpiado', 'success');
+  }
+
+  function updateHeaderCount() {
+    document.getElementById('headerCount').textContent = S.designs.length;
+    // sync all export buttons
+    ['btnExportZip','btnExportZip2','btnExportZip3'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = S.designs.length === 0 || S.isExporting;
+    });
+  }
+
+  /* ── RANGE ── */
+  function onRange(el, valId, stateKey, suffix='%') {
+    const v = el.value;
+    if (valId) document.getElementById(valId).textContent = v + suffix;
+    if (stateKey === 'shirtDesignScale' || stateKey === 'shirtDesignX' || stateKey === 'shirtDesignY') {
+      S[stateKey] = v + '%';
+    } else if (stateKey === 'bgOpacity') {
+      S.bgOpacity = (v / 100).toFixed(2);
+    } else if (stateKey === 'fontSize') {
+      S.fontSize = parseInt(v);
+    } else if (stateKey === 'gradAngle') {
+      S.gradAngle = parseInt(v);
+    } else {
+      S[stateKey] = v;
+    }
+    renderCards();
+  }
+
+  function onBgGrayscale() {
+    S.bgFilter = document.getElementById('bgGrayscale').checked ? 'grayscale(100%)' : 'none';
+    renderCards();
+  }
+
+  function onTextChange() {
+    S.line1 = document.getElementById('textLine1').value;
+    S.line2 = document.getElementById('textLine2').value;
+    renderCards();
+  }
+
+  function onTextColorChange(v) { S.textColor = v; renderCards(); }
+
+  function onBrandTextChange() {
+    S.brandText = document.getElementById('brandText').value;
+    renderCards();
+  }
+
+  function onLogoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      S.brandLogo = ev.target.result;
+      document.getElementById('logoUploadTxt').textContent = file.name;
+      renderCards();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ── BUILD CANVAS HTML ── */
+  function buildCanvasHTML(designUrl) {
+    const m = MODELS[S.model];
+    const baseScale = m ? m.baseScale || 1.0 : 1.0;
+    const mockup = S.mockupB64 || DUMMY;
+    const crossAttr = mockup.startsWith('http') ? 'crossorigin="anonymous"' : '';
+
+    const bgStyle = `background: linear-gradient(${S.gradAngle}deg, ${S.bgColor1}, ${S.bgColor2}); position:absolute; inset:0;`;
+
+    const bgArt = designUrl ? `<img src="${designUrl}"
+      style="position:absolute;
+        width:calc(${S.bgDesignScale}*10px);height:auto;
+        left:calc(${S.bgDesignX}*1%);top:calc(${S.bgDesignY}*1%);
+        transform:translate(-50%,-50%);
+        opacity:${S.bgOpacity};filter:${S.bgFilter};
+        mix-blend-mode:lighten;pointer-events:none;z-index:2;">` : '';
+
+    const c1 = escHtml(S.line1);
+    const c2 = escHtml(S.line2);
+    const line1 = c1 ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:${S.fontSize}px;font-weight:900;color:${S.textColor};line-height:1;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 6px 24px rgba(0,0,0,.7);">${c1}</div>` : '';
+    const line2 = c2 ? `<div style="display:inline-block;background:#fff;padding:5px 14px;margin-top:-8px;margin-left:6px;box-shadow:0 8px 28px rgba(0,0,0,.45);"><span style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#111;letter-spacing:.05em;text-transform:uppercase;line-height:1;">${c2}</span></div>` : '';
+
+    const designOnShirt = designUrl ? `<div style="position:absolute;left:${S.shirtDesignX};top:${S.shirtDesignY};
+      width:${S.shirtDesignScale};transform:translate(-50%,-50%);z-index:25;">
+      <img src="${designUrl}" style="width:100%;height:auto;">
+    </div>` : '';
+
+    // Brand position
+    let brandPosStyle = 'top:50px;right:50px;text-align:right;';
+    if (S.brandPos === 'tl') brandPosStyle = 'top:50px;left:50px;text-align:left;';
+    if (S.brandPos === 'br') brandPosStyle = 'bottom:50px;right:50px;text-align:right;';
+
+    let brand = '';
+    if (S.brandType === 'text' && S.brandText) {
+      brand = `<div style="font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,.5);opacity:.85;">${escHtml(S.brandText)}</div>`;
+    } else if (S.brandType === 'logo' && S.brandLogo) {
+      brand = `<img src="${S.brandLogo}" style="height:60px;width:auto;max-width:250px;object-fit:contain;opacity:.85;">`;
+    }
+
+    return `
+      <div style="${bgStyle};z-index:1;"></div>
+      ${bgArt}
+      <div style="position:absolute;top:50px;left:50px;z-index:30;pointer-events:none;">
+        ${line1}${line2}
+      </div>
+      <div style="position:absolute;right:-150px;top:50px;width:1200px;height:1200px;
+        transform:scale(${baseScale});transform-origin:center;pointer-events:none;z-index:20;
+        display:flex;align-items:center;justify-content:center;">
+        <img src="${mockup}" ${crossAttr} style="position:absolute;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 50px rgba(0,0,0,.7));">
+        ${designOnShirt}
+      </div>
+      ${brand ? `<div style="position:absolute;${brandPosStyle}z-index:100;pointer-events:none;">${brand}</div>` : ''}
+    `;
+  }
+
+  function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── RENDER PREVIEW ── */
+  function renderPreview() {
+    const area = document.getElementById('previewArea');
+
+    if (S.designs.length === 0) {
+      area.innerHTML = `
+        <div class="empty-state fade-up" onclick="document.getElementById('fileInput').click()">
+          <input type="file" id="fileInputEmpty" accept="image/png,image/jpeg,image/webp" multiple onchange="handleFilesFromInput(this)" style="position:absolute;inset:0;opacity:0;cursor:pointer;" />
+          <div class="empty-icon">🖼️</div>
+          <h3>SUBE TUS DISEÑOS</h3>
+          <p>Arrastra archivos aquí o haz clic para explorar<br/>PNG · JPG · WEBP</p>
+        </div>`;
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'card-grid grid-' + S.gridMode;
+
+    S.designs.forEach((d, i) => {
+      const card = document.createElement('div');
+      card.className = 'preview-card fade-up';
+      card.style.animationDelay = (i * .04) + 's';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'card-canvas-wrapper';
+      wrapper.innerHTML = buildCanvasHTML(d.url);
+
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+      actions.innerHTML = `
+        <button class="card-btn" title="Vista completa" onclick="openModal(${i})">🔍</button>
+        <button class="card-btn dl" title="Descargar" onclick="exportSingle(${i})">⬇</button>
+        <button class="card-btn del" title="Eliminar" onclick="removeDesign(${i})">✕</button>`;
+
+      const num = document.createElement('div');
+      num.className = 'card-num';
+      num.textContent = String(i + 1).padStart(2, '0');
+
+      card.appendChild(wrapper);
+      card.appendChild(actions);
+      card.appendChild(num);
+      grid.appendChild(card);
+    });
+
+    area.innerHTML = '';
+    area.appendChild(grid);
+    updateCardScales();
+  }
+
+  function renderCards() {
+    document.querySelectorAll('.card-canvas-wrapper').forEach((wrapper, i) => {
+      const design = S.designs[i];
+      if (!design) return;
+      wrapper.innerHTML = buildCanvasHTML(design.url);
+    });
+    // update modal if open
+    const modal = document.getElementById('modalCanvas');
+    if (modal.children.length && S._modalIdx !== undefined) {
+      const w = modal.querySelector('.card-canvas-wrapper');
+      if (w && S.designs[S._modalIdx]) w.innerHTML = buildCanvasHTML(S.designs[S._modalIdx].url);
+    }
+    updateHeaderCount();
+  }
+
+  /* ── CARD SCALES ── */
+  function updateCardScales() {
+    document.querySelectorAll('.preview-card').forEach(card => {
+      const w = card.clientWidth;
+      const scale = w / 1080;
+      const wrapper = card.querySelector('.card-canvas-wrapper');
+      if (wrapper) wrapper.style.transform = `scale(${scale})`;
+    });
+    // modal
+    const mc = document.getElementById('modalCanvas');
+    if (mc.children.length) {
+      const w = mc.clientWidth;
+      const scale = w / 1080;
+      const wrapper = mc.querySelector('.card-canvas-wrapper');
+      if (wrapper) wrapper.style.transform = `scale(${scale})`;
+    }
+  }
+  window.addEventListener('resize', updateCardScales);
+
+  /* ── MODAL ── */
+  function openModal(idx) {
+    S._modalIdx = idx;
+    const mc = document.getElementById('modalCanvas');
+    mc.style.width = Math.min(700, window.innerWidth - 40) + 'px';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'card-canvas-wrapper';
+    wrapper.style.background = '#0a0a0c';
+    wrapper.innerHTML = buildCanvasHTML(S.designs[idx].url);
+    mc.innerHTML = '';
+    mc.appendChild(wrapper);
+    document.getElementById('modalOverlay').classList.add('visible');
+    setTimeout(updateCardScales, 50);
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modalOverlay') && !e.currentTarget.classList.contains('modal-close')) return;
+    document.getElementById('modalOverlay').classList.remove('visible');
+    document.getElementById('modalCanvas').innerHTML = '';
+    S._modalIdx = undefined;
+  }
+
+  /* ── REMOVE ── */
+  window.removeDesign = function(i) {
+    S.designs.splice(i, 1);
+    renderPreview(); updateHeaderCount();
+    notify('Diseño eliminado', 'success');
+  };
+
+  /* ── EXPORT ── */
+  function setExporting(flag, title='Procesando…', sub='Por favor espera', progress=0) {
+    S.isExporting = flag;
+    document.getElementById('exportOverlay').classList.toggle('visible', flag);
+    document.getElementById('exportTitle').textContent = title;
+    document.getElementById('exportSub').textContent = sub;
+    document.getElementById('exportProgressBar').style.width = progress + '%';
+    updateHeaderCount();
+  }
+
+  async function waitForImagesReady(node) {
+    const imgs = Array.from(node.querySelectorAll('img'));
+    await Promise.all(imgs.map(img => {
+      // decode() guarantees the frame is fully decoded and paint-ready.
+      // Safari in particular can fire "load" before the bitmap is actually
+      // ready to be read into a canvas/SVG snapshot, which is what causes
+      // images (design / shirt mockup) to come out blank on export.
+      const waitLoad = img.complete
+        ? Promise.resolve()
+        : new Promise(r => { img.onload = r; img.onerror = r; });
+      return waitLoad.then(() => {
+        if (img.decode) return img.decode().catch(() => {});
+        return Promise.resolve();
+      });
+    }));
+  }
+
+  async function captureDesign(idx) {
+    const design = S.designs[idx];
+    if (!design || !window.htmlToImage) throw new Error('htmlToImage no disponible');
+    const node = document.createElement('div');
+    node.style.cssText = 'width:1080px;height:1080px;background:#0a0a0c;position:fixed;top:0;left:0;z-index:-9999;pointer-events:none;overflow:hidden;';
+    node.innerHTML = buildCanvasHTML(design.url);
+    document.body.appendChild(node);
+    try {
+      await waitForImagesReady(node);
+      await document.fonts.ready;
+      await new Promise(r => setTimeout(r, 120));
+
+      const opts = { quality: 0.92, pixelRatio: 1.5, backgroundColor: S.bgColor1, cacheBust: true };
+
+      // Warm-up pass: on Safari the first html-to-image render frequently
+      // omits <img> elements (design/shirt) even though everything else
+      // (text, gradients) renders fine. Throwing away one render and doing
+      // a second pass reliably fixes it, since by then the images are
+      // already inlined/cached by the library.
+      await window.htmlToImage.toJpeg(node, opts).catch(() => {});
+      await waitForImagesReady(node);
+      await new Promise(r => setTimeout(r, 60));
+
+      const dataUrl = await window.htmlToImage.toJpeg(node, opts);
+      const arr = dataUrl.split(',');
+      const bstr = atob(arr[1]);
+      const u8 = new Uint8Array(bstr.length);
+      for (let i = 0; i < bstr.length; i++) u8[i] = bstr.charCodeAt(i);
+      return new Blob([u8], { type: 'image/jpeg' });
+    } finally {
+      document.body.removeChild(node);
+    }
+  }
+
+  window.exportSingle = async function(idx) {
+    setExporting(true, 'Generando imagen…', `Diseño ${idx+1} de ${S.designs.length}`, 50);
+    try {
+      const blob = await captureDesign(idx);
+      const link = document.createElement('a');
+      link.download = `promo-${S.line1.replace(/\s+/g,'-') || 'diseño'}-${idx+1}.jpg`;
+      link.href = URL.createObjectURL(blob);
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      notify('Imagen descargada', 'success');
+    } catch(err) {
+      notify('Error: ' + (err.message || err), 'error');
+    } finally { setExporting(false); }
+  };
+
+  window.handleExportZip = async function() {
+    if (!S.designs.length || !window.JSZip) return;
+    const total = S.designs.length;
+    setExporting(true, 'Preparando ZIP…', `0 de ${total} diseños`, 0);
+    try {
+      const zip = new window.JSZip();
+      for (let i = 0; i < total; i++) {
+        setExporting(true, `Procesando ${i+1} de ${total}`, 'Generando imagen…', Math.round((i/total)*90));
+        const blob = await captureDesign(i);
+        zip.file(`promo-${S.line1.replace(/\s+/g,'-') || 'diseño'}-${i+1}.jpg`, blob);
+        await new Promise(r => setTimeout(r, 40));
+      }
+      setExporting(true, 'Comprimiendo…', 'Casi listo…', 95);
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const link = document.createElement('a');
+      link.download = `promo-pack-${S.line1.replace(/\s+/g,'-') || 'diseños'}.zip`;
+      link.href = URL.createObjectURL(zipBlob);
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      notify(`ZIP con ${total} imágenes listo`, 'success');
+    } catch(err) {
+      notify('Error ZIP: ' + (err.message || err), 'error');
+    } finally { setExporting(false); }
+  };
+
+  /* ── DRAG & DROP ── */
+  function initDragDrop() {
+    const zone = document.getElementById('uploadZone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+  }
+
+  window.handleFilesFromInput = function(inp) { handleFiles(inp.files); inp.value=''; };
+
+  /* ── BOOT ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    initModelSelect();
+    applyModelDefaults();
+    initDragDrop();
+    initBgColorPresets();
+    initTextPresets();
+    renderHistory();
+
+    document.getElementById('fileInput').addEventListener('change', e => { handleFiles(e.target.files); e.target.value=''; });
+
+    preloadMockup();
+    renderPreview();
+    updateHeaderCount();
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,2631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Pedrería PRO — CHECHENA SHIRTS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+    /* ===== CHECHENA SHIRTS — PEDRERÍA PRO — CREAM PALETTE ===== */
+    :root {
+        --font-title: 'Bebas Neue', sans-serif;
+        --font-body: 'Inter', sans-serif;
+
+        /* Cream palette */
+        --cream-50:  #FDFAF4;
+        --cream-100: #F8F2E4;
+        --cream-200: #F0E6CE;
+        --cream-300: #E4D5B3;
+        --cream-400: #C8B897;
+        --cream-500: #A89070;
+        --cream-600: #7A6248;
+        --cream-700: #5C4A36;
+
+        --ink:       #1A1208;
+        --ink-soft:  #3D2E1A;
+        --ink-muted: #6B5840;
+
+        --accent:    #1A1208;
+        --accent-h:  #3D2E1A;
+        --gold:      #C8A55A;
+        --gold-h:    #B8952A;
+
+        --border:    rgba(90,60,20,.15);
+        --border-m:  rgba(90,60,20,.25);
+
+        --sidebar-w: 370px;
+        --radius:    6px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; font-family: var(--font-body); background: var(--cream-50); color: var(--ink); }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+        height: 48px;
+        background: var(--ink);
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        gap: 16px;
+        border-bottom: 2px solid var(--gold);
+        flex-shrink: 0;
+    }
+    .top-bar .brand {
+        font-family: var(--font-title);
+        font-size: 1.5rem;
+        color: var(--cream-100);
+        letter-spacing: 2px;
+    }
+    .top-bar .sub-brand {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--gold);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        border-left: 1px solid var(--cream-600);
+        padding-left: 16px;
+        margin-left: 4px;
+    }
+    .top-bar .version-badge {
+        margin-left: auto;
+        font-size: 0.6rem;
+        font-weight: 800;
+        color: var(--ink);
+        background: var(--gold);
+        padding: 2px 8px;
+        border-radius: 100px;
+        letter-spacing: 1px;
+    }
+
+    /* ── APP WRAPPER ── */
+    .app-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 48px);
+        overflow: hidden;
+    }
+    .builder-wrapper {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+        width: var(--sidebar-w);
+        min-width: var(--sidebar-w);
+        background: var(--cream-100);
+        border-right: 1px solid var(--cream-300);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        z-index: 50;
+        box-shadow: 2px 0 20px rgba(26,18,8,.08);
+    }
+
+    .sidebar-header {
+        padding: 18px 24px 12px;
+        flex-shrink: 0;
+        background: var(--cream-100);
+        border-bottom: 1px solid var(--cream-200);
+    }
+    .sidebar-title {
+        font-family: var(--font-title);
+        font-size: 2rem;
+        color: var(--ink);
+        line-height: 1;
+        letter-spacing: 1px;
+    }
+    .sidebar-title span { color: var(--gold); }
+    .sidebar-sub {
+        font-size: 0.6rem;
+        font-weight: 700;
+        color: var(--ink-muted);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-top: 3px;
+    }
+    .divider {
+        height: 1px;
+        background: var(--cream-300);
+        margin: 12px 0;
+    }
+
+    .sidebar-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 20px 140px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-height: 0;
+    }
+    .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+    .sidebar-scroll::-webkit-scrollbar-track { background: var(--cream-200); }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--cream-400); border-radius: 4px; }
+
+    /* ── TOOL SECTION ── */
+    .tool-section { }
+    .section-title {
+        font-family: var(--font-title);
+        font-size: 1.2rem;
+        color: var(--ink);
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        letter-spacing: .5px;
+    }
+    .sub-label {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: var(--ink-muted);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    /* ── DISABLED STATES ── */
+    .controls-disabled { opacity: .45; pointer-events: none; filter: grayscale(.8); transition: .3s; }
+    .btn-disabled { opacity: .4; pointer-events: none; filter: grayscale(.8); }
+    .partial-disabled { opacity: .45; pointer-events: none; filter: grayscale(.8); }
+
+    /* ── CANVAS DIMS INPUTS ── */
+    .canvas-dims-row, .calc-inputs-row { display: flex; gap: 12px; margin-bottom: 10px; }
+    .dim-input-group, .calc-group { flex: 1; display: flex; flex-direction: column; }
+    .dim-input-group label, .calc-group label {
+        font-size: 0.62rem;
+        font-weight: 800;
+        color: var(--ink-muted);
+        margin-bottom: 3px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .dim-input-group input, .calc-group input {
+        padding: 8px;
+        border: 1px solid var(--cream-300);
+        border-radius: var(--radius);
+        font-weight: 800;
+        font-family: var(--font-body);
+        text-align: center;
+        width: 100%;
+        background: var(--cream-50);
+        color: var(--ink);
+        transition: border-color .2s;
+    }
+    .dim-input-group input:focus, .calc-group input:focus {
+        outline: none;
+        border-color: var(--gold);
+    }
+    .calc-group input:disabled { background: var(--cream-200); color: var(--cream-500); cursor: not-allowed; }
+
+    /* ── INFO BOX ── */
+    .info-box {
+        background: var(--cream-200);
+        border: 1px solid var(--cream-300);
+        color: var(--ink-soft);
+        padding: 10px;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+    }
+    .info-box.green {
+        background: #F0FAF2;
+        border-color: #A8D5B5;
+        color: #2D7A4A;
+    }
+
+    /* ── LAYERS ── */
+    .layers-container {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 10px;
+        max-height: 220px;
+        overflow-y: auto;
+    }
+    .layer-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border: 1px solid var(--cream-300);
+        background: var(--cream-50);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: .2s;
+        border-left: 3px solid transparent;
+    }
+    .layer-item:hover { background: var(--cream-200); }
+    .layer-item.active {
+        border-color: var(--gold);
+        background: #FDF7E8;
+        border-left: 3px solid var(--gold);
+    }
+    .layer-item.multi-selected {
+        border-color: var(--cream-600);
+        background: var(--cream-200);
+        border-left: 3px solid var(--cream-600);
+    }
+    .layer-thumb {
+        width: 30px;
+        height: 30px;
+        background: var(--cream-300);
+        border-radius: 3px;
+        object-fit: cover;
+        border: 1px solid var(--cream-300);
+    }
+    .layer-info { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .layer-name { font-size: 0.78rem; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .layer-status { font-size: 0.62rem; color: var(--ink-muted); font-weight: 600; }
+    .layer-actions { display: flex; align-items: center; gap: 4px; }
+    .layer-btn {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background: transparent;
+        color: var(--ink-muted);
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .layer-btn:hover { background: var(--cream-300); color: var(--ink); }
+    .layer-btn.delete:hover { background: #FFF0F0; color: #C0392B; }
+    .layer-btn.move:hover { background: #FDF7E8; color: var(--gold-h); }
+    .color-picker-mini {
+        width: 20px; height: 20px;
+        border: none; padding: 0;
+        background: none; cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px var(--cream-300);
+        overflow: hidden;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-black {
+        background: var(--ink);
+        color: var(--cream-100);
+        border: 1px solid var(--ink);
+        padding: 12px;
+        width: 100%;
+        font-weight: 800;
+        cursor: pointer;
+        border-radius: var(--radius);
+        font-size: 0.95rem;
+        font-family: var(--font-body);
+        letter-spacing: .5px;
+        transition: .2s;
+    }
+    .btn-black:hover {
+        background: var(--ink-soft);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(26,18,8,.2);
+    }
+    .btn-gold {
+        background: var(--gold);
+        color: var(--ink);
+        border: none;
+        padding: 12px;
+        width: 100%;
+        font-weight: 800;
+        cursor: pointer;
+        border-radius: var(--radius);
+        font-size: 0.95rem;
+        font-family: var(--font-body);
+        letter-spacing: .5px;
+        transition: .2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-gold:hover {
+        background: var(--gold-h);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(200,165,90,.4);
+    }
+
+    .row-buttons { display: flex; gap: 6px; width: 100%; flex-wrap: wrap; }
+    .btn-outline {
+        flex: 1;
+        background: var(--cream-50);
+        border: 1.5px solid var(--cream-400);
+        padding: 9px 6px;
+        font-weight: 800;
+        cursor: pointer;
+        border-radius: var(--radius);
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+        font-family: var(--font-body);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: .2s;
+    }
+    .btn-outline:hover { background: var(--cream-200); border-color: var(--cream-600); }
+    .btn-active-tool {
+        background: var(--ink) !important;
+        color: var(--cream-100) !important;
+        border-color: var(--ink) !important;
+    }
+
+    .btn-purple {
+        background: var(--ink-soft);
+        color: var(--cream-100);
+        border: none;
+        padding: 10px;
+        width: 100%;
+        font-weight: 800;
+        font-family: var(--font-body);
+        cursor: pointer;
+        border-radius: var(--radius);
+        font-size: 0.88rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 8px;
+        transition: .2s;
+    }
+    .btn-purple:hover { filter: brightness(1.2); }
+    .btn-purple.active { box-shadow: inset 0 0 6px rgba(0,0,0,.4); }
+
+    .btn-toggle {
+        background: var(--cream-50);
+        color: var(--cream-600);
+        border: 2px solid var(--cream-400);
+        padding: 9px;
+        width: 100%;
+        font-weight: 800;
+        font-family: var(--font-body);
+        cursor: pointer;
+        border-radius: var(--radius);
+        font-size: 0.82rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 5px;
+        transition: .2s;
+    }
+    .btn-toggle:hover { background: var(--cream-200); }
+    .btn-toggle.active { background: var(--ink); color: var(--cream-100); border-color: var(--ink); }
+
+    .btn-done {
+        background: #2D7A4A;
+        color: #fff;
+        border: none;
+        padding: 9px;
+        font-weight: 800;
+        font-family: var(--font-body);
+        cursor: pointer;
+        border-radius: var(--radius);
+        display: none;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.78rem;
+        flex: 1;
+    }
+    .btn-done:hover { background: #236038; }
+    .btn-success { border-color: #2D7A4A !important; color: #2D7A4A !important; }
+    .btn-success:hover { background: #F0FAF2 !important; }
+
+    /* ── STONE SIZE GRID ── */
+    .ss-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+    .ss-btn, .effect-btn {
+        border: 1.5px solid var(--cream-300);
+        background: var(--cream-50);
+        padding: 8px 4px;
+        font-weight: 800;
+        font-family: var(--font-body);
+        cursor: pointer;
+        border-radius: var(--radius);
+        font-size: 0.8rem;
+        color: var(--ink-muted);
+        transition: .2s;
+    }
+    .ss-btn:hover, .effect-btn:hover { background: var(--cream-200); border-color: var(--cream-500); }
+    .ss-btn.active, .effect-btn.active {
+        background: var(--ink);
+        color: var(--cream-100);
+        border-color: var(--ink);
+    }
+    .effect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
+
+    .manual-size-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--cream-200);
+        padding: 6px 10px;
+        border: 1px solid var(--cream-300);
+        margin-bottom: 15px;
+        border-radius: var(--radius);
+    }
+    #manual-mm {
+        width: 60px;
+        padding: 4px;
+        border: 1px solid var(--cream-300);
+        border-radius: 4px;
+        font-weight: 800;
+        font-family: var(--font-body);
+        text-align: center;
+        background: var(--cream-50);
+    }
+
+    .density-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--ink-muted);
+    }
+    input[type=range] {
+        flex: 1;
+        height: 5px;
+        accent-color: var(--gold);
+        cursor: pointer;
+    }
+
+    /* ── BG SELECTOR ── */
+    .bg-selector-group { display: flex; gap: 8px; }
+    .bg-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1.5px solid var(--cream-300);
+        cursor: pointer;
+        transition: .2s;
+        position: relative;
+    }
+    .bg-btn.active {
+        border: 2px solid var(--cream-50);
+        box-shadow: 0 0 0 2.5px var(--gold);
+        transform: scale(1.15);
+    }
+    .bg-btn.white { background: #fff; }
+    .bg-btn.gray  { background: #ccc; }
+    .bg-btn.black { background: #111; }
+    .bg-btn.navy  { background: #000080; }
+    .bg-btn.grid  {
+        background-image: conic-gradient(#ccc 90deg, transparent 90deg 180deg, #ccc 180deg 270deg, transparent 270deg);
+        background-size: 16px 16px;
+        background-color: #fff;
+    }
+
+    /* ── COST BOX ── */
+    .calc-result-box {
+        background: var(--cream-200);
+        padding: 12px;
+        border: 1px solid var(--cream-300);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: var(--radius);
+    }
+    .result-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .result-label { font-size: 0.62rem; font-weight: 800; color: var(--gold-h); letter-spacing: 1px; }
+    .result-item strong { font-size: 1.2rem; font-weight: 900; color: var(--ink); }
+    .money-text { color: #2D7A4A !important; font-size: 1.4rem !important; }
+    .result-divider { width: 1px; height: 32px; background: var(--cream-400); }
+
+    /* ── RAIN PANEL ── */
+    .rain-controls-panel {
+        display: none;
+        padding: 12px;
+        background: var(--cream-200);
+        border: 1px solid var(--cream-300);
+        border-radius: var(--radius);
+        margin-top: 10px;
+    }
+
+    /* ── EDITOR AREA ── */
+    .editor-area {
+        flex: 1;
+        min-width: 0;
+        background: var(--cream-200);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cursor-draw    { cursor: crosshair !important; }
+    .cursor-capture { cursor: cell !important; }
+    .cursor-deselect{ cursor: not-allowed !important; }
+    .cursor-grab    { cursor: grab !important; }
+    .cursor-grabbing{ cursor: grabbing !important; }
+
+    /* ── CONTROL PANEL ── */
+    .control-panel-wrapper {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 20;
+    }
+    .panel-group {
+        background: var(--cream-50);
+        padding: 5px;
+        border-radius: 8px;
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(26,18,8,.12);
+        border: 1px solid var(--cream-300);
+    }
+    .ctrl-btn {
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--cream-300);
+        background: var(--cream-50);
+        font-weight: 900;
+        cursor: pointer;
+        font-size: 1.1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        color: var(--ink);
+        transition: .2s;
+        font-family: var(--font-body);
+    }
+    .ctrl-btn:hover { background: var(--cream-200); }
+    .ctrl-btn.danger { color: #C0392B; }
+    .reset-btn { width: auto; padding: 0 10px; font-size: 0.75rem; font-weight: 800; }
+    .divider-v { width: 1px; background: var(--cream-300); height: 18px; align-self: center; margin: 0 2px; }
+
+    /* ── CANVAS SCROLL ── */
+    .canvas-scroll-container {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        overflow: scroll !important;
+        background: var(--cream-200);
+        z-index: 5;
+    }
+    .canvas-scroll-container::-webkit-scrollbar { width: 12px; height: 12px; }
+    .canvas-scroll-container::-webkit-scrollbar-track { background: var(--cream-300); border: 1px solid var(--cream-400); }
+    .canvas-scroll-container::-webkit-scrollbar-thumb { background: var(--cream-500); border-radius: 4px; border: 3px solid var(--cream-300); }
+    .canvas-scroll-container::-webkit-scrollbar-thumb:hover { background: var(--cream-700); }
+    .canvas-scroll-container::-webkit-scrollbar-corner { background: var(--cream-400); }
+
+    .viewport-wrapper {
+        width: 3000px !important;
+        height: 3000px !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+    .canvas-viewport {
+        position: relative;
+        margin: auto;
+        box-shadow: 0 20px 60px rgba(26,18,8,.2);
+        background-color: #fff;
+    }
+    .canvas-bg-grid {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        background-image: conic-gradient(#E4D5B3 90deg, transparent 90deg 180deg, #E4D5B3 180deg 270deg, transparent 270deg);
+        background-size: 20px 20px;
+        opacity: 0.4;
+    }
+    .ruler-v {
+        position: absolute;
+        left: -24px; top: 0;
+        width: 24px; height: 100%;
+        background: var(--cream-100);
+        border-right: 1px solid var(--cream-300);
+        color: var(--cream-500);
+        display: flex; justify-content: center; align-items: center;
+        writing-mode: vertical-lr;
+        font-size: 9px; font-weight: bold; cursor: pointer;
+    }
+    .ruler-h {
+        position: absolute;
+        top: -24px; left: 0;
+        height: 24px; width: 100%;
+        background: var(--cream-100);
+        border-bottom: 1px solid var(--cream-300);
+        color: var(--cream-500);
+        display: flex; justify-content: center; align-items: center;
+        font-size: 9px; font-weight: bold; cursor: pointer;
+    }
+
+    /* ── LOADING OVERLAY ── */
+    #loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(253,250,244,.96);
+        z-index: 999;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .spinner {
+        width: 40px; height: 40px;
+        border: 3px solid var(--cream-300);
+        border-top: 3px solid var(--gold);
+        border-radius: 50%;
+        animation: spin .8s linear infinite;
+        margin-bottom: 14px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-text { font-weight: 800; letter-spacing: 2px; color: var(--ink); font-size: .85rem; }
+    #progress-text { font-size: 0.75rem; color: var(--ink-muted); margin-top: 5px; }
+
+    /* ── TOOLTIP ── */
+    #dynamic-tooltip {
+        position: fixed;
+        display: none;
+        background: var(--ink);
+        color: var(--cream-100);
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 800;
+        pointer-events: none;
+        z-index: 1000;
+    }
+
+    /* ── MOBILE PAN ── */
+    .mobile-pan-controls { display: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .tool-section { animation: fadeIn .3s ease; }
+
+    /* ── SCROLLBAR LAYER LIST ── */
+    .layers-container::-webkit-scrollbar { width: 4px; }
+    .layers-container::-webkit-scrollbar-track { background: var(--cream-200); }
+    .layers-container::-webkit-scrollbar-thumb { background: var(--cream-400); border-radius: 4px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+        .builder-wrapper { flex-direction: column; height: auto; min-height: 100vh; overflow: visible; }
+        .sidebar { width: 100%; min-width: unset; height: auto; border-right: none; border-bottom: 1px solid var(--cream-300); box-shadow: none; }
+        .sidebar-scroll { max-height: none; overflow: visible; padding-bottom: 20px; }
+        .editor-area { height: 80vh; min-height: 500px; width: 100% !important; border-top: 2px solid var(--cream-300); }
+        .canvas-scroll-container { overflow: auto; position: relative; height: 100% !important; }
+        .control-panel-wrapper { top: 8px; right: 8px; transform: scale(.9); transform-origin: top right; }
+        .viewport-wrapper { display: flex; justify-content: center; align-items: center; width: max-content !important; height: max-content !important; min-width: 100% !important; min-height: 500px !important; padding: 40px; }
+        .mobile-pan-controls {
+            display: grid;
+            grid-template-columns: 28px 28px 28px;
+            grid-template-rows: 28px 28px 28px;
+            gap: 4px;
+            position: absolute;
+            bottom: 14px; left: 14px;
+            z-index: 100;
+        }
+        .pan-up { grid-column: 2; grid-row: 1; }
+        .pan-left { grid-column: 1; grid-row: 2; }
+        .pan-right { grid-column: 3; grid-row: 2; }
+        .pan-down { grid-column: 2; grid-row: 3; }
+        .pan-btn {
+            background: var(--ink);
+            color: var(--cream-100);
+            border: none;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(26,18,8,.3);
+            cursor: pointer;
+        }
+        .pan-btn:active { background: var(--ink-soft); transform: scale(.95); }
+        .pan-btn span { font-size: 18px; }
+    }
+</style>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <span class="brand">CHECHENA SHIRTS</span>
+    <span class="sub-brand">Pedrería Studio PRO</span>
+    <span class="version-badge">PRO</span>
+</div>
+
+<div class="app-wrapper">
+<div class="builder-wrapper">
+
+    <!-- OVERLAYS -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p id="loading-text">PROCESANDO...</p>
+        <p id="progress-text"></p>
+    </div>
+    <div id="dynamic-tooltip">0.0 cm</div>
+
+    <!-- ════ SIDEBAR ════ -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">PEDRERÍA <span>PRO</span></h1>
+            <p class="sidebar-sub">Herramienta profesional de diseño</p>
+            <div class="divider"></div>
+        </div>
+
+        <div class="sidebar-scroll">
+
+            <!-- 00. ÁREA DE TRABAJO -->
+            <div class="tool-section">
+                <h2 class="section-title">00. ÁREA DE TRABAJO</h2>
+                <span class="sub-label">Dimensiones del lienzo (CM)</span>
+                <div class="canvas-dims-row">
+                    <div class="dim-input-group">
+                        <label>Ancho</label>
+                        <input type="number" id="canvas-w" value="30.5" step="0.5" onchange="updateCanvasSize()">
+                    </div>
+                    <div class="dim-input-group">
+                        <label>Alto</label>
+                        <input type="number" id="canvas-h" value="30.5" step="0.5" onchange="updateCanvasSize()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 00. CAPAS -->
+            <div class="tool-section">
+                <h2 class="section-title">00. CAPAS <span style="font-size:0.65rem;color:var(--ink-muted);font-family:var(--font-body);">(JERARQUÍA)</span></h2>
+                <div id="layers-list" class="layers-container">
+                    <div style="padding:12px; text-align:center; color:var(--ink-muted); font-size:0.78rem; border:1.5px dashed var(--cream-400); border-radius:6px;">
+                        Sin capas. Sube una imagen.
+                    </div>
+                </div>
+                <input type="file" id="file-upload" accept="image/*" hidden>
+                <button id="btn-add-layer" class="btn-black" onclick="document.getElementById('file-upload').value=''; document.getElementById('file-upload').click()">+ AGREGAR CAPA</button>
+
+                <input type="file" id="file-upload-guide" accept="image/*" hidden>
+                <button id="btn-add-guide" class="btn-outline" style="margin-top:8px; width:100%; border-color:var(--gold); color:var(--gold-h);" onclick="document.getElementById('file-upload-guide').value=''; document.getElementById('file-upload-guide').click()">+ AGREGAR DISEÑO GUÍA</button>
+
+                <div id="capture-tools" style="display:none; margin-top:10px; border-top:1px dashed var(--cream-300); padding-top:10px;">
+                    <button class="btn-toggle" id="btn-toggle-deselect" onclick="toggleDeselectMode()">
+                        <span class="material-icons-round" style="font-size:15px;">remove_circle_outline</span> DESELECCIONAR
+                    </button>
+                    <button class="btn-purple" id="btn-create-captured" style="display:none;" onclick="createLayerFromCapture()">
+                        <span class="material-icons-round">add_circle</span> CREAR CAPA DE SELECCIÓN
+                    </button>
+                </div>
+            </div>
+
+            <!-- 01. DISEÑO -->
+            <div class="tool-section">
+                <h2 class="section-title">01. DISEÑO</h2>
+                <div id="dims-display" class="info-box" style="display:none;">
+                    <span class="material-icons-round">straighten</span>
+                    <div style="display:flex; flex-direction:column;">
+                        <span id="dims-text" style="line-height:1.2;">0 x 0 cm</span>
+                        <span style="font-size:0.6rem; color:var(--ink-muted); font-weight:400;">(MEDIDA DE CAPA)</span>
+                    </div>
+                </div>
+                <div id="stone-dims-display" class="info-box green" style="display:none;">
+                    <span class="material-icons-round">straighten</span>
+                    <div style="display:flex; flex-direction:column;">
+                        <span id="stone-dims-text" style="line-height:1.2;">0 x 0 cm</span>
+                        <span style="font-size:0.6rem; color:#2D7A4A; font-weight:700;">(LÍMITE DE PEDRERÍA)</span>
+                    </div>
+                </div>
+
+                <div class="row-buttons" id="image-controls" style="display:none; margin-top:10px;">
+                    <button class="btn-outline" id="btn-draw" onclick="toggleDrawMode()">
+                        <span class="material-icons-round">brush</span> DIBUJAR
+                    </button>
+                    <button id="btn-draw-done" class="btn-done" onclick="toggleDrawMode()">
+                        <span class="material-icons-round">check</span> LISTO
+                    </button>
+                    <button class="btn-outline" id="btn-capture" onclick="toggleCaptureMode()">
+                        <span class="material-icons-round">touch_app</span> CAPTURAR
+                    </button>
+                    <button class="btn-outline" id="btn-lasso" onclick="toggleLassoMode()">
+                        <span class="material-icons-round">content_cut</span> LAZO
+                    </button>
+                    <button class="btn-outline" id="btn-aura-trigger" onclick="toggleAuraMode()">
+                        <span class="material-icons-round">blur_on</span> AURA
+                    </button>
+                    <button class="btn-outline" id="btn-edit-img" onclick="unlockImage()">
+                        <span class="material-icons-round">edit</span> EDITAR
+                    </button>
+                    <button class="btn-outline btn-success" id="btn-apply-stones" onclick="applyRhinestones()">
+                        <span class="material-icons-round">auto_awesome</span> APLICAR
+                    </button>
+                </div>
+
+                <button id="btn-apply-lasso" class="btn-purple" style="display:none; margin-top:10px; background:#7A3A1A;" onclick="applyMultipleCrops()">
+                    <span class="material-icons-round">check_circle</span> APLICAR RECORTES LAZO
+                </button>
+
+                <!-- Aura panel -->
+                <div id="aura-panel" class="rain-controls-panel">
+                    <span class="sub-label">AJUSTES: AURA EXPANSIVA</span>
+                    <div class="density-control" style="margin-bottom:8px;">
+                        <label>EXTENSIÓN:</label>
+                        <input type="range" id="aura-extension" min="10" max="150" step="10" value="50" oninput="scheduleAuraPreview()">
+                        <span id="aura-extension-display">50</span>
+                    </div>
+                    <div class="density-control">
+                        <label>DENSIDAD:</label>
+                        <input type="range" id="aura-density" min="10" max="100" step="5" value="80" oninput="scheduleAuraPreview()">
+                        <span id="aura-density-display">80</span>
+                    </div>
+                    <button class="btn-black" style="margin-top:14px;" onclick="confirmAuraLayer()">APLICAR EFECTO AURA</button>
+                    <button class="btn-outline" style="margin-top:6px; width:100%;" onclick="toggleAuraMode()">CANCELAR</button>
+                </div>
+
+                <!-- Layer resize -->
+                <div id="layer-resize-container" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--cream-300);">
+                    <span class="sub-label">TAMAÑO DE CAPA (%)</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="range" id="layer-scale-slider" min="10" max="500" step="1" value="100" oninput="updateLayerScaleFromSlider(this.value)" onchange="saveHistory()">
+                        <span id="layer-scale-display" style="font-size:0.78rem; font-weight:800; color:var(--ink);">100%</span>
+                    </div>
+                </div>
+
+                <!-- Rain button -->
+                <button id="btn-rain" class="btn-purple" style="margin-top:10px;" onclick="toggleRainMode()">
+                    <span class="material-icons-round">water_drop</span> EFECTO LLUVIA
+                </button>
+                <div id="rain-panel" class="rain-controls-panel">
+                    <span class="sub-label">DENSIDAD DE LLUVIA</span>
+                    <div class="density-control">
+                        <label>ESPACIO (1=Cerrado, 100=Abierto):</label>
+                        <input type="range" id="rain-density" min="1" max="100" step="1" value="1" oninput="updateRainPreview(this.value)">
+                        <span id="rain-density-display">1</span>
+                    </div>
+                    <button class="btn-black" style="margin-top:10px;" onclick="confirmRainLayer()">GENERAR LLUVIA</button>
+                </div>
+            </div>
+
+            <!-- 02. CONFIGURACIÓN -->
+            <div class="tool-section controls-disabled" id="rhinestone-controls">
+                <h2 class="section-title">02. CONFIGURACIÓN</h2>
+                <span class="sub-label">TAMAÑO PIEDRA (SS)</span>
+                <div class="ss-grid">
+                    <button class="ss-btn" data-val="2.3" onclick="setStoneSize(2.3, this)">SS6</button>
+                    <button class="ss-btn active" data-val="3.1" onclick="setStoneSize(3.1, this)">SS10</button>
+                    <button class="ss-btn" data-val="4.2" onclick="setStoneSize(4.2, this)">SS16</button>
+                    <button class="ss-btn" data-val="5.0" onclick="setStoneSize(5.0, this)">SS20</button>
+                </div>
+                <div class="manual-size-wrapper">
+                    <span class="sub-label" style="margin-bottom:0;">MANUAL (MM):</span>
+                    <input type="number" id="manual-mm" value="3.1" step="0.1" onchange="setManualSize(this.value)">
+                </div>
+
+                <span class="sub-label" id="lbl-fill">TIPO DE RELLENO</span>
+                <div class="effect-grid" id="cont-fill">
+                    <button class="effect-btn active" data-mode="linear" onclick="setMode('linear', this)">LINEAL</button>
+                    <button class="effect-btn" data-mode="hex" onclick="setMode('hex', this)">HEXAGONAL</button>
+                    <button class="effect-btn" data-mode="radial" onclick="setMode('radial', this)">CIRCULAR</button>
+                    <button class="effect-btn" data-mode="edge" onclick="setMode('edge', this)">CONTORNO</button>
+                </div>
+
+                <div class="density-control" id="cont-spacing">
+                    <label>ESPACIO:</label>
+                    <input type="range" id="spacing-slider" min="0.1" max="3.0" step="0.1" value="0.5" oninput="updateSpacing(this.value)">
+                    <span id="spacing-display">0.5 mm</span>
+                </div>
+            </div>
+
+            <!-- 03. FONDO -->
+            <div class="tool-section">
+                <h2 class="section-title">03. FONDO</h2>
+                <div class="bg-selector-group">
+                    <button class="bg-btn grid active" onclick="setBg('grid', this)"></button>
+                    <button class="bg-btn white" onclick="setBg('#ffffff', this)"></button>
+                    <button class="bg-btn gray"  onclick="setBg('#888888', this)"></button>
+                    <button class="bg-btn black" onclick="setBg('#222222', this)"></button>
+                    <button class="bg-btn navy"  onclick="setBg('#000080', this)"></button>
+                </div>
+            </div>
+
+            <!-- 04. COSTOS -->
+            <div class="tool-section calc-section">
+                <h2 class="section-title">04. COSTOS (TOTAL)</h2>
+                <div class="calc-inputs-row">
+                    <div class="calc-group">
+                        <label>PZAS BOLSA</label>
+                        <input type="number" id="bag-qty" value="14400" oninput="updateCostInput(this, 'qty')">
+                    </div>
+                    <div class="calc-group">
+                        <label>PRECIO</label>
+                        <input type="number" id="bag-price" value="450" oninput="updateCostInput(this, 'price')">
+                    </div>
+                </div>
+                <div class="calc-result-box">
+                    <div class="result-item">
+                        <span class="result-label">PIEDRAS</span>
+                        <strong id="stone-count">0</strong>
+                    </div>
+                    <div class="result-divider"></div>
+                    <div class="result-item">
+                        <span class="result-label">COSTO</span>
+                        <strong id="total-cost" class="money-text">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 05. EXPORTAR -->
+            <div class="tool-section">
+                <h2 class="section-title">05. EXPORTAR</h2>
+                <button class="btn-purple" id="btn-select-area" onclick="toggleSelectionMode()" style="background:var(--cream-600);">
+                    <span class="material-icons-round">crop_free</span> SELECCIONAR ZONA
+                </button>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <button class="btn-gold" onclick="download('svg')">
+                        <span class="material-icons-round">download</span> DESCARGAR CAPAS (SVG)
+                    </button>
+                    <button class="btn-gold" onclick="download('png')">
+                        <span class="material-icons-round">download</span> DESCARGAR PNG
+                    </button>
+                    <button class="btn-gold" onclick="download('pdf')">
+                        <span class="material-icons-round">download</span> DESCARGAR PDF
+                    </button>
+                </div>
+            </div>
+
+        </div><!-- /sidebar-scroll -->
+    </aside>
+
+    <!-- ════ EDITOR AREA ════ -->
+    <main class="editor-area" id="editor-area">
+        <div class="control-panel-wrapper">
+            <div class="panel-group">
+                <button class="ctrl-btn" onclick="undo()" title="Deshacer (Ctrl+Z)">↶</button>
+                <div class="divider-v"></div>
+                <button class="ctrl-btn" onclick="window.zoom(-0.1)">－</button>
+                <button class="ctrl-btn reset-btn" onclick="fitCanvas()">AJUSTAR</button>
+                <button class="ctrl-btn" onclick="window.zoom(0.1)">＋</button>
+                <div class="divider-v"></div>
+                <button class="ctrl-btn danger" onclick="deleteActive()">✕</button>
+            </div>
+        </div>
+
+        <div class="mobile-pan-controls">
+            <button class="pan-btn pan-up" onclick="panMobile(0, -100)"><span class="material-icons-round">arrow_drop_up</span></button>
+            <button class="pan-btn pan-left" onclick="panMobile(-100, 0)"><span class="material-icons-round">arrow_left</span></button>
+            <button class="pan-btn pan-right" onclick="panMobile(100, 0)"><span class="material-icons-round">arrow_right</span></button>
+            <button class="pan-btn pan-down" onclick="panMobile(0, 100)"><span class="material-icons-round">arrow_drop_down</span></button>
+        </div>
+
+        <div class="canvas-scroll-container">
+            <div class="viewport-wrapper">
+                <div class="canvas-viewport" id="viewport">
+                    <div id="canvas-bg" class="canvas-bg-grid"></div>
+                    <div class="ruler-v" onclick="addGuide('V')" title="Añadir Guía Vertical"></div>
+                    <div class="ruler-h" onclick="addGuide('H')" title="Añadir Guía Horizontal"></div>
+                    <canvas id="c"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div><!-- /builder-wrapper -->
+</div><!-- /app-wrapper -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const MM_TO_PX = 3.7795;
+    let canvas;
+    let currentZoom = 1;
+    let isLocked = false;
+    let lockedImageObj = null;
+    let history = [];
+    let historyProcessing = false;
+    const MAX_HISTORY = 10;
+    let isDrawingMode = false;
+    let isCaptureMode = false;
+    let isDeselectMode = false;
+    let captureSelection = [];
+    let isLassoMode = false;
+    let isDraggingLasso = false;
+    let lassoPoints = [];
+    let currentLassoLine = null;
+    let allLassoPolygons = [];
+    let allLassoRawPoints = [];
+    let lassoTargetImage = null;
+    let isAuraMode = false;
+    let auraPreviewGroup = null;
+    let auraData = [];
+    let auraDebounceTimer = null;
+    let rainPreviewGroup = null;
+    let rainData = [];
+    let manualPoints = [];
+    let lastDrawPoint = null;
+    let isSelectionMode = false;
+    let selectionRect = null;
+    let uploadedFileName = 'chechena-pedreria';
+    let isDraggingCanvas = false;
+    let lastPosX = 0;
+    let lastPosY = 0;
+    let config = { stoneSizeMM: 3.1, spacingMM: 0.5, mode: 'linear' };
+    let baseWidth = 30.5 * 10 * MM_TO_PX;
+    let baseHeight = 30.5 * 10 * MM_TO_PX;
+    let layers = [];
+    let activeLayerId = null;
+    let selectedLayerIds = [];
+
+    function init() {
+        canvas = new fabric.Canvas('c', {
+            preserveObjectStacking: true,
+            selection: true,
+            backgroundColor: null,
+            fireRightClick: true,
+            stopContextMenu: true
+        });
+
+        canvas.setWidth(baseWidth);
+        canvas.setHeight(baseHeight);
+
+        fabric.Object.prototype.set({
+            transparentCorners: false,
+            cornerColor: '#C8A55A',
+            borderColor: '#C8A55A',
+            cornerStrokeColor: '#fff',
+            cornerSize: 12,
+            borderScaleFactor: 2,
+            padding: 5
+        });
+
+        document.querySelector('.canvas-scroll-container').addEventListener('contextmenu', e => e.preventDefault());
+        document.querySelector('.canvas-scroll-container').addEventListener('mouseout', function(e) {
+            if (!e.relatedTarget || !this.contains(e.relatedTarget))
+                document.getElementById('dynamic-tooltip').style.display = 'none';
+        });
+        canvas.on('mouse:out', () => document.getElementById('dynamic-tooltip').style.display = 'none');
+
+        window.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 'z') { undo(); return; }
+            if (e.altKey && !isDraggingCanvas) document.getElementById('editor-area').classList.add('cursor-grab');
+        });
+        window.addEventListener('keyup', e => {
+            if (!e.altKey && !isDraggingCanvas) {
+                document.getElementById('editor-area').classList.remove('cursor-grab');
+                document.getElementById('editor-area').classList.remove('cursor-grabbing');
+            }
+        });
+
+        canvas.on('mouse:down:before', opt => {
+            if (isDrawingMode || isCaptureMode || isLassoMode || isAuraMode || opt.e.altKey) {
+                canvas.selection = false;
+                canvas.getObjects().forEach(o => { o.evented = false; o.selectable = false; });
+            } else { canvas.selection = true; }
+        });
+
+        canvas.on('mouse:wheel', opt => {
+            if (opt.e.ctrlKey || opt.e.metaKey) {
+                window.zoom(opt.e.deltaY > 0 ? -0.1 : 0.1);
+                opt.e.preventDefault(); opt.e.stopPropagation();
+            }
+        });
+
+        canvas.on('mouse:down', opt => {
+            if (opt.e.altKey) {
+                isDraggingCanvas = true; canvas.selection = false;
+                lastPosX = opt.e.clientX; lastPosY = opt.e.clientY;
+                document.getElementById('editor-area').classList.remove('cursor-grab');
+                document.getElementById('editor-area').classList.add('cursor-grabbing');
+                return;
+            }
+            if (opt.target && opt.target.id === 'selectionArea') return;
+            if (isLassoMode) {
+                if (opt.e.touches && opt.e.touches.length >= 2) return;
+                isDraggingLasso = true;
+                const pointer = canvas.getPointer(opt.e);
+                lassoPoints = [pointer];
+                currentLassoLine = new fabric.Polyline(lassoPoints, {
+                    stroke: '#C8A55A', strokeWidth: 2 / currentZoom,
+                    fill: 'rgba(200,165,90,.2)', selectable: false, evented: false, excludeFromExport: true
+                });
+                canvas.add(currentLassoLine); return;
+            }
+            if (opt.target && opt.target.layerId && !isDrawingMode && !isCaptureMode && !isLassoMode && !isAuraMode)
+                setActiveLayer(opt.target.layerId, opt.e);
+            if (isLocked && !isAuraMode) {
+                const pointer = canvas.getPointer(opt.e);
+                if (isDrawingMode && opt.e.button === 0) {
+                    canvas.selection = false; addManualStone(pointer); lastDrawPoint = pointer;
+                } else if (isCaptureMode) {
+                    canvas.selection = false;
+                    if (opt.e.button === 2 || isDeselectMode) handleCaptureDeselection(pointer);
+                    else handleCaptureSelection(pointer);
+                }
+            }
+        });
+
+        canvas.on('mouse:move', opt => {
+            if (isDraggingCanvas) {
+                const e = opt.e;
+                const dx = e.clientX - lastPosX, dy = e.clientY - lastPosY;
+                const cont = document.querySelector('.canvas-scroll-container');
+                cont.scrollLeft -= dx; cont.scrollTop -= dy;
+                lastPosX = e.clientX; lastPosY = e.clientY; return;
+            }
+            if (opt.target && opt.target.id === 'selectionArea') return;
+            const pointer = canvas.getPointer(opt.e);
+            if (isLassoMode && isDraggingLasso) {
+                lassoPoints.push(pointer);
+                canvas.remove(currentLassoLine);
+                currentLassoLine = new fabric.Polyline(lassoPoints, {
+                    stroke: '#C8A55A', strokeWidth: 2 / currentZoom,
+                    fill: 'rgba(200,165,90,.2)', selectable: false, evented: false, excludeFromExport: true
+                });
+                canvas.add(currentLassoLine); canvas.requestRenderAll(); return;
+            }
+            if (isLocked && !isAuraMode) {
+                if (isDrawingMode && opt.e.buttons === 1) {
+                    if (lastDrawPoint) {
+                        const dist = Math.sqrt(Math.pow(pointer.x-lastDrawPoint.x,2)+Math.pow(pointer.y-lastDrawPoint.y,2));
+                        const minS = (config.stoneSizeMM*MM_TO_PX)+(config.spacingMM*MM_TO_PX);
+                        if (dist > minS) { addManualStone(pointer); lastDrawPoint = pointer; }
+                    } else { addManualStone(pointer); lastDrawPoint = pointer; }
+                } else if (isCaptureMode) {
+                    if (isDeselectMode && opt.e.buttons===1) handleCaptureDeselection(pointer);
+                    else if (opt.e.buttons===2) handleCaptureDeselection(pointer);
+                    else if (opt.e.buttons===1) handleCaptureSelection(pointer);
+                }
+            } else if (!isLocked && !isLassoMode && !isAuraMode) { showTooltip(opt); }
+        });
+
+        canvas.on('mouse:up', opt => {
+            if (isDraggingCanvas) {
+                isDraggingCanvas = false;
+                document.getElementById('editor-area').classList.remove('cursor-grabbing');
+                if (opt.e.altKey) document.getElementById('editor-area').classList.add('cursor-grab');
+            }
+            if (isLassoMode && isDraggingLasso) {
+                isDraggingLasso = false;
+                if (lassoPoints.length > 2) {
+                    const poly = new fabric.Polygon(lassoPoints, {
+                        stroke: '#C8A55A', strokeWidth: 2/currentZoom,
+                        fill: 'rgba(200,165,90,.15)', selectable: false, evented: false, excludeFromExport: true
+                    });
+                    canvas.remove(currentLassoLine); currentLassoLine = null;
+                    canvas.add(poly); allLassoPolygons.push(poly); allLassoRawPoints.push([...lassoPoints]);
+                    canvas.requestRenderAll();
+                    if (lassoTargetImage) {
+                        document.getElementById('btn-apply-lasso').style.display = 'flex';
+                    }
+                } else {
+                    if (currentLassoLine) { canvas.remove(currentLassoLine); currentLassoLine = null; }
+                }
+                lassoPoints = [];
+            }
+            if (!isDraggingCanvas) {
+                canvas.getObjects().forEach(o => {
+                    const l = layers.find(la => la.id === o.layerId);
+                    if (!l) return;
+                    if (l.status === 'locked') { o.selectable = false; o.evented = false; }
+                    else { o.selectable = true; o.evented = true; }
+                });
+                if (opt.target && opt.target.id === 'guide') {
+                    opt.target.selectable = true; opt.target.evented = true;
+                }
+                if (opt.target && opt.target.id === 'selectionArea') {
+                    opt.target.selectable = true; opt.target.evented = true;
+                }
+            }
+            saveHistory();
+        });
+
+        canvas.on('selection:created', () => showTooltip({target: canvas.getActiveObject()}));
+        canvas.on('selection:updated', () => showTooltip({target: canvas.getActiveObject()}));
+        canvas.on('object:modified', () => { showTooltip({target: canvas.getActiveObject()}); saveHistory(); });
+        canvas.on('object:scaling', opt => showTooltip(opt));
+
+        document.getElementById('file-upload').addEventListener('change', e => {
+            if (e.target.files[0]) loadImageAsLayer(e.target.files[0], false);
+        });
+        document.getElementById('file-upload-guide').addEventListener('change', e => {
+            if (e.target.files[0]) loadImageAsLayer(e.target.files[0], true);
+        });
+
+        updateCanvasSize();
+        setTimeout(centerVirtualDesk, 100);
+        updateLayersUI();
+    }
+
+    // ── CANVAS SIZE ──
+    window.updateCanvasSize = () => {
+        const w = parseFloat(document.getElementById('canvas-w').value) || 30.5;
+        const h = parseFloat(document.getElementById('canvas-h').value) || 30.5;
+        baseWidth = w * 10 * MM_TO_PX;
+        baseHeight = h * 10 * MM_TO_PX;
+        canvas.setWidth(baseWidth); canvas.setHeight(baseHeight);
+        document.getElementById('viewport').style.width = baseWidth + 'px';
+        document.getElementById('viewport').style.height = baseHeight + 'px';
+        canvas.requestRenderAll();
+    };
+
+    // ── PAN MOBILE ──
+    window.panMobile = (dx, dy) => {
+        const cont = document.querySelector('.canvas-scroll-container');
+        cont.scrollLeft += dx; cont.scrollTop += dy;
+    };
+
+    // ── ZOOM ──
+    window.zoom = (delta) => {
+        currentZoom = Math.max(0.1, Math.min(5, currentZoom + delta));
+        applyZoom(currentZoom);
+    };
+    function applyZoom(z) {
+        currentZoom = z;
+        canvas.setZoom(z);
+        canvas.setWidth(baseWidth * z);
+        canvas.setHeight(baseHeight * z);
+        canvas.requestRenderAll();
+    }
+    window.fitCanvas = () => {
+        const cont = document.querySelector('.canvas-scroll-container');
+        const z = Math.min((cont.clientWidth - 80) / baseWidth, (cont.clientHeight - 80) / baseHeight);
+        applyZoom(Math.max(0.1, z));
+        setTimeout(centerVirtualDesk, 50);
+    };
+
+    // ── LOAD IMAGE ──
+    function loadImageAsLayer(file, isGuide) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const layerId = 'L_' + Date.now();
+            const fileName = file.name.replace(/\.[^/.]+$/, '');
+            uploadedFileName = fileName;
+            fabric.Image.fromURL(e.target.result, img => {
+                const maxSide = Math.min(baseWidth, baseHeight) * 0.7;
+                const scale = Math.min(maxSide / img.width, maxSide / img.height);
+                img.set({
+                    left: baseWidth / 2, top: baseHeight / 2,
+                    originX: 'center', originY: 'center',
+                    scaleX: scale, scaleY: scale,
+                    id: 'sourceImage', layerId: layerId,
+                    selectable: !isGuide, evented: !isGuide,
+                    opacity: isGuide ? 0.5 : 1
+                });
+                img.baseScale = scale;
+                canvas.add(img);
+
+                const layerColor = isGuide ? '#A89070' : getNextColor();
+                const previewUrl = e.target.result;
+
+                const layer = {
+                    id: layerId, name: isGuide ? 'Guía: ' + fileName : fileName,
+                    color: layerColor, status: 'edit', visible: true,
+                    preview: previewUrl, config: { ...config }, isVector: false,
+                    isGuide: isGuide, bagPrice: 450, bagQty: 14400
+                };
+                layers.push(layer);
+                setActiveLayer(layerId);
+                saveHistory();
+                updateLayersUI();
+                canvas.requestRenderAll();
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+
+    const COLORS = ['#C8A55A','#1A1208','#7A6248','#3D2E1A','#A89070','#5C4A36','#E4D5B3','#6B5840'];
+    let colorIdx = 0;
+    function getNextColor() { return COLORS[colorIdx++ % COLORS.length]; }
+
+    // ── STONE ──
+    function createStone(x, y, sizePx) {
+        return new fabric.Circle({
+            left: x, top: y, radius: sizePx / 2,
+            fill: '#C8A55A', originX: 'center', originY: 'center',
+            selectable: false, evented: false, id: 'stone'
+        });
+    }
+
+    // ── APPLY RHINESTONES ──
+    window.applyRhinestones = () => {
+        if (!activeLayerId) return;
+        const layer = layers.find(l => l.id === activeLayerId);
+        if (!layer || layer.status !== 'edit') return;
+        const imgObj = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image');
+        if (!imgObj) return;
+        document.getElementById('loading-overlay').style.display = 'flex';
+        document.getElementById('loading-text').innerText = 'CALCULANDO PEDRERÍA...';
+        setTimeout(() => {
+            runAlgorithm(imgObj.getElement(), imgObj);
+            layer.status = 'locked';
+            isLocked = true; lockedImageObj = imgObj;
+            layer.preview = generateFastThumbnail(imgObj, layer.color);
+            document.getElementById('loading-overlay').style.display = 'none';
+            updateLayersUI(); recountAllStones(); updateStoneDims();
+            canvas.requestRenderAll(); saveHistory();
+        }, 50);
+    };
+
+    // ── RUN ALGORITHM ──
+    function runAlgorithm(element, imgObj) {
+        const existing = canvas.getObjects().filter(o => o.layerId === activeLayerId && (o.id === 'stone' || o.id === 'stoneGroup'));
+        existing.forEach(o => canvas.remove(o));
+
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const spacingPx = config.spacingMM * MM_TO_PX;
+        const stepX = stonePx + spacingPx;
+        let stepY = stepX;
+        if (config.mode === 'hex') stepY = stepX * 0.8660254;
+
+        const isMobile = window.innerWidth <= 900;
+        const maxDim = isMobile ? 600 : 1200;
+        const bW = imgObj.getScaledWidth(), bH = imgObj.getScaledHeight();
+        let rs = 1;
+        if (bW > maxDim || bH > maxDim) rs = maxDim / Math.max(bW, bH);
+        const rW = Math.ceil(bW * rs), rH = Math.ceil(bH * rs);
+
+        const offC = document.createElement('canvas');
+        offC.width = rW; offC.height = rH;
+        const ctx = offC.getContext('2d');
+        ctx.drawImage(element, 0, 0, element.naturalWidth || element.width, element.naturalHeight || element.height, 0, 0, rW, rH);
+        const data = ctx.getImageData(0, 0, rW, rH).data;
+
+        const isOpaque = (px, py) => {
+            if (px < 0 || px >= rW || py < 0 || py >= rH) return false;
+            return data[(Math.floor(py) * rW + Math.floor(px)) * 4 + 3] > 30;
+        };
+
+        const matrix = imgObj.calcTransformMatrix();
+        const centerX = bW / 2 / rs, centerY = bH / 2 / rs;
+        const scaleX = Math.abs(imgObj.scaleX), scaleY = Math.abs(imgObj.scaleY);
+        const stones = [];
+
+        if (config.mode === 'edge') {
+            for (let py = 0; py < rH; py += stepY * rs) {
+                for (let px = 0; px < rW; px += stepX * rs) {
+                    if (!isOpaque(px, py)) continue;
+                    let edgeFound = false;
+                    const r = Math.ceil(stonePx * rs);
+                    for (let a = 0; a < Math.PI * 2; a += 0.3) {
+                        if (!isOpaque(px + Math.cos(a) * r, py + Math.sin(a) * r)) { edgeFound = true; break; }
+                    }
+                    if (edgeFound) {
+                        const lx = (px - centerX) / rs / scaleX, ly = (py - centerY) / rs / scaleY;
+                        const pt = fabric.util.transformPoint({x: lx, y: ly}, matrix);
+                        stones.push(createStone(pt.x, pt.y, stonePx));
+                    }
+                }
+            }
+        } else if (config.mode === 'radial') {
+            const cx = rW / 2, cy = rH / 2;
+            const maxR = Math.sqrt(cx*cx + cy*cy);
+            for (let r = stepX * rs / 2; r < maxR; r += stepX * rs) {
+                const circ = 2 * Math.PI * r;
+                const count = Math.max(1, Math.round(circ / (stepX * rs)));
+                for (let i = 0; i < count; i++) {
+                    const angle = (i / count) * 2 * Math.PI;
+                    const px = cx + Math.cos(angle) * r, py = cy + Math.sin(angle) * r;
+                    if (!isOpaque(px, py)) continue;
+                    const lx = (px - centerX) / rs / scaleX, ly = (py - centerY) / rs / scaleY;
+                    const pt = fabric.util.transformPoint({x: lx, y: ly}, matrix);
+                    stones.push(createStone(pt.x, pt.y, stonePx));
+                }
+            }
+        } else {
+            for (let py = stepY * rs / 2; py < rH; py += stepY * rs) {
+                let shift = 0;
+                if (config.mode === 'hex' && Math.floor(py / (stepY * rs)) % 2 === 1) shift = stepX * rs / 2;
+                for (let px = stepX * rs / 2; px < rW; px += stepX * rs) {
+                    const checkX = px + shift;
+                    if (checkX >= rW) continue;
+                    if (!isOpaque(checkX, py)) continue;
+                    const lx = (checkX - centerX) / rs / scaleX, ly = (py - centerY) / rs / scaleY;
+                    const pt = fabric.util.transformPoint({x: lx, y: ly}, matrix);
+                    stones.push(createStone(pt.x, pt.y, stonePx));
+                }
+            }
+        }
+
+        const layerColor = layers.find(l => l.id === activeLayerId)?.color || '#C8A55A';
+        stones.forEach(s => { s.set({ layerId: activeLayerId, fill: layerColor }); });
+
+        if (stones.length > 0) {
+            const group = new fabric.Group(stones, { selectable: false, evented: false, id: 'stoneGroup', layerId: activeLayerId });
+            canvas.add(group);
+        }
+        canvas.requestRenderAll();
+    }
+
+    function generateFastThumbnail(imgObj, color) {
+        try {
+            const c = document.createElement('canvas');
+            c.width = 60; c.height = 60;
+            const ctx = c.getContext('2d');
+            ctx.drawImage(imgObj.getElement(), 0, 0, 60, 60);
+            return c.toDataURL();
+        } catch { return ''; }
+    }
+
+    function generateFastThumbnailFromObjects(pts, color) {
+        if (!pts || pts.length === 0) return '';
+        try {
+            const c = document.createElement('canvas'); c.width = 60; c.height = 60;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = color || '#C8A55A';
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            pts.forEach(p => { minX = Math.min(minX, p.x); minY = Math.min(minY, p.y); maxX = Math.max(maxX, p.x); maxY = Math.max(maxY, p.y); });
+            const w = maxX - minX || 1, h = maxY - minY || 1;
+            const sx = 56 / w, sy = 56 / h, s = Math.min(sx, sy);
+            pts.forEach(p => {
+                const cx = (p.x - minX) * s + 2, cy = (p.y - minY) * s + 2, r = (p.r || 3) * s;
+                ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+            });
+            return c.toDataURL();
+        } catch { return ''; }
+    }
+
+    // ── MANUAL DRAW ──
+    function addManualStone(pointer) {
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const existing = canvas.getObjects().filter(o => o.layerId === activeLayerId && o.id === 'stone');
+        for (let s of existing) {
+            if (Math.sqrt(Math.pow(s.left - pointer.x, 2) + Math.pow(s.top - pointer.y, 2)) < stonePx) return;
+        }
+        const color = layers.find(l => l.id === activeLayerId)?.color || '#C8A55A';
+        const s = createStone(pointer.x, pointer.y, stonePx);
+        s.set({ layerId: activeLayerId, isManual: true, fill: color });
+        canvas.add(s);
+        canvas.requestRenderAll();
+        recountAllStones();
+    }
+
+    // ── CAPTURE MODE ──
+    function handleCaptureSelection(pointer) {
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const radius = stonePx * 1.5;
+        const imgObj = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image');
+        if (!imgObj) return;
+        const color = layers.find(l => l.id === activeLayerId)?.color || '#C8A55A';
+        let added = false;
+        const invMatrix = fabric.util.invertTransform(imgObj.calcTransformMatrix());
+        const localP = fabric.util.transformPoint(pointer, invMatrix);
+        const px = (localP.x + imgObj.width / 2) * Math.abs(imgObj.scaleX);
+        const py = (localP.y + imgObj.height / 2) * Math.abs(imgObj.scaleY);
+        const existing = canvas.getObjects().filter(o => o.layerId === activeLayerId && (o.id === 'stone'));
+        for (let s of existing) {
+            if (Math.sqrt(Math.pow(s.left - pointer.x, 2) + Math.pow(s.top - pointer.y, 2)) < stonePx * 0.8) return;
+        }
+        const s = createStone(pointer.x, pointer.y, stonePx);
+        s.set({ layerId: activeLayerId, isManual: true, fill: color, id: 'stone' });
+        canvas.add(s);
+        captureSelection.push(s);
+        canvas.requestRenderAll();
+        recountAllStones();
+        const cap = document.getElementById('btn-create-captured');
+        if (cap && captureSelection.length > 0) cap.style.display = 'flex';
+    }
+    function handleCaptureDeselection(pointer) {
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const toRemove = canvas.getObjects().filter(o =>
+            o.layerId === activeLayerId && (o.id === 'stone') &&
+            Math.sqrt(Math.pow(o.left - pointer.x, 2) + Math.pow(o.top - pointer.y, 2)) < stonePx * 1.5
+        );
+        toRemove.forEach(o => { canvas.remove(o); captureSelection = captureSelection.filter(s => s !== o); });
+        canvas.requestRenderAll(); recountAllStones();
+    }
+    window.createLayerFromCapture = () => {
+        if (captureSelection.length === 0) return;
+        const newId = 'L_CAP_' + Date.now();
+        const color = layers.find(l => l.id === activeLayerId)?.color || '#C8A55A';
+        const pts = captureSelection.map(s => ({ x: s.left, y: s.top, r: s.radius }));
+        captureSelection.forEach(s => { s.set({ layerId: newId }); });
+        captureSelection = [];
+        const layer = {
+            id: newId, name: 'Captura ' + Date.now(), color, status: 'locked', visible: true,
+            preview: generateFastThumbnailFromObjects(pts, color), config: { ...config }, isVector: true,
+            originalStones: pts, bagPrice: 450, bagQty: 14400
+        };
+        layers.push(layer);
+        setActiveLayer(newId);
+        document.getElementById('capture-tools').style.display = 'none';
+        toggleCaptureMode();
+        updateLayersUI(); saveHistory();
+    };
+
+    // ── DRAW MODE ──
+    window.toggleDrawMode = () => {
+        if (!isLocked) return;
+        isDrawingMode = !isDrawingMode;
+        if (isDrawingMode) {
+            if (isCaptureMode) toggleCaptureMode();
+            if (isAuraMode) toggleAuraMode();
+        }
+        const btn = document.getElementById('btn-draw');
+        const done = document.getElementById('btn-draw-done');
+        const area = document.getElementById('editor-area');
+        if (isDrawingMode) {
+            btn.classList.add('btn-active-tool'); done.style.display = 'flex';
+            area.classList.add('cursor-draw'); canvas.selection = false;
+            setInterfaceState('draw');
+        } else {
+            btn.classList.remove('btn-active-tool'); done.style.display = 'none';
+            area.classList.remove('cursor-draw'); canvas.selection = true;
+            manualPoints = []; lastDrawPoint = null;
+            setInterfaceState('none');
+        }
+    };
+
+    // ── CAPTURE MODE ──
+    window.toggleCaptureMode = () => {
+        if (!isLocked) return;
+        isCaptureMode = !isCaptureMode;
+        if (isCaptureMode && isDrawingMode) toggleDrawMode();
+        const btn = document.getElementById('btn-capture');
+        const tools = document.getElementById('capture-tools');
+        const area = document.getElementById('editor-area');
+        if (isCaptureMode) {
+            btn.classList.add('btn-active-tool'); tools.style.display = 'block';
+            area.classList.add('cursor-capture'); canvas.selection = false;
+            setInterfaceState('capture');
+        } else {
+            btn.classList.remove('btn-active-tool'); tools.style.display = 'none';
+            area.classList.remove('cursor-capture'); canvas.selection = true;
+            isDeselectMode = false;
+            document.getElementById('btn-toggle-deselect').classList.remove('active');
+            setInterfaceState('none');
+        }
+    };
+    window.toggleDeselectMode = () => {
+        isDeselectMode = !isDeselectMode;
+        const btn = document.getElementById('btn-toggle-deselect');
+        btn.classList.toggle('active', isDeselectMode);
+        document.getElementById('editor-area').classList.toggle('cursor-deselect', isDeselectMode);
+    };
+
+    // ── LASSO MODE ──
+    window.toggleLassoMode = () => {
+        isLassoMode = !isLassoMode;
+        const btn = document.getElementById('btn-lasso');
+        const btnApply = document.getElementById('btn-apply-lasso');
+        const area = document.getElementById('editor-area');
+        if (isLassoMode) {
+            if (isDrawingMode) toggleDrawMode();
+            if (isCaptureMode) toggleCaptureMode();
+            lassoTargetImage = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image') || null;
+            allLassoPolygons = []; allLassoRawPoints = [];
+            btn.classList.add('btn-active-tool');
+            canvas.selection = false;
+            canvas.getObjects().forEach(o => { o.set({ selectable: false, evented: false }); });
+            setInterfaceState('lasso');
+        } else {
+            btn.classList.remove('btn-active-tool');
+            if (btnApply) btnApply.style.display = 'none';
+            allLassoPolygons.forEach(p => canvas.remove(p));
+            allLassoPolygons = []; allLassoRawPoints = [];
+            if (currentLassoLine) { canvas.remove(currentLassoLine); currentLassoLine = null; }
+            area.classList.remove('cursor-draw');
+            canvas.selection = true;
+            canvas.getObjects().forEach(o => {
+                const l = layers.find(la => la.id === o.layerId);
+                if (l && l.status !== 'locked') { o.set({ selectable: true, evented: true }); }
+            });
+            setInterfaceState('none');
+            canvas.requestRenderAll();
+        }
+    };
+    window.applyMultipleCrops = () => {
+        if (!lassoTargetImage || allLassoRawPoints.length === 0) return;
+        document.getElementById('loading-overlay').style.display = 'flex';
+        document.getElementById('loading-text').innerText = 'APLICANDO RECORTES...';
+        setTimeout(() => {
+            const img = lassoTargetImage;
+            const c = document.createElement('canvas');
+            c.width = img.width; c.height = img.height;
+            const ctx = c.getContext('2d');
+            ctx.drawImage(img.getElement(), 0, 0, c.width, c.height);
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            const invMatrix = fabric.util.invertTransform(img.calcTransformMatrix());
+            allLassoRawPoints.forEach(rawPts => {
+                if (rawPts.length < 3) return;
+                rawPts.forEach((p, i) => {
+                    const lp = fabric.util.transformPoint(p, invMatrix);
+                    const x = lp.x + img.width / 2, y = lp.y + img.height / 2;
+                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                });
+                ctx.closePath();
+            });
+            ctx.fill();
+            const trim = trimCanvasMaskHD(c, ctx, 15);
+            fabric.Image.fromURL(trim.url, newImg => {
+                const ox = trim.offsetX, oy = trim.offsetY;
+                const ncx = ox + trim.width / 2, ncy = oy + trim.height / 2;
+                const ccx = ncx - img.width / 2, ccy = ncy - img.height / 2;
+                const absCenter = fabric.util.transformPoint({x: ccx, y: ccy}, img.calcTransformMatrix());
+                newImg.set({
+                    left: absCenter.x, top: absCenter.y,
+                    originX: 'center', originY: 'center',
+                    scaleX: img.scaleX, scaleY: img.scaleY, angle: img.angle,
+                    id: 'sourceImage', layerId: img.layerId, baseScale: img.baseScale
+                });
+                canvas.remove(img); canvas.add(newImg);
+                const layer = layers.find(l => l.id === img.layerId);
+                if (layer) layer.preview = trim.url;
+                history = [];
+                toggleLassoMode();
+                document.getElementById('loading-overlay').style.display = 'none';
+                saveHistory(); updateLayersUI(); canvas.requestRenderAll();
+            });
+        }, 50);
+    };
+    function trimCanvasMaskHD(cvs, ctx, tol) {
+        const px = ctx.getImageData(0, 0, cvs.width, cvs.height);
+        const b = { top: null, left: null, right: null, bottom: null };
+        for (let i = 0; i < px.data.length; i += 4) {
+            if (px.data[i + 3] > tol) {
+                const x = (i / 4) % cvs.width, y = Math.floor((i / 4) / cvs.width);
+                if (b.top === null) b.top = y;
+                if (b.left === null || x < b.left) b.left = x;
+                if (b.right === null || x > b.right) b.right = x;
+                if (b.bottom === null || y > b.bottom) b.bottom = y;
+            }
+        }
+        if (b.top === null) return { url: cvs.toDataURL(), offsetX: 0, offsetY: 0, width: cvs.width, height: cvs.height };
+        const tw = b.right - b.left + 1, th = b.bottom - b.top + 1;
+        const trimmed = ctx.getImageData(b.left, b.top, tw, th);
+        cvs.width = tw; cvs.height = th; ctx.putImageData(trimmed, 0, 0);
+        return { url: cvs.toDataURL(), offsetX: b.left, offsetY: b.top, width: tw, height: th };
+    }
+
+    // ── AURA MODE ──
+    window.toggleAuraMode = () => {
+        const panel = document.getElementById('aura-panel');
+        const btn = document.getElementById('btn-aura-trigger');
+        if (panel.style.display === 'block') {
+            panel.style.display = 'none';
+            if (btn) btn.classList.remove('btn-active-tool');
+            if (auraPreviewGroup) { canvas.remove(auraPreviewGroup); auraPreviewGroup = null; }
+            isAuraMode = false; canvas.selection = true;
+            setInterfaceState('none'); checkActiveLayerState();
+        } else {
+            if (!activeLayerId) return;
+            const img = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image');
+            if (!img) { alert('Necesitas una capa de imagen activa.'); return; }
+            if (isDrawingMode) toggleDrawMode();
+            if (isCaptureMode) toggleCaptureMode();
+            if (isLassoMode) toggleLassoMode();
+            panel.style.display = 'block';
+            if (btn) btn.classList.add('btn-active-tool');
+            isAuraMode = true; canvas.selection = false;
+            setInterfaceState('aura');
+            canvas.discardActiveObject();
+            canvas.getObjects().forEach(o => o.set({ selectable: false, evented: false }));
+            scheduleAuraPreview();
+        }
+    };
+    window.scheduleAuraPreview = () => {
+        const extEl = document.getElementById('aura-extension');
+        const denEl = document.getElementById('aura-density');
+        document.getElementById('aura-extension-display').innerText = extEl.value;
+        document.getElementById('aura-density-display').innerText = denEl.value;
+        if (auraDebounceTimer) clearTimeout(auraDebounceTimer);
+        auraDebounceTimer = setTimeout(renderAuraPreview, 300);
+    };
+    function renderAuraPreview() {
+        if (!isAuraMode) return;
+        const ext = document.getElementById('aura-extension').value;
+        const den = document.getElementById('aura-density').value;
+        auraData = generateAuraData(ext, den);
+        if (auraPreviewGroup) canvas.remove(auraPreviewGroup);
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const circles = [];
+        canvas.renderOnAddRemove = false;
+        auraData.forEach(d => {
+            circles.push(new fabric.Circle({
+                left: d.x, top: d.y, radius: stonePx / 2,
+                fill: 'rgba(200,165,90,0.5)',
+                originX: 'center', originY: 'center', selectable: false, evented: false
+            }));
+        });
+        auraPreviewGroup = new fabric.Group(circles, { selectable: false, evented: false });
+        canvas.add(auraPreviewGroup);
+        canvas.renderOnAddRemove = true;
+        canvas.requestRenderAll();
+    }
+    function generateAuraData(extension, density) {
+        const imgObj = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image');
+        if (!imgObj) return [];
+        const scaleX = Math.abs(imgObj.scaleX), scaleY = Math.abs(imgObj.scaleY);
+        const isMobile = window.innerWidth <= 900;
+        const maxDim = isMobile ? 800 : 1500;
+        const bW = imgObj.width * scaleX, bH = imgObj.height * scaleY;
+        let rs = 1;
+        if (bW > maxDim || bH > maxDim) rs = maxDim / Math.max(bW, bH);
+        const imgW = bW * rs, imgH = bH * rs;
+        const extPx = parseInt(extension) * 3 * rs;
+        const wW = Math.ceil(imgW + extPx * 2), wH = Math.ceil(imgH + extPx * 2);
+        const off = document.createElement('canvas');
+        off.width = wW; off.height = wH;
+        const ctx = off.getContext('2d');
+        ctx.drawImage(imgObj.getElement(), 0, 0, imgObj.width, imgObj.height, extPx, extPx, imgW, imgH);
+        const origData = ctx.getImageData(0, 0, wW, wH).data;
+        ctx.clearRect(0, 0, wW, wH);
+        ctx.globalAlpha = 0.12;
+        const steps = 12;
+        const maxRadius = parseInt(extension) * rs;
+        for (let r = 1; r <= maxRadius; r += Math.max(1, maxRadius / 4)) {
+            for (let i = 0; i < steps; i++) {
+                const angle = (i / steps) * Math.PI * 2;
+                ctx.drawImage(imgObj.getElement(), 0, 0, imgObj.width, imgObj.height,
+                    extPx + Math.cos(angle) * r, extPx + Math.sin(angle) * r, imgW, imgH);
+            }
+        }
+        const blurData = ctx.getImageData(0, 0, wW, wH).data;
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const spacingPx = config.spacingMM * MM_TO_PX;
+        const stepX = (stonePx + spacingPx) * rs;
+        let stepY = stepX;
+        if (config.mode === 'hex') stepY = stepX * 0.8660254;
+        const generated = [];
+        const densityFactor = parseInt(density) / 100;
+        const matrix = imgObj.calcTransformMatrix();
+        const cx = extPx + imgW / 2, cy = extPx + imgH / 2;
+        const isOpaque = (x, y) => {
+            if (x < 0 || x >= wW || y < 0 || y >= wH) return false;
+            return origData[(Math.floor(y) * wW + Math.floor(x)) * 4 + 3] > 30;
+        };
+        const checkOpNeighbor = (px, py, rPx) => {
+            const rSafe = Math.max(2, rPx);
+            for (let r = 1; r <= rSafe; r += 2) {
+                for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+                    if (isOpaque(px + Math.cos(a) * r, py + Math.sin(a) * r)) return true;
+                }
+            }
+            return false;
+        };
+        for (let y = stepY / 2; y < wH; y += stepY) {
+            let shift = 0;
+            if (config.mode === 'hex' && Math.floor(y / stepY) % 2 === 1) shift = stepX / 2;
+            for (let x = stepX / 2; x < wW; x += stepX) {
+                let checkX = x + shift;
+                if (checkX >= wW) continue;
+                const pxX = Math.floor(checkX), pxY = Math.floor(y);
+                const idx = (pxY * wW + pxX) * 4;
+                if (isOpaque(pxX, pxY)) continue;
+                const bAlpha = blurData[idx + 3];
+                if (bAlpha > 2) {
+                    let prob = 0;
+                    if (checkOpNeighbor(pxX, pxY, Math.max(2, (stonePx * rs) / 1.5))) {
+                        prob = 1;
+                    } else {
+                        let ratio = Math.min(1, (bAlpha / 255) * 2.2);
+                        const solidThreshold = 1 - densityFactor * 0.85;
+                        if (ratio >= solidThreshold) prob = 1;
+                        else prob = Math.pow(ratio / solidThreshold, 2) * densityFactor * 1.5;
+                    }
+                    if (prob > 1) prob = 1;
+                    if (Math.random() < prob) {
+                        const lx = ((checkX - cx) / rs) / scaleX, ly = ((y - cy) / rs) / scaleY;
+                        const absPt = fabric.util.transformPoint({x: lx, y: ly}, matrix);
+                        let collision = false;
+                        for (let gi of generated) {
+                            if (Math.sqrt(Math.pow(absPt.x-gi.x,2)+Math.pow(absPt.y-gi.y,2)) < (stonePx+spacingPx-0.1)) { collision = true; break; }
+                        }
+                        if (!collision) generated.push({x: absPt.x, y: absPt.y});
+                    }
+                }
+            }
+        }
+        return generated;
+    }
+    window.confirmAuraLayer = () => {
+        if (!auraData.length) return;
+        const origLayerId = activeLayerId;
+        const origLayer = layers.find(l => l.id === activeLayerId);
+        const layerColor = origLayer ? origLayer.color : '#C8A55A';
+        const newId = 'L_AURA_' + Date.now();
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const radius = stonePx / 2;
+        const stones = [];
+        auraData.forEach(d => {
+            const s = createStone(d.x, d.y, stonePx);
+            s.set({ layerId: newId, isManual: true, fill: layerColor });
+            stones.push(s);
+        });
+        if (auraPreviewGroup) { canvas.remove(auraPreviewGroup); auraPreviewGroup = null; }
+        const group = new fabric.Group(stones, { selectable: false, evented: false, id: 'stoneGroup', layerId: newId });
+        const previewUrl = generateFastThumbnailFromObjects(auraData.map(d => ({x: d.x, y: d.y, r: radius})), layerColor);
+        canvas.add(group);
+        const newLayer = {
+            id: newId, name: (origLayer ? 'Aura ' + origLayer.name : 'Aura Expansiva'),
+            color: layerColor, status: 'locked', visible: true,
+            preview: previewUrl, config: { ...config }, isVector: true,
+            originalStones: auraData.map(d => ({x: d.x, y: d.y, r: radius})),
+            bagPrice: 450, bagQty: 14400
+        };
+        layers.push(newLayer);
+        toggleAuraMode();
+        setActiveLayer(newId);
+        if (origLayerId) deleteLayer(origLayerId, null, true);
+        else { enforceHierarchy(); updateLayersUI(); saveHistory(); }
+    };
+
+    // ── RAIN MODE ──
+    window.toggleRainMode = () => {
+        const panel = document.getElementById('rain-panel');
+        const btn = document.getElementById('btn-rain');
+        if (panel.style.display === 'block') {
+            panel.style.display = 'none'; btn.classList.remove('btn-active-tool');
+            if (rainPreviewGroup) { canvas.remove(rainPreviewGroup); rainPreviewGroup = null; }
+        } else {
+            panel.style.display = 'block'; btn.classList.add('btn-active-tool');
+            updateRainPreview(document.getElementById('rain-density').value);
+        }
+    };
+    window.updateRainPreview = (val) => {
+        document.getElementById('rain-density-display').innerText = val;
+        if (rainPreviewGroup) { canvas.remove(rainPreviewGroup); rainPreviewGroup = null; }
+        const spacing = parseInt(val);
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const step = stonePx + spacing * MM_TO_PX;
+        const circles = [];
+        canvas.renderOnAddRemove = false;
+        rainData = [];
+        for (let x = stonePx; x < baseWidth - stonePx; x += step) {
+            for (let y = stonePx; y < baseHeight - stonePx; y += step) {
+                if (Math.random() > 0.3) {
+                    circles.push(new fabric.Circle({
+                        left: x, top: y, radius: stonePx / 2,
+                        fill: 'rgba(200,165,90,0.4)', originX: 'center', originY: 'center',
+                        selectable: false, evented: false
+                    }));
+                    rainData.push({x, y});
+                }
+            }
+        }
+        if (circles.length > 0) {
+            rainPreviewGroup = new fabric.Group(circles, { selectable: false, evented: false });
+            canvas.add(rainPreviewGroup);
+        }
+        canvas.renderOnAddRemove = true;
+        canvas.requestRenderAll();
+    };
+    window.confirmRainLayer = () => {
+        if (!rainData.length) return;
+        const newId = 'L_RAIN_' + Date.now();
+        const color = layers.find(l => l.id === activeLayerId)?.color || '#C8A55A';
+        const stonePx = config.stoneSizeMM * MM_TO_PX;
+        const stones = rainData.map(d => {
+            const s = createStone(d.x, d.y, stonePx);
+            s.set({ layerId: newId, isManual: true, fill: color });
+            return s;
+        });
+        if (rainPreviewGroup) { canvas.remove(rainPreviewGroup); rainPreviewGroup = null; }
+        const group = new fabric.Group(stones, { selectable: false, evented: false, id: 'stoneGroup', layerId: newId });
+        const previewUrl = generateFastThumbnailFromObjects(rainData.map(d => ({x: d.x, y: d.y, r: stonePx/2})), color);
+        canvas.add(group);
+        const layer = {
+            id: newId, name: 'Lluvia ' + Date.now(), color, status: 'locked', visible: true,
+            preview: previewUrl, config: { ...config }, isVector: true,
+            originalStones: rainData.map(d => ({x: d.x, y: d.y, r: stonePx/2})),
+            bagPrice: 450, bagQty: 14400
+        };
+        layers.push(layer);
+        toggleRainMode();
+        setActiveLayer(newId);
+        enforceHierarchy(); updateLayersUI(); saveHistory();
+    };
+
+    // ── UNLOCK IMAGE ──
+    window.unlockImage = () => {
+        if (!activeLayerId) return;
+        const layer = layers.find(l => l.id === activeLayerId);
+        const stones = canvas.getObjects().filter(o => o.layerId === activeLayerId && (o.id === 'stone' || o.id === 'stoneGroup'));
+        stones.forEach(o => canvas.remove(o));
+        if (layer) layer.status = 'edit';
+        isLocked = false; lockedImageObj = null; manualPoints = []; isDrawingMode = false;
+        document.getElementById('btn-draw').classList.remove('btn-active-tool');
+        document.getElementById('btn-draw-done').style.display = 'none';
+        document.getElementById('editor-area').classList.remove('cursor-draw');
+        if (selectionRect) { canvas.remove(selectionRect); selectionRect = null; }
+        const btnSel = document.getElementById('btn-select-area');
+        if (btnSel) btnSel.classList.remove('active');
+        isSelectionMode = false;
+        recountAllStones(); updateStoneDims(); updateLayersUI(); canvas.renderAll();
+        canvas.selection = true; setInterfaceState('none');
+    };
+
+    // ── LAYER MANAGEMENT ──
+    function setActiveLayer(id, e) {
+        if (e && e.shiftKey && activeLayerId && activeLayerId !== id) {
+            if (selectedLayerIds.includes(id)) selectedLayerIds = selectedLayerIds.filter(lid => lid !== id);
+            else selectedLayerIds.push(id);
+        } else {
+            activeLayerId = id;
+            selectedLayerIds = [id];
+        }
+        if (isSelectionMode && selectionRect) { canvas.remove(selectionRect); selectionRect = null; isSelectionMode = false; }
+        const layer = layers.find(l => l.id === id);
+        if (layer) { config = { ...layer.config }; syncUIFromConfig(config); }
+        isLocked = layer && layer.status === 'locked';
+        lockedImageObj = isLocked ? canvas.getObjects().find(o => o.layerId === id && o.type === 'image') : null;
+        const imgLayer = canvas.getObjects().find(o => o.layerId === id && o.type === 'image');
+        if (imgLayer) updateImageDims(imgLayer);
+        else document.getElementById('dims-display').style.display = 'none';
+        const bagQty = document.getElementById('bag-qty');
+        const bagPrice = document.getElementById('bag-price');
+        if (layer && selectedLayerIds.length <= 1) {
+            bagQty.value = layer.bagQty || 14400;
+            bagPrice.value = layer.bagPrice || 450;
+            bagQty.disabled = false; bagPrice.disabled = false;
+        } else {
+            bagQty.disabled = true; bagPrice.disabled = true;
+        }
+        recountAllStones(); updateStoneDims(); updateLayersUI();
+    }
+
+    window.moveLayer = (id, direction, event) => {
+        event.stopPropagation();
+        const index = layers.findIndex(l => l.id === id);
+        if (direction === 'up' && index < layers.length - 1) {
+            [layers[index], layers[index+1]] = [layers[index+1], layers[index]];
+        } else if (direction === 'down' && index > 0) {
+            [layers[index], layers[index-1]] = [layers[index-1], layers[index]];
+        }
+        refreshAllLayers(); updateLayersUI(); saveHistory();
+    };
+
+    window.deleteLayer = (id, event, force = false) => {
+        if (event) event.stopPropagation();
+        if (!force && !confirm('¿Eliminar esta capa?')) return;
+        canvas.getObjects().filter(o => o.layerId === id).forEach(o => canvas.remove(o));
+        layers = layers.filter(l => l.id !== id);
+        selectedLayerIds = selectedLayerIds.filter(lid => lid !== id);
+        if (activeLayerId === id) {
+            activeLayerId = layers.length > 0 ? layers[layers.length - 1].id : null;
+            selectedLayerIds = activeLayerId ? [activeLayerId] : [];
+            if (activeLayerId) {
+                const l = layers.find(la => la.id === activeLayerId);
+                if (l) { config = l.config; syncUIFromConfig(config); }
+            } else { isLocked = false; lockedImageObj = null; }
+        }
+        refreshAllLayers(); updateLayersUI(); updateStoneDims();
+        const imgLayer = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image');
+        if (!imgLayer) document.getElementById('dims-display').style.display = 'none';
+        saveHistory();
+    };
+
+    window.toggleLayerVis = (id) => {
+        const layer = layers.find(l => l.id === id);
+        if (!layer) return;
+        layer.visible = !layer.visible;
+        canvas.getObjects().filter(o => o.layerId === id).forEach(o => {
+            o.visible = (layer.status === 'locked' && o.type === 'image') ? false : layer.visible;
+        });
+        updateLayersUI(); canvas.requestRenderAll();
+    };
+
+    window.updateLayerColor = (id, color) => {
+        const layer = layers.find(l => l.id === id);
+        if (!layer) return;
+        layer.color = color;
+        canvas.getObjects().filter(o => o.layerId === id).forEach(o => {
+            if (o.id === 'stone' || o.type === 'circle') o.set('fill', color);
+            if (o.type === 'group') o.getObjects().forEach(s => s.set('fill', color));
+        });
+        canvas.requestRenderAll();
+    };
+
+    function refreshAllLayers() {
+        const prevActive = activeLayerId;
+        const origConfig = { ...config };
+        canvas.renderOnAddRemove = false;
+        layers.forEach(l => {
+            if (l.status === 'locked') {
+                if (!l.isVector) {
+                    config = l.config; activeLayerId = l.id;
+                    const img = canvas.getObjects().find(o => o.layerId === l.id && o.type === 'image');
+                    if (img) runAlgorithm(img.getElement(), img);
+                } else if (l.isVector && l.originalStones) {
+                    const oldGroup = canvas.getObjects().find(o => o.layerId === l.id && o.id === 'stoneGroup');
+                    if (oldGroup) canvas.remove(oldGroup);
+                    const circles = l.originalStones.map(d => {
+                        const s = createStone(d.x, d.y, d.r * 2);
+                        s.set({ layerId: l.id, isManual: true, fill: l.color });
+                        return s;
+                    });
+                    canvas.add(new fabric.Group(circles, { selectable: false, evented: false, id: 'stoneGroup', layerId: l.id }));
+                }
+            }
+        });
+        activeLayerId = prevActive;
+        const activeL = layers.find(l => l.id === activeLayerId);
+        if (activeL) config = activeL.config; else config = origConfig;
+        enforceHierarchy();
+        canvas.renderOnAddRemove = true;
+        canvas.requestRenderAll();
+        recountAllStones();
+    }
+
+    function enforceHierarchy() {
+        for (let i = layers.length - 1; i >= 0; i--) {
+            const higher = layers[i];
+            if (!higher.visible || higher.status !== 'locked') continue;
+            const highObjs = canvas.getObjects().filter(o => o.layerId === higher.id);
+            const highStones = [];
+            highObjs.forEach(o => {
+                if (o.id === 'stone') highStones.push({x: o.left, y: o.top, r: o.radius});
+                if (o.id === 'stoneGroup') {
+                    const m = o.calcTransformMatrix();
+                    o.getObjects().forEach(s => {
+                        const pt = fabric.util.transformPoint({x: s.left, y: s.top}, m);
+                        highStones.push({x: pt.x, y: pt.y, r: s.radius});
+                    });
+                }
+            });
+            if (!highStones.length) continue;
+            const spacingPx = (higher.config.spacingMM || 0.5) * MM_TO_PX;
+            for (let j = i - 1; j >= 0; j--) {
+                const lower = layers[j];
+                if (!lower.visible) continue;
+                canvas.getObjects().filter(o => o.layerId === lower.id).forEach(lo => {
+                    if (lo.id === 'sourceImage') return;
+                    if (lo.id === 'stoneGroup') {
+                        const matrix = lo.calcTransformMatrix();
+                        const surviving = [];
+                        let modified = false;
+                        lo.getObjects().forEach(s => {
+                            const pt = fabric.util.transformPoint({x: s.left, y: s.top}, matrix);
+                            const collision = highStones.some(h => {
+                                const dx = pt.x - h.x, dy = pt.y - h.y;
+                                return Math.sqrt(dx*dx+dy*dy) < (h.r + s.radius + spacingPx);
+                            });
+                            if (!collision) {
+                                surviving.push(new fabric.Circle({
+                                    left: pt.x, top: pt.y, radius: s.radius, fill: s.fill,
+                                    originX: 'center', originY: 'center', selectable: false, evented: false, id: 'stone'
+                                }));
+                            } else modified = true;
+                        });
+                        if (modified) {
+                            canvas.remove(lo);
+                            if (surviving.length > 0) canvas.add(new fabric.Group(surviving, { selectable: false, evented: false, id: 'stoneGroup', layerId: lower.id }));
+                        }
+                    } else if (lo.id === 'stone') {
+                        const collision = highStones.some(h => {
+                            const dx = lo.left - h.x, dy = lo.top - h.y;
+                            return Math.sqrt(dx*dx+dy*dy) < (h.r + lo.radius + spacingPx);
+                        });
+                        if (collision) canvas.remove(lo);
+                    }
+                });
+            }
+        }
+        syncVisualOrder();
+        recountAllStones();
+        canvas.requestRenderAll();
+    }
+
+    function syncVisualOrder() {
+        layers.forEach(l => {
+            canvas.getObjects().filter(o => o.layerId === l.id).forEach(o => canvas.bringToFront(o));
+        });
+        layers.forEach(l => {
+            canvas.getObjects().filter(o => o.layerId === l.id).forEach(o => {
+                o.visible = (l.status === 'locked' && o.type === 'image') ? false : l.visible;
+            });
+        });
+        canvas.requestRenderAll();
+    }
+
+    function updateLayersUI() {
+        const container = document.getElementById('layers-list');
+        container.innerHTML = '';
+        if (!layers.length) {
+            container.innerHTML = '<div style="padding:12px; text-align:center; color:var(--ink-muted); font-size:0.78rem; border:1.5px dashed var(--cream-400); border-radius:6px;">Sin capas. Sube una imagen.</div>';
+            return;
+        }
+        [...layers].reverse().forEach(l => {
+            const isActive = l.id === activeLayerId;
+            const isMulti = selectedLayerIds.includes(l.id) && selectedLayerIds.length > 1;
+            const div = document.createElement('div');
+            div.className = 'layer-item' + (isActive ? ' active' : '') + (isMulti ? ' multi-selected' : '');
+            div.onclick = e => setActiveLayer(l.id, e);
+            div.innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:2px; margin-right:4px;">
+                    <button class="layer-btn move" onclick="moveLayer('${l.id}', 'up', event)">▲</button>
+                    <button class="layer-btn move" onclick="moveLayer('${l.id}', 'down', event)">▼</button>
+                </div>
+                <img src="${l.preview}" class="layer-thumb" style="opacity:${l.visible ? 1 : 0.4}">
+                <div class="layer-info">
+                    <span class="layer-name">${l.name}</span>
+                    <span class="layer-status">${l.status === 'locked' ? (l.isVector ? 'VECTOR' : 'PEDRERÍA') : 'EDICIÓN'}</span>
+                </div>
+                <div class="layer-actions">
+                    <input type="color" class="color-picker-mini" value="${l.color}"
+                           onchange="updateLayerColor('${l.id}', this.value)" onclick="event.stopPropagation()">
+                    <button class="layer-btn" onclick="toggleLayerVis('${l.id}'); event.stopPropagation()">
+                        <span class="material-icons-round" style="font-size:15px;">${l.visible ? 'visibility' : 'visibility_off'}</span>
+                    </button>
+                    <button class="layer-btn delete" onclick="deleteLayer('${l.id}', event)">
+                        <span class="material-icons-round" style="font-size:15px;">close</span>
+                    </button>
+                </div>`;
+            container.appendChild(div);
+        });
+        updateControlsUI();
+    }
+
+    function checkActiveLayerState() {
+        if (!activeLayerId) { isLocked = false; lockedImageObj = null; }
+        else {
+            const layer = layers.find(l => l.id === activeLayerId);
+            if (layer && layer.status === 'locked') {
+                isLocked = true;
+                lockedImageObj = canvas.getObjects().find(o => o.layerId === layer.id && o.type === 'image');
+            } else { isLocked = false; lockedImageObj = null; }
+        }
+        updateControlsUI();
+    }
+
+    // ── INTERFACE STATE ──
+    function setInterfaceState(state) {
+        const ids = ['btn-draw','btn-capture','btn-edit-img','btn-rain','btn-add-layer','btn-lasso','btn-aura-trigger','btn-apply-stones','rhinestone-controls','cont-fill','cont-spacing'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('btn-disabled', 'controls-disabled', 'partial-disabled');
+        });
+        if (['draw','capture','lasso','aura','rain'].includes(state)) {
+            if (state !== 'aura' && state !== 'rain') document.getElementById('rhinestone-controls')?.classList.add('controls-disabled');
+            if (state !== 'draw') document.getElementById('btn-draw')?.classList.add('btn-disabled');
+            if (state !== 'capture') document.getElementById('btn-capture')?.classList.add('btn-disabled');
+            if (state !== 'lasso') document.getElementById('btn-lasso')?.classList.add('btn-disabled');
+            if (state !== 'aura') document.getElementById('btn-aura-trigger')?.classList.add('btn-disabled');
+            if (state !== 'rain') document.getElementById('btn-rain')?.classList.add('btn-disabled');
+            document.getElementById('btn-edit-img')?.classList.add('btn-disabled');
+            document.getElementById('btn-add-layer')?.classList.add('btn-disabled');
+            document.getElementById('btn-apply-stones')?.classList.add('btn-disabled');
+            if (state === 'rain' || state === 'aura') {
+                document.getElementById('cont-fill')?.classList.add('partial-disabled');
+                document.getElementById('cont-spacing')?.classList.add('partial-disabled');
+            }
+        } else if (state === 'edit') {
+            document.getElementById('rhinestone-controls')?.classList.add('controls-disabled');
+            document.getElementById('btn-rain')?.classList.add('btn-disabled');
+            document.getElementById('btn-add-layer')?.classList.add('btn-disabled');
+            document.getElementById('btn-draw')?.classList.add('btn-disabled');
+            document.getElementById('btn-capture')?.classList.add('btn-disabled');
+            document.getElementById('btn-aura-trigger')?.classList.add('btn-disabled');
+        }
+    }
+
+    window.updateControlsUI = () => {
+        const controls = document.getElementById('rhinestone-controls');
+        const editBtn = document.getElementById('btn-edit-img');
+        const applyBtn = document.getElementById('btn-apply-stones');
+        const drawBtn = document.getElementById('btn-draw');
+        const captureBtn = document.getElementById('btn-capture');
+        const lassoBtn = document.getElementById('btn-lasso');
+        const auraBtn = document.getElementById('btn-aura-trigger');
+        const imgControls = document.getElementById('image-controls');
+        const resizeCont = document.getElementById('layer-resize-container');
+        if (!activeLayerId) {
+            imgControls.style.display = 'none';
+            controls.classList.add('controls-disabled');
+            resizeCont.style.display = 'none'; return;
+        }
+        imgControls.style.display = 'flex';
+        const layer = layers.find(l => l.id === activeLayerId);
+        if (isDrawingMode || isLassoMode || isAuraMode) {
+            [editBtn, captureBtn, applyBtn].forEach(el => { if (el) el.style.display = 'none'; });
+            resizeCont.style.display = 'none';
+            if (lassoBtn && (isDrawingMode || isAuraMode)) lassoBtn.style.display = 'none';
+            if (auraBtn && (isDrawingMode || isLassoMode)) auraBtn.style.display = 'none';
+            return;
+        }
+        if (layer && layer.status === 'edit' && layer.isGuide) {
+            controls.classList.add('controls-disabled'); editBtn.style.display = 'none';
+            applyBtn.style.display = 'flex'; drawBtn.style.display = 'none'; captureBtn.style.display = 'none';
+            if (lassoBtn) lassoBtn.style.display = 'flex';
+            if (auraBtn) auraBtn.style.display = 'none';
+            if (resizeCont) resizeCont.style.display = 'block';
+            return;
+        }
+        if (layer && layer.status === 'locked') {
+            controls.classList.remove('controls-disabled');
+            resizeCont.style.display = 'none';
+            editBtn.style.display = layer.isVector ? 'none' : 'flex';
+            applyBtn.style.display = 'none'; drawBtn.style.display = 'flex'; captureBtn.style.display = 'flex';
+            if (lassoBtn) lassoBtn.style.display = 'none';
+            if (auraBtn) auraBtn.style.display = 'none';
+        } else {
+            controls.classList.add('controls-disabled'); editBtn.style.display = 'none';
+            applyBtn.style.display = 'flex'; drawBtn.style.display = 'none'; captureBtn.style.display = 'none';
+            if (lassoBtn) lassoBtn.style.display = 'flex';
+            if (auraBtn) auraBtn.style.display = 'flex';
+            if (resizeCont) resizeCont.style.display = 'block';
+            const img = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image');
+            if (img && img.baseScale) {
+                const val = Math.round((img.scaleX / img.baseScale) * 100);
+                document.getElementById('layer-scale-slider').value = val;
+                document.getElementById('layer-scale-display').innerText = val + '%';
+            }
+        }
+    };
+
+    // ── STONE COUNT / DIMS ──
+    function recountAllStones() {
+        const layerIds = selectedLayerIds.length > 0 ? selectedLayerIds : layers.map(l => l.id);
+        let total = 0;
+        layerIds.forEach(lid => {
+            canvas.getObjects().filter(o => o.layerId === lid).forEach(o => {
+                if (o.id === 'stone') total++;
+                if (o.id === 'stoneGroup') total += o._objects?.length || 0;
+            });
+        });
+        document.getElementById('stone-count').innerText = total;
+        calcCost();
+    }
+
+    function updateStoneDims(group) {
+        const el = document.getElementById('stone-dims-display');
+        const allStones = [];
+        if (activeLayerId) {
+            canvas.getObjects().filter(o => o.layerId === activeLayerId).forEach(o => {
+                if (o.id === 'stone') allStones.push(o);
+                if (o.id === 'stoneGroup') {
+                    const m = o.calcTransformMatrix();
+                    o.getObjects().forEach(s => {
+                        const pt = fabric.util.transformPoint({x: s.left, y: s.top}, m);
+                        allStones.push({left: pt.x, top: pt.y, radius: s.radius});
+                    });
+                }
+            });
+        }
+        if (!allStones.length) { el.style.display = 'none'; return; }
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        allStones.forEach(s => {
+            const r = s.radius || 0;
+            minX = Math.min(minX, s.left - r); minY = Math.min(minY, s.top - r);
+            maxX = Math.max(maxX, s.left + r); maxY = Math.max(maxY, s.top + r);
+        });
+        const wCM = ((maxX - minX) / MM_TO_PX / 10).toFixed(2);
+        const hCM = ((maxY - minY) / MM_TO_PX / 10).toFixed(2);
+        el.style.display = 'flex';
+        document.getElementById('stone-dims-text').innerText = `${wCM} x ${hCM} cm`;
+    }
+
+    function updateImageDims(imgObj) {
+        if (!imgObj) return;
+        const w = (imgObj.getScaledWidth() / MM_TO_PX / 10).toFixed(2);
+        const h = (imgObj.getScaledHeight() / MM_TO_PX / 10).toFixed(2);
+        document.getElementById('dims-display').style.display = 'flex';
+        document.getElementById('dims-text').innerText = `${w} x ${h} cm`;
+    }
+
+    // ── CONFIG CONTROLS ──
+    window.setStoneSize = (val, btn) => {
+        const rainOpen = document.getElementById('rain-panel').style.display === 'block';
+        const auraOpen = document.getElementById('aura-panel').style.display === 'block';
+        config.stoneSizeMM = val;
+        document.getElementById('manual-mm').value = val;
+        document.querySelectorAll('.ss-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (rainOpen) { updateRainPreview(document.getElementById('rain-density').value); return; }
+        if (auraOpen) { scheduleAuraPreview(); return; }
+        if (!activeLayerId) return;
+        const layer = layers.find(l => l.id === activeLayerId);
+        if (layer) layer.config.stoneSizeMM = val;
+        if (layer?.isVector) {
+            const newR = (val * MM_TO_PX) / 2;
+            canvas.getObjects().filter(o => o.layerId === activeLayerId).forEach(o => {
+                if (o.id === 'stoneGroup') { o.getObjects().forEach(s => s.set('radius', newR)); o.addWithUpdate(); }
+                else if (o.id === 'stone') o.set('radius', newR);
+            });
+            canvas.requestRenderAll(); saveHistory();
+        } else regen();
+    };
+    window.setManualSize = (val) => {
+        config.stoneSizeMM = parseFloat(val);
+        document.querySelectorAll('.ss-btn').forEach(b => {
+            b.classList.toggle('active', Math.abs(parseFloat(b.dataset.val) - config.stoneSizeMM) < 0.1);
+        });
+        const rainOpen = document.getElementById('rain-panel').style.display === 'block';
+        const auraOpen = document.getElementById('aura-panel').style.display === 'block';
+        if (rainOpen) { updateRainPreview(document.getElementById('rain-density').value); return; }
+        if (auraOpen) { scheduleAuraPreview(); return; }
+        if (!activeLayerId) return;
+        const layer = layers.find(l => l.id === activeLayerId);
+        if (layer) layer.config.stoneSizeMM = parseFloat(val);
+        if (layer?.isVector) {
+            const newR = (parseFloat(val) * MM_TO_PX) / 2;
+            canvas.getObjects().filter(o => o.layerId === activeLayerId).forEach(o => {
+                if (o.id === 'stoneGroup') { o.getObjects().forEach(s => s.set('radius', newR)); o.addWithUpdate(); }
+                else if (o.id === 'stone') o.set('radius', newR);
+            });
+            canvas.requestRenderAll(); saveHistory();
+        } else regen();
+    };
+    window.setMode = (mode, btn) => {
+        if (!activeLayerId) return;
+        config.mode = mode;
+        const layer = layers.find(l => l.id === activeLayerId);
+        if (layer) layer.config.mode = mode;
+        document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        regen();
+    };
+    window.updateSpacing = (val) => {
+        if (!activeLayerId) return;
+        config.spacingMM = parseFloat(val);
+        const layer = layers.find(l => l.id === activeLayerId);
+        if (layer) layer.config.spacingMM = parseFloat(val);
+        document.getElementById('spacing-display').innerText = val + ' mm';
+        regen();
+    };
+    function regen() {
+        if (isLocked && lockedImageObj) runAlgorithm(lockedImageObj.getElement(), lockedImageObj);
+    }
+    function syncUIFromConfig(cfg) {
+        document.querySelectorAll('.ss-btn').forEach(b => {
+            b.classList.toggle('active', Math.abs(parseFloat(b.dataset.val) - cfg.stoneSizeMM) < 0.1);
+        });
+        document.getElementById('manual-mm').value = cfg.stoneSizeMM;
+        document.querySelectorAll('.effect-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === cfg.mode));
+        document.getElementById('spacing-slider').value = cfg.spacingMM;
+        document.getElementById('spacing-display').innerText = cfg.spacingMM + ' mm';
+    }
+
+    // ── BACKGROUND ──
+    window.setBg = (color, btn) => {
+        const grid = document.getElementById('canvas-bg');
+        const vp = document.getElementById('viewport');
+        document.querySelectorAll('.bg-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        if (color === 'grid') { grid.style.display = 'block'; vp.style.backgroundColor = '#fff'; }
+        else { grid.style.display = 'none'; vp.style.backgroundColor = color; }
+    };
+
+    // ── COST ──
+    window.updateCostInput = (input, type) => {
+        if (!activeLayerId) return;
+        const val = parseFloat(input.value) || 0;
+        if (selectedLayerIds.length <= 1) {
+            const layer = layers.find(l => l.id === activeLayerId);
+            if (layer) { if (type === 'price') layer.bagPrice = val; if (type === 'qty') layer.bagQty = val; }
+        }
+        calcCost();
+    };
+    window.calcCost = () => {
+        let totalCost = 0;
+        const layerIds = selectedLayerIds.length > 0 ? selectedLayerIds : layers.map(l => l.id);
+        layerIds.forEach(lid => {
+            const l = layers.find(la => la.id === lid);
+            if (!l) return;
+            let count = 0;
+            canvas.getObjects().filter(o => o.layerId === lid).forEach(o => {
+                if (o.id === 'stone') count++;
+                if (o.id === 'stoneGroup') count += o._objects?.length || 0;
+            });
+            totalCost += (count / (l.bagQty || 1)) * (l.bagPrice || 0);
+        });
+        document.getElementById('total-cost').innerText = '$' + (isNaN(totalCost) ? '0.00' : totalCost.toFixed(2));
+    };
+
+    // ── GUIDES ──
+    window.addGuide = (type) => {
+        const isH = type === 'H';
+        const pts = isH ? [0, 0, baseWidth, 0] : [0, 0, 0, baseHeight];
+        const line = new fabric.Line(pts, {
+            stroke: '#C8A55A', strokeWidth: 2 / currentZoom, selectable: true, evented: true, id: 'guide',
+            lockMovementX: isH, lockMovementY: !isH, hasControls: false, hasBorders: false,
+            originX: 'center', originY: 'center'
+        });
+        canvas.add(line); canvas.setActiveObject(line); canvas.requestRenderAll();
+    };
+
+    // ── SELECTION ZONE ──
+    window.toggleSelectionMode = () => {
+        isSelectionMode = !isSelectionMode;
+        const btn = document.getElementById('btn-select-area');
+        if (isSelectionMode) {
+            btn.classList.add('active');
+            const invMatrix = fabric.util.invertTransform(canvas.viewportTransform);
+            const pt = fabric.util.transformPoint({x: canvas.getWidth()/2, y: canvas.getHeight()/2}, invMatrix);
+            selectionRect = new fabric.Rect({
+                left: pt.x - 100, top: pt.y - 100, width: 200, height: 200,
+                fill: 'rgba(200,165,90,0.1)', stroke: '#C8A55A', strokeWidth: 2/currentZoom,
+                strokeDashArray: [10, 5], transparentCorners: false,
+                cornerColor: '#C8A55A', cornerStrokeColor: '#fff',
+                id: 'selectionArea', selectable: true, evented: true
+            });
+            canvas.add(selectionRect); canvas.setActiveObject(selectionRect);
+        } else {
+            btn.classList.remove('active');
+            if (selectionRect) { canvas.remove(selectionRect); selectionRect = null; }
+        }
+        canvas.requestRenderAll();
+    };
+
+    // ── LAYER SCALE ──
+    window.updateLayerScaleFromSlider = (val) => {
+        document.getElementById('layer-scale-display').innerText = val + '%';
+        if (!activeLayerId) return;
+        const img = canvas.getObjects().find(o => o.layerId === activeLayerId && o.type === 'image');
+        if (img && img.baseScale) {
+            const scale = img.baseScale * (parseInt(val) / 100);
+            img.set({ scaleX: scale, scaleY: scale });
+            canvas.requestRenderAll();
+            updateImageDims(img);
+        }
+    };
+
+    // ── UNDO ──
+    function saveHistory() {
+        if (historyProcessing) return;
+        const json = canvas.toJSON(['id', 'layerId', 'isManual', 'baseScale', 'isGuide']);
+        history.push({ json, layersCopy: JSON.parse(JSON.stringify(layers)), activeLayerId, config: { ...config } });
+        if (history.length > MAX_HISTORY) history.shift();
+    }
+    window.undo = () => {
+        if (history.length < 2) return;
+        history.pop();
+        const prev = history[history.length - 1];
+        historyProcessing = true;
+        canvas.loadFromJSON(prev.json, () => {
+            layers = prev.layersCopy;
+            activeLayerId = prev.activeLayerId;
+            config = { ...prev.config };
+            syncUIFromConfig(config);
+            updateLayersUI();
+            canvas.requestRenderAll();
+            historyProcessing = false;
+        });
+    };
+
+    // ── DELETE ACTIVE ──
+    window.deleteActive = () => {
+        const obj = canvas.getActiveObject();
+        if (!obj) return;
+        if (obj.id === 'guide') { canvas.remove(obj); canvas.requestRenderAll(); return; }
+        if (obj.id === 'selectionArea') { canvas.remove(obj); selectionRect = null; isSelectionMode = false; canvas.requestRenderAll(); return; }
+        if (obj.layerId) { deleteLayer(obj.layerId, null, true); return; }
+        canvas.remove(obj); canvas.requestRenderAll();
+    };
+
+    // ── TOOLTIP ──
+    function showTooltip(opt) {
+        const t = opt.target || (opt.e ? null : opt);
+        const tt = document.getElementById('dynamic-tooltip');
+        if (!t) return;
+        let show = false;
+        if (t.id === 'guide') {
+            const isH = t.width > t.height;
+            tt.innerText = ((isH ? t.top : t.left) / MM_TO_PX / 10).toFixed(2) + ' cm';
+            show = true;
+        } else if (t.type === 'image') {
+            updateImageDims(t);
+            tt.innerText = (t.getScaledWidth()/MM_TO_PX/10).toFixed(2) + ' x ' + (t.getScaledHeight()/MM_TO_PX/10).toFixed(2) + ' cm';
+            show = true;
+        } else if (t.type === 'activeSelection') {
+            const w = t.getScaledWidth(), h = t.getScaledHeight();
+            tt.innerText = (w/MM_TO_PX/10).toFixed(2) + ' x ' + (h/MM_TO_PX/10).toFixed(2) + ' cm';
+            show = true;
+        }
+        if (show) {
+            tt.style.display = 'block';
+            if (opt.e?.clientX !== undefined) {
+                tt.style.left = (opt.e.clientX + 15) + 'px';
+                tt.style.top = (opt.e.clientY + 15) + 'px';
+            }
+        }
+    }
+
+    // ── DOWNLOAD ──
+    window.download = (type) => {
+        if (!layers.length) { alert('No hay capas.'); return; }
+        const guides = canvas.getObjects().filter(o => o.id === 'guide');
+        guides.forEach(g => g.visible = false);
+        const savedZoom = currentZoom;
+        applyZoom(1);
+
+        const exportRect = isSelectionMode && selectionRect ? {
+            left: selectionRect.left, top: selectionRect.top,
+            width: selectionRect.getScaledWidth(), height: selectionRect.getScaledHeight()
+        } : null;
+
+        const layerGroups = {};
+        canvas.getObjects().forEach(o => {
+            if (!o.layerId) return;
+            const layer = layers.find(l => l.id === o.layerId);
+            if (!layer || !layer.visible) return;
+            const color = layer.color || '#000000';
+            if (!layerGroups[color]) layerGroups[color] = [];
+            if (o.id === 'stone') {
+                if (!exportRect || isInside(o, exportRect)) layerGroups[color].push({left: o.left, top: o.top, radius: o.radius});
+            }
+            if (o.id === 'stoneGroup') {
+                const m = o.calcTransformMatrix();
+                o.getObjects().forEach(s => {
+                    const pt = fabric.util.transformPoint({x: s.left, y: s.top}, m);
+                    if (!exportRect || isInside({left: pt.x, top: pt.y}, exportRect))
+                        layerGroups[color].push({left: pt.x, top: pt.y, radius: s.radius});
+                });
+            }
+        });
+
+        Object.entries(layerGroups).forEach(([colorKey, allStones]) => {
+            if (!allStones.length) return;
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            allStones.forEach(s => {
+                minX = Math.min(minX, s.left - s.radius); minY = Math.min(minY, s.top - s.radius);
+                maxX = Math.max(maxX, s.left + s.radius); maxY = Math.max(maxY, s.top + s.radius);
+            });
+            if (exportRect) { minX = exportRect.left; minY = exportRect.top; maxX = exportRect.left + exportRect.width; maxY = exportRect.top + exportRect.height; }
+            const widthMM = (maxX - minX) / MM_TO_PX, heightMM = (maxY - minY) / MM_TO_PX;
+
+            if (type === 'svg') {
+                const MM72 = 2.834645;
+                const vW = (widthMM * MM72).toFixed(2), vH = (heightMM * MM72).toFixed(2);
+                let svg = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${vW} ${vH}"><style>.st0{fill:${colorKey};}</style>`;
+                allStones.forEach(s => {
+                    svg += `<circle class="st0" cx="${((s.left-minX)/MM_TO_PX*MM72).toFixed(2)}" cy="${((s.top-minY)/MM_TO_PX*MM72).toFixed(2)}" r="${(s.radius/MM_TO_PX*MM72).toFixed(2)}"/>`;
+                });
+                svg += '</svg>';
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(new Blob([svg], {type:'image/svg+xml'}));
+                a.download = `${uploadedFileName}_${colorKey}.svg`; a.click();
+            } else if (type === 'png') {
+                const scale = 11.811;
+                const c = document.createElement('canvas');
+                c.width = Math.ceil(widthMM * scale); c.height = Math.ceil(heightMM * scale);
+                const ctx = c.getContext('2d');
+                ctx.fillStyle = colorKey;
+                allStones.forEach(s => {
+                    ctx.beginPath();
+                    ctx.arc((s.left-minX)/MM_TO_PX*scale, (s.top-minY)/MM_TO_PX*scale, s.radius/MM_TO_PX*scale, 0, Math.PI*2);
+                    ctx.fill();
+                });
+                const a = document.createElement('a');
+                a.href = c.toDataURL('image/png');
+                a.download = `${uploadedFileName}_${colorKey}.png`; a.click();
+            } else if (type === 'pdf') {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: widthMM > heightMM ? 'l' : 'p',
+                    unit: 'mm', format: [Math.max(widthMM,1), Math.max(heightMM,1)]
+                });
+                pdf.setFillColor(colorKey);
+                allStones.forEach(s => {
+                    pdf.circle((s.left-minX)/MM_TO_PX, (s.top-minY)/MM_TO_PX, s.radius/MM_TO_PX, 'F');
+                });
+                pdf.save(`${uploadedFileName}_${colorKey}.pdf`);
+            }
+        });
+
+        guides.forEach(g => g.visible = true);
+        applyZoom(savedZoom);
+    };
+
+    function isInside(obj, rect) {
+        return obj.left >= rect.left && obj.left <= rect.left + rect.width &&
+               obj.top >= rect.top && obj.top <= rect.top + rect.height;
+    }
+
+    function centerVirtualDesk() {
+        const cont = document.querySelector('.canvas-scroll-container');
+        const wrap = document.querySelector('.viewport-wrapper');
+        if (cont && wrap) {
+            cont.scrollLeft = (wrap.offsetWidth - cont.clientWidth) / 2;
+            cont.scrollTop = (wrap.offsetHeight - cont.clientHeight) / 2;
+        }
+    }
+
+    init();
+});
+</script>
+</html>

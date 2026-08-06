@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collage Generator — Chechena Shirts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Bebas+Neue&family=Bangers&family=Caveat:wght@700&family=Luckiest+Guy&family=Permanent+Marker&family=Abril+Fatface&family=Rubik+Mono+One&family=Amatic+SC:wght@700&family=Anton&family=Pacifico&family=Playfair+Display:wght@900&family=Sigmar+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --transition: 0.35s cubic-bezier(.4,0,.2,1);
+    }
+
+    [data-theme="dark"] {
+      --bg:        #080808;
+      --bg2:       #111111;
+      --bg3:       #1a1a1a;
+      --surface:   #161616;
+      --border:    #2a2a2a;
+      --text:      #f0f0f0;
+      --muted:     #666;
+      --accent:    #c8a96e;
+      --accent2:   #e8c88e;
+      --danger:    #e05252;
+      --checker1:  #1c1c1c;
+      --checker2:  #111;
+      --glow:      rgba(200,169,110,0.15);
+    }
+
+    [data-theme="light"] {
+      --bg:        #f5f2ed;
+      --bg2:       #ede9e1;
+      --bg3:       #e5e0d8;
+      --surface:   #fff;
+      --border:    #d4cfc6;
+      --text:      #1a1208;
+      --muted:     #8a7f6e;
+      --accent:    #8b5e1a;
+      --accent2:   #c2862b;
+      --danger:    #c0392b;
+      --checker1:  #e8e3da;
+      --checker2:  #d4cfc6;
+      --glow:      rgba(139,94,26,0.12);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    /* SVG Logo - Chechena Shirts gothic style */
+    .logo-svg {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .logo-main {
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 900;
+      font-size: 1.15rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      transition: color var(--transition);
+    }
+
+    .logo-sub {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.25em;
+      transition: color var(--transition);
+    }
+
+    /* ── THEME TOGGLE ── */
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    .theme-toggle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      font-size: 1.1rem;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--glow);
+    }
+
+    .header-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+
+    /* ── LAYOUT ── */
+    .wrap {
+      max-width: 1280px;
+      margin: 24px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .wrap { grid-template-columns: 1fr; }
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    /* ── PANEL ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .panel-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color var(--transition);
+    }
+
+    .panel-head h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      color: var(--text);
+    }
+
+    .panel-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .panel-body { padding: 18px; }
+
+    /* ── FORM ELEMENTS ── */
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+      transition: color var(--transition);
+    }
+
+    textarea, input[type="number"], select {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 13px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color var(--transition), background var(--transition), color var(--transition);
+      outline: none;
+      appearance: none;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    textarea:focus, input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    select option {
+      background: var(--bg2);
+      color: var(--text);
+    }
+
+    /* ── RANGE ── */
+    .range-wrap { display: flex; flex-direction: column; gap: 4px; }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      height: 4px;
+      border-radius: 99px;
+      background: var(--border);
+      outline: none;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .range-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── GRID HELPERS ── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .mt { margin-top: 16px; }
+    .mb { margin-bottom: 16px; }
+
+    /* ── BUTTONS ── */
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .btn {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .btn.primary:hover {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: var(--bg);
+    }
+
+    .btn.danger {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .btn.danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* ── PRESETS ── */
+    .preset-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .chip {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      padding: 7px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chip.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+    /* ── CANVAS STAGE ── */
+    .stage {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: crosshair;
+    }
+
+    .checker {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(45deg, var(--checker1) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--checker1) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--checker1) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--checker1) 75%);
+      background-size: 18px 18px;
+      background-position: 0 0, 0 9px, 9px -9px, -9px 0;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .canvas-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── HISTORIAL ── */
+    .hist {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .hist-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .hist-card:hover { border-color: var(--accent); }
+
+    .hist-card img {
+      display: block;
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+    }
+
+    .hist-meta {
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hist-date {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .hist-btns { display: flex; gap: 5px; }
+
+    .hist-btns .btn {
+      font-size: 0.7rem;
+      padding: 5px 8px;
+      border-radius: 7px;
+      flex: 1;
+      text-align: center;
+    }
+
+    .empty-hist {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-size: 1rem;
+      padding: 24px 0;
+      text-align: center;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 6px 0 14px;
+    }
+
+    .section-divider span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .section-divider::before, .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ── FADE IN ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel {
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .panel:nth-child(2) { animation-delay: 0.08s; }
+    .panel:nth-child(3) { animation-delay: 0.16s; }
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+}
+
+.logo-img{
+    height:42px;
+    width:auto;
+}
+
+.logo-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.logo-main{
+    font-weight:700;
+}
+
+.logo-sub{
+    font-size:12px;
+    opacity:0.7;
+}
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <a class="logo" href="#">
+    <img src="logo.png" alt="Chechena Shirts Logo" class="logo-img">
+
+    <div class="logo-text">
+      <span class="logo-main">Chechena Shirts</span>
+      <span class="logo-sub">Collage Generator · DTF Ready</span>
+    </div>
+  </a>
+
+  <div class="header-right">
+    <span class="header-tag">PNG Transparente</span>
+    <button class="theme-toggle" id="themeBtn" title="Cambiar tema">🌙</button>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<div class="wrap">
+
+  <!-- ── PANEL CONTROLES ── -->
+  <section class="panel">
+    <div class="panel-head">
+      <div class="panel-dot"></div>
+      <h3>Texto &amp; Ajustes</h3>
+    </div>
+    <div class="panel-body">
+
+      <label>Frase / párrafos <span style="text-transform:none;letter-spacing:0">(Enter separa líneas)</span></label>
+      <textarea id="inputText" placeholder="chechena&#10;SHIRTS &#10;the best&#10;in the &#10;world"></textarea>
+
+      <div class="section-divider mt"><span>Tamaño &amp; Espaciado</span></div>
+
+      <div class="g2">
+        <div class="range-wrap">
+          <label>Ancho de línea</label>
+          <input type="range" id="lineWidth" min="300" max="1200" value="650">
+          <span class="range-val"><span id="lineWidthOut">650</span> px</span>
+        </div>
+        <div class="range-wrap">
+          <label>Tamaño base</label>
+          <input type="range" id="fontBase" min="36" max="160" value="100">
+          <span class="range-val"><span id="fontBaseOut">100</span> px</span>
+        </div>
+      </div>
+
+      <div class="g2 mt">
+        <div class="range-wrap">
+          <label>Espaciado letras</label>
+          <input type="range" id="espLetras" min="-8" max="28" value="4">
+          <span class="range-val"><span id="espLetrasOut">4</span> px</span>
+        </div>
+        <div class="range-wrap">
+          <label>Interlineado</label>
+          <input type="range" id="interlineado" min="0.8" max="2.2" step="0.05" value="1.2">
+          <span class="range-val"><span id="interlineadoOut">1.2</span> ×</span>
+        </div>
+      </div>
+
+      <div class="section-divider mt"><span>Formato &amp; Export</span></div>
+
+      <div class="g2">
+        <div>
+          <label>Alineación</label>
+          <select id="alineacion">
+            <option value="center">Centrado</option>
+            <option value="left">Izquierda</option>
+            <option value="right">Derecha</option>
+            <option value="justify">Justificado</option>
+          </select>
+        </div>
+        <div>
+          <label>Ancho export (px)</label>
+          <input type="number" id="exportAncho" min="800" max="6000" value="3000">
+        </div>
+      </div>
+
+      <div class="section-divider mt"><span>Paleta</span></div>
+
+      <div class="preset-bar mb" id="presets">
+        <button class="chip active" data-preset="pastel">Pastel</button>
+        <button class="chip" data-preset="neon">Neón</button>
+        <button class="chip" data-preset="vintage">Vintage</button>
+        <button class="chip" data-preset="cartoon">Cartoon</button>
+        <button class="chip" data-preset="dark">Dark</button>
+        <button class="chip" data-preset="mixto">Mixto</button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="btnRandom">🎲 Random</button>
+        <button class="btn" id="btnEjemplo">Ejemplo</button>
+        <button class="btn primary" id="btnDescargar">⬇ Descargar PNG</button>
+      </div>
+
+      <div class="btn-row mt">
+        <button class="btn" id="btnGuardar">💾 Guardar versión</button>
+        <button class="btn" id="btnDescargarUltimo">Última versión</button>
+      </div>
+
+      <p style="font-size:.75rem;color:var(--muted);margin-top:12px;line-height:1.5">
+        Tip: toca una letra en la vista previa para re-estilizarla individualmente.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── PANEL PREVIEW ── -->
+  <section class="panel">
+    <div class="panel-head">
+      <div class="panel-dot"></div>
+      <h3>Vista Previa — Transparente</h3>
+    </div>
+    <div class="panel-body">
+      <div class="stage">
+        <div class="checker"></div>
+        <canvas id="preview" width="900" height="900"></canvas>
+      </div>
+      <p class="canvas-hint">PNG final sin fondo · listo para DTF · al ancho que elijas</p>
+    </div>
+  </section>
+
+  <!-- ── PANEL HISTORIAL ── -->
+  <section class="panel full">
+    <div class="panel-head">
+      <div class="panel-dot"></div>
+      <h3>Historial de Diseños</h3>
+    </div>
+    <div class="panel-body">
+      <div class="btn-row mb">
+        <button class="btn" id="btnRecuperarUltimo">⏮ Recuperar último</button>
+        <button class="btn danger" id="btnLimpiarHist">🗑 Limpiar</button>
+      </div>
+      <div id="historial" class="hist"></div>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<script>
+// ══ THEME TOGGLE ══
+const themeBtn = document.getElementById('themeBtn');
+const html = document.documentElement;
+
+themeBtn.addEventListener('click', () => {
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  themeBtn.textContent = isDark ? '🌙' : '☀️';
+});
+
+// ══ GENERATOR ══
+(()=>{
+  const FONTS=[
+    'Bangers','Caveat','Luckiest Guy','Permanent Marker','Abril Fatface',
+    'Rubik Mono One','Amatic SC','Anton','Pacifico','Bebas Neue',
+    'Playfair Display','Sigmar One'
+  ];
+
+  const PALETTES = {
+    pastel: ['#ffd6e7','#ffe8a3','#d7f9f5','#e0d8ff','#ffdfc7','#d1f5a9','#cfe2ff','#fce1ff','#fbf6d9'],
+    neon:   ['#ff2d95','#00f0ff','#39ff14','#ffea00','#ff6b00','#7b61ff','#ff007a','#00ffa2'],
+    vintage:['#f6e0b5','#d7c6aa','#a3b18a','#7f8c8d','#c9ada1','#ced4da','#b08968','#c08497'],
+    cartoon:['#ffb703','#219ebc','#fb8500','#8ecae6','#ff006e','#8338ec','#3a86ff','#ffbe0b'],
+    dark:   ['#1a1a2e','#16213e','#0f3460','#533483','#e94560','#c84b31','#2b2d42','#8d99ae'],
+    mixto:  []
+  };
+  PALETTES.mixto = [
+    ...PALETTES.pastel,...PALETTES.neon,...PALETTES.vintage,
+    ...PALETTES.cartoon,...PALETTES.dark
+  ];
+
+  const $ = s => document.querySelector(s);
+  const canvas = $('#preview'), ctx = canvas.getContext('2d');
+
+  const state = {
+    texto:'', lineWidth:650, fontBase:100, espLetras:4,
+    interlineado:1.2, alineacion:'center', preset:'pastel',
+    seed:(Math.random()*1e9)|0, layout:[], scalePreview:1
+  };
+
+  // refs
+  const inputText     = $('#inputText');
+  const lineWidthR    = $('#lineWidth'),    lineWidthOut    = $('#lineWidthOut');
+  const fontBaseR     = $('#fontBase'),     fontBaseOut     = $('#fontBaseOut');
+  const espLetrasR    = $('#espLetras'),    espLetrasOut    = $('#espLetrasOut');
+  const interlineadoR = $('#interlineado'), interlineadoOut = $('#interlineadoOut');
+  const alineacionSel = $('#alineacion');
+  const presets       = $('#presets');
+  const exportAncho   = $('#exportAncho');
+  const historialEl   = $('#historial');
+
+  const rerender = () => { collect(); layout(); render(); };
+
+  inputText.addEventListener('input', rerender);
+  lineWidthR.addEventListener('input',    ()=>{ lineWidthOut.textContent    = state.lineWidth    = lineWidthR.value|0;           rerender(); });
+  fontBaseR.addEventListener('input',     ()=>{ fontBaseOut.textContent     = state.fontBase     = fontBaseR.value|0;            rerender(); });
+  espLetrasR.addEventListener('input',    ()=>{ espLetrasOut.textContent    = state.espLetras    = espLetrasR.value|0;           rerender(); });
+  interlineadoR.addEventListener('input', ()=>{ interlineadoOut.textContent = state.interlineado = parseFloat(interlineadoR.value); rerender(); });
+  alineacionSel.addEventListener('change',()=>{ state.alineacion = alineacionSel.value; rerender(); });
+
+  presets.addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    [...presets.children].forEach(c => c.classList.toggle('active', c === chip));
+    state.preset = chip.dataset.preset;
+    rerender();
+  });
+
+  $('#btnRandom').addEventListener('click',         ()=>{ state.seed=(Math.random()*1e9)|0; rerender(); });
+  $('#btnEjemplo').addEventListener('click',        ()=>{ inputText.value='CHECHENA\nSHIRTS\nTHE BEST\nIN THE\nWORLD'; rerender(); });
+  $('#btnDescargar').addEventListener('click',      descargarPNG);
+  $('#btnGuardar').addEventListener('click',        guardarVersion);
+  $('#btnLimpiarHist').addEventListener('click',    ()=>{ localStorage.removeItem('cs_collage_hist'); pintarHistorial(); });
+  $('#btnRecuperarUltimo').addEventListener('click',()=>{ const h=leerHistorial(); if(h.length) aplicarVersion(h[0]); });
+  $('#btnDescargarUltimo').addEventListener('click',()=>{
+    const h=leerHistorial();
+    if(h.length) triggerDownload(h[0].thumb,'CS_Collage_'+h[0].id+'.png');
+    else descargarPNG();
+  });
+
+  canvas.addEventListener('click', e => {
+    const r = canvas.getBoundingClientRect();
+    const x = (e.clientX-r.left)*canvas.width/r.width;
+    const y = (e.clientY-r.top)*canvas.height/r.height;
+    const hit = state.layout.find(b => x>=b.x&&y>=b.y&&x<=b.x+b.w&&y<=b.y+b.h);
+    if (hit) { hit.seed=(Math.random()*1e9)|0; render(); }
+  });
+
+  // ── math helpers ──
+  function rand(seed){ let t=seed>>>0; t=(1664525*t+1013904223)>>>0; return t/0xffffffff; }
+  function choice(a,r){ return a[Math.floor(r*a.length)]; }
+  function hash(a,b,c){ return((a+1)*73856093^(b+1)*19349663^(c+1)*83492791)>>>0; }
+
+  function collect(){ state.texto=(inputText.value||'').replace(/\t/g,' '); }
+
+  function crearEstiloLetra(ch,seed){
+    const r1=rand(seed), r2=rand(seed+77), r3=rand(seed+1234);
+    const pal=PALETTES[state.preset]||PALETTES.pastel;
+    return {
+      bg:   choice(pal,r1),
+      font: choice(FONTS,r2),
+      rot:  (r3-.5)*0.35,
+      mag:  0.88+rand(seed+9)*0.28,
+      pad:  6+Math.floor(rand(seed+19)*10),
+      shape:rand(seed+29)>.6?'rect':'pill',
+      flip: rand(seed+39)>.85
+    };
+  }
+
+  function medirLetra(ch,estilo,base){
+    ctx.save();
+    ctx.font=`900 ${Math.max(10,base*estilo.mag)}px ${estilo.font}, system-ui`;
+    const m=ctx.measureText(ch);
+    ctx.restore();
+    return {
+      w: Math.max(8,m.width)+estilo.pad*2,
+      h: Math.max(14,(m.actualBoundingBoxAscent+m.actualBoundingBoxDescent))+estilo.pad*2
+    };
+  }
+
+  function layout(){
+    const base=state.fontBase, L=[], paragraphs=state.texto.split(/\n+/);
+    const topPad=Math.max(12,base*0.8), bottomPad=Math.max(12,base*0.8);
+    const paragraphGap=Math.max(8,base*0.6);
+    let y=topPad;
+    const lineHBase=base*state.interlineado;
+
+    paragraphs.forEach((p,pi)=>{
+      const words=p.split(/\s+/).filter(Boolean);
+      let line=[], lineW=0, maxLineH=0;
+
+      function flush(){
+        if(!line.length){ y+=lineHBase; return; }
+        let offsetX=0;
+        if(state.alineacion==='center') offsetX=(state.lineWidth-lineW)/2;
+        if(state.alineacion==='right')  offsetX=(state.lineWidth-lineW);
+        if(state.alineacion==='justify'&&line.length>1){
+          const gaps=line.length-1, extra=Math.max(0,state.lineWidth-lineW);
+          for(let i=0;i<line.length;i++) if(i<gaps) line[i].xGap=extra/gaps;
+        }
+        let x=offsetX;
+        line.forEach(b=>{ b.x=x; b.y=y; x+=b.w+(b.xGap||0); L.push(b); });
+        y+=maxLineH+(lineHBase-maxLineH);
+        line=[]; lineW=0; maxLineH=0;
+      }
+
+      words.forEach((word,wi)=>{
+        for(let i=0;i<word.length;i++){
+          const ch=word[i], seed=hash(pi,wi,i)^state.seed;
+          const est=crearEstiloLetra(ch,seed);
+          const s=medirLetra(ch,est,base);
+          const box={char:ch,estilo:est,...s,seed};
+          if(lineW+s.w>state.lineWidth&&line.length) flush();
+          box.w+=state.espLetras;
+          line.push(box); lineW+=box.w; maxLineH=Math.max(maxLineH,s.h);
+        }
+        const wsp=Math.max(12,base*0.25+state.espLetras*0.6);
+        if(lineW+wsp>state.lineWidth&&line.length) flush();
+        line.push({char:' ',w:wsp,h:base*0.4,estilo:{shape:'none'},seed:(pi*997+wi*131)^state.seed});
+        lineW+=wsp; maxLineH=Math.max(maxLineH,base*0.4);
+      });
+      flush();
+      if(pi<paragraphs.length-1) y+=paragraphGap;
+    });
+
+    const cw=Math.max(state.lineWidth,300), ch=Math.max(y+bottomPad,base*2);
+    const r=Math.min(1200/cw,1);
+    canvas.width=Math.round(cw*r);
+    canvas.height=Math.round(ch*r);
+    state.scalePreview=r;
+    state.layout=L.map(b=>({...b,x:b.x*r,y:b.y*r,w:b.w*r,h:b.h*r}));
+  }
+
+  function roughRect(ctx,x,y,w,h){
+    const j=Math.max(1,Math.min(4,Math.min(w,h)*0.03));
+    ctx.beginPath();
+    ctx.moveTo(x+j,y+rand(state.seed+1)*j);
+    ctx.lineTo(x+w-j,y+rand(state.seed+2)*j);
+    ctx.lineTo(x+w+rand(state.seed+3)*j,y+h-j);
+    ctx.lineTo(x+rand(state.seed+4)*j,y+h-j);
+    ctx.closePath();
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  function render(){
+    const r=state.scalePreview||1;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    state.layout.forEach(b=>{
+      if(b.char===' ') return;
+      const es=b.estilo, cx=b.x+b.w/2, cy=b.y+b.h/2;
+      ctx.save();
+      ctx.translate(cx,cy);
+      if(es.flip) ctx.scale(-1,1);
+      ctx.rotate(es.rot);
+      const w=b.w*0.98, h=b.h*0.98;
+      ctx.fillStyle=es.bg;
+      if(es.shape==='pill') roundRect(ctx,-w/2,-h/2,w,h,Math.min(w,h)*0.18);
+      else roughRect(ctx,-w/2,-h/2,w,h);
+      ctx.fill();
+      ctx.lineWidth=Math.max(1,2*r);
+      ctx.strokeStyle='rgba(0,0,0,.25)';
+      ctx.stroke();
+      ctx.fillStyle='#111';
+      ctx.font=`900 ${Math.max(10,(state.fontBase*es.mag*r))}px ${es.font}, system-ui`;
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(b.char,0,0);
+      ctx.restore();
+    });
+  }
+
+  function renderToScale(scale){
+    const cw=Math.max(state.lineWidth,300);
+    const ch=Math.max(canvas.height/(state.scalePreview||1),state.fontBase*2);
+    const W=Math.round(cw*scale), H=Math.round(ch*scale);
+    const c=document.createElement('canvas');
+    c.width=W; c.height=H;
+    const g=c.getContext('2d');
+
+    state.layout.forEach(b=>{
+      if(b.char===' ') return;
+      const es=b.estilo, sp=state.scalePreview||1;
+      const cx=(b.x/sp)*scale+(b.w/sp)*scale/2;
+      const cy=(b.y/sp)*scale+(b.h/sp)*scale/2;
+      g.save();
+      g.translate(cx,cy);
+      if(es.flip) g.scale(-1,1);
+      g.rotate(es.rot);
+      const w=(b.w/sp)*scale*0.98, h=(b.h/sp)*scale*0.98;
+      g.fillStyle=es.bg;
+      if(es.shape==='pill') roundRect(g,-w/2,-h/2,w,h,Math.min(w,h)*0.18);
+      else roughRect(g,-w/2,-h/2,w,h);
+      g.fill();
+      g.lineWidth=Math.max(1,2*scale);
+      g.strokeStyle='rgba(0,0,0,.25)';
+      g.stroke();
+      g.fillStyle='#111';
+      g.font=`900 ${Math.max(10,(state.fontBase*es.mag*scale))}px ${es.font}, system-ui`;
+      g.textAlign='center';
+      g.textBaseline='middle';
+      g.fillText(b.char,0,0);
+      g.restore();
+    });
+    return c;
+  }
+
+  function descargarPNG(){
+    const outW=Math.max(800,Math.min(6000,parseInt(exportAncho.value)||3000));
+    const scale=outW/Math.max(state.lineWidth,300);
+    const c=renderToScale(scale);
+    triggerDownload(c.toDataURL('image/png'),`CS_Collage_${Date.now()}.png`);
+  }
+
+  function triggerDownload(dataURL,filename){
+    const a=document.createElement('a');
+    a.href=dataURL; a.download=filename;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function guardarVersion(){
+    const outW=parseInt(exportAncho.value)||3000;
+    const scale=outW/Math.max(state.lineWidth,300);
+    const c=renderToScale(scale);
+    const ver={
+      id:Date.now(),
+      thumb:c.toDataURL('image/png'),
+      texto:state.texto,
+      config:{...state,layout:undefined},
+      ts:new Date().toISOString()
+    };
+    const arr=leerHistorial();
+    arr.unshift(ver);
+    localStorage.setItem('cs_collage_hist',JSON.stringify(arr.slice(0,60)));
+    pintarHistorial();
+  }
+
+  function leerHistorial(){
+    try{ return JSON.parse(localStorage.getItem('cs_collage_hist'))||[]; }
+    catch(e){ return []; }
+  }
+
+  function pintarHistorial(){
+    const arr=leerHistorial();
+    historialEl.innerHTML='';
+    if(!arr.length){
+      historialEl.innerHTML='<p class="empty-hist">Sin versiones guardadas aún</p>';
+      return;
+    }
+    arr.forEach(v=>{
+      const card=document.createElement('div');
+      card.className='hist-card';
+      card.innerHTML=`
+        <img src="${v.thumb}" alt="version"/>
+        <div class="hist-meta">
+          <span class="hist-date">${new Date(v.ts).toLocaleDateString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
+          <div class="hist-btns">
+            <button class="btn primary" data-act="dl"  data-id="${v.id}">⬇</button>
+            <button class="btn"         data-act="use" data-id="${v.id}">↩</button>
+            <button class="btn danger"  data-act="rm"  data-id="${v.id}">✕</button>
+          </div>
+        </div>`;
+      historialEl.appendChild(card);
+    });
+  }
+
+  historialEl.addEventListener('click', e=>{
+    const b=e.target.closest('button');
+    if(!b) return;
+    const id=+b.dataset.id, act=b.dataset.act;
+    const arr=leerHistorial(), v=arr.find(x=>x.id===id);
+    if(!v) return;
+    if(act==='dl')  triggerDownload(v.thumb,`CS_Collage_${id}.png`);
+    if(act==='use') aplicarVersion(v);
+    if(act==='rm'){
+      arr.splice(arr.findIndex(x=>x.id===id),1);
+      localStorage.setItem('cs_collage_hist',JSON.stringify(arr));
+      pintarHistorial();
+    }
+  });
+
+  function aplicarVersion(v){
+    inputText.value=v.texto||'';
+    const c=v.config||{};
+    lineWidthR.value=c.lineWidth||650;    lineWidthOut.textContent    = state.lineWidth    = lineWidthR.value|0;
+    fontBaseR.value=c.fontBase||100;      fontBaseOut.textContent     = state.fontBase     = fontBaseR.value|0;
+    espLetrasR.value=c.espLetras||4;      espLetrasOut.textContent    = state.espLetras    = espLetrasR.value|0;
+    interlineadoR.value=c.interlineado||1.2; interlineadoOut.textContent= state.interlineado= parseFloat(interlineadoR.value);
+    alineacionSel.value=c.alineacion||'center';
+    state.preset=c.preset||'pastel';
+    [...presets.children].forEach(ch=>ch.classList.toggle('active',ch.dataset.preset===state.preset));
+    state.seed=(Math.random()*1e9)|0;
+    rerender();
+  }
+
+  // boot
+  $('#btnEjemplo').click();
+  pintarHistorial();
+})();
+</script>
+</body>
+</html>

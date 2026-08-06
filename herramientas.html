@@ -101,9 +101,9 @@ body::after{
 /* ════════════════════════ NAV ════════════════════════ */
 nav{
   position:sticky;top:0;z-index:200;
-  background:rgba(245,244,247,.88);
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
+  background:rgba(245,244,247,.92);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
   height:64px;
   display:flex;align-items:center;
@@ -132,10 +132,14 @@ nav .wrap{display:flex;align-items:center;width:100%;}
   border-bottom:2px solid rgba(0,0,0,.12);
   background:#0a0a0c;
 }
-/* Fondo: niebla negra con velas de luz (visible mientras el video carga) */
+/* Fondo: niebla índigo/violeta, sin video — solo gradientes (barato de renderizar) */
 .hero::before{
   content:'';position:absolute;inset:0;
-  background:#0a0a0c;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% -10%, rgba(108,99,255,.28) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 42% at 12% 105%, rgba(176,74,255,.22) 0%, transparent 55%),
+    radial-gradient(ellipse 32% 32% at 90% 88%, rgba(201,162,39,.14) 0%, transparent 50%),
+    #0a0a0c;
   pointer-events:none;z-index:0;
 }
 /* Líneas de cuadrícula tenue tipo manuscrito gótico */
@@ -149,22 +153,39 @@ nav .wrap{display:flex;align-items:center;width:100%;}
 }
 .hero .wrap{position:relative;z-index:1;}
 
-/* Video de fondo — solo en el hero */
-.hero-video{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center;
-  z-index:0;
-  opacity:.55;
-  filter:saturate(1.1) contrast(1.05);
+/* Sello giratorio — motivo de marca (referencia al reg-mark ✛), decorativo detrás del título.
+   Solo anima transform, así que corre gratis en el compositor sin costarle nada al navegador. */
+.hero-seal{
+  position:absolute;top:50%;right:-6%;
+  width:min(56vw,620px);height:min(56vw,620px);
+  transform:translateY(-50%);
+  z-index:0;pointer-events:none;
+  opacity:.5;
 }
-.hero-video-overlay{
-  position:absolute;inset:0;z-index:0;
-  background:
-    radial-gradient(ellipse 60% 55% at 50% -10%, rgba(60,0,80,.6) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 15% 110%, rgba(30,0,40,.55) 0%, transparent 55%),
-    radial-gradient(ellipse 30% 30% at 88% 90%, rgba(40,0,20,.45) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(10,10,12,.55) 0%, rgba(10,10,12,.35) 40%, rgba(10,10,12,.85) 100%);
-  pointer-events:none;
+.hero-seal svg{width:100%;height:100%;animation:sealSpin 120s linear infinite;will-change:transform;}
+.hero-seal circle{fill:none;stroke:rgba(176,74,255,.16);}
+.hero-seal .ring-2{stroke:rgba(108,99,255,.13);}
+.hero-seal .tick{stroke:rgba(255,255,255,.08);}
+@keyframes sealSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* Dos manchas de luz que respiran muy lento, solo transform+opacity */
+.hero-glow{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;z-index:0;will-change:transform,opacity;}
+.hero-glow-a{
+  width:420px;height:420px;top:-10%;left:55%;
+  background:radial-gradient(circle,rgba(176,74,255,.32) 0%,transparent 70%);
+  animation:glowFloat 14s ease-in-out infinite;
+}
+.hero-glow-b{
+  width:340px;height:340px;bottom:-15%;left:0%;
+  background:radial-gradient(circle,rgba(108,99,255,.26) 0%,transparent 70%);
+  animation:glowFloat 18s ease-in-out infinite reverse;
+}
+@keyframes glowFloat{
+  0%,100%{transform:translate(0,0) scale(1);opacity:.7;}
+  50%{transform:translate(-30px,20px) scale(1.12);opacity:1;}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-seal svg,.hero-glow-a,.hero-glow-b{animation:none;}
 }
 
 .reg-mark{width:13px;height:13px;flex-shrink:0;}
@@ -282,7 +303,7 @@ nav .wrap{display:flex;align-items:center;width:100%;}
 /* ════════════════════════ CONTROL BAR (search + filtros) ════════════════════════ */
 .control-bar{
   position:sticky;top:64px;z-index:150;
-  background:rgba(245,244,247,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  background:rgba(245,244,247,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
   padding:16px 0;
 }
@@ -359,8 +380,7 @@ nav .wrap{display:flex;align-items:center;width:100%;}
     var(--surface);
   border:1px solid var(--border);border-radius:var(--r-md);
   padding:22px;display:flex;flex-direction:column;position:relative;overflow:hidden;
-  transition:border-color .25s,background-color .25s,transform .25s,box-shadow .25s,clip-path .3s;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:border-color .25s,background-color .25s,transform .25s,box-shadow .25s;
   box-shadow:0 2px 12px rgba(100,90,140,.06);
   counter-increment:toolnum;
   clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%);
@@ -561,6 +581,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         0 0 35px rgba(255,190,0,.5);
 
     animation:legendPulse 2s ease-in-out infinite;
+    will-change:transform;
 }
 
 .badge-legend::before{
@@ -576,8 +597,9 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
         rgba(255,255,255,.95),
         transparent
     );
-    transform:rotate(25deg);
+    transform:rotate(25deg) translateX(-10%);
     animation:legendShine 2.8s linear infinite;
+    will-change:transform;
 }
 
 .badge-legend::after{
@@ -591,25 +613,13 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
 }
 
 @keyframes legendShine{
-    from{left:-70%;}
-    to{left:170%;}
+    from{transform:rotate(25deg) translateX(-10%);}
+    to{transform:rotate(25deg) translateX(430%);}
 }
 
 @keyframes legendPulse{
-    0%,100%{
-        transform:scale(1);
-        box-shadow:
-            0 0 8px rgba(255,210,0,.8),
-            0 0 18px rgba(255,180,0,.7),
-            0 0 35px rgba(255,190,0,.5);
-    }
-    50%{
-        transform:scale(1.05);
-        box-shadow:
-            0 0 15px rgba(255,220,0,1),
-            0 0 30px rgba(255,170,0,.9),
-            0 0 55px rgba(255,220,0,.8);
-    }
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.05);}
 }
 </style>
 </head>
@@ -677,10 +687,19 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
 
 <!-- ════════════════════════ HERO ════════════════════════ -->
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="">
-    <source src="goyo.mp4" type="video/mp4">
-  </video>
-  <div class="hero-video-overlay"></div>
+  <div class="hero-glow hero-glow-a"></div>
+  <div class="hero-glow hero-glow-b"></div>
+  <div class="hero-seal" aria-hidden="true">
+    <svg viewBox="0 0 200 200">
+      <circle class="ring-2" cx="100" cy="100" r="70" stroke-width="1"/>
+      <circle cx="100" cy="100" r="92" stroke-width="1" stroke-dasharray="2 6"/>
+      <circle cx="100" cy="100" r="98" stroke-width="1"/>
+      <line class="tick" x1="100" y1="2" x2="100" y2="14" stroke-width="1.4"/>
+      <line class="tick" x1="100" y1="186" x2="100" y2="198" stroke-width="1.4"/>
+      <line class="tick" x1="2" y1="100" x2="14" y2="100" stroke-width="1.4"/>
+      <line class="tick" x1="186" y1="100" x2="198" y2="100" stroke-width="1.4"/>
+    </svg>
+  </div>
   <div class="wrap">
     <div class="hero-eyebrow">
       <svg class="reg-mark" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="1" x2="12" y2="23"/><line x1="1" y1="12" x2="23" y2="12"/></svg>
@@ -762,7 +781,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Halftone Generator</div>
           <p class="tcard-desc">Genera semitonos con calidad profesional y control total sobre frecuencia, ángulo y forma.</p>
           <div class="tcard-actions">
-            <a href="halftone_master_REAL.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Semitonos Studio.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636247374968458516?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -771,7 +790,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
 
 
         
-        <div class="tcard" data-id="d-pedreria">
+        <div class="tcard" data-id="d-semitono">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div>
             <div class="tcard-meta"><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
@@ -781,7 +800,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Halftone Generator</div>
           <p class="tcard-desc">Genera semitonos con calidad profesional y control total sobre frecuencia, ángulo y forma.</p>
           <div class="tcard-actions">
-            <a href="semitono.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="SEMITONO PARA DIFERENTES COLORES.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>proximamente</a>
           </div>
         </div>
@@ -797,12 +816,12 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Rhinestone Studio</div>
           <p class="tcard-desc">Convierte imágenes en plantillas de alta precisión para rhinestones y pedrería en playeras.</p>
           <div class="tcard-actions">
-            <a href="D.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Pedrería.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7625845030661410069" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
 
-                <div class="tcard" data-id="d-pedreria">
+                <div class="tcard" data-id="d-pedreriapro">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div>
             <div class="tcard-meta"><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
@@ -812,7 +831,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Rhinestone Studio</div>
           <p class="tcard-desc">Convierte imágenes en plantillas de alta precisión para rhinestones y pedrería en playeras.</p>
           <div class="tcard-actions">
-            <a href="chechena_pedreria_pro.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Pedrería PRO.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
                         <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
           </div>
         </div>
@@ -826,7 +845,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Vector Studio</div>
           <p class="tcard-desc">Transforma imágenes en vectores SVG/PDF escalables al infinito.</p>
           <div class="tcard-actions">
-            <a href="vectorizador-chechena.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Vectorizador.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636245780126338325?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -839,7 +858,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Pattern Generator</div>
           <p class="tcard-desc">Generador de patrones infinitos y fondos repetibles para sublimación completa.</p>
           <div class="tcard-actions">
-            <a href="PATRONES.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Patrones de Sublimación.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636188095271980309?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -853,7 +872,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Layout Bootleg</div>
           <p class="tcard-desc">Crea composiciones tipo collage urbano para tus playeras bootleg.</p>
           <div class="tcard-actions">
-            <a href="chechena-collage.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Estilo Collage.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636188095271980309?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -867,7 +886,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Vintage Borders</div>
           <p class="tcard-desc">Aplica marcos desgastados y efectos vintage a tus diseños para un estilo auténtico y urbano.</p>
           <div class="tcard-actions">
-            <a href="chechena-marco-desgastado-v2.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Marco Desgastado.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636189832846396693?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -880,7 +899,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Texturas para DTF</div>
           <p class="tcard-desc">Aplica texturas grunge a tus diseños para impresión en DTF con calidad profesional.</p>
           <div class="tcard-actions">
-            <a href="Texturas para diseños.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Texturas Grunge.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7655575646273293589?is_from_webapp=1&sender_device=pc&web_id=7652820373969798663" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>VER TUTORIAL</a>
           </div>
         </div>
@@ -894,7 +913,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Templates</div>
           <p class="tcard-desc">Crea diseños listos para estampar a partir de plantillas predefinidas.</p>
           <div class="tcard-actions">
-            <a href="PLANTILLAS.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Plantillas DTF.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7625846956220386581?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -922,7 +941,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">AI Background Removal</div>
           <p class="tcard-desc">Elimina fondos complejos de tus fotografías automáticamente con un solo clic usando IA.</p>
           <div class="tcard-actions">
-            <a href="REMO.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Quitar Fondo.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636191919957101845?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -936,7 +955,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">AI Background Removal Pro</div>
           <p class="tcard-desc">Sube tu imagen y elimina fondos con precisión profesional. Herramienta exclusiva de CHECHENA SHIRTS para diseños DTF de alta calidad.</p>
           <div class="tcard-actions">
-            <a href="Eliminador de Fondos Pro.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Quitar Fondo PRO.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636191919957101845?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -952,7 +971,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">AI Upscaler · gratis hasta el 10/07/2026</div>
           <p class="tcard-desc">Aumenta la resolución y recupera detalles usando inteligencia artificial.</p>
           <div class="tcard-actions">
-            <a href="chechena-mejorador-protected.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Mejorar Calidad.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638276691223170325?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -966,7 +985,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Mezzotint Effect AI</div>
           <p class="tcard-desc">Aplica efectos de mezzotinta y grabado clásico a tus fotografías.</p>
           <div class="tcard-actions">
-            <a href="mezzotinta-studio-chechena (2).html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Mezzotinta Studio.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636193426274405652?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -980,7 +999,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Smart Cropper</div>
           <p class="tcard-desc">Detecta y recorta tus imágenes de forma automática alrededor de tu diseño principal.</p>
           <div class="tcard-actions">
-            <a href="recortador_chechena.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Recortador Inteligente.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638485301538721044?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1008,7 +1027,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Metro Pliego</div>
           <p class="tcard-desc">Arma tu pliego DTF con precisión real. Sube tus diseños, acomódalos al tamaño exacto del rollo y exporta listos para imprenta en PNG 300 DPI o PDF.</p>
           <div class="tcard-actions">
-            <a href="chechena_shirts_studio (1).html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Armador de Metro DTF.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7652985519579598100?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1077,7 +1096,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Color Studio</div>
           <p class="tcard-desc">Cambia los colores de tu diseño de forma rápida y precisa antes de imprimir.</p>
           <div class="tcard-actions">
-            <a href="chechena-cambiar-color.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Cambiar Color.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
           </div>
         </div>
@@ -1104,7 +1123,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Trim Transparente</div>
           <p class="tcard-desc">Elimina el espacio transparente alrededor de tus diseños PNG.</p>
           <div class="tcard-actions">
-            <a href="chechena-shirts-reductor.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Reducir Borde.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7655574169735679253?is_from_webapp=1&sender_device=pc&web_id=7652820373969798663" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>VER TUTORIAL</a>
           </div>
         </div>
@@ -1118,7 +1137,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Convertidor de Color</div>
           <p class="tcard-desc">Convierte tus imágenes del espacio de color RGB a CMYK optimizado para impresión profesional.</p>
           <div class="tcard-actions">
-            <a href="simulador_cmyk_crema (1).html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="RGB a CMYK.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638494917995547924?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1132,7 +1151,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Image Cropper</div>
           <p class="tcard-desc">Ajusta, encuadra y recorta tus imágenes a las dimensiones exactas.</p>
           <div class="tcard-actions">
-            <a href="recortador_chechena (1).html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Recortador Manual.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638493224314752277?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1172,7 +1191,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Auto Generator</div>
           <p class="tcard-desc">Genera mockups de forma automática. Sube tu diseño y listo en segundos.</p>
           <div class="tcard-actions">
-            <a href="mockup-studio1.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Mockups Automáticos.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638499597786058004?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1186,12 +1205,12 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Procesamiento masivo</div>
           <p class="tcard-desc">Procesa múltiples diseños en un solo paso. Producción masiva en segundos.</p>
           <div class="tcard-actions">
-            <a href="mockup-studio.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Mockup Studio Batch.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638507671842376981?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
 
-        <div class="tcard" data-id="m-promo">
+        <div class="tcard" data-id="m-promomaker">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-tshirt"/></svg></div>
                           <div>
@@ -1202,13 +1221,13 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Diseño con Fondo</div>
           <p class="tcard-desc">Crea imágenes promocionales impactantes para redes sociales y tu tienda en minutos.</p>
           <div class="tcard-actions">
-            <a href="promo-maker.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Promo Maker.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638510795973922069?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
 
 
-                <div class="tcard" data-id="m-promo">
+                <div class="tcard" data-id="m-publicidad">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-tshirt"/></svg></div>
                           <div>
@@ -1219,12 +1238,12 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Mockup Promo Studio</div>
           <p class="tcard-desc">Crea imágenes promocionales impactantes para redes sociales y tu tienda en minutos de ambos lados</p>
           <div class="tcard-actions">
-            <a href="vista2.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Publicidad para playeras.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>pendiente</a>
           </div>
         </div>
         
-        <div class="tcard" data-id="m-promo">
+        <div class="tcard" data-id="m-mockupstazas">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-tshirt"/></svg></div>
                           <div>
@@ -1234,7 +1253,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Diseño con Fondo</div>
           <p class="tcard-desc">Crea imágenes promocionales sobre tazas impactantes para redes sociales y tu tienda en minutos.</p>
           <div class="tcard-actions">
-            <a href="mockup-tazas-pro.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="MOCKUPS TAZAS.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>proximamente</a>
           </div>
         </div>
@@ -1248,7 +1267,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Colecciones</div>
           <p class="tcard-desc">Colección completa de blanks premium para tus proyectos.</p>
           <div class="tcard-actions">
-            <a href="catalogo_chechena.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Catálogo de Blanks.html" class="tcard-btn-p">Abrir Studio <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="guia-semitonos.html" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1274,7 +1293,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">QR Code Creator</div>
           <p class="tcard-desc">Crea códigos QR listos para imprimir en tus playeras y material promocional.</p>
           <div class="tcard-actions">
-            <a href="qrs.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Generador QR.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636199823259028757?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1288,7 +1307,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">PDF · SVG · PNG · JPG</div>
           <p class="tcard-desc">Procesa PDFs, SVGs, PNGs o JPGs de forma cruzada. Todo el procesamiento se realiza en tu navegador de forma segura.</p>
           <div class="tcard-actions">
-            <a href="conversor-chechena.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Conversor Universal.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636181792210439444?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1302,7 +1321,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Cost Calculator</div>
           <p class="tcard-desc">Calcula el precio final de tus playeras: materiales, impresión y margen de ganancia.</p>
           <div class="tcard-actions">
-            <a href="CA.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Calculadora de Playeras.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636181792210439444?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1316,7 +1335,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Cost Calculator</div>
           <p class="tcard-desc">Calcula el precio final de tus tazas, vasos y tumblers considerando materiales, personalización y margen de ganancia.</p>
           <div class="tcard-actions">
-            <a href="CA_vasos_tazas.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Calculadora de Tazas y Tumblers.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
           </div>
         </div>
@@ -1330,7 +1349,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Cotizador para clientes</div>
           <p class="tcard-desc">Genera tickets de cotización profesionales listos para enviar a tus clientes.</p>
           <div class="tcard-actions">
-            <a href="cotizador-playeras.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Generador de Tickets.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636200673847069973?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1344,7 +1363,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Ajuste de diseño</div>
           <p class="tcard-desc">Ajusta los diseños en tu playera y descárgalos en medidas reales.</p>
           <div class="tcard-actions">
-            <a href="chechenia.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Guía de Tallas.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7636201278133030165?is_from_webapp=1&sender_device=pc&web_id=7635429961268332049" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>
@@ -1358,14 +1377,14 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Visualizador + Ajuste de diseño</div>
           <p class="tcard-desc">Encuentra tu talla y visualiza tu diseño antes de comprar.</p>
           <div class="tcard-actions">
-            <a href="GUÍA DE MEDIDAS Y DISEÑO´PRO.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Guía de Tallas PRO.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7655572642111589653?is_from_webapp=1&sender_device=pc&web_id=7652820373969798663" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>VER TUTORIAL</a>
           </div>
         </div>
 
 
 
-                <div class="tcard" data-id="u-guiatallaspro">
+                <div class="tcard" data-id="u-guiatallasdoble">
           <div class="tcard-top">
             <div class="tcard-icon"><svg viewBox="0 0 24 24"><use href="#i-ruler"/></svg></div>
             <div class="tcard-meta"><span class="badge badge-nuevo">Nuevo</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div><div class="tcard-meta"><span class="badge badge-pro">Pro</span><button class="star-btn" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button></div>
@@ -1374,7 +1393,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">muestra el diseño en ambos lados al mismo tiempo</div>
           <p class="tcard-desc">Encuentra la talla ideal y visualiza tu diseño en la parte frontal y trasera antes de imprimir.</p>
           <div class="tcard-actions">
-            <a href="chechena_guia_medidas_pro.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="Guía de Tallas Doble Vista.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="#" class="tcard-btn-s" aria-disabled="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Próximamente</a>
           </div>
         </div>
@@ -1390,7 +1409,7 @@ footer{background:var(--bg-soft);border-top:1px solid var(--border);padding:26px
           <div class="tcard-sub">Presentación al cliente</div>
           <p class="tcard-desc">Plataforma para cotizar y mostrar diseños personalizados al cliente: mockups, tamaños, tipos de impresión y precios finales, todo claro y profesional.</p>
           <div class="tcard-actions">
-            <a href="chechena_v7 (2).html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+            <a href="TONY — Cotizador Visual.html" class="tcard-btn-p">Abrir Herramienta <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
             <a href="https://www.tiktok.com/@chechena_shirts/video/7638519449389141269?is_from_webapp=1&sender_device=pc&web_id=7620312228671243783" target="_blank" rel="noopener" class="tcard-btn-s"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg>Ver guía</a>
           </div>
         </div>

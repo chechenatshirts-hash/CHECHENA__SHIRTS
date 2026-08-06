@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Chechena Shirts • Marco Desgastado</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  font-family:'Jost',sans-serif;font-weight:300;
+  background:#fdf8f4;color:#4a3f38;min-height:100vh;
+  scrollbar-width:thin;scrollbar-color:#d8c9b0 #f5ede4;
+}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:8px}
+html::-webkit-scrollbar-track,body::-webkit-scrollbar-track{background:#f5ede4}
+html::-webkit-scrollbar-thumb,body::-webkit-scrollbar-thumb{background:#d8c9b0;border-radius:999px}
+
+/* ── TOKENS ── */
+:root{
+  --rose:      #faf0ec;
+  --rose-mid:  #eacec5;
+  --rose-dark: #c0847a;
+  --rose-btn:  #b87060;
+  --sage:      #edf2ed;
+  --sage-mid:  #c0d0c0;
+  --sage-dark: #7a9e7a;
+  --cream:     #fdf8f4;
+  --cream-mid: #f0e6d8;
+  --sand:      #ddd0b8;
+  --text:      #4a3f38;
+  --text-m:    #8c7d74;
+  --white:     #ffffff;
+  --radius:    12px;
+  --shadow:    0 2px 20px rgba(100,70,60,0.07);
+}
+
+/* ── LAYOUT ── */
+.container{max-width:1160px;margin:0 auto;padding:24px 20px}
+@media(max-width:768px){.container{padding:14px}}
+
+/* ── HEADER ── */
+.site-header{
+  background:var(--white);
+  border-bottom:1px solid var(--cream-mid);
+  padding:16px 28px;
+  display:flex;align-items:center;gap:14px;
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:600;letter-spacing:0.1em;color:var(--text);
+}
+.logo em{font-style:normal;color:var(--rose-dark);}
+.back-link-top{
+  margin-left:auto;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border:1px solid var(--cream-mid);border-radius:999px;
+  background:var(--white);color:var(--text-m);
+  text-decoration:none;font-size:13px;letter-spacing:0.04em;
+  transition:all .2s;
+}
+.back-link-top:hover{background:var(--rose);border-color:var(--rose-mid);color:var(--text);}
+
+/* ── PAGE TITLE ── */
+.page-hero{padding:28px 0 8px;}
+.page-hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;font-weight:300;letter-spacing:0.06em;color:var(--text);
+  margin-bottom:4px;
+}
+.page-hero p{font-size:13px;color:var(--text-m);}
+
+/* ── CONTROLS CARD ── */
+.top-controls{
+  background:var(--white);
+  border:1px solid var(--cream-mid);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:26px 28px;
+  margin-bottom:22px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.block-label{
+  font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--rose-dark);font-weight:500;margin-bottom:-6px;
+}
+
+/* ── GRID ROWS ── */
+.controls-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+.controls-row-three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end}
+.dimensions-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.title-color-row{display:grid;grid-template-columns:1fr minmax(260px,1fr);gap:12px;align-items:center}
+.color-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:center}
+
+/* ── SECTION TITLE ── */
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:400;letter-spacing:0.04em;color:var(--text);
+}
+
+/* ── COLOR FIELDS ── */
+.mini-color-field{display:flex;flex-direction:column;gap:5px;min-width:110px}
+.mini-color-field label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-m)}
+.mini-swatch{width:100%;height:34px;border:1.5px solid var(--cream-mid);border-radius:7px;background:#fff;transition:border-color .2s}
+.mini-color-field input{
+  padding:7px 10px;border:1.5px solid var(--cream-mid);border-radius:7px;
+  background:var(--cream);font-size:13px;font-family:'Jost',sans-serif;
+  color:var(--text);transition:border-color .2s;
+}
+.mini-color-field input:focus{outline:none;border-color:var(--rose-dark)}
+.mini-color-field input:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── CONTROL FIELDS ── */
+.control-field{display:flex;flex-direction:column;gap:6px}
+.control-field label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-m)}
+.control-field .tolerance-label{font-size:12px;font-weight:400;letter-spacing:0.04em;text-transform:none;color:var(--text-m)}
+.control-field input[type=range]{
+  width:100%;padding:10px 0;accent-color:var(--rose-dark);
+}
+.control-field input[type=text],
+.control-field input[type=number]{
+  width:100%;padding:10px 13px;
+  border:1.5px solid var(--cream-mid);border-radius:8px;
+  background:var(--cream);font-size:14px;font-family:'Jost',sans-serif;
+  color:var(--text);transition:border-color .2s;
+}
+.control-field input:focus{outline:none;border-color:var(--rose-dark)}
+.control-field input:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── BUTTONS ── */
+.btn{
+  width:100%;padding:13px 16px;
+  border:1.5px solid var(--text);border-radius:9px;
+  background:transparent;font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .2s;
+  text-transform:uppercase;letter-spacing:0.08em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Jost',sans-serif;color:var(--text);
+}
+.btn:disabled{opacity:.38;cursor:not-allowed}
+.btn.is-busy{cursor:progress}
+.btn-primary{background:var(--text);color:var(--white)}
+.btn-primary:hover:not(:disabled){background:var(--rose-btn);border-color:var(--rose-btn)}
+.btn-ghost{color:var(--text)}
+.btn-ghost:hover:not(:disabled){background:var(--rose);border-color:var(--rose-mid);color:var(--text)}
+.btn-danger{border-color:#c97070;color:#c97070}
+.btn-danger:hover:not(:disabled){background:#c97070;color:var(--white)}
+
+/* ── STATUS ── */
+.status{
+  margin-top:4px;font-size:13px;color:var(--text-m);
+  min-height:1.2em;display:block;line-height:1.5;
+}
+
+/* ── VIEWER ── */
+.viewer{
+  background:var(--white);
+  border:1px solid var(--cream-mid);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:24px;
+}
+.canvas-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.figure{
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--cream);border:1px solid var(--cream-mid);
+  border-radius:10px;padding:14px;
+}
+.figure--full{grid-column:1 / -1}
+.figure figcaption{
+  font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.14em;
+  color:var(--text-m);display:flex;justify-content:space-between;gap:8px;align-items:center;
+}
+.figure-note{
+  font-size:11px;font-weight:400;color:var(--rose-dark);
+  background:var(--rose);border-radius:5px;padding:2px 8px;
+  text-transform:none;letter-spacing:0;
+}
+.canvas-shell{
+  position:relative;width:100%;
+  background:#faf7f3;
+  border:1px solid var(--cream-mid);border-radius:8px;
+  overflow:auto;min-height:200px;
+}
+.canvas-stage{
+  position:relative;width:100%;min-height:200px;
+  display:flex;align-items:center;justify-content:center;
+}
+.canvas-shell canvas{width:100%;max-width:100%;height:auto;display:block;border:none;background:transparent}
+.checker{
+  background-color:#fff;
+  background-image:
+    linear-gradient(45deg,#ede8e2 25%,transparent 25%),
+    linear-gradient(-45deg,#ede8e2 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#ede8e2 75%),
+    linear-gradient(-45deg,transparent 75%,#ede8e2 75%);
+  background-size:18px 18px;
+  background-position:0 0,0 9px,9px -9px,-9px 0;
+}
+#frameCanvas{cursor:crosshair}
+.empty{color:var(--text-m);font-size:13px;text-align:center;padding:24px;line-height:1.6}
+
+/* ── DIVIDER ── */
+.section-divider{border:none;border-top:1px solid var(--cream-mid);margin:2px 0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .controls-row,.controls-row-three{grid-template-columns:1fr}
+  .title-color-row{grid-template-columns:1fr;gap:10px}
+  .canvas-grid{grid-template-columns:1fr}
+  .figure--full{grid-column:auto}
+  .viewer{padding:14px}
+  .top-controls{padding:18px 16px}
+}
+@media(max-width:480px){
+  .btn{padding:11px 12px;font-size:12px}
+  .top-controls{padding:14px 12px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">Chechena <em>Shirts</em></div>
+  <a class="back-link-top" href="#" aria-label="Volver al inicio">← Volver al inicio</a>
+</header>
+
+<div class="container" id="app">
+
+  <div class="page-hero">
+    <h1>Marco Desgastado</h1>
+    <p>Aplica marcos vintage a tus diseños con eliminación de fondo y exportación @300 dpi</p>
+  </div>
+
+  <!-- CONTROLES -->
+  <section class="top-controls">
+
+    <div class="block-label">1. Imágenes</div>
+    <div class="controls-row">
+      <div>
+        <input id="baseInput" type="file" accept="image/png,image/jpeg,image/webp,image/avif,.avif" hidden/>
+        <button id="btnUploadBase" class="btn btn-primary" type="button">↑ Subir imagen principal</button>
+      </div>
+      <div>
+        <input id="frameInput" type="file" accept="image/png,image/jpeg,image/webp,image/avif,.avif" hidden/>
+        <button id="btnUploadFrame" class="btn btn-primary" type="button" disabled>↑ Subir marco desgastado</button>
+      </div>
+    </div>
+
+    <hr class="section-divider"/>
+    <div class="block-label">2. Tamaño de salida</div>
+    <div class="controls-row">
+      <div class="control-field">
+        <label for="wcm">Ancho (cm)</label>
+        <input id="wcm" type="number" step="0.01" min="1" max="120" inputmode="decimal" autocomplete="off" disabled/>
+      </div>
+      <div class="control-field">
+        <label for="hcm">Alto (cm)</label>
+        <input id="hcm" type="number" step="0.01" min="1" max="120" inputmode="decimal" autocomplete="off" disabled/>
+      </div>
+    </div>
+
+    <hr class="section-divider"/>
+    <div class="title-color-row">
+      <div>
+        <h2 class="section-title">Haz clic en la vista previa del marco para elegir el color de fondo</h2>
+      </div>
+      <div class="color-pair">
+        <div class="mini-color-field">
+          <label for="pickSwatch">Color elegido</label>
+          <div id="pickSwatch" class="mini-swatch"></div>
+        </div>
+        <div class="mini-color-field">
+          <label for="pickHex">Hex editable</label>
+          <input id="pickHex" type="text" aria-label="HEX del color elegido" value="#ffffff" autocomplete="off" disabled/>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-field" style="display:none" id="tolWrap">
+      <label class="tolerance-label">Tolerancia: <span id="tolValue">200</span></label>
+      <input id="tolRange" type="range" min="0" max="200" step="1" value="200" disabled/>
+    </div>
+    <!-- tolerance shown visually below -->
+    <div class="control-field">
+      <label>Tolerancia <span id="tolValue2" style="color:var(--rose-dark);font-weight:500">200</span></label>
+      <input id="tolRange2" type="range" min="0" max="200" step="1" value="200" disabled style="accent-color:var(--rose-dark)"/>
+    </div>
+
+    <hr class="section-divider"/>
+    <div class="block-label">3. Acciones</div>
+    <div class="controls-row-three">
+      <button id="btnApply"      class="btn btn-primary" type="button" disabled>Aplicar marco</button>
+      <button id="btnDownload"   class="btn btn-ghost"   type="button" disabled>Descargar PNG @300 dpi</button>
+      <button id="btnResetFrame" class="btn btn-ghost"   type="button" disabled>Restaurar marco</button>
+    </div>
+  </section>
+
+  <!-- VISOR -->
+  <section class="viewer">
+    <div class="canvas-grid">
+      <figure class="figure">
+        <figcaption>
+          Imagen principal
+          <span id="baseInfo" class="figure-note">Sin imagen</span>
+        </figcaption>
+        <div class="canvas-shell checker">
+          <div class="canvas-stage">
+            <canvas id="baseCanvas" aria-label="Imagen principal"></canvas>
+            <div id="baseEmpty" class="empty">Sube la imagen principal a la que quieres aplicar el marco desgastado.</div>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="figure">
+        <figcaption>
+          Marco desgastado
+          <span id="frameInfo" class="figure-note">Sin imagen</span>
+        </figcaption>
+        <div class="canvas-shell checker">
+          <div class="canvas-stage">
+            <canvas id="frameCanvas" aria-label="Marco desgastado: clic para seleccionar color"></canvas>
+            <div id="frameEmpty" class="empty">Sube el marco desgastado. Si tiene fondo, haz clic sobre el color que deseas eliminar.</div>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="figure figure--full">
+        <figcaption>
+          Resultado final
+          <span id="resultInfo" class="figure-note">PNG transparente</span>
+        </figcaption>
+        <div class="canvas-shell checker">
+          <div class="canvas-stage">
+            <canvas id="resultCanvas" aria-label="Resultado final"></canvas>
+            <div id="resultEmpty" class="empty">Haz clic en la imagen del marco desgastado para eliminar el fondo y generar el resultado final.</div>
+          </div>
+        </div>
+      </figure>
+    </div>
+
+    <p id="status" class="status" role="status" aria-live="polite">Configuración lista. Sube una imagen principal para comenzar.</p>
+  </section>
+</div>
+
+<script>
+// ── Sync the visible tolerance slider with the hidden one expected by the JS engine ──
+(function(){
+  const t2 = document.getElementById('tolRange2');
+  const tv2= document.getElementById('tolValue2');
+  // We'll create the real hidden inputs that the engine uses
+  // and mirror them from the visible ones
+  t2.addEventListener('input', function(){
+    tv2.textContent = t2.value;
+    // mirror to engine inputs
+    const tr = document.getElementById('tolRange');
+    const tv = document.getElementById('tolValue');
+    if(tr){ tr.value = t2.value; tr.dispatchEvent(new Event('input')); }
+    if(tv){ tv.textContent = t2.value; }
+  });
+
+  // Also enable t2 when tr is enabled
+  const observer = new MutationObserver(function(){
+    t2.disabled = document.getElementById('tolRange').disabled;
+  });
+  observer.observe(document.getElementById('tolRange'), {attributes:true, attributeFilter:['disabled']});
+})();
+</script>
+
+<script>
+// ══════════════════════════════════════════════════
+// ORIGINAL LOGIC (preserved exactly, minified source)
+// ══════════════════════════════════════════════════
+var e="size-adjust-modal-style",t=(e,t,n)=>{const a=Number.isFinite(e)?e:t;return Math.max(t,Math.min(n,a))},n=e=>Number.isFinite(e)?e.toFixed(2):"";function a(e){return new Promise((t,n)=>{const a=URL.createObjectURL(e),i=new Image;i.decoding="async",i.onload=()=>{URL.revokeObjectURL(a),t(i)},i.onerror=()=>{URL.revokeObjectURL(a),n(new Error("Imagen inválida."))},i.src=a})}function i(e,t,n){return new Promise(a=>{try{e.toBlob(e=>a(e||null),t,n)}catch(e){a(null)}})}async function o(e,t={}){const n=Number.isFinite(t.maxUploadBytes)?t.maxUploadBytes:20971520,o=Number.isFinite(t.limitSide)?t.limitSide:function(){const e=String(navigator.userAgent||"");return!!window.matchMedia&&window.matchMedia("(pointer: coarse)").matches||/Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(e)}()?5e3:9e3,r=await a(e),l=Math.max(r.naturalWidth||1,r.naturalHeight||1);if(!(e.size>n||l>o))return{file:e,image:r,compressed:!1};const d=Math.min(1,o/l),s=[d,.85*d,.7*d,.55*d].map(e=>Math.max(.2,Math.min(1,e))),c=String((null==e?void 0:e.name)||"imagen").replace(/\.[^./]+$/,""),u=function(e){const t=String((null==e?void 0:e.type)||"").toLowerCase();return"image/jpeg"===t||"image/jpg"===t?[{type:"image/jpeg",quality:.88,ext:"jpg"},{type:"image/webp",quality:.9,ext:"webp"},{type:"image/png",quality:.92,ext:"png"}]:"image/webp"===t?[{type:"image/webp",quality:.9,ext:"webp"},{type:"image/png",quality:.92,ext:"png"}]:[{type:"image/png",quality:.92,ext:"png"}]}(e);let m=null;for(const t of s){const a=Math.max(1,Math.round((r.naturalWidth||1)*t)),o=Math.max(1,Math.round((r.naturalHeight||1)*t)),l=document.createElement("canvas");l.width=a,l.height=o;const d=l.getContext("2d",{alpha:!0,willReadFrequently:!0});if(d){d.imageSmoothingEnabled=!0,d.imageSmoothingQuality="high",d.drawImage(r,0,0,a,o);for(const n of u){const a=await i(l,n.type,n.quality);if(a&&a.size&&!(a.size>=e.size&&t>=.99)){m=new File([a],`${c}-compressed.${n.ext}`,{type:n.type,lastModified:Date.now()});break}}if(m&&m.size<=n)break}}return m?{file:m,image:await a(m),compressed:!0}:{file:e,image:r,compressed:!1}}var r=(e,t=document)=>t.querySelector(e),l=r("#baseInput"),d=r("#frameInput"),s=r("#btnUploadBase"),c=r("#btnUploadFrame"),u=r("#btnApply"),m=r("#btnDownload"),h=r("#btnResetFrame"),g=r("#btnClear"),p=r("#wcm"),f=r("#hcm"),b=r("#tolRange"),w=r("#tolValue"),v=r("#pickSwatch"),x=r("#pickHex"),y=r("#status"),_=r("#baseCanvas"),z=r("#frameCanvas"),j=r("#resultCanvas"),k=null==_?void 0:_.getContext("2d",{alpha:!0,willReadFrequently:!0}),C=null==z?void 0:z.getContext("2d",{alpha:!0,willReadFrequently:!0}),E=null==j?void 0:j.getContext("2d",{alpha:!0,willReadFrequently:!0}),M=r("#baseEmpty"),L=r("#frameEmpty"),U=r("#resultEmpty"),S=r("#baseInfo"),R=r("#frameInfo"),F=r("#resultInfo"),I=300,N=2.54,q=120,P=null,A=null,D=0,$=0,H=0,B=0,W=null,G=null,Q=null,O=null,Y=!1;function T(e,t=!1){y&&(y.textContent=e||"",y.style.color=t?"#c97070":"#8c7d74")}function V(e,t,n){const a=Number(e),i=Number.isFinite(a)?a:t;return Math.max(t,Math.min(n,i))}function X(e){return V(e,1,q)}function J(e){return Math.round(100*e)/100}function K(e,t=300){return Math.max(1,Math.round(e/N*t))}function Z(e,t,n){e&&(e.width=Math.max(1,Math.round(t||1)),e.height=Math.max(1,Math.round(n||1)),e.style.aspectRatio=`${e.width} / ${e.height}`)}function ee(e,t,n){e&&(e.style.display=n?"block":"none"),t&&(t.style.display=n?"none":"block")}function te(e,t){e&&t&&(t.clearRect(0,0,e.width,e.height),e.width=0,e.height=0,e.style.aspectRatio="")}function ne(e,t,n){return`#${[e,t,n].map(e=>e.toString(16).padStart(2,"0")).join("")}`}function ae(e){Q=e;const t=ne(e.r,e.g,e.b);x&&(x.value=t),v&&(v.style.background=t)}function ie(){O=function(e=W){var t,n,a;if(!(null==e?void 0:e.width)||!(null==e?void 0:e.height))return null;const i=Math.floor(e.width/2),o=4*(Math.floor(e.height/2)*e.width+i),r=e.data;return{r:null!=(t=r[o])?t:255,g:null!=(n=r[o+1])?n:255,b:null!=(a=r[o+2])?a:255}}(),!Q&&O&&function(e){if(!e)return;const t=ne(e.r,e.g,e.b);x&&(x.value=t),v&&(v.style.background=t)}(O)}function oe(){return V(null==b?void 0:b.value,0,200)}function re(){p&&(p.value=D.toFixed(2)),f&&(f.value=$.toFixed(2))}function le(){return P?(P.naturalHeight||1)/Math.max(1,P.naturalWidth||1):1}function de(e){P&&(function(e){if(!P)return;const t=le();"height"===e?($=X(Number.parseFloat((null==f?void 0:f.value)||"")),1!==(D=X($/Math.max(1e-4,t)))&&D!==q||($=X(D*t))):(D=X(Number.parseFloat((null==p?void 0:p.value)||"")),1!==($=X(D*t))&&$!==q||(D=X($/Math.max(1e-4,t)))),D=J(D),$=J($),re()}(e),P&&(ce(),A?(ue(),Q?(ge(Q,oe(),{skipResult:!0}),he()):me()):me()))}function se(){const e=Boolean(P),t=Boolean(A),n=Boolean(e&&t&&(Q||O));c&&(c.disabled=!e),p&&(p.disabled=!e),f&&(f.disabled=!e),b&&(b.disabled=!t),x&&(x.disabled=!t),u&&(u.disabled=!n),h&&(h.disabled=!t),m&&(m.disabled=!Y)}function ce(){if(!P||!k)return;const e=function(){const e=K(D,I),t=K($,I),n=Math.min(1,1800/Math.max(e,t));return{width:Math.max(1,Math.round(e*n)),height:Math.max(1,Math.round(t*n))}}();H=e.width,B=e.height,Z(_,e.width,e.height),k.clearRect(0,0,_.width,_.height),k.imageSmoothingEnabled=!0,k.imageSmoothingQuality="high",k.drawImage(P,0,0,_.width,_.height),ee(_,M,!0),S&&(S.textContent="")}function ue(){A&&C&&H&&B&&(Z(z,H,B),C.clearRect(0,0,z.width,z.height),C.imageSmoothingEnabled=!0,C.imageSmoothingQuality="high",C.drawImage(A,0,0,z.width,z.height),W=C.getImageData(0,0,z.width,z.height),G=new ImageData(new Uint8ClampedArray(W.data),W.width,W.height),ie(),ee(z,L,!0),R&&(R.textContent=""))}function me(){Y=!1,E&&j.width&&j.height&&E.clearRect(0,0,j.width,j.height),ee(j,U,!1),F&&(F.textContent="PNG transparente"),se()}function he(){if(!(P&&G&&E&&H&&B))return void me();Z(j,H,B),E.clearRect(0,0,j.width,j.height),E.imageSmoothingEnabled=!0,E.imageSmoothingQuality="high",E.drawImage(P,0,0,j.width,j.height);const e=E.getImageData(0,0,j.width,j.height),t=e.data,n=G.data;for(let e=0;e<t.length;e+=4)n[e+3]>10&&(t[e+3]=0);E.putImageData(e,0,0),ee(j,U,!0),F&&(F.textContent=`${j.width} × ${j.height}px`),Y=!0,se()}function ge(e,t,{skipResult:n=!1}={}){if(!W||!C)return;const a=new Uint8ClampedArray(W.data),i=new ImageData(a,W.width,W.height),o=i.data;for(let n=0;n<o.length;n+=4){const a=o[n]-e.r,i=o[n+1]-e.g,r=o[n+2]-e.b;Math.sqrt(a*a+i*i+r*r)<=t&&(o[n+3]=0)}G=i,C.putImageData(G,0,0),n||(he(),T(`Color eliminado del marco: RGB(${e.r}, ${e.g}, ${e.b}) con tolerancia ${t}.`,!1))}async function pe(e,{compress:t=!0}={}){if(t){const t=await o(e);return{file:t.file,image:t.image,compressed:t.compressed}}return new Promise((t,n)=>{const a=new FileReader;a.onload=()=>{const i=new Image;i.decoding="async",i.onload=()=>t({file:e,image:i,compressed:!1}),i.onerror=()=>n(new Error("No se pudo leer la imagen.")),i.src=a.result},a.onerror=()=>n(new Error("No se pudo cargar el archivo.")),a.readAsDataURL(e)})}async function fe(a){if(a){T("Preparando imagen principal...",!1),null==s||s.classList.add("is-busy");try{const i=async function(e){try{const t=await e.arrayBuffer(),n=new DataView(t),a=[137,80,78,71,13,10,26,10];if(n.byteLength>=8&&a.every((e,t)=>n.getUint8(t)===e)){let e=8;for(;e+8<=n.byteLength;){const t=n.getUint32(e),a=String.fromCharCode(n.getUint8(e+4),n.getUint8(e+5),n.getUint8(e+6),n.getUint8(e+7));if(e+=8,"pHYs"===a){const t=n.getUint32(e);if(1===n.getUint8(e+8)&&t>0)return Math.round(.0254*t);break}e+=t+4}}if(n.byteLength>=4&&65496===n.getUint16(0)){let e=2;for(;e+4<n.byteLength&&255===n.getUint8(e);){const t=n.getUint8(e+1);if(217===t||218===t)break;const a=n.getUint16(e+2);if(a<2)break;if(224===t&&e+16<=n.byteLength&&"JFIF\0"===String.fromCharCode(n.getUint8(e+4),n.getUint8(e+5),n.getUint8(e+6),n.getUint8(e+7),n.getUint8(e+8))){const t=n.getUint8(e+11),a=n.getUint16(e+12),i=n.getUint16(e+14),o=Math.max(a,i);if(o>0){if(1===t)return o;if(2===t)return Math.round(2.54*o)}}e+=2+a}}}catch(e){}return null}(a),{file:o,image:r,compressed:l}=await pe(a,{compress:!0}),d=await i||72;P=r;const s=function(e,t){const n=le(),a=Number.isFinite(t)&&t>0?t:72;let i=e?e.naturalWidth/a*N:28,o=e?e.naturalHeight/a*N:i*n;return Number.isFinite(i)&&Number.isFinite(o)||(i=28,o=i*n),i=Math.max(1,i),o=Math.max(1,o),i>q&&(i=q,o=i*n),o>q&&(o=q,i=o/Math.max(1e-4,n)),{widthCm:J(i),heightCm:J(o)}}(r,d),c=await async function(a,i){return((a={})=>new Promise(i=>{(()=>{if(document.getElementById(e))return;const t=document.createElement("style");t.id=e,t.textContent="\n    .size-adjust-modal__backdrop{\n      position:fixed; inset:0; z-index:10000;\n      background:rgba(180,140,120,0.5);\n      display:flex; align-items:center; justify-content:center;\n      padding:24px;\n      font-family:'Jost',sans-serif;\n    }\n    .size-adjust-modal__dialog{\n      width:min(100%, 420px);\n      max-width:420px;\n      background:#fdf8f4;\n      border:1px solid #eacec5;\n      border-radius:12px;\n      box-shadow:0 4px 32px rgba(100,70,60,0.12);\n      padding:28px;\n      position:relative;\n      color:#4a3f38;\n      overflow-x:hidden;\n    }\n    .size-adjust-modal__close{\n      position:absolute; top:12px; right:14px;\n      border:none; background:transparent;\n      color:#8c7d74;\n      font-size:18px; line-height:1; cursor:pointer;\n      padding:0;\n    }\n    .size-adjust-modal__close:hover{color:#c0847a}\n    .size-adjust-modal__title{\n      margin:0 0 22px;\n      text-align:left;\n      font-size:17px;\n      line-height:1.4;\n      font-weight:400;\n      letter-spacing:.3px;\n      padding-right:24px;\n      color:#4a3f38;\n      font-family:'Cormorant Garamond',serif;\n    }\n    .size-adjust-modal__fields{\n      display:grid;\n      grid-template-columns:1fr 1fr;\n      gap:12px;\n      align-items:end;\n      margin-bottom:20px;\n    }\n    .size-adjust-modal__field{\n      display:flex;\n      flex-direction:column;\n      gap:6px;\n    }\n    .size-adjust-modal__field-head{\n      display:flex;\n      align-items:center;\n      justify-content:space-between;\n      gap:8px;\n      min-width:0;\n    }\n    .size-adjust-modal__fields .control-field input{\n      width:100%;\n      font-size:15px;\n      padding:10px 12px;\n      border-radius:8px;\n      background:#faf7f2;\n      border:1.5px solid #eacec5;\n      color:#4a3f38;\n      outline:none;\n      transition:border-color .15s;\n      appearance:textfield;\n      font-family:'Jost',sans-serif;\n    }\n    .size-adjust-modal__fields .control-field input:focus{\n      border-color:#c0847a;\n    }\n    .size-adjust-modal__fields .control-field label{\n      font-size:10px;\n      font-weight:500;\n      text-transform:uppercase;\n      letter-spacing:.12em;\n      color:#8c7d74;\n    }\n    .size-adjust-modal__ratio{\n      display:flex;\n      align-items:center;\n      gap:4px;\n      cursor:pointer;\n      user-select:none;\n      margin:0;\n      border:none;\n      background:transparent;\n      width:auto;\n      height:auto;\n      flex:0 0 auto;\n      white-space:nowrap;\n    }\n    .size-adjust-modal__ratio input{\n      width:13px;\n      height:13px;\n      accent-color:#c0847a;\n      cursor:pointer;\n    }\n    .size-adjust-modal__ratio span{\n      font-size:10px;\n      color:#8c7d74;\n      letter-spacing:.06em;\n    }\n    .size-adjust-modal__actions{\n      display:grid;\n      grid-template-columns:1fr 1fr;\n      gap:12px;\n    }\n    .size-adjust-modal__btn{\n      width:100%;\n      padding:11px 14px;\n      border:1.5px solid #4a3f38;\n      border-radius:9px;\n      font-size:13px;\n      font-weight:500;\n      cursor:pointer;\n      text-transform:uppercase;\n      letter-spacing:.08em;\n      transition:all .15s;\n      background:transparent;\n      color:#4a3f38;\n      font-family:'Jost',sans-serif;\n    }\n    .size-adjust-modal__btn--cancel:hover{\n      background:#faf0ec;\n      border-color:#c0847a;\n      color:#c0847a;\n    }\n    .size-adjust-modal__btn--accept{\n      background:#4a3f38;\n      color:#fff;\n    }\n    .size-adjust-modal__btn--accept:hover{\n      background:#b87060;\n      border-color:#b87060;\n    }\n    @media (max-width: 480px){\n      .size-adjust-modal__fields{grid-template-columns:1fr}\n      .size-adjust-modal__actions{grid-template-columns:1fr}\n    }\n  ",document.head.appendChild(t)})();const{title:o="Configura el tamaño de tu diseño antes de continuar.",initialWidthCm:r=10,initialHeightCm:l=10,minWidthCm:d=1,maxWidthCm:s=100,minHeightCm:c=1,maxHeightCm:u=100,step:m=.1,keepRatioByDefault:h=!0}=a,g=t(r,d,s),p=t(l,c,u),f=p/Math.max(1e-6,g),b=document.createElement("div");b.className="size-adjust-modal__backdrop",b.innerHTML=`\n    <div class="size-adjust-modal__dialog" role="dialog" aria-modal="true" aria-label="Ajustar dimensiones">\n      <button class="size-adjust-modal__close" type="button" aria-label="Cerrar">\u00d7</button>\n      <h2 class="size-adjust-modal__title">${o}</h2>\n\n      <div class="size-adjust-modal__fields dimensions-pair">\n        <div class="control-field size-adjust-modal__field">\n          <label for="sizeModalWidth">Ancho (cm)</label>\n          <input id="sizeModalWidth" class="size-adjust-modal__width" type="number" min="${d}" max="${s}" step="${m}" />\n        </div>\n        <div class="control-field size-adjust-modal__field">\n          <div class="size-adjust-modal__field-head">\n            <label for="sizeModalHeight">Alto (cm)</label>\n            <label class="size-adjust-modal__ratio" title="Mantener proporciones" aria-label="Mantener proporciones">\n              <input class="size-adjust-modal__keep-ratio" type="checkbox" ${h?"checked":""} />\n              <span>Proporciones</span>\n            </label>\n          </div>\n          <input id="sizeModalHeight" class="size-adjust-modal__height" type="number" min="${c}" max="${u}" step="${m}" />\n        </div>\n      </div>\n\n      <div class="size-adjust-modal__actions">\n        <button class="size-adjust-modal__btn size-adjust-modal__btn--cancel size-adjust-modal__cancel" type="button">Cancelar</button>\n        <button class="size-adjust-modal__btn size-adjust-modal__btn--accept size-adjust-modal__accept" type="button">Aceptar</button>\n      </div>\n    </div>\n  `;const w=b.querySelector(".size-adjust-modal__width"),v=b.querySelector(".size-adjust-modal__height"),x=b.querySelector(".size-adjust-modal__keep-ratio"),y=b.querySelector(".size-adjust-modal__close"),_=b.querySelector(".size-adjust-modal__cancel"),z=b.querySelector(".size-adjust-modal__accept");let j=g,k=p,C="width";const E=e=>{if("width"===e){const e=parseFloat(w.value);return void(Number.isFinite(e)&&(j=t(e,d,s)))}const n=parseFloat(v.value);Number.isFinite(n)&&(k=t(n,c,u))},M=()=>{w.value=n(j),v.value=n(k)},L=e=>{if("height"===e)return E("height"),j=t(k/Math.max(1e-6,f),d,s),void(j!==s&&j!==d||(k=t(j*f,c,u)));E("width"),k=t(j*f,c,u),k!==u&&k!==c||(j=t(k/Math.max(1e-6,f),d,s))},U=e=>{E(e)},S=e=>{C=e,x.checked?L(e):U(e),M()},R=e=>{b.remove(),window.removeEventListener("keydown",F),i(e?{widthCm:j,heightCm:k,confirmed:!0}:{widthCm:g,heightCm:p,confirmed:!1})},F=e=>{"Escape"===e.key&&(e.preventDefault(),R(!1))},I=e=>{if(!x.checked)return;if("width"===e){const e=parseFloat(w.value);if(!Number.isFinite(e))return;const a=t(e,d,s);let i=t(a*f,c,u);return i!==u&&i!==c||(i=t(i,c,u)),void(v.value=n(i))}const a=parseFloat(v.value);if(!Number.isFinite(a))return;const i=t(a,c,u);let o=t(i/Math.max(1e-6,f),d,s);o!==s&&o!==d||(o=t(o,d,s)),w.value=n(o)};w.addEventListener("input",()=>{C="width",I("width")}),v.addEventListener("input",()=>{C="height",I("height")}),w.addEventListener("change",()=>S("width")),v.addEventListener("change",()=>S("height")),w.addEventListener("blur",()=>S("width")),v.addEventListener("blur",()=>S("height")),w.addEventListener("keydown",e=>{"Enter"===e.key&&(e.preventDefault(),S("width"),w.blur())}),v.addEventListener("keydown",e=>{"Enter"===e.key&&(e.preventDefault(),S("height"),v.blur())}),x.addEventListener("change",()=>{x.checked?L(C):(U("width"),U("height")),M()}),y.addEventListener("click",()=>R(!1)),_.addEventListener("click",()=>R(!1)),z.addEventListener("click",()=>{x.checked?L(C):(U("width"),U("height")),M(),R(!0)}),j=g,k=p,M(),document.body.appendChild(b),window.addEventListener("keydown",F),w.focus(),w.select()}))({title:"Configura el tamaño de tu diseño antes de continuar.",initialWidthCm:a,initialHeightCm:i,minWidthCm:1,maxWidthCm:q,minHeightCm:1,maxHeightCm:q,step:.1,keepRatioByDefault:!0})}(s.widthCm,s.heightCm);if(!c.confirmed)return P=null,T("Carga cancelada. Elige una imagen principal para comenzar.",!1),void se();D=J(X(c.widthCm)),$=J(X(c.heightCm)),re(),ce(),ee(z,L,!1),R&&(R.textContent="Sin imagen"),A?(ue(),Q&&(ge(Q,oe(),{skipResult:!0}),he()),T("Imagen principal cargada. El marco se reajustó automáticamente al nuevo tamaño.",!1)):T("Imagen principal cargada. Ahora sube el marco desgastado.",!1),S&&(S.textContent=""),l&&T("Imagen principal cargada y comprimida automáticamente. Ahora sube el marco desgastado.",!1),se()}catch(e){T((null==e?void 0:e.message)||"No se pudo cargar la imagen principal.",!0)}finally{null==s||s.classList.remove("is-busy"),l&&(l.value="")}}}function be(){l&&(l.value=""),d&&(d.value=""),te(_,k),te(z,C),te(j,E),P=null,A=null,D=0,$=0,H=0,B=0,W=null,G=null,Q=null,O=null,Y=!1,p&&(p.value=""),f&&(f.value=""),b&&(b.value=String(200)),w&&(w.textContent=String(200)),x&&(x.value="#ffffff"),v&&(v.style.background="#ffffff"),S&&(S.textContent="Sin imagen"),R&&(R.textContent="Sin imagen"),F&&(F.textContent="PNG transparente"),ee(_,M,!1),ee(z,L,!1),ee(j,U,!1),se(),T("Configuración lista. Sube una imagen principal para comenzar.",!1)}null==s||s.addEventListener("click",()=>{l&&(l.value="",l.click())}),null==c||c.addEventListener("click",()=>{P?d&&(d.value="",d.click()):T("Primero sube la imagen principal.",!0)}),null==l||l.addEventListener("change",async e=>{var t,n;const a=null==(n=null==(t=e.target)?void 0:t.files)?void 0:n[0];a&&await fe(a)}),null==d||d.addEventListener("change",async e=>{var t,n;const a=null==(n=null==(t=e.target)?void 0:t.files)?void 0:n[0];a&&await async function(e){if(e)if(P){T("Preparando marco desgastado...",!1),null==c||c.classList.add("is-busy");try{const{file:t,image:n,compressed:a}=await pe(e,{compress:!0});A=n,Q=null,O=null,ue(),me(),R&&(R.textContent=""),T(a?"Marco cargado y comprimido automáticamente. Haz clic en el color del marco que deseas eliminar.":"Marco cargado y ajustado al tamaño de la imagen principal. Haz clic en el color del marco que deseas eliminar.",!1),se()}catch(e){T((null==e?void 0:e.message)||"No se pudo cargar el marco desgastado.",!0)}finally{null==c||c.classList.remove("is-busy"),d&&(d.value="")}}else T("Primero sube la imagen principal.",!0)}(a)}),null==p||p.addEventListener("change",()=>de("width")),null==p||p.addEventListener("blur",()=>de("width")),null==p||p.addEventListener("keydown",e=>{"Enter"===e.key&&(e.preventDefault(),de("width"),p.blur())}),null==f||f.addEventListener("change",()=>de("height")),null==f||f.addEventListener("blur",()=>de("height")),null==f||f.addEventListener("keydown",e=>{"Enter"===e.key&&(e.preventDefault(),de("height"),f.blur())}),null==b||b.addEventListener("input",()=>{w&&(w.textContent=String(oe()));const t2=document.getElementById('tolValue2');const r2=document.getElementById('tolRange2');if(t2)t2.textContent=String(oe());if(r2)r2.value=String(oe());Q&&ge(Q,oe())}),null==z||z.addEventListener("click",e=>{if(!G||!C)return;const t=function(e,t){if(!t)return null;const n=t.getBoundingClientRect(),a=t.width/n.width,i=t.height/n.height,o=Math.floor((e.clientX-n.left)*a),r=Math.floor((e.clientY-n.top)*i);return o<0||r<0||o>=t.width||r>=t.height?null:{x:o,y:r}}(e,z);if(!t)return;const n=C.getImageData(t.x,t.y,1,1).data,a={r:n[0],g:n[1],b:n[2]};ae(a),ge(a,oe())}),null==x||x.addEventListener("change",()=>{const e=function(e){const t=String(e||"").trim().replace(/^#/,"");return/^[0-9a-fA-F]{6}$/.test(t)?{r:Number.parseInt(t.slice(0,2),16),g:Number.parseInt(t.slice(2,4),16),b:Number.parseInt(t.slice(4,6),16)}:null}(x.value);if(!e)return T("HEX inválido. Usa un valor como #ffffff.",!0),void(x&&Q&&(x.value=ne(Q.r,Q.g,Q.b)));ae(e),A?ge(e,oe()):T(`Color establecido: ${x.value}.`,!1)}),null==u||u.addEventListener("click",function(){if(!P||!A)return void T("Primero carga la imagen principal y el marco desgastado.",!0);const e=Q||O;e?(Q||ae(e),ge(e,oe())):T("Primero elige el color del fondo del marco.",!0)}),null==m||m.addEventListener("click",()=>{!async function(){if(P&&A&&(Q||O)&&Y)try{T("Generando PNG @300 dpi…",!1);const e=K(D,I),t=K($,I),n=document.createElement("canvas");n.width=e,n.height=t;const a=n.getContext("2d",{alpha:!0,willReadFrequently:!0});if(!a)return void T("No se pudo preparar la exportación.",!0);a.imageSmoothingEnabled=!0,a.imageSmoothingQuality="high",a.clearRect(0,0,e,t),a.drawImage(P,0,0,e,t);const colorToUse=Q||O;const i=function(e,t,n,a){const i=document.createElement("canvas");i.width=e,i.height=t;const o=i.getContext("2d",{alpha:!0,willReadFrequently:!0});if(!o||!A)return null;o.imageSmoothingEnabled=!0,o.imageSmoothingQuality="high",o.clearRect(0,0,e,t),o.drawImage(A,0,0,e,t);const r=o.getImageData(0,0,e,t),l=r.data;for(let e=0;e<l.length;e+=4){const t=l[e]-n.r,i=l[e+1]-n.g,o=l[e+2]-n.b;Math.sqrt(t*t+i*i+o*o)<=a&&(l[e+3]=0)}return r}(e,t,colorToUse,oe());if(!i)return void T("No se pudo preparar el marco para exportar.",!0);const o=a.getImageData(0,0,e,t),r=o.data,l=i.data;for(let e=0;e<r.length;e+=4)l[e+3]>10&&(r[e+3]=0);a.putImageData(o,0,0);const d=await new Promise(e=>n.toBlob(e,"image/png"));if(!d)return void T("No se pudo generar el PNG.",!0);const s=function(e){const t=Math.round(1e4/254*300),n=new Uint8Array(e),a=e=>new Uint8Array([e>>>24&255,e>>>16&255,e>>>8&255,255&e]),i=new Uint8Array(9);i.set(a(t),0),i.set(a(t),4),i[8]=1;const o=(new TextEncoder).encode("pHYs"),r=new Uint32Array(256).map((e,t)=>{let n=t;for(let e=0;e<8;e+=1)n=1&n?3988292384^n>>>1:n>>>1;return n>>>0}),l=a(i.length),d=a((e=>{let t=-1;for(let n=0;n<e.length;n+=1)t=t>>>8^r[255&(t^e[n])];return~t>>>0})(new Uint8Array([...o,...i]))),s=new Uint8Array([...l,...o,...i,...d]),c=new Uint8Array(n.length+s.length);return c.set(n.slice(0,33),0),c.set(s,33),c.set(n.slice(33),33+s.length),c.buffer}(new Uint8Array(await d.arrayBuffer())),c=new Blob([s],{type:"image/png"}),u=URL.createObjectURL(c),m=document.createElement("a");m.href=u,m.download="chechena-marco-300dpi.png",document.body.appendChild(m),m.click(),m.remove(),URL.revokeObjectURL(u),T("PNG @300 dpi generado correctamente.",!1)}catch(e){T("No se pudo exportar PNG.",!0)}else T("Primero aplica el marco desgastado para descargar el PNG.",!0)}()}),null==h||h.addEventListener("click",function(){A&&W&&C&&(G=new ImageData(new Uint8ClampedArray(W.data),W.width,W.height),C.putImageData(G,0,0),Q=null,ie(),O||(x&&(x.value="#ffffff"),v&&(v.style.background="#ffffff")),me(),se(),T("Marco restaurado.",!1))}),null==g||g.addEventListener("click",be),be();
+</script>
+</body>
+</html>

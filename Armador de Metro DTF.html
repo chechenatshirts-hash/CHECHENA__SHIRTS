@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chechena Shirts — Studio DTF</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== CHECHENA SHIRTS — DESIGN TOKENS (LIGHT THEME) ===== */
+        :root {
+            --ink:      #ffffff;    /* fondo panel — blanco */
+            --ink-mid:  #f7f5f3;    /* fondo cards / hover */
+            --ink-lite: #e8e4e0;    /* bordes / separadores */
+            --ink-mute: #d1ccc7;    /* elementos secundarios */
+            --bone:     #1a1714;    /* texto principal */
+            --bone-dim: #7a746e;    /* texto muted */
+            --red:      #d91f1f;    /* acento rojo tinta */
+            --red-dark: #b81515;    /* rojo hover */
+            --red-glow: rgba(217,31,31,0.10);
+            --canvas-bg: #ece9e4;   /* área de trabajo */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { 
+            width: 100%; height: 100%; overflow: hidden; 
+            font-family: 'Inter', sans-serif; 
+            background: var(--canvas-bg); 
+        }
+
+        /* ===== INTRO SCREEN ===== */
+        #intro-screen {
+            position: fixed; inset: 0; z-index: 99999;
+            background: #f7f5f2;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            animation: none;
+        }
+        #intro-screen.fade-out {
+            animation: introFade 0.55s ease forwards;
+        }
+        @keyframes introFade {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-12px); pointer-events: none; }
+        }
+
+        .intro-inner {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 0; text-align: center; padding: 24px;
+        }
+        .intro-logo-wrap {
+            position: relative; margin-bottom: 28px;
+        }
+        .intro-shirt-icon {
+            width: 80px; height: 80px; margin: 0 auto 4px;
+            background: #d91f1f; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 12px 40px rgba(217,31,31,0.22);
+        }
+        .intro-tag {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 10px; font-weight: 700; letter-spacing: 0.25em;
+            text-transform: uppercase; color: #d91f1f;
+            margin-bottom: 10px; display: block;
+        }
+        .intro-brand {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(46px, 10vw, 80px);
+            font-weight: 900; letter-spacing: 0.04em;
+            text-transform: uppercase; line-height: 0.92;
+            color: #1a1714;
+        }
+        .intro-brand span { color: #d91f1f; }
+        .intro-sub {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 16px; font-weight: 600; letter-spacing: 0.18em;
+            text-transform: uppercase; color: #7a746e;
+            margin-top: 10px; margin-bottom: 34px;
+        }
+        .intro-divider {
+            width: 48px; height: 2px; background: #d91f1f;
+            margin: 0 auto 28px;
+        }
+        .intro-desc {
+            font-size: 14px; color: #7a746e; line-height: 1.65;
+            max-width: 360px; margin-bottom: 36px;
+            font-weight: 400;
+        }
+        .intro-btn {
+            appearance: none; border: none;
+            background: #d91f1f; color: white;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 15px; font-weight: 700; letter-spacing: 0.12em;
+            text-transform: uppercase; padding: 14px 44px;
+            border-radius: 8px; cursor: pointer;
+            box-shadow: 0 6px 24px rgba(217,31,31,0.28);
+            transition: all 0.2s;
+        }
+        .intro-btn:hover { background: #b81515; box-shadow: 0 8px 28px rgba(217,31,31,0.38); transform: translateY(-1px); }
+        .intro-footer {
+            margin-top: 28px;
+            font-size: 11px; color: #b5aea8;
+            font-family: 'Barlow Condensed', sans-serif;
+            letter-spacing: 0.08em; text-transform: uppercase;
+        }
+        .intro-badges {
+            display: flex; gap: 12px; justify-content: center;
+            margin-bottom: 32px; flex-wrap: wrap;
+        }
+        .intro-badge {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+            color: #7a746e; background: #edeae6;
+            padding: 5px 12px; border-radius: 20px;
+            text-transform: uppercase; border: 1px solid #ddd9d4;
+        }
+
+        #studio-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh; height: 100dvh;
+            z-index: 9999; background-color: var(--canvas-bg);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        #studio-layout { display: flex; width: 100%; height: 100%; }
+
+        @media (min-width: 1024px) {
+            #sidePanel { width: 380px; height: 100%; border-right: 1px solid var(--ink-lite); overflow-y: auto; flex-shrink: 0; }
+            #mainArea { flex: 1; height: 100%; position: relative; }
+        }
+
+        @media (max-width: 1023px) {
+            #studio-layout { flex-direction: column; }
+            #mainArea { flex: 1; position: relative; order: 1; overflow: hidden; }
+            #sidePanel {
+                height: auto; max-height: 45%; width: 100%;
+                border-top: 1px solid var(--ink-lite); overflow-y: auto; order: 2;
+                background: var(--ink); z-index: 20;
+            }
+        }
+
+        .canvas-wrapper {
+            box-shadow: 0 20px 60px -12px rgba(0,0,0,0.7);
+            position: absolute; top: 0; left: 0; background: white;
+            transform-origin: top left; will-change: transform, width, height;
+        }
+
+        .bg-checkboard {
+            background-color: var(--canvas-bg);
+            background-image:
+                linear-gradient(45deg, #dedad4 25%, transparent 25%),
+                linear-gradient(-45deg, #dedad4 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #dedad4 75%),
+                linear-gradient(-45deg, transparent 75%, #dedad4 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        .canvas-limits {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: 2px dashed rgba(224,32,32,0.5); pointer-events: none; z-index: 10;
+        }
+
+        .size-badge {
+            position: absolute; pointer-events: none; z-index: 999;
+            background: var(--red); color: white; padding: 4px 10px;
+            border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(224,32,32,0.4); display: none;
+            transform: translate(-50%, -100%); margin-top: -10px;
+            font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.05em;
+        }
+        .size-badge::after {
+            content: ""; position: absolute; left: 50%; bottom: -5px;
+            transform: translateX(-50%); border-left: 5px solid transparent;
+            border-right: 5px solid transparent; border-top: 5px solid var(--red);
+        }
+
+        .input-clean {
+            appearance: none; -webkit-appearance: none; width: 100%;
+            padding: 0.5rem 0.75rem; border: 1px solid var(--ink-lite); border-radius: 6px;
+            font-size: 0.875rem; font-weight: 600; color: var(--bone); outline: none; transition: all 0.2s;
+            background: var(--ink);
+        }
+        .input-clean:focus { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-glow); }
+        .input-clean::placeholder { color: var(--ink-mute); }
+
+        .btn-clean {
+            appearance: none; -webkit-appearance: none; display: flex;
+            align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.75rem; border-radius: 6px; font-weight: 700;
+            font-size: 0.75rem; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
+            font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.05em; font-size: 13px;
+        }
+        .btn-primary { background-color: var(--red); color: white; }
+        .btn-primary:hover { background-color: var(--red-dark); }
+        .btn-outline { background-color: var(--ink-mid); border-color: var(--ink-lite); color: var(--bone-dim); }
+        .btn-outline:hover { background-color: var(--ink-mute); border-color: #c5c0ba; color: var(--bone); }
+
+        .bg-selector-btn {
+            flex: 1; padding: 0.5rem; border-radius: 5px; font-size: 11px;
+            font-weight: 700; border: 1px solid var(--ink-lite); background: var(--ink-mid);
+            color: var(--bone-dim); transition: all 0.2s; cursor: pointer;
+            font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.04em;
+        }
+        .bg-selector-btn.active { border-color: var(--red); background-color: var(--red-glow); color: var(--red); }
+        .bg-selector-btn:hover:not(.active) { border-color: var(--ink-mute); color: var(--bone); }
+
+        .checkbox-wrapper {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem;
+            border: 1px solid var(--ink-lite); border-radius: 6px; background: var(--ink-mid);
+            cursor: pointer; transition: background 0.2s;
+        }
+        .checkbox-wrapper:hover { background-color: #edeae6; }
+        .checkbox-native { width: 1.25rem; height: 1.25rem; accent-color: var(--red); cursor: pointer; }
+
+        .spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: var(--ink-mute); border-radius: 3px; }
+
+        .zoom-controls {
+            position: absolute; bottom: 20px; right: 20px; display: flex;
+            flex-direction: column; gap: 8px; z-index: 1000; align-items: center;
+        }
+        .zoom-btn {
+            background: white; padding: 10px; border-radius: 50%; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            border: 1px solid var(--ink-lite); color: var(--bone-dim); cursor: pointer; transition: all 0.15s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .zoom-btn:hover { background: var(--ink-mid); color: var(--bone); border-color: var(--ink-mute); }
+        .zoom-btn:active { transform: scale(0.95); }
+
+        .nav-pad {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+            background: white; padding: 4px; border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12); border: 1px solid var(--ink-lite);
+        }
+        .nav-btn {
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            border-radius: 4px; background: var(--ink-mid); color: var(--bone-dim); 
+            cursor: pointer; transition: all 0.1s; border: none;
+        }
+        .nav-btn:hover { background: var(--ink-mute); color: var(--bone); }
+        .nav-btn:active { transform: scale(0.95); }
+
+        .loading-overlay {
+            position: absolute; inset: 0; background: rgba(247,245,242,0.88);
+            z-index: 10000; display: none; align-items: center; justify-content: center;
+            flex-direction: column; gap: 16px; backdrop-filter: blur(6px);
+        }
+        .loading-overlay.active { display: flex; }
+        .loading-card {
+            background: var(--ink); padding: 28px; border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            border: 1px solid var(--ink-lite);
+            display: flex; flex-direction: column; align-items: center;
+            max-width: 320px; text-align: center; gap: 8px;
+        }
+
+        .progress-bar-container {
+            width: 100%; height: 4px; background: var(--ink-mid); border-radius: 9999px;
+            margin-top: 12px; overflow: hidden; display: none;
+        }
+        .progress-bar-fill {
+            height: 100%; background: var(--red); border-radius: 9999px;
+            width: 0%; transition: width 0.2s ease;
+        }
+
+        .section-label {
+            font-size: 10px; font-weight: 700; color: var(--bone-dim);
+            text-transform: uppercase; letter-spacing: 0.15em;
+            display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+            font-family: 'Barlow Condensed', sans-serif;
+        }
+        .section-label svg { color: var(--red); }
+
+        /* Línea decorativa en las secciones */
+        .section-label::after {
+            content: ''; flex: 1; height: 1px; background: var(--ink-lite);
+        }
+
+        .upload-zone {
+            position: relative; width: 100%; background: var(--ink-mid);
+            border: 2px dashed var(--ink-mute); border-radius: 10px; padding: 20px;
+            text-align: center; transition: all 0.2s; cursor: pointer;
+        }
+        .upload-zone:hover { background: var(--ink-mute); border-color: var(--red); }
+        .upload-zone input[type="file"] {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            opacity: 0; cursor: pointer; z-index: 10;
+        }
+
+        .pill {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 9px; background: var(--red-glow); color: var(--red);
+            padding: 3px 8px; border-radius: 9999px; font-weight: 700;
+            border: 1px solid rgba(224,32,32,0.3);
+            font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.05em;
+        }
+
+        /* Header brand strip */
+        .brand-strip {
+            background: var(--red);
+            height: 3px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+html<!-- ===== INTRO SCREEN ===== -->
+<div id="intro-screen">
+    <div class="intro-inner">
+        <div class="intro-logo-wrap">
+            <div class="intro-shirt-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+                </svg>
+            </div>
+        </div>
+        <span class="intro-tag">Impresión DTF · Acayucan, Veracruz</span>
+        <div class="intro-brand">Chechena <span>Shirts</span></div>
+        <div class="intro-sub">Studio de Diseño Profesional</div>
+        <div class="intro-divider"></div>
+        <p class="intro-desc">
+            Arma tu pliego DTF con precisión real. Sube tus diseños, acomódalos al tamaño exacto del rollo y exporta listos para imprenta en PNG de 300 DPI o PDF.
+        </p>
+        <div class="intro-badges">
+            <span class="intro-badge">300 DPI</span>
+            <span class="intro-badge">PNG &amp; PDF</span>
+            <span class="intro-badge">Auto-recorte</span>
+            <span class="intro-badge">Multi-imagen</span>
+        </div>
+        <button class="intro-btn" onclick="enterStudio()">
+            Abrir Studio →
+        </button>
+
+        <!-- TikTok Follow -->
+        <a href="https://www.tiktok.com/@chechena_shirts?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer" style="
+            display:inline-flex; align-items:center; gap:10px;
+            margin-top:20px; padding:12px 26px;
+            border-radius:999px;
+            background: linear-gradient(135deg, #010101 0%, #1a1a2e 50%, #010101 100%);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            text-decoration:none;
+            box-shadow: 0 0 18px rgba(105,201,208,0.45), 0 0 40px rgba(238,29,82,0.25), 0 4px 20px rgba(0,0,0,0.3);
+            animation: tiktokPulse 2.4s ease-in-out infinite;
+            position:relative; overflow:hidden;
+            transition:all 0.2s;
+        "
+        onmouseover="this.style.boxShadow='0 0 28px rgba(105,201,208,0.7), 0 0 56px rgba(238,29,82,0.45), 0 6px 24px rgba(0,0,0,0.4)'; this.style.transform='translateY(-2px)';"
+        onmouseout="this.style.boxShadow='0 0 18px rgba(105,201,208,0.45), 0 0 40px rgba(238,29,82,0.25), 0 4px 20px rgba(0,0,0,0.3)'; this.style.transform='translateY(0)';">
+
+            <!-- shimmer -->
+            <span style="position:absolute; inset:0; background:linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.07) 50%, transparent 60%); animation: shimmer 2.4s linear infinite; pointer-events:none;"></span>
+
+            <!-- TikTok icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0; filter: drop-shadow(0 0 4px rgba(105,201,208,0.8));">
+                <path fill="#69c9d0" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>
+                <path fill="#ee1d52" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" opacity="0.35" transform="translate(-1.5, 1)"/>
+            </svg>
+
+            <div style="display:flex; flex-direction:column; line-height:1.2;">
+                <span style="font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.5);">Para seguir mejorando</span>
+                <span style="font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:#ffffff; text-shadow: 0 0 10px rgba(105,201,208,0.6);">Sígueme en TikTok si aún no me sigues</span>
+            </div>
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+
+        <style>
+            @keyframes tiktokPulse {
+                0%, 100% { box-shadow: 0 0 18px rgba(105,201,208,0.45), 0 0 40px rgba(238,29,82,0.25), 0 4px 20px rgba(0,0,0,0.3); }
+                50%       { box-shadow: 0 0 30px rgba(105,201,208,0.75), 0 0 60px rgba(238,29,82,0.45), 0 4px 24px rgba(0,0,0,0.35); }
+            }
+            @keyframes shimmer {
+                0%   { transform: translateX(-100%); }
+                100% { transform: translateX(200%); }
+            }
+        </style>
+
+        <div class="intro-footer" style="margin-top:16px;">© 2026 Chechena Shirts — Todos los derechos reservados</div>
+    </div>
+</div>
+
+<div id="studio-overlay">
+
+    <!-- LOADING -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <svg id="loadingSpinner" class="spinner" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e02020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+            <h3 style="font-size:18px;font-weight:800;color:#1a1714;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.05em;" id="loadingTitle">PROCESANDO...</h3>
+            <p style="font-size:13px;color:#7a746e" id="loadingText">Optimizando gráficos</p>
+            <div class="progress-bar-container" id="progressContainer">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LAYOUT -->
+    <div id="studio-layout">
+
+        <!-- PANEL LATERAL -->
+        <div id="sidePanel" class="custom-scroll" style="background:#ffffff; display:flex; flex-direction:column;">
+
+            <!-- Header -->
+            <div style="padding:0; border-bottom:1px solid #e8e4e0; background:#ffffff; position:sticky; top:0; z-index:20;">
+                <!-- Brand red strip -->
+                <div class="brand-strip"></div>
+                <div style="padding:16px 20px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <h1 style="font-size:22px; font-weight:900; color:#1a1714; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.08em; line-height:1; text-transform:uppercase;">
+                            CHECHENA <span style="color:#d91f1f;">SHIRTS</span>
+                        </h1>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7a746e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            <span style="font-size:10px; color:#7a746e; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.12em; text-transform:uppercase;">Studio DTF — Metro Pliego</span>
+                        </div>
+                    </div>
+                    <button onclick="closeStudio()" style="background:#f7f5f3; border:1px solid #e8e4e0; cursor:pointer; color:#7a746e; transition:all 0.2s; border-radius:6px; padding:6px; display:flex;" onmouseover="this.style.color='#d91f1f'; this.style.borderColor='#d91f1f';" onmouseout="this.style.color='#7a746e'; this.style.borderColor='#e8e4e0';" title="Cerrar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding:20px; display:flex; flex-direction:column; gap:24px; flex:1;">
+
+                <!-- DIMENSIONES -->
+                <section>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <div class="section-label" style="margin-bottom:0; flex:1;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>
+                            Medidas (CM)
+                        </div>
+                        <span id="pixelInfo" style="font-size:9px; font-family:monospace; color:#7a746e; background:#f7f5f3; padding:2px 6px; border-radius:4px; border:1px solid #e8e4e0; margin-left:8px; flex-shrink:0;">...</span>
+                    </div>
+                    <div style="display:flex; gap:12px; align-items:flex-end;">
+                        <div style="flex:1;">
+                            <label style="font-size:10px; color:#7a746e; font-weight:700; display:block; margin-bottom:4px; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em; text-transform:uppercase;">Ancho</label>
+                            <input type="number" id="widthInput" class="input-clean" placeholder="58" value="58">
+                        </div>
+                        <div style="flex:1;">
+                            <label style="font-size:10px; color:#7a746e; font-weight:700; display:block; margin-bottom:4px; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em; text-transform:uppercase;">Alto</label>
+                            <input type="number" id="heightInput" class="input-clean" placeholder="100" value="100">
+                        </div>
+                        <button onclick="updateDimensions()" style="background:#e02020; color:white; border:none; padding:10px; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; width:38px; height:38px; flex-shrink:0; transition:background 0.2s;" onmouseover="this.style.background='#b81515'" onmouseout="this.style.background='#e02020'" title="Aplicar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ARCHIVOS -->
+                <section>
+                    <div class="section-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M20.4 14.5 16 10 4 20"/></svg>
+                        Diseños
+                    </div>
+                    <div class="upload-zone">
+                        <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.webp,.svg" multiple onchange="handleFileUpload(event)">
+                        <div style="display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none;">
+                            <div style="width:44px; height:44px; background:#f7f5f3; border-radius:50%; border:1px solid #e8e4e0; display:flex; align-items:center; justify-content:center; color:#d91f1f;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                            </div>
+                            <div>
+                                <p style="font-size:13px; font-weight:700; color:#1a1714; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.04em;">SUBIR IMÁGENES</p>
+                                <p style="font-size:10px; color:#7a746e; margin-top:2px;">PNG, JPG, SVG — múltiples archivos</p>
+                            </div>
+                            <span class="pill">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="14.31" y1="8" x2="20.05" y2="17.94"/><line x1="9.69" y1="8" x2="21.17" y2="8"/><line x1="7.38" y1="12" x2="13.12" y2="2.06"/><line x1="9.69" y1="16" x2="3.95" y2="6.06"/><line x1="14.31" y1="16" x2="2.83" y2="16"/><line x1="16.62" y1="12" x2="10.88" y2="21.94"/></svg>
+                                Auto-recorte inteligente
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AJUSTES -->
+                <section>
+                    <div class="section-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+                        Herramientas
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:14px;">
+
+                        <!-- Fondo -->
+                        <div>
+                            <span style="font-size:10px; color:#7a746e; font-weight:700; display:block; margin-bottom:8px; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em; text-transform:uppercase;">Color de Fondo</span>
+                            <div style="display:flex; gap:8px;">
+                                <button onclick="changeBackground('transparent')" class="bg-selector-btn active" data-bg="transparent">Transparente</button>
+                                <button onclick="changeBackground('#ffffff')" class="bg-selector-btn" data-bg="#ffffff">Blanco</button>
+                                <button onclick="changeBackground('#000000')" class="bg-selector-btn" data-bg="#000000">Negro</button>
+                            </div>
+                        </div>
+
+                        <!-- Checkbox Alpha -->
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="removeAlphaToggle" checked class="checkbox-native">
+                            <div>
+                                <span style="font-size:12px; font-weight:700; color:#1a1714; display:block; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.03em;">Limpiar Semitransparencias</span>
+                                <span style="font-size:9px; color:#7a746e; display:block;">Recomendado para DTF/UV</span>
+                            </div>
+                        </label>
+
+                        <!-- Botones acción -->
+                        <div style="display:flex; flex-direction:column; gap:8px; padding-top:8px; border-top:1px solid #e8e4e0;">
+                            <button onclick="autoFillCanvas()" style="width:100%; padding:10px; background:#f0faf4; color:#16a34a; border:1px solid #bbf7d0; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.05em; text-transform:uppercase;" onmouseover="this.style.background='#dcfce7'; this.style.borderColor='#86efac';" onmouseout="this.style.background='#f0faf4'; this.style.borderColor='#bbf7d0';">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                Auto-Acomodar y Expandir
+                            </button>
+                            <button onclick="duplicateSelected()" class="btn-clean btn-outline" style="width:100%; text-transform:uppercase; letter-spacing:0.05em;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                Duplicar Seleccionado
+                            </button>
+                            <button onclick="deleteSelected()" style="width:100%; padding:10px; background:#fff5f5; color:#dc2626; border:1px solid #fecaca; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.05em; text-transform:uppercase;" onmouseover="this.style.background='#fee2e2'; this.style.borderColor='#fca5a5';" onmouseout="this.style.background='#fff5f5'; this.style.borderColor='#fecaca';">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- FOOTER -->
+            <div style="padding:16px 20px; border-top:1px solid #e8e4e0; background:#ffffff; position:sticky; bottom:0; z-index:30;">
+                <div style="display:flex; gap:10px;">
+                    <button onclick="exportPNG()" style="flex:1; background:#f7f5f3; border:1px solid #e8e4e0; border-radius:6px; padding:12px 8px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all 0.2s; font-size:12px;" onmouseover="this.style.borderColor='#86efac'; this.style.background='#f0faf4';" onmouseout="this.style.borderColor='#e8e4e0'; this.style.background='#f7f5f3';">
+                        <div style="display:flex; align-items:center; gap:6px; font-weight:700; color:#1a1714; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.08em;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M20.4 14.5 16 10 4 20"/></svg>
+                            PNG
+                        </div>
+                        <span style="font-size:9px; color:#7a746e; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.06em;">ALTA CALIDAD</span>
+                    </button>
+                    <button onclick="exportPDF()" style="flex:1; background:#e02020; border:none; border-radius:6px; padding:12px 8px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all 0.2s; font-size:12px; box-shadow:0 4px 20px rgba(224,32,32,0.4);" onmouseover="this.style.background='#b81515'; this.style.boxShadow='0 4px 24px rgba(224,32,32,0.6)';" onmouseout="this.style.background='#e02020'; this.style.boxShadow='0 4px 20px rgba(224,32,32,0.4)';">
+                        <div style="display:flex; align-items:center; gap:6px; font-weight:700; color:white; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.08em;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                            PDF
+                        </div>
+                        <span style="font-size:9px; color:rgba(255,255,255,0.7); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.06em;">PARA IMPRENTA</span>
+                    </button>
+                </div>
+                <p id="mobileWarning" style="display:none; font-size:10px; color:#92400e; margin-top:10px; text-align:center; font-weight:700; background:#fffbeb; padding:8px; border-radius:6px; border:1px solid #fde68a; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.03em;">
+                    ⚠️ En celular usa PDF para evitar cierres inesperados.
+                </p>
+            </div>
+        </div>
+
+        <!-- MAIN AREA -->
+        <div id="mainArea" class="bg-checkboard" style="position:relative; overflow:hidden; cursor:grab; flex:1;" onmousedown="handleMainMouseDown(event)">
+
+            <!-- Zoom Controls -->
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="setZoom('in')" title="Acercar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="zoom-btn" onclick="resetZoom()" title="Ajustar a pantalla">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                </button>
+                <button class="zoom-btn" onclick="setZoom('out')" title="Alejar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <div style="height:8px;"></div>
+                <div class="nav-pad">
+                    <div></div>
+                    <button class="nav-btn" onclick="panView(0,100)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></button>
+                    <div></div>
+                    <button class="nav-btn" onclick="panView(100,0)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+                    <button class="nav-btn" onclick="resetZoom()" style="background:#fff0f0; color:#d91f1f;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></button>
+                    <button class="nav-btn" onclick="panView(-100,0)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+                    <div></div>
+                    <button class="nav-btn" onclick="panView(0,-100)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                    <div></div>
+                </div>
+            </div>
+
+            <!-- Canvas Wrapper -->
+            <div id="canvasWrapper" class="canvas-wrapper">
+                <div class="canvas-limits" id="limits"></div>
+                <canvas id="canvas"></canvas>
+                <div id="sizeBadge" class="size-badge">0.0 × 0.0 cm</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // CONFIGURACIÓN Y DETECCIÓN DE HARDWARE
+    // ============================================================
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const hwCores = navigator.hardwareConcurrency || 2;
+    const isLowEnd = isMobile || hwCores <= 4;
+    const CHUNK_SIZE = isLowEnd ? 1500 : 4000;
+
+    let PLIEGO_WIDTH_CM  = 58;
+    let PLIEGO_HEIGHT_CM = 100;
+    let PX_W = 6850;
+    let PX_H = 11811;
+
+    let canvas;
+    let currentZoom = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDraggingViewport = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let animationFrameId = null;
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        initCanvas();
+        updateDimensions();
+        setupViewportDrag();
+
+        if (isMobile) document.getElementById('mobileWarning').style.display = 'block';
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') { e.preventDefault(); duplicateSelected(); }
+            if (e.key === 'Delete' || e.key === 'Backspace') deleteSelected();
+        });
+
+        window.addEventListener('resize', resetZoom);
+
+        const mainArea = document.getElementById('mainArea');
+        mainArea.addEventListener('wheel', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                setZoom(e.deltaY < 0 ? 'in' : 'out');
+            }
+        }, { passive: false });
+    });
+
+    // ============================================================
+    // INTRO SCREEN
+    // ============================================================
+    function enterStudio() {
+        const intro = document.getElementById('intro-screen');
+        intro.classList.add('fade-out');
+        setTimeout(() => { intro.style.display = 'none'; }, 560);
+    }
+
+    function closeStudio() {
+        if (confirm('¿Seguro que deseas salir? Perderás los cambios no guardados.')) {
+            document.getElementById('studio-overlay').style.display = 'none';
+        }
+    }
+
+    // ============================================================
+    // FABRIC CANVAS
+    // ============================================================
+    function initCanvas() {
+        canvas = new fabric.Canvas('canvas', {
+            selection: true,
+            preserveObjectStacking: true,
+            backgroundColor: null,
+            perPixelTargetFind: false,
+            targetFindTolerance: 4,
+            renderOnAddRemove: false,
+            stateful: false
+        });
+
+        fabric.Object.prototype.set({
+            borderColor: '#4f46e5',
+            cornerColor: '#ffffff',
+            cornerStrokeColor: '#4f46e5',
+            cornerSize: 14,
+            transparentCorners: false,
+            cornerStyle: 'circle',
+            borderScaleFactor: 2,
+            padding: 4,
+            snapAngle: 90,
+            snapThreshold: 8
+        });
+
+        function throttle(fn, limit) {
+            let lastCall = 0;
+            return function(...args) {
+                const now = Date.now();
+                if (now - lastCall >= limit) { lastCall = now; fn(...args); }
+            };
+        }
+
+        const throttledMove = throttle((e) => {
+            constrainObject(e.target);
+            updateSizeBadge(e.target);
+        }, 30);
+
+        const throttledRotate = throttle((e) => {
+            updateSizeBadge(e.target, true);
+        }, 30);
+
+        canvas.on('object:moving', throttledMove);
+        canvas.on('object:scaling', throttledMove);
+        canvas.on('object:rotating', throttledRotate);
+        canvas.on('object:modified', (e) => {
+            constrainObject(e.target);
+            e.target.setCoords();
+            updateSizeBadge(e.target);
+            canvas.requestRenderAll();
+        });
+        canvas.on('selection:created', e => updateSizeBadge(e.target));
+        canvas.on('selection:updated', e => updateSizeBadge(e.target));
+        canvas.on('selection:cleared', () => { document.getElementById('sizeBadge').style.display = 'none'; });
+    }
+
+    function constrainObject(obj) {
+        const br = obj.getBoundingRect(true);
+        const w = br.width;
+        const h = br.height;
+        const leftDiff = obj.left - br.left;
+        const topDiff  = obj.top  - br.top;
+
+        if (br.left < 0)            obj.left = leftDiff;
+        if (br.top  < 0)            obj.top  = topDiff;
+        if (br.left + w > PX_W)     obj.left = PX_W - w + leftDiff;
+        if (br.top  + h > PX_H)     obj.top  = PX_H - h + topDiff;
+        if (w > PX_W)               obj.left = leftDiff;
+        if (h > PX_H)               obj.top  = topDiff;
+    }
+
+    // ============================================================
+    // DIMENSIONES
+    // ============================================================
+    function updateDimensions() {
+        const wVal = parseFloat(document.getElementById('widthInput').value)  || 58;
+        const hVal = parseFloat(document.getElementById('heightInput').value) || 100;
+        PLIEGO_WIDTH_CM  = wVal;
+        PLIEGO_HEIGHT_CM = hVal;
+        const dpiScale = 300 / 2.54;
+        PX_W = Math.round(PLIEGO_WIDTH_CM  * dpiScale);
+        PX_H = Math.round(PLIEGO_HEIGHT_CM * dpiScale);
+        const mp = ((PX_W * PX_H) / 1e6).toFixed(1);
+        document.getElementById('pixelInfo').innerText = `${PX_W}×${PX_H}px (${mp}MP)`;
+
+        canvas.getObjects().forEach(obj => {
+            const br = obj.getBoundingRect(true);
+            if (br.left + br.width  > PX_W) obj.left -= (br.left + br.width  - PX_W);
+            if (br.top  + br.height > PX_H) obj.top  -= (br.top  + br.height - PX_H);
+            obj.setCoords();
+        });
+
+        resetZoom();
+    }
+
+    // ============================================================
+    // SISTEMA DE VISTA / ZOOM
+    // ============================================================
+    function applyTransform() {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(() => {
+            const displayW = Math.floor(PX_W * currentZoom);
+            const displayH = Math.floor(PX_H * currentZoom);
+            const wrapper  = document.getElementById('canvasWrapper');
+            wrapper.style.width  = `${displayW}px`;
+            wrapper.style.height = `${displayH}px`;
+            wrapper.style.transform = `translate(${panX}px, ${panY}px)`;
+
+            if (canvas.getWidth() !== displayW || canvas.getHeight() !== displayH) {
+                canvas.setZoom(currentZoom);
+                canvas.setWidth(displayW);
+                canvas.setHeight(displayH);
+                const el = canvas.getElement();
+                if (el) { el.style.width = '100%'; el.style.height = '100%'; }
+                const uel = canvas.upperCanvasEl;
+                if (uel) { uel.style.width = '100%'; uel.style.height = '100%'; }
+            }
+
+            const active = canvas.getActiveObject();
+            if (active) updateSizeBadge(active);
+
+            canvas.requestRenderAll();
+        });
+    }
+
+    function resetZoom() {
+        const container = document.getElementById('mainArea');
+        const padding   = 40;
+        const availW = container.clientWidth  - padding * 2;
+        const availH = container.clientHeight - padding * 2;
+        currentZoom = Math.min(availW / PX_W, availH / PX_H);
+        const scaledW = PX_W * currentZoom;
+        const scaledH = PX_H * currentZoom;
+        panX = (container.clientWidth  - scaledW) / 2;
+        panY = (container.clientHeight - scaledH) / 2;
+        applyTransform();
+    }
+
+    function setZoom(dir) {
+        const step     = 1.25;
+        const oldZoom  = currentZoom;
+        if (dir === 'in')  currentZoom = Math.min(currentZoom * step, 5);
+        if (dir === 'out') currentZoom = Math.max(currentZoom / step, 0.05);
+        const container = document.getElementById('mainArea');
+        const cx = container.clientWidth  / 2;
+        const cy = container.clientHeight / 2;
+        panX = cx - (cx - panX) * (currentZoom / oldZoom);
+        panY = cy - (cy - panY) * (currentZoom / oldZoom);
+        applyTransform();
+    }
+
+    function panView(dx, dy) {
+        panX += dx; panY += dy;
+        applyTransform();
+    }
+
+    function handleMainMouseDown(e) {
+        if (e.target === document.getElementById('mainArea') || e.target.id === 'limits') {
+            isDraggingViewport = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            document.getElementById('mainArea').style.cursor = 'grabbing';
+        }
+    }
+
+    function setupViewportDrag() {
+        window.addEventListener('mousemove', (e) => {
+            if (!isDraggingViewport) return;
+            panX += e.clientX - lastMouseX;
+            panY += e.clientY - lastMouseY;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            applyTransform();
+        });
+        window.addEventListener('mouseup', () => {
+            isDraggingViewport = false;
+            document.getElementById('mainArea').style.cursor = 'grab';
+        });
+
+        const mainArea = document.getElementById('mainArea');
+        mainArea.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1 &&
+               (e.target === mainArea || e.target.id === 'limits')) {
+                isDraggingViewport = true;
+                lastMouseX = e.touches[0].clientX;
+                lastMouseY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+            if (!isDraggingViewport) return;
+            panX += e.touches[0].clientX - lastMouseX;
+            panY += e.touches[0].clientY - lastMouseY;
+            lastMouseX = e.touches[0].clientX;
+            lastMouseY = e.touches[0].clientY;
+            applyTransform();
+        }, { passive: true });
+        window.addEventListener('touchend', () => { isDraggingViewport = false; });
+    }
+
+    // ============================================================
+    // CARGA DE IMÁGENES
+    // ============================================================
+    async function handleFileUpload(e) {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+        showLoading('Procesando imágenes...');
+        const loadPromises = files.map(file => new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = (f) => {
+                const url = f.target.result;
+                if (file.type.includes('svg')) {
+                    fabric.loadSVGFromURL(url, (objects, options) => {
+                        addToCanvas(fabric.util.groupSVGElements(objects, options));
+                        resolve();
+                    });
+                } else {
+                    const imgEl = new Image();
+                    imgEl.onload = () => {
+                        const trimmedData = getTrimmedImageData(imgEl);
+                        const finalUrl = trimmedData || url;
+                        fabric.Image.fromURL(finalUrl, (img) => { addToCanvas(img); resolve(); });
+                    };
+                    imgEl.src = url;
+                }
+            };
+            reader.readAsDataURL(file);
+        }));
+        await Promise.all(loadPromises);
+        canvas.requestRenderAll();
+        hideLoading();
+        e.target.value = '';
+    }
+
+    function getTrimmedImageData(img) {
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth; c.height = img.naturalHeight;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        try {
+            const idata = ctx.getImageData(0, 0, c.width, c.height);
+            const d = idata.data;
+            let top = null, bottom = null, left = null, right = null;
+            for (let y = 0; y < c.height; y++) {
+                for (let x = 0; x < c.width; x++) {
+                    if (d[(y * c.width + x) * 4 + 3] > 0) {
+                        if (top === null)   top    = y;
+                        if (left === null || x < left)  left   = x;
+                        if (right === null || x > right) right  = x;
+                        bottom = y;
+                    }
+                }
+            }
+            if (top !== null) {
+                const w = right - left + 1, h = bottom - top + 1;
+                const c2 = document.createElement('canvas');
+                c2.width = w; c2.height = h;
+                c2.getContext('2d').drawImage(c, left, top, w, h, 0, 0, w, h);
+                return c2.toDataURL();
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    function addToCanvas(obj) {
+        const maxD  = Math.min(PX_W, PX_H) * 0.4;
+        const scale = Math.min(maxD / obj.width, maxD / obj.height);
+        obj.set({ originX: 'center', originY: 'center', scaleX: scale, scaleY: scale, left: PX_W / 2, top: PX_H / 2 });
+        canvas.add(obj);
+        canvas.setActiveObject(obj);
+    }
+
+    // ============================================================
+    // ACCIONES
+    // ============================================================
+    function duplicateSelected() {
+        const active = canvas.getActiveObject();
+        if (!active) return;
+        active.clone(cloned => {
+            canvas.discardActiveObject();
+            cloned.set({ left: cloned.left + 200, top: cloned.top + 200, evented: true });
+            if (cloned.type === 'activeSelection') {
+                cloned.canvas = canvas;
+                cloned.forEachObject(o => canvas.add(o));
+                cloned.setCoords();
+            } else {
+                canvas.add(cloned);
+            }
+            const br = cloned.getBoundingRect(true);
+            if (br.left + br.width  > PX_W) cloned.left -= (br.left + br.width  - PX_W);
+            if (br.top  + br.height > PX_H) cloned.top  -= (br.top  + br.height - PX_H);
+            canvas.setActiveObject(cloned);
+            canvas.requestRenderAll();
+        });
+    }
+
+    function deleteSelected() {
+        const active = canvas.getActiveObjects();
+        if (active.length) {
+            canvas.discardActiveObject();
+            active.forEach(o => canvas.remove(o));
+            document.getElementById('sizeBadge').style.display = 'none';
+            canvas.requestRenderAll();
+        }
+    }
+
+    function changeBackground(color) {
+        document.querySelectorAll('.bg-selector-btn').forEach(b => {
+            b.classList.remove('active');
+            if (b.dataset.bg === color) b.classList.add('active');
+        });
+        const wrapper = document.getElementById('canvasWrapper');
+        if (color === 'transparent') {
+            canvas.backgroundColor = null;
+            wrapper.classList.add('bg-checkboard');
+            wrapper.style.backgroundColor = 'white';
+        } else {
+            canvas.backgroundColor = color;
+            wrapper.classList.remove('bg-checkboard');
+            wrapper.style.backgroundColor = color;
+        }
+        canvas.requestRenderAll();
+    }
+
+    // ============================================================
+    // AUTO-ACOMODAR (BIN PACKING)
+    // ============================================================
+    function autoFillCanvas() {
+        const objects = canvas.getObjects();
+        if (!objects.length) { alert('Sube al menos un diseño para acomodar.'); return; }
+        showLoading('Calculando el encaje perfecto...');
+        setTimeout(() => {
+            const margin = Math.min(PX_W, PX_H) * 0.015;
+            const items  = objects.map(obj => ({ obj, baseW: obj.width, baseH: obj.height }));
+            items.sort((a, b) => Math.max(b.baseW, b.baseH) - Math.max(a.baseW, a.baseH));
+
+            let minScale = 0.001, maxScale = 100.0, bestLayout = null;
+            for (let i = 0; i < 30; i++) {
+                const mid    = (minScale + maxScale) / 2;
+                const layout = tryPack(items, mid, PX_W, margin);
+                if (layout && layout.totalH <= PX_H) { bestLayout = layout; minScale = mid; }
+                else maxScale = mid;
+            }
+
+            if (bestLayout) {
+                const offsetX = (PX_W - bestLayout.maxW) / 2;
+                const offsetY = (PX_H - bestLayout.totalH) / 2;
+                bestLayout.placements.forEach(p => {
+                    p.item.obj.set({
+                        originX: 'center', originY: 'center',
+                        scaleX: p.scale, scaleY: p.scale, angle: p.angle,
+                        left: p.x + offsetX + p.visualW / 2,
+                        top:  p.y + offsetY + p.visualH / 2
+                    });
+                    p.item.obj.setCoords();
+                });
+                canvas.discardActiveObject();
+                canvas.requestRenderAll();
+            } else {
+                alert('No se pudo calcular el acomodo. Intenta con imágenes más pequeñas.');
+            }
+            hideLoading();
+        }, 100);
+    }
+
+    function tryPack(items, scale, availW, margin) {
+        let cx = margin, cy = margin, rowH = 0, maxW = 0;
+        const placements = [];
+        for (const item of items) {
+            let w = item.baseW * scale, h = item.baseH * scale;
+            let angle = 0, visualW = w, visualH = h;
+
+            if (visualW > availW - 2 * margin) {
+                if (h <= availW - 2 * margin) { visualW = h; visualH = w; angle = 90; }
+                else return null;
+            } else if (cx + visualW > availW - margin && cx + h <= availW - margin) {
+                visualW = h; visualH = w; angle = 90;
+            }
+
+            if (cx + visualW > availW - margin) { cx = margin; cy += rowH + margin; rowH = 0; }
+
+            placements.push({ item, scale, angle, x: cx, y: cy, visualW, visualH });
+            cx  += visualW + margin;
+            maxW = Math.max(maxW, cx);
+            rowH = Math.max(rowH, visualH);
+        }
+        return { totalH: cy + rowH + margin, maxW, placements };
+    }
+
+    // ============================================================
+    // BADGE DE MEDIDA
+    // ============================================================
+    function updateSizeBadge(obj, isRotating = false) {
+        if (!obj) return;
+        const badge    = document.getElementById('sizeBadge');
+        const dpiScale = 300 / 2.54;
+        const realW    = (obj.getScaledWidth()  / dpiScale).toFixed(1);
+        const realH    = (obj.getScaledHeight() / dpiScale).toFixed(1);
+        let   text     = `${realW} × ${realH} cm`;
+        let   angle    = Math.round(obj.angle) % 360;
+        if (angle < 0) angle += 360;
+        if (isRotating || (angle !== 0 && angle !== 360)) text += ` | ↻ ${angle}°`;
+        badge.innerText = text;
+        const coords = obj.oCoords.mt;
+        badge.style.left    = `${coords.x}px`;
+        badge.style.top     = `${coords.y}px`;
+        badge.style.display = 'block';
+        badge.style.transform = 'translate(-50%, -100%)';
+    }
+
+    // ============================================================
+    // EXPORTACIÓN
+    // ============================================================
+    async function getHighResCanvas() {
+        const temp = new fabric.StaticCanvas(null, { width: PX_W, height: PX_H });
+        temp.setBackgroundColor(null, () => {});
+        const objects = canvas.getObjects();
+        const clones  = await Promise.all(objects.map(o => new Promise(r => o.clone(c => r(c)))));
+        clones.forEach(c => temp.add(c));
+        temp.renderAll();
+        return temp;
+    }
+
+    async function stripAlphaAsync(dataUrl, w, h) {
+        return new Promise(resolve => {
+            const img = new Image();
+            img.onload = async () => {
+                const c   = document.createElement('canvas');
+                c.width   = w; c.height = h;
+                const ctx = c.getContext('2d', { willReadFrequently: true });
+                ctx.drawImage(img, 0, 0);
+                const idata = ctx.getImageData(0, 0, w, h);
+                const d     = idata.data;
+                const chunk = 500000;
+                const total = d.length / 4;
+                for (let start = 0; start < total; start += chunk) {
+                    const end = Math.min(start + chunk, total);
+                    for (let p = start; p < end; p++) {
+                        const i = p * 4;
+                        const a = d[i + 3];
+                        d[i + 3] = a < 250 ? 0 : 255;
+                    }
+                    await new Promise(r => setTimeout(r, 0));
+                }
+                ctx.putImageData(idata, 0, 0);
+                resolve(c.toDataURL('image/png'));
+            };
+            img.src = dataUrl;
+        });
+    }
+
+    function setProgress(percent) {
+        const container = document.getElementById('progressContainer');
+        const bar       = document.getElementById('progressBar');
+        container.style.display = 'block';
+        bar.style.width = `${percent}%`;
+    }
+
+    async function exportPNG() {
+        if (isMobile && !confirm('En celulares puede fallar por memoria. ¿Continuar?')) return;
+        showLoading('Generando PNG alta resolución...');
+        setProgress(10);
+        try {
+            await new Promise(r => setTimeout(r, 100));
+            const temp = await getHighResCanvas();
+            setProgress(40);
+            let dataUrl = temp.toDataURL({ format: 'png', multiplier: 1 });
+            setProgress(60);
+            if (document.getElementById('removeAlphaToggle').checked) {
+                document.getElementById('loadingText').innerText = 'Limpiando semitransparencias...';
+                dataUrl = await stripAlphaAsync(dataUrl, PX_W, PX_H);
+            }
+            setProgress(80);
+            document.getElementById('loadingText').innerText = 'Escribiendo metadatos (300 DPI)...';
+            await new Promise(r => setTimeout(r, 50));
+            const blob = await apply300DPIMetadata(dataUrl);
+            setProgress(100);
+            const link  = document.createElement('a');
+            link.download = `pliego_dtf_${PLIEGO_WIDTH_CM}x${PLIEGO_HEIGHT_CM}cm.png`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            temp.dispose();
+        } catch (e) {
+            alert('Archivo demasiado grande para la memoria de tu dispositivo. Usa PDF o reduce las dimensiones.');
+            console.error(e);
+        } finally {
+            hideLoading();
+            document.getElementById('progressContainer').style.display = 'none';
+        }
+    }
+
+    async function exportPDF() {
+        showLoading('Armando PDF por partes...');
+        setProgress(0);
+        try {
+            await new Promise(r => setTimeout(r, 100));
+            const temp    = await getHighResCanvas();
+            const { jsPDF } = window.jspdf;
+            const orient  = PX_W > PX_H ? 'l' : 'p';
+            const pdf     = new jsPDF({ orientation: orient, unit: 'cm', format: [PLIEGO_WIDTH_CM, PLIEGO_HEIGHT_CM], compress: true });
+            const ratio   = PLIEGO_HEIGHT_CM / PX_H;
+            let totalProcessed = 0;
+            for (let y = 0; y < PX_H; y += CHUNK_SIZE) {
+                const h = Math.min(CHUNK_SIZE, PX_H - y);
+                document.getElementById('loadingText').innerText = `Procesando tira ${Math.floor(y / CHUNK_SIZE) + 1}...`;
+                let chunkUrl = temp.toDataURL({ left: 0, top: y, width: PX_W, height: h, format: 'png' });
+                if (document.getElementById('removeAlphaToggle').checked) {
+                    chunkUrl = await stripAlphaAsync(chunkUrl, PX_W, h);
+                }
+                pdf.addImage(chunkUrl, 'PNG', 0, y * ratio, PLIEGO_WIDTH_CM, h * ratio, undefined, 'FAST');
+                totalProcessed += h;
+                setProgress(Math.round((totalProcessed / PX_H) * 100));
+            }
+            temp.dispose();
+            document.getElementById('loadingText').innerText = 'Guardando PDF...';
+            await new Promise(r => setTimeout(r, 100));
+            pdf.save(`pliego_dtf_${PLIEGO_WIDTH_CM}x${PLIEGO_HEIGHT_CM}cm.pdf`);
+        } catch (e) {
+            alert('Error al generar PDF. El dispositivo no tiene suficiente memoria.');
+            console.error(e);
+        } finally {
+            hideLoading();
+            document.getElementById('progressContainer').style.display = 'none';
+        }
+    }
+
+    async function apply300DPIMetadata(dataUrl) {
+        const bin = atob(dataUrl.split(',')[1]);
+        const buf = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+        const ppm   = 11811;
+        const chunk = new Uint8Array(21);
+        const view  = new DataView(chunk.buffer);
+        view.setUint32(0, 9, false);
+        chunk.set([112, 72, 89, 115], 4);
+        view.setUint32(8, ppm, false);
+        view.setUint32(12, ppm, false);
+        chunk[16] = 1;
+        view.setUint32(17, calcCRC32(chunk.subarray(4, 17)), false);
+        const pos = 33;
+        const fin = new Uint8Array(buf.length + 21);
+        fin.set(buf.subarray(0, pos), 0);
+        fin.set(chunk, pos);
+        fin.set(buf.subarray(pos), pos + 21);
+        return new Blob([fin], { type: 'image/png' });
+    }
+
+    let crcTable;
+    function calcCRC32(data) {
+        if (!crcTable) {
+            crcTable = new Int32Array(256);
+            for (let n = 0; n < 256; n++) {
+                let c = n;
+                for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+                crcTable[n] = c;
+            }
+        }
+        let crc = -1;
+        for (let i = 0; i < data.length; i++) crc = (crc >>> 8) ^ crcTable[(crc ^ data[i]) & 0xFF];
+        return (crc ^ -1) >>> 0;
+    }
+
+    // ============================================================
+    // UI HELPERS
+    // ============================================================
+    function showLoading(text) {
+        document.getElementById('loadingText').innerText = text;
+        document.getElementById('loadingOverlay').classList.add('active');
+    }
+    function hideLoading() {
+        document.getElementById('loadingOverlay').classList.remove('active');
+    }
+</script>
+</body>
+</html>

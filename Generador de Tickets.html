@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizador — Generador de Tickets Pro</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       SISTEMA DE DISEÑO PREMIUM — CREMA & CHAMPAGNE
+    ═══════════════════════════════════════════════ */
+    :root {
+      /* Paleta principal */
+      --cream:         #FAF7F2;
+      --ivory:         #F5F0E8;
+      --linen:         #EDE8DF;
+      --sand:          #E0D8CC;
+      --champagne:     #D4C9B0;
+      --warm-stone:    #C5B99A;
+      --blush:         #EDD5C5;
+      --sage-light:    #D8E0D4;
+      --dusty-rose:    #D9BDB0;
+      --vanilla:       #F8F3E6;
+
+      /* Textos */
+      --text-primary:   #3A3228;
+      --text-secondary: #6B5F52;
+      --text-muted:     #9A8E82;
+
+      /* Acentos funcionales cálidos */
+      --accent-warm:   #B8977E;
+      --accent-gold:   #C9A96E;
+      --accent-sage:   #8A9E84;
+      --accent-rose:   #C4938A;
+      --accent-deep:   #7A6455;
+
+      /* Bordes y sombras */
+      --border:        rgba(180,165,145,0.32);
+      --border-mid:    rgba(180,165,145,0.55);
+      --border-strong: rgba(180,165,145,0.75);
+      --shadow-xs:     0 1px 4px rgba(80,60,40,0.06);
+      --shadow-sm:     0 4px 14px rgba(80,60,40,0.08);
+      --shadow-md:     0 8px 30px rgba(80,60,40,0.11);
+      --shadow-card:   0 6px 24px rgba(80,60,40,0.10), 0 1px 4px rgba(80,60,40,0.06);
+
+      /* Funcionales heredados (para PDF y código existente) */
+      --primary-color:   var(--accent-warm);
+      --secondary-color: var(--accent-deep);
+      --light-bg:        var(--linen);
+      --white:           var(--ivory);
+      --border-color:    var(--border);
+      --success-color:   #E8F0E5;
+      --error-color:     #F5E8E5;
+      --accent-color:    var(--vanilla);
+      --discount-color:  var(--accent-rose);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --f-ui:      'Jost', 'Inter', Arial, sans-serif;
+      --f-display: 'Cormorant Garamond', serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: var(--f-ui);
+      padding: 0 0 3rem 0;
+      background: var(--linen);
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(212,201,176,0.25) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(237,213,197,0.2) 0%, transparent 45%);
+      color: var(--text-primary);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Marca / Brand ─────────────────────────────── */
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 28px 24px 20px;
+      background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .brand::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 60px; height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+    }
+    .brand img {
+      height: 52px;
+      filter: drop-shadow(0 2px 5px rgba(80,60,40,0.12));
+    }
+    .brand h2 {
+      font-family: var(--f-display);
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    /* ── Título de página ──────────────────────────── */
+    h1.page-title {
+      text-align: center;
+      font-family: var(--f-display);
+      font-size: 1.8rem;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin: 2rem 0 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── Tarjeta principal ─────────────────────────── */
+    .ticket-box {
+      background: linear-gradient(160deg, var(--ivory) 0%, var(--cream) 100%);
+      padding: 2rem 2rem 1.8rem;
+      max-width: 740px;
+      margin: 1.5rem auto;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .ticket-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--champagne), var(--accent-warm), var(--accent-gold), var(--champagne));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .ticket-box h2 {
+      text-align: center;
+      margin-bottom: 1.8rem;
+      font-family: var(--f-display);
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .ticket-box h3 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-family: var(--f-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    /* ── Labels ────────────────────────────────────── */
+    label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    /* ── Form groups ───────────────────────────────── */
+    .form-group { margin-bottom: 1.1rem; }
+    .form-row { display: flex; gap: 1rem; align-items: end; }
+    .form-row .form-group { flex: 1; margin-bottom: 0; }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.35rem;
+    }
+    .checkbox-group label {
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: none;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .iva-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .iva-controls span {
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    /* ── Inputs, selects, textareas ────────────────── */
+    input, select, textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      margin-top: 0;
+      box-sizing: border-box;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      font-family: var(--f-ui);
+      font-size: 13px;
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.55);
+      box-shadow: var(--shadow-xs);
+    }
+    input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-warm);
+      box-shadow: 0 0 0 3px rgba(184,151,126,0.18);
+      background: rgba(255,255,255,0.8);
+    }
+
+    input[type="checkbox"] {
+      width: 16px; height: 16px; margin: 0;
+      accent-color: var(--accent-warm);
+      cursor: pointer;
+      box-shadow: none;
+    }
+
+    input[type="file"] {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--cream);
+      cursor: pointer;
+    }
+
+    /* ── Botones ────────────────────────────────────── */
+    button {
+      background: linear-gradient(135deg, var(--accent-warm), var(--accent-gold));
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s var(--ease);
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      font-family: var(--f-ui);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 14px rgba(184,151,126,0.28);
+      width: 100%;
+    }
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(184,151,126,0.38);
+    }
+    button:active:not(:disabled) { transform: translateY(0); }
+    button:disabled {
+      background: var(--sand);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--warm-stone), var(--champagne));
+      color: var(--text-primary);
+      box-shadow: 0 4px 12px rgba(180,165,145,0.22);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      box-shadow: 0 8px 20px rgba(180,165,145,0.32);
+    }
+
+    /* WhatsApp */
+    button[style*="25D366"] {
+      background: linear-gradient(135deg, #4CAF7D, #25D366) !important;
+      box-shadow: 0 4px 14px rgba(37,211,102,0.25) !important;
+    }
+    button[style*="25D366"]:hover {
+      box-shadow: 0 8px 22px rgba(37,211,102,0.35) !important;
+    }
+
+    /* ── Tabla de productos ─────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1.2rem;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+    }
+
+    th, td {
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 0.7rem;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 13px;
+    }
+    td:not(:last-child), th:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+
+    thead th {
+      background: linear-gradient(180deg, var(--sand) 0%, var(--champagne) 100%);
+      color: var(--text-secondary);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      padding: 0.7rem;
+    }
+    tbody tr { background: rgba(255,255,255,0.45); }
+    tbody tr:nth-child(even) { background: rgba(237,232,223,0.35); }
+    tbody tr:hover { background: rgba(212,201,176,0.2); }
+
+    tbody td input {
+      border: 1px solid transparent;
+      background: transparent;
+      box-shadow: none;
+      padding: 0.35rem 0.5rem;
+      font-size: 13px;
+      margin: 0;
+    }
+    tbody td input:focus {
+      border-color: var(--accent-warm);
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 0 0 2px rgba(184,151,126,0.15);
+    }
+
+    /* ── Tools / botones de acción ──────────────────── */
+    .tools {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .tools button { width: auto; flex: 1; }
+
+    /* ── Mensajes de estado ─────────────────────────── */
+    .status-message {
+      padding: 12px 16px;
+      margin: 10px 0;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .status-success {
+      background: var(--success-color);
+      color: #3D6B4F;
+      border: 1px solid rgba(138,158,132,0.3);
+    }
+    .status-error {
+      background: var(--error-color);
+      color: #8B4A42;
+      border: 1px solid rgba(196,147,138,0.3);
+    }
+
+    /* ── Caja de resumen ────────────────────────────── */
+    .summary-box {
+      background: linear-gradient(135deg, var(--vanilla) 0%, var(--linen) 100%);
+      padding: 1.2rem 1.4rem;
+      border-radius: var(--radius-md);
+      margin-top: 1.2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.55rem;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .summary-row span:first-child {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .summary-row span:last-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .summary-row.discount-row span { color: var(--accent-rose); }
+    .summary-row.discount-row { font-style: italic; }
+
+    .summary-row.total-bold {
+      font-weight: 700;
+      font-size: 1.05rem;
+      border-top: 1px solid var(--border-mid);
+      padding-top: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .summary-row.total-bold span:first-child {
+      font-size: 10.5px;
+      color: var(--accent-deep);
+      font-weight: 700;
+    }
+    .summary-row.total-bold span:last-child {
+      font-size: 1.15rem;
+      color: var(--accent-warm);
+      font-weight: 700;
+    }
+
+    /* Anticipo input inline */
+    #anticipo-controls-row {
+      margin-top: 0.8rem;
+      color: var(--text-secondary) !important;
+    }
+    #anticipo-controls-row label {
+      text-transform: uppercase;
+      font-size: 9.5px;
+      color: var(--text-muted);
+    }
+
+    /* ── Sección de descuento ───────────────────────── */
+    .discount-section {
+      margin-top: 1rem;
+      padding: 14px 16px;
+      background: rgba(237,213,197,0.25);
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(196,147,138,0.45);
+    }
+
+    /* ── Historial ──────────────────────────────────── */
+    .ticket-box.history ul li {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+    }
+    .ticket-box.history ul li:hover { background: rgba(212,201,176,0.15); }
+    .ticket-box.history ul li:last-child { border-bottom: none; }
+
+    /* ── PDF content (oculto) ───────────────────────── */
+    #pdf-content {
+      position: absolute;
+      left: -9999px; top: -9999px;
+      width: 800px;
+      background: white;
+      padding: 50px;
+      font-family: Arial, sans-serif;
+      color: #000;
+      line-height: 1.5;
+    }
+    .pdf-visible {
+      position: static !important;
+      left: auto !important; top: auto !important;
+      margin: 2rem auto;
+      max-width: 800px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Header / #header legado ────────────────────── */
+    #header { text-align: center; margin-top: 20px; }
+    #header h1 { font-family: var(--f-display); font-size: 28px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; }
+    #header p { color: var(--text-muted); font-size: 13px; }
+
+    /* ── Responsive ─────────────────────────────────── */
+    @media (max-width: 768px) {
+      body { padding: 0 0 2rem 0; }
+      .ticket-box { padding: 1.4rem 1.2rem; margin: 1rem 0.75rem; border-radius: var(--radius-md); }
+      .form-row { flex-direction: column; gap: 0.8rem; }
+      .tools button { flex: 1 0 calc(50% - 0.5rem); }
+    }
+
+    @media (max-width: 600px) {
+      #productos thead { display: none; }
+      #productos tr { display: block; width: 100%; border-bottom: 2px solid var(--champagne); margin-bottom: 1rem; padding-bottom: 0.5rem; background: rgba(255,255,255,0.5); border-radius: var(--radius-sm); }
+      #productos td { display: block; text-align: right; padding-left: 50%; position: relative; border: none; }
+      #productos td:before { content: attr(data-label); position: absolute; left: 10px; font-weight: 600; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+      #productos td[data-label=" "] { text-align: center; padding-left: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="brand">
+  <img src="logo.png" alt="Chechena Shirts">
+  <h2>Chechena Shirts</h2>
+</div>
+  <div class="ticket-box">
+    <h2 data-translate="ticketGenerator">Generador de Ticket</h2>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="language" data-translate="languageLabel">Idioma</label>
+        <select id="language">
+          <option value="es" selected>Español</option>
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="it">Italiano</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="moneda" data-translate="currency">Moneda</label>
+        <select id="moneda">
+          <optgroup label="Latinoamérica">
+            <option value="MXN" selected>MXN — Peso Mexicano</option>
+            <option value="CRC">CRC — Colón Costarricense</option>
+            <option value="GTQ">GTQ — Quetzal Guatemalteco</option>
+            <option value="HNL">HNL — Lempira Hondureño</option>
+            <option value="NIO">NIO — Córdoba Nicaragüense</option>
+            <option value="DOP">DOP — Peso Dominicano</option>
+            <option value="COP">COP — Peso Colombiano</option>
+            <option value="ARS">ARS — Peso Argentino</option>
+            <option value="CLP">CLP — Peso Chileno</option>
+            <option value="PEN">PEN — Sol Peruano</option>
+            <option value="UYU">UYU — Peso Uruguayo</option>
+            <option value="PYG">PYG — Guaraní Paraguayo</option>
+            <option value="BOB">BOB — Boliviano</option>
+            <option value="BRL">BRL — Real Brasileño</option>
+            <option value="VES">VES — Bolívar Venezolano</option>
+            <option value="USD">USD — Dólar (Ecuador/Panamá/El Salvador)</option>
+          </optgroup>
+          <optgroup label="Otros">
+            <option value="USD">USD — Dólar Estadounidense</option>
+            <option value="CAD">CAD — Dólar Canadiense</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="GBP">GBP — Libra Esterlina</option>
+            <option value="CHF">CHF — Franco Suizo</option>
+            <option value="JPY">JPY — Yen Japonés</option>
+            <option value="CNY">CNY — Yuan Chino</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="marca" data-translate="brandName">Nombre de tu marca</label>
+      <input type="text" id="marca" data-translate-placeholder="brandNamePlaceholder" placeholder="Ej. Mi Tienda">
+    </div>
+
+    <div class="form-group">
+      <label for="logo" data-translate="logoLabel">Logo (opcional)</label>
+      <input type="file" id="logo" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label for="cliente" data-translate="clientName">Nombre del cliente</label>
+      <input type="text" id="cliente" data-translate-placeholder="clientNamePlaceholder" placeholder="Nombre del cliente">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="metodo" data-translate="paymentMethod">Método de pago</label>
+        <select id="metodo">
+          <option data-translate="paymentCash">Contado</option>
+          <option data-translate="paymentTransfer">Transferencia</option>
+          <option data-translate="paymentEfectivo">Efectivo</option>
+          <option data-translate="paymentCard">Tarjeta</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label data-translate="vatLabel">IVA</label>
+        <div class="checkbox-group">
+          <input type="checkbox" id="incluir-iva" checked>
+          <label for="incluir-iva" data-translate="includeVat">Incluir IVA</label>
+        </div>
+        <div class="iva-controls">
+          <input type="number" id="iva-porcentaje" value="16" min="0" max="100" step="0.1">
+          <span>%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row discount-section">
+      <div class="form-group">
+        <label for="codigo-descuento" data-translate="discountCodeLabel">Código de Descuento</label>
+        <input type="text" id="codigo-descuento" placeholder="Ej. PROMO10" data-translate-placeholder="discountCodePlaceholder">
+      </div>
+      <div class="form-group">
+        <label for="monto-descuento" data-translate="discountAmountLabel">Descuento (Valor)</label>
+        <input type="number" id="monto-descuento" value="0" min="0" step="0.01" oninput="calcular()">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="nota" data-translate="notesLabel">Notas adicionales</label>
+      <textarea id="nota" rows="2" placeholder="Ej. No se aceptan devoluciones" data-translate-placeholder="notesPlaceholder"></textarea>
+    </div>
+
+    <div class="form-group tools">
+      <button onclick="agregarProducto()" data-translate="addProductBtn">+ Añadir Producto</button>
+      <button onclick="copiarTotal()" class="btn-secondary" data-translate="copyTotalBtn">📋 Copiar Total</button>
+      <button onclick="limpiarFormulario()" class="btn-secondary" title="Borrar todo y empezar de cero" style="flex:0 0 auto; width:auto; padding: 0.75rem 1rem;">🗑️ Nuevo</button>
+    </div>
+
+    <table id="productos">
+      <thead>
+        <tr>
+          <th data-translate="productTh">Producto</th>
+          <th data-translate="quantityTh">Cant.</th>
+          <th data-translate="unitPriceTh">Precio Unit.</th>
+          <th data-translate="subtotalTh">Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="summary-box">
+      <div class="summary-row">
+        <span data-translate="subtotalLabel">Subtotal</span>
+        <span id="sub">$0.00</span>
+      </div>
+      <div class="summary-row" id="iva-row">
+        <span><span data-translate="vatLabel">IVA</span> (<span id="iva-porcentaje-texto">16</span>%)</span>
+        <span id="iva">$0.00</span>
+      </div>
+      <div class="summary-row discount-row" id="summary-discount-row" style="display:none;">
+        <span><span data-translate="discountLabel">Descuento</span> (<span id="display-discount-code"></span>)</span>
+        <span id="discount-val">-$0.00</span>
+      </div>
+      <div class="summary-row" id="total-general-row" style="font-weight: bold;">
+        <span data-translate="totalLabel">Total General</span>
+        <span id="total">$0.00</span>
+      </div>
+      <div class="summary-row" id="anticipo-controls-row" style="margin-top: 10px; color: var(--secondary-color);">
+        <label for="anticipo-input" style="font-weight: bold;" data-translate="downPaymentLabel">Anticipo / Depósito</label>
+        <div style="width: 150px;">
+          <input type="number" id="anticipo-input" value="0" min="0" step="0.01" oninput="calcular()">
+        </div>
+      </div>
+      <div class="summary-row total-bold" id="restante-summary-row">
+        <span data-translate="balanceDueLabel">Saldo Pendiente (Restante)</span>
+        <span id="restante">$0.00</span>
+      </div>
+    </div>
+
+    <div class="form-group tools" style="margin-top: 2rem;">
+      <button onclick="generarPDF()" id="btn-pdf" data-translate="downloadPdfBtn">Descargar PDF</button>
+      <button onclick="generarPNG()" class="btn-secondary" data-translate="downloadPngBtn">Descargar PNG</button>
+      <button onclick="enviarWhatsApp()" style="background-color: #25D366;" data-translate="sendWaBtn">WhatsApp</button>
+      <button onclick="mostrarVistaPrevia()" class="btn-secondary" data-translate="previewBtn">👁️ Vista Previa</button>
+    </div>
+
+    <div id="status-message"></div>
+  </div>
+
+  <div class="ticket-box history">
+    <h3 data-translate="historyTitle">Historial de Tickets</h3>
+    <ul id="historial" style="list-style: none; padding: 0;"></ul>
+    <button onclick="borrarHistorial()" class="btn-secondary" data-translate="deleteHistoryBtn">🗑️ Borrar historial</button>
+  </div>
+
+  <div id="pdf-content"></div>
+
+  <script>
+    let logoData = "";
+
+    const translations = {
+      es: {
+        ticketGenerator: "Generador de Tickets",
+        languageLabel: "Idioma",
+        brandName: "Nombre de tu marca",
+        brandNamePlaceholder: "Ej. Mi Tienda",
+        logoLabel: "Logo (opcional)",
+        clientName: "Nombre del cliente",
+        clientNamePlaceholder: "Nombre del cliente",
+        paymentMethod: "Método de pago",
+        paymentCash: "Contado",
+        paymentTransfer: "Transferencia",
+        paymentEfectivo: "Efectivo",
+        paymentCard: "Tarjeta",
+        currency: "Moneda",
+        vatLabel: "IVA",
+        includeVat: "Incluir IVA",
+        discountLabel: "Descuento",
+        discountCodeLabel: "Código de Descuento",
+        discountCodePlaceholder: "Ej. PROMO10",
+        discountAmountLabel: "Valor del Descuento",
+        notesLabel: "Notas adicionales",
+        notesPlaceholder: "Ej. No se aceptan devoluciones",
+        addProductBtn: "+ Añadir Producto",
+        copyTotalBtn: "📋 Copiar Total",
+        productTh: "Producto",
+        quantityTh: "Cant.",
+        unitPriceTh: "Precio Unit.",
+        subtotalTh: "Subtotal",
+        subtotalLabel: "Subtotal",
+        totalLabel: "Total General",
+        downPaymentLabel: "Anticipo / Depósito",
+        balanceDueLabel: "Saldo Restante",
+        downloadPdfBtn: "Descargar PDF",
+        downloadPngBtn: "Descargar PNG",
+        sendWaBtn: "Enviar por WhatsApp",
+        previewBtn: "Vista Previa",
+        historyTitle: "Historial de Tickets",
+        deleteHistoryBtn: "Borrar Historial",
+        totalCopied: "Total copiado al portapapeles",
+        enterClientName: "Escribe el nombre del cliente",
+        addOneProduct: "Agrega al menos un producto",
+        generatingPDF: "Generando PDF...",
+        generatingPNG: "Generando PNG...",
+        pdfGeneratedSuccess: "Archivo guardado exitosamente",
+        confirmDeleteHistory: "¿Borrar todo el historial?",
+        client: "Cliente",
+        date: "Fecha",
+        ticket: "Ticket",
+        paymentMethodPdf: "Método de pago",
+        product: "Producto",
+        quantity: "Cant.",
+        unitPrice: "Precio Unit.",
+        subtotal: "Subtotal",
+        note: "Nota",
+        totalToPay: "Total a pagar",
+        thankYou: "¡Gracias por su compra!",
+        generatedOn: "Generado el",
+        waHi: "Hola",
+        waDetails: "aquí tienes el detalle de tu pedido:",
+        waThanks: "¡Gracias por tu compra! 😊✨",
+        closePreview: "❌ Cerrar Vista Previa",
+        productPlaceholder: "Nombre del producto",
+      },
+      en: {
+        ticketGenerator: "Ticket Generator",
+        languageLabel: "Language",
+        brandName: "Brand Name",
+        brandNamePlaceholder: "e.g. My Store",
+        logoLabel: "Logo (optional)",
+        clientName: "Customer Name",
+        clientNamePlaceholder: "Customer name",
+        paymentMethod: "Payment Method",
+        paymentCash: "Cash",
+        paymentTransfer: "Transfer",
+        paymentEfectivo: "Cash",
+        paymentCard: "Card",
+        currency: "Currency",
+        vatLabel: "Tax",
+        includeVat: "Include Tax",
+        discountLabel: "Discount",
+        discountCodeLabel: "Discount Code",
+        discountCodePlaceholder: "e.g. SAVE20",
+        discountAmountLabel: "Discount Value",
+        notesLabel: "Additional Notes",
+        notesPlaceholder: "e.g. No returns",
+        addProductBtn: "+ Add Product",
+        copyTotalBtn: "📋 Copy Total",
+        productTh: "Product",
+        quantityTh: "Qty.",
+        unitPriceTh: "Unit Price",
+        subtotalTh: "Subtotal",
+        subtotalLabel: "Subtotal",
+        totalLabel: "Total Amount",
+        downPaymentLabel: "Down Payment",
+        balanceDueLabel: "Balance Due",
+        downloadPdfBtn: "Download PDF",
+        downloadPngBtn: "Download PNG",
+        sendWaBtn: "WhatsApp",
+        previewBtn: "Preview",
+        historyTitle: "History",
+        deleteHistoryBtn: "Clear History",
+        totalCopied: "Copied to clipboard",
+        enterClientName: "Enter customer name",
+        addOneProduct: "Add at least one product",
+        generatingPDF: "Generating PDF...",
+        generatingPNG: "Generating PNG...",
+        pdfGeneratedSuccess: "File saved successfully",
+        confirmDeleteHistory: "Delete all history?",
+        client: "Customer",
+        date: "Date",
+        ticket: "Ticket",
+        paymentMethodPdf: "Payment",
+        product: "Product",
+        quantity: "Qty.",
+        unitPrice: "Unit Price",
+        subtotal: "Subtotal",
+        note: "Note",
+        totalToPay: "Total to pay",
+        thankYou: "Thank you for your purchase!",
+        generatedOn: "Generated on",
+        waHi: "Hi",
+        waDetails: "here are your order details:",
+        waThanks: "Thanks for your business! 😊✨",
+        closePreview: "❌ Close Preview",
+        productPlaceholder: "Product name",
+      },
+      fr: {
+        ticketGenerator: "Générateur de Tickets",
+        languageLabel: "Langue",
+        brandName: "Nom de la marque",
+        brandNamePlaceholder: "ex. Mon Magasin",
+        logoLabel: "Logo (optionnel)",
+        clientName: "Nom du Client",
+        clientNamePlaceholder: "Nom du client",
+        paymentMethod: "Mode de paiement",
+        paymentCash: "Espèces",
+        paymentTransfer: "Virement",
+        paymentEfectivo: "Espèces",
+        paymentCard: "Carte",
+        currency: "Devise",
+        vatLabel: "TVA",
+        includeVat: "Inclure TVA",
+        discountLabel: "Remise",
+        discountCodeLabel: "Code de Réduction",
+        discountCodePlaceholder: "ex. SOLDES",
+        discountAmountLabel: "Valeur de la Remise",
+        notesLabel: "Notes",
+        notesPlaceholder: "ex. Pas de retours",
+        addProductBtn: "+ Ajouter Produit",
+        copyTotalBtn: "📋 Copier Total",
+        productTh: "Produit",
+        quantityTh: "Qté.",
+        unitPriceTh: "Prix Unitaire",
+        subtotalTh: "Sous-total",
+        subtotalLabel: "Sous-total",
+        totalLabel: "Total Général",
+        downPaymentLabel: "Acompte",
+        balanceDueLabel: "Solde Dû",
+        downloadPdfBtn: "Télécharger PDF",
+        downloadPngBtn: "Télécharger PNG",
+        sendWaBtn: "WhatsApp",
+        previewBtn: "Aperçu",
+        historyTitle: "Historique",
+        deleteHistoryBtn: "Effacer",
+        totalCopied: "Copié",
+        enterClientName: "Entrez le nom",
+        addOneProduct: "Ajoutez un produit",
+        generatingPDF: "PDF en cours...",
+        generatingPNG: "PNG en cours...",
+        pdfGeneratedSuccess: "Fichier enregistré",
+        confirmDeleteHistory: "Tout effacer ?",
+        client: "Client",
+        date: "Date",
+        ticket: "Ticket",
+        paymentMethodPdf: "Paiement",
+        product: "Produit",
+        quantity: "Qté.",
+        unitPrice: "Prix",
+        subtotal: "Sous-total",
+        note: "Note",
+        totalToPay: "Total à payer",
+        thankYou: "Merci de votre achat!",
+        generatedOn: "Généré le",
+        waHi: "Bonjour",
+        waDetails: "voici les détails:",
+        waThanks: "Merci! 😊✨",
+        closePreview: "❌ Fermer",
+        productPlaceholder: "Produit",
+      },
+      it: {
+        ticketGenerator: "Generatore Biglietti",
+        languageLabel: "Lingua",
+        brandName: "Nome Marchio",
+        brandNamePlaceholder: "es. Mio Negozio",
+        logoLabel: "Logo (opzionale)",
+        clientName: "Nome Cliente",
+        clientNamePlaceholder: "Nome cliente",
+        paymentMethod: "Pagamento",
+        paymentCash: "Contanti",
+        paymentTransfer: "Bonifico",
+        paymentEfectivo: "Contanti",
+        paymentCard: "Carta",
+        currency: "Valuta",
+        vatLabel: "IVA",
+        includeVat: "Includi IVA",
+        discountLabel: "Sconto",
+        discountCodeLabel: "Codice Sconto",
+        discountCodePlaceholder: "es. PROMO",
+        discountAmountLabel: "Valore Sconto",
+        notesLabel: "Note",
+        notesPlaceholder: "es. No resi",
+        addProductBtn: "+ Aggiungi",
+        copyTotalBtn: "📋 Copia Totale",
+        productTh: "Prodotto",
+        quantityTh: "Qtà.",
+        unitPriceTh: "Prezzo Unit.",
+        subtotalTh: "Subtotale",
+        subtotalLabel: "Subtotale",
+        totalLabel: "Totale Generale",
+        downPaymentLabel: "Acconto",
+        balanceDueLabel: "Saldo Dovuto",
+        downloadPdfBtn: "Scarica PDF",
+        downloadPngBtn: "Scarica PNG",
+        sendWaBtn: "WhatsApp",
+        previewBtn: "Anteprima",
+        historyTitle: "Cronologia",
+        deleteHistoryBtn: "Cancella",
+        totalCopied: "Copiato",
+        enterClientName: "Inserisci nome",
+        addOneProduct: "Aggiungi prodotto",
+        generatingPDF: "Generazione PDF...",
+        generatingPNG: "Generazione PNG...",
+        pdfGeneratedSuccess: "File salvato",
+        confirmDeleteHistory: "Cancella tutto?",
+        client: "Cliente",
+        date: "Date",
+        ticket: "Biglietto",
+        paymentMethodPdf: "Metodo",
+        product: "Prodotto",
+        quantity: "Qtà.",
+        unitPrice: "Prezzo",
+        subtotal: "Subtotale",
+        note: "Nota",
+        totalToPay: "Totale da pagare",
+        thankYou: "Grazie!",
+        generatedOn: "Generato il",
+        waHi: "Ciao",
+        waDetails: "ecco i dettagli:",
+        waThanks: "Grazie! 😊✨",
+        closePreview: "❌ Chiudi",
+        productPlaceholder: "Prodotto",
+      }
+    };
+
+    function translateUI() {
+      const lang = document.getElementById('language').value;
+      const t = translations[lang];
+
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        el.innerText = t[key] || el.innerText;
+      });
+
+      document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-translate-placeholder');
+        el.placeholder = t[key] || el.placeholder;
+      });
+
+      document.querySelectorAll('#productos tbody tr').forEach(row => {
+        if (row.children[0]) row.children[0].dataset.label = t.productTh;
+        if (row.children[1]) row.children[1].dataset.label = t.quantityTh;
+        if (row.children[2]) row.children[2].dataset.label = t.unitPriceTh;
+        if (row.children[3]) row.children[3].dataset.label = t.subtotalTh;
+      });
+      mostrarHistorial();
+    }
+
+    const currencyLocales = {
+      MXN: 'es-MX', USD: 'en-US', EUR: 'it-IT', GBP: 'en-GB',
+      ARS: 'es-AR', CLP: 'es-CL', COP: 'es-CO', PEN: 'es-PE',
+      CRC: 'es-CR', GTQ: 'es-GT', HNL: 'es-HN', NIO: 'es-NI',
+      DOP: 'es-DO', UYU: 'es-UY', PYG: 'es-PY', BOB: 'es-BO',
+      BRL: 'pt-BR', VES: 'es-VE', CAD: 'en-CA', CHF: 'de-CH',
+      JPY: 'ja-JP', CNY: 'zh-CN'
+    };
+
+    function getCurrencyCode() { return document.getElementById('moneda').value; }
+    function getLang() { return document.getElementById('language').value; }
+
+    function formatMoney(value) {
+      const code = getCurrencyCode();
+      const locale = currencyLocales[code] || 'en-US';
+      return new Intl.NumberFormat(locale, {
+        style: 'currency', currency: code, maximumFractionDigits: 2
+      }).format(value || 0);
+    }
+
+    document.getElementById('logo').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => { logoData = evt.target.result; };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function agregarProducto() {
+      const lang = getLang();
+      const t = translations[lang];
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td data-label="${t.productTh}"><input type="text" placeholder="${t.productPlaceholder}"></td>
+        <td data-label="${t.quantityTh}"><input type="number" value="1" min="1" oninput="calcular()"></td>
+        <td data-label="${t.unitPriceTh}"><input type="number" step="0.01" value="0" min="0" oninput="calcular()"></td>
+        <td data-label="${t.subtotalTh}" class="row-subtotal">${formatMoney(0)}</td>
+        <td data-label=" "><button style="color:red; background: transparent; border: none; font-size: 1.2rem; padding: 0;" onclick="this.closest('tr').remove(); calcular();">🗑️</button></td>
+      `;
+      document.querySelector('#productos tbody').appendChild(row);
+      calcular();
+    }
+
+    function calcular() {
+      let subtotal = 0;
+      document.querySelectorAll('#productos tbody tr').forEach(row => {
+        const qty = parseFloat(row.children[1].querySelector('input').value) || 0;
+        const price = parseFloat(row.children[2].querySelector('input').value) || 0;
+        const st = qty * price;
+        row.children[3].innerText = formatMoney(st);
+        subtotal += st;
+      });
+
+      const incluirIva = document.getElementById('incluir-iva').checked;
+      const ivaPorcentaje = parseFloat(document.getElementById('iva-porcentaje').value) || 0;
+      const iva = incluirIva ? subtotal * (ivaPorcentaje / 100) : 0;
+
+      const descuentoCode = document.getElementById('codigo-descuento').value.trim();
+      const descuentoMonto = parseFloat(document.getElementById('monto-descuento').value) || 0;
+
+      const totalSinDescuento = subtotal + iva;
+      const total = totalSinDescuento - descuentoMonto;
+
+      const anticipo = parseFloat(document.getElementById('anticipo-input').value) || 0;
+      const restante = total - anticipo;
+
+      document.getElementById('sub').innerText = formatMoney(subtotal);
+      document.getElementById('iva').innerText = formatMoney(iva);
+
+      const discRow = document.getElementById('summary-discount-row');
+      if (descuentoMonto > 0) {
+        discRow.style.display = 'flex';
+        document.getElementById('discount-val').innerText = `-${formatMoney(descuentoMonto)}`;
+        document.getElementById('display-discount-code').innerText = descuentoCode || "CODE";
+      } else {
+        discRow.style.display = 'none';
+      }
+
+      document.getElementById('total').innerText = formatMoney(total);
+      document.getElementById('restante').innerText = formatMoney(restante);
+      document.getElementById('iva-porcentaje-texto').innerText = ivaPorcentaje;
+      document.getElementById('iva-row').style.display = incluirIva ? 'flex' : 'none';
+      document.getElementById('iva-porcentaje').disabled = !incluirIva;
+      document.getElementById('restante-summary-row').style.display = anticipo > 0 ? 'flex' : 'none';
+    }
+
+    function copiarTotal() {
+      const text = `${document.getElementById('total').innerText} (${getCurrencyCode()})`;
+      const tempInput = document.createElement("input");
+      document.body.appendChild(tempInput);
+      tempInput.value = text;
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      mostrarMensaje(translations[getLang()].totalCopied, "success");
+    }
+
+    function mostrarMensaje(mensaje, tipo) {
+      const statusDiv = document.getElementById('status-message');
+      statusDiv.innerHTML = `<div class="status-message status-${tipo}">${mensaje}</div>`;
+      setTimeout(() => { statusDiv.innerHTML = ''; }, 3000);
+    }
+
+    function generarContenidoPDF() {
+      const lang = getLang();
+      const t = translations[lang];
+      const cliente = document.getElementById('cliente').value.trim() || t.client;
+      const marca = document.getElementById('marca').value.trim() || t.brandName;
+      const metodo = document.getElementById('metodo').selectedOptions[0].text;
+      const nota = document.getElementById('nota').value.trim();
+      const incluirIva = document.getElementById('incluir-iva').checked;
+      const ivaPorcentaje = parseFloat(document.getElementById('iva-porcentaje').value) || 0;
+      const anticipoVal = parseFloat(document.getElementById('anticipo-input').value) || 0;
+      const discMonto = parseFloat(document.getElementById('monto-descuento').value) || 0;
+      const discCode = document.getElementById('codigo-descuento').value.trim();
+      const hoy = new Date().toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' });
+
+      let filas = '';
+      let subtotalCalc = 0;
+      document.querySelectorAll('#productos tbody tr').forEach((row, idx) => {
+        const nombre = row.children[0].querySelector('input').value.trim() || `${t.product} ${idx + 1}`;
+        const cantidad = parseFloat(row.children[1].querySelector('input').value) || 1;
+        const precio = parseFloat(row.children[2].querySelector('input').value) || 0;
+        const st = cantidad * precio;
+        subtotalCalc += st;
+        filas += `
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${nombre}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${cantidad}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">${formatMoney(precio)}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right; font-weight: bold;">${formatMoney(st)}</td>
+          </tr>`;
+      });
+
+      const ivaCalc = incluirIva ? subtotalCalc * (ivaPorcentaje / 100) : 0;
+      const totalSinDisc = subtotalCalc + ivaCalc;
+      const totalCalc = totalSinDisc - discMonto;
+      const restanteCalc = totalCalc - anticipoVal;
+
+      return `
+        <div style="background: white; padding: 20px; color: #333;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #B8977E; padding-bottom: 15px;">
+            <div>
+              <h1 style="margin: 0; color: #B8977E; font-size: 28px;">${marca.toUpperCase()}</h1>
+              <p style="margin: 5px 0; color: #666;">${t.ticket} #${Date.now().toString().slice(-6)}</p>
+            </div>
+            ${logoData ? `<img src="${logoData}" style="max-height: 70px;">` : ''}
+          </div>
+          <div style="display: flex; justify-content: space-between; margin: 20px 0;">
+            <div>
+              <p><strong>${t.client}:</strong> ${cliente}</p>
+              <p><strong>${t.date}:</strong> ${hoy}</p>
+            </div>
+            <div style="text-align: right;">
+              <p><strong>${t.paymentMethodPdf}:</strong> ${metodo}</p>
+            </div>
+          </div>
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead style="background: #EDE8DF;">
+              <tr>
+                <th style="padding: 10px; text-align: left;">${t.product}</th>
+                <th style="padding: 10px; width: 60px;">${t.quantity}</th>
+                <th style="padding: 10px; text-align: right; width: 100px;">${t.unitPrice}</th>
+                <th style="padding: 10px; text-align: right; width: 110px;">${t.subtotal}</th>
+              </tr>
+            </thead>
+            <tbody>${filas}</tbody>
+          </table>
+          <div style="text-align: right; line-height: 1.8;">
+            <p style="margin: 0;">${t.subtotalLabel}: <strong>${formatMoney(subtotalCalc)}</strong></p>
+            ${incluirIva ? `<p style="margin: 0;">${t.vatLabel} (${ivaPorcentaje}%): <strong>${formatMoney(ivaCalc)}</strong></p>` : ''}
+            ${discMonto > 0 ? `<p style="margin: 0; color: #d93025;">${t.discountLabel} (${discCode}): <strong>- ${formatMoney(discMonto)}</strong></p>` : ''}
+            <p style="margin: 5px 0; font-size: 18px;">${t.totalLabel}: <strong style="color: #B8977E;">${formatMoney(totalCalc)}</strong></p>
+            ${anticipoVal > 0 ? `
+              <p style="margin: 0; font-size: 16px;">${t.downPaymentLabel}: <strong>- ${formatMoney(anticipoVal)}</strong></p>
+              <div style="margin-top: 10px; border-top: 2px solid #B8977E; padding-top: 10px;">
+                <p style="margin: 0; font-size: 22px; font-weight: bold; color: #B8977E;">${t.balanceDueLabel}: ${formatMoney(restanteCalc)}</p>
+              </div>
+            ` : ''}
+          </div>
+          ${nota ? `<div style="margin-top: 25px; padding: 10px; background: #FAF7F2; border-left: 4px solid #B8977E;"><strong>${t.note}:</strong> <em>${nota}</em></div>` : ''}
+          <div style="margin-top: 40px; text-align: center; font-size: 12px; color: #999;">
+            <p>${t.thankYou}</p>
+            <p>${t.generatedOn} ${new Date().toLocaleString()}</p>
+          </div>
+        </div>`;
+    }
+
+    async function generarPDF() {
+      const t = translations[getLang()];
+      const btn = document.getElementById('btn-pdf');
+      btn.disabled = true;
+      btn.textContent = t.generatingPDF;
+
+      const pdfContainer = document.getElementById('pdf-content');
+      pdfContainer.innerHTML = generarContenidoPDF();
+
+      try {
+        const canvas = await html2canvas(pdfContainer, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const width = pdf.internal.pageSize.getWidth();
+        const height = (canvas.height * width) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+        pdf.save(`Ticket_${Date.now()}.pdf`);
+        guardarHistorial(
+          document.getElementById('cliente').value || t.client,
+          new Date().toISOString().split('T')[0],
+          document.getElementById('restante').innerText
+        );
+        mostrarMensaje(t.pdfGeneratedSuccess, "success");
+      } catch (e) {
+        mostrarMensaje("Error al generar PDF", "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = t.downloadPdfBtn;
+        pdfContainer.innerHTML = '';
+      }
+    }
+
+    async function generarPNG() {
+      const t = translations[getLang()];
+      const pdfContainer = document.getElementById('pdf-content');
+      pdfContainer.innerHTML = generarContenidoPDF();
+      mostrarMensaje(t.generatingPNG, "success");
+
+      try {
+        const canvas = await html2canvas(pdfContainer, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = `Ticket_${Date.now()}.png`;
+        link.href = imgData;
+        link.click();
+        mostrarMensaje(t.pdfGeneratedSuccess, "success");
+      } catch (e) {
+        mostrarMensaje("Error al generar PNG", "error");
+      } finally {
+        pdfContainer.innerHTML = '';
+      }
+    }
+
+    function enviarWhatsApp() {
+      const t = translations[getLang()];
+      const cliente = document.getElementById('cliente').value.trim() || t.client;
+      const marca = document.getElementById('marca').value.trim() || t.brandName;
+      const sub = document.getElementById('sub').innerText;
+      const total = document.getElementById('total').innerText;
+      const discountVal = parseFloat(document.getElementById('monto-descuento').value) || 0;
+      const discount = formatMoney(discountVal);
+      const code = document.getElementById('codigo-descuento').value.trim();
+      const anticipoVal = parseFloat(document.getElementById('anticipo-input').value) || 0;
+      const anticipo = formatMoney(anticipoVal);
+      const restante = document.getElementById('restante').innerText;
+
+      let msg = `*${marca}* 🏪\n\n👋 ${t.waHi} *${cliente}*, ${t.waDetails}\n`;
+      document.querySelectorAll('#productos tbody tr').forEach(row => {
+        const n = row.children[0].querySelector('input').value || t.product;
+        const q = row.children[1].querySelector('input').value;
+        msg += `• ${n} x${q}\n`;
+      });
+      msg += `\n💰 *Resumen:*\n`;
+      msg += `- Subtotal: ${sub}\n`;
+      if (discountVal > 0) {
+        msg += `- Descuento (${code}): -${discount}\n`;
+      }
+      msg += `- *Total:* ${total}\n`;
+      if (anticipoVal > 0) {
+        msg += `- *Anticipo:* ${anticipo}\n`;
+        msg += `✅ *Saldo Pendiente: ${restante}*\n\n`;
+      } else {
+        msg += `\n`;
+      }
+      msg += t.waThanks;
+
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function mostrarVistaPrevia() {
+      const pdfContainer = document.getElementById('pdf-content');
+      pdfContainer.innerHTML = generarContenidoPDF();
+      pdfContainer.classList.add('pdf-visible');
+
+      const btnClose = document.createElement('button');
+      btnClose.innerText = translations[getLang()].closePreview;
+      btnClose.style.cssText = "margin: 20px; background: #666;";
+      btnClose.onclick = () => {
+        pdfContainer.classList.remove('pdf-visible');
+        pdfContainer.innerHTML = '';
+      };
+      pdfContainer.prepend(btnClose);
+      pdfContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function guardarHistorial(cliente, fecha, total) {
+      let h = JSON.parse(localStorage.getItem('ticket_h') || '[]');
+      h.unshift(`${fecha} | ${cliente} | ${total}`);
+      localStorage.setItem('ticket_h', JSON.stringify(h.slice(0, 20)));
+      mostrarHistorial();
+    }
+
+    function borrarHistorial() {
+      if (confirm(translations[getLang()].confirmDeleteHistory)) {
+        localStorage.removeItem('ticket_h');
+        mostrarHistorial();
+      }
+    }
+
+    function mostrarHistorial() {
+      const h = JSON.parse(localStorage.getItem('ticket_h') || '[]');
+      const ul = document.getElementById('historial');
+      ul.innerHTML = h.length
+        ? h.map(i => `<li style="padding:8px; border-bottom:1px solid #eee;">${i}</li>`).join('')
+        : '<li>-</li>';
+    }
+
+    // ─── PERSISTENCIA DE FORMULARIO ───────────────────────────────────────────
+
+    function limpiarFormulario() {
+      if (!confirm('¿Borrar todo el formulario y empezar de cero?')) return;
+      localStorage.removeItem(FORM_KEY);
+      // Reset campos
+      ['marca','cliente','nota','codigo-descuento'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('monto-descuento').value = '0';
+      document.getElementById('anticipo-input').value  = '0';
+      document.getElementById('iva-porcentaje').value  = '16';
+      document.getElementById('incluir-iva').checked   = true;
+      document.getElementById('language').value        = 'es';
+      document.getElementById('moneda').value          = 'MXN';
+      document.getElementById('metodo').selectedIndex  = 0;
+      document.querySelector('#productos tbody').innerHTML = '';
+      agregarProducto();
+      calcular();
+      mostrarMensaje('Formulario limpiado', 'success');
+    }
+
+
+
+    const FORM_KEY = 'cotizador_form_v1';
+
+    function guardarFormulario() {
+      const productos = [];
+      document.querySelectorAll('#productos tbody tr').forEach(row => {
+        productos.push({
+          nombre:   row.children[0].querySelector('input').value,
+          cantidad: row.children[1].querySelector('input').value,
+          precio:   row.children[2].querySelector('input').value,
+        });
+      });
+
+      const estado = {
+        idioma:        document.getElementById('language').value,
+        moneda:        document.getElementById('moneda').value,
+        marca:         document.getElementById('marca').value,
+        cliente:       document.getElementById('cliente').value,
+        metodo:        document.getElementById('metodo').value,
+        incluirIva:    document.getElementById('incluir-iva').checked,
+        ivaPct:        document.getElementById('iva-porcentaje').value,
+        codigoDesc:    document.getElementById('codigo-descuento').value,
+        montoDesc:     document.getElementById('monto-descuento').value,
+        nota:          document.getElementById('nota').value,
+        anticipo:      document.getElementById('anticipo-input').value,
+        productos,
+      };
+
+      localStorage.setItem(FORM_KEY, JSON.stringify(estado));
+    }
+
+    function restaurarFormulario() {
+      let estado;
+      try { estado = JSON.parse(localStorage.getItem(FORM_KEY)); } catch(e) {}
+      if (!estado) return false;
+
+      if (estado.idioma)   document.getElementById('language').value         = estado.idioma;
+      if (estado.moneda)   document.getElementById('moneda').value           = estado.moneda;
+      if (estado.marca)    document.getElementById('marca').value            = estado.marca;
+      if (estado.cliente)  document.getElementById('cliente').value          = estado.cliente;
+      if (estado.metodo)   document.getElementById('metodo').value           = estado.metodo;
+      document.getElementById('incluir-iva').checked                         = !!estado.incluirIva;
+      if (estado.ivaPct !== undefined) document.getElementById('iva-porcentaje').value   = estado.ivaPct;
+      if (estado.codigoDesc) document.getElementById('codigo-descuento').value = estado.codigoDesc;
+      if (estado.montoDesc)  document.getElementById('monto-descuento').value  = estado.montoDesc;
+      if (estado.nota)       document.getElementById('nota').value             = estado.nota;
+      if (estado.anticipo)   document.getElementById('anticipo-input').value   = estado.anticipo;
+
+      // Restaurar filas de productos
+      if (estado.productos && estado.productos.length > 0) {
+        const tbody = document.querySelector('#productos tbody');
+        tbody.innerHTML = '';
+        const lang = estado.idioma || 'es';
+        const t = translations[lang] || translations['es'];
+        estado.productos.forEach(p => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td data-label="${t.productTh}"><input type="text" placeholder="${t.productPlaceholder}" value="${p.nombre.replace(/"/g,'&quot;')}"></td>
+            <td data-label="${t.quantityTh}"><input type="number" value="${p.cantidad}" min="1" oninput="calcular(); guardarFormulario()"></td>
+            <td data-label="${t.unitPriceTh}"><input type="number" step="0.01" value="${p.precio}" min="0" oninput="calcular(); guardarFormulario()"></td>
+            <td data-label="${t.subtotalTh}" class="row-subtotal">${formatMoney(0)}</td>
+            <td data-label=" "><button style="color:var(--accent-rose); background: transparent; border: none; font-size: 1.2rem; padding: 0; box-shadow:none; width:auto;" onclick="this.closest('tr').remove(); calcular(); guardarFormulario();">🗑️</button></td>
+          `;
+          // guardar al escribir nombre
+          row.querySelector('input[type=text]').addEventListener('input', () => { calcular(); guardarFormulario(); });
+          tbody.appendChild(row);
+        });
+      }
+
+      return true;
+    }
+
+    // Interceptar agregarProducto para que también guarde
+    const _agregarProductoOriginal = agregarProducto;
+    window.agregarProducto = function() {
+      const lang = getLang();
+      const t = translations[lang];
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td data-label="${t.productTh}"><input type="text" placeholder="${t.productPlaceholder}"></td>
+        <td data-label="${t.quantityTh}"><input type="number" value="1" min="1" oninput="calcular(); guardarFormulario()"></td>
+        <td data-label="${t.unitPriceTh}"><input type="number" step="0.01" value="0" min="0" oninput="calcular(); guardarFormulario()"></td>
+        <td data-label="${t.subtotalTh}" class="row-subtotal">${formatMoney(0)}</td>
+        <td data-label=" "><button style="color:var(--accent-rose); background: transparent; border: none; font-size: 1.2rem; padding: 0; box-shadow:none; width:auto;" onclick="this.closest('tr').remove(); calcular(); guardarFormulario();">🗑️</button></td>
+      `;
+      row.querySelector('input[type=text]').addEventListener('input', () => { calcular(); guardarFormulario(); });
+      document.querySelector('#productos tbody').appendChild(row);
+      calcular();
+      guardarFormulario();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Intentar restaurar; si no hay nada guardado, agregar fila vacía
+      const restaurado = restaurarFormulario();
+      if (!restaurado) agregarProducto();
+
+      translateUI();
+      mostrarHistorial();
+
+      // Escuchas con autoguardado
+      document.getElementById('language').onchange   = () => { translateUI(); guardarFormulario(); };
+      document.getElementById('moneda').onchange     = () => { calcular(); guardarFormulario(); };
+      document.getElementById('incluir-iva').onchange= () => { calcular(); guardarFormulario(); };
+      document.getElementById('iva-porcentaje').oninput = () => { calcular(); guardarFormulario(); };
+      document.getElementById('codigo-descuento').oninput = () => { calcular(); guardarFormulario(); };
+      document.getElementById('monto-descuento').oninput  = () => { calcular(); guardarFormulario(); };
+      document.getElementById('anticipo-input').oninput   = () => { calcular(); guardarFormulario(); };
+      document.getElementById('marca').addEventListener('input', guardarFormulario);
+      document.getElementById('cliente').addEventListener('input', guardarFormulario);
+      document.getElementById('metodo').addEventListener('change', guardarFormulario);
+      document.getElementById('nota').addEventListener('input', guardarFormulario);
+
+      calcular();
+
+      // Indicador visual de sesión restaurada
+      const saved = localStorage.getItem(FORM_KEY);
+      if (saved) {
+        const t = translations[getLang()] || translations['es'];
+        mostrarMensaje('✦ Sesión anterior restaurada automáticamente', 'success');
+      }
+    });
+  </script>
+
+</body>
+</html>

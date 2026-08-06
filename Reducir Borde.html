@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reductor de Bordes · CHECHENA SHIRTS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --cream:      #F8F4EE;
+      --cream-2:    #F0EAE0;
+      --cream-3:    #E8DDD0;
+      --linen:      #EDE6D9;
+      --sand:       #C9B99A;
+      --ink:        #2A2118;
+      --ink-soft:   #6B5E4E;
+      --ink-muted:  #9E8E7B;
+      --accent:     #7C5C3B;
+      --accent-lt:  #A67C52;
+      --accent-ring: rgba(124,92,59,.22);
+      --white:      #FFFFFF;
+      --border:     #DDD3C4;
+      --shadow-sm:  0 1px 3px rgba(42,33,24,.06);
+      --shadow-md:  0 4px 16px rgba(42,33,24,.09);
+      --r-sm:       10px;
+      --r-md:       16px;
+      --r-lg:       22px;
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(16px, 4vw, 48px);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+    .site-logo {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .site-logo-mark {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      color: var(--accent);
+      letter-spacing: -.5px;
+      line-height: 1;
+    }
+    .site-logo-sub {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .header-tag {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: var(--cream-2);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 100px;
+    }
+
+    /* ─── Page layout ────────────────────────────────────────── */
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: clamp(28px, 5vw, 56px) clamp(16px, 4vw, 32px);
+    }
+
+    /* ─── Hero title ─────────────────────────────────────────── */
+    .tool-hero {
+      margin-bottom: 32px;
+    }
+    .tool-hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .tool-hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(28px, 4.5vw, 42px);
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .tool-hero p {
+      font-size: 15px;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      max-width: 580px;
+    }
+    .tool-hero p em {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* ─── Drop zone ──────────────────────────────────────────── */
+    .dropzone {
+      border: 2px dashed var(--sand);
+      border-radius: var(--r-lg);
+      background: var(--linen);
+      padding: clamp(28px, 5vw, 48px) 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+      position: relative;
+      text-align: center;
+    }
+    .dropzone:hover,
+    .dropzone.drag-over {
+      border-color: var(--accent);
+      background: var(--cream-2);
+      box-shadow: 0 0 0 5px var(--accent-ring);
+    }
+    .dropzone.has-image {
+      border-style: solid;
+      border-color: var(--accent);
+      background: var(--cream-2);
+      padding: 16px 24px;
+    }
+    #cs-file { display: none; }
+    .dz-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--white);
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
+    }
+    .dz-icon svg { width: 24px; height: 24px; stroke: var(--accent); }
+    .dz-text {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+    .dz-text strong {
+      display: block;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .dz-types {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* ─── File name badge ────────────────────────────────────── */
+    .file-badge {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--ink-soft);
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+      max-width: 420px;
+    }
+    .file-badge.visible { display: flex; }
+    .file-badge svg { width: 16px; height: 16px; stroke: var(--accent); flex-shrink: 0; }
+    .file-badge-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .file-badge-clear {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      color: var(--ink-muted);
+      font-size: 18px;
+      line-height: 1;
+      transition: color .15s;
+    }
+    .file-badge-clear:hover { color: var(--ink); }
+
+    /* ─── Controls card ──────────────────────────────────────── */
+    .controls-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .controls-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: .02em;
+    }
+    .seg-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .seg-btn {
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      transition: all .15s;
+    }
+    .seg-btn:hover { background: var(--cream-2); border-color: var(--sand); color: var(--ink); }
+    .seg-btn.active {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .controls-divider {
+      height: 1px;
+      background: var(--cream-2);
+      border: none;
+    }
+    .controls-hint {
+      font-size: 12px;
+      color: var(--ink-muted);
+      line-height: 1.55;
+    }
+
+    /* ─── Meta bar ───────────────────────────────────────────── */
+    .meta-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .meta-chip {
+      font-size: 12px;
+      color: var(--ink-muted);
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      display: none;
+    }
+    .meta-chip.visible { display: inline-block; }
+    .counter-badge {
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--accent);
+      color: var(--white);
+      border-radius: 100px;
+      padding: 3px 10px;
+      display: none;
+    }
+    .counter-badge.visible { display: inline-block; }
+
+    /* ─── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: var(--r-sm);
+      border: 1px solid transparent;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+      user-select: none;
+      letter-spacing: .01em;
+    }
+    .btn:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 2px; }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+      box-shadow: 0 1px 0 rgba(42,33,24,.15);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-lt);
+      border-color: var(--accent-lt);
+      box-shadow: 0 0 0 4px var(--accent-ring);
+    }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--ink);
+      border-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--cream);
+      border-color: var(--sand);
+      box-shadow: 0 0 0 4px var(--accent-ring);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-outline:hover:not(:disabled) {
+      background: var(--accent);
+      color: var(--white);
+      box-shadow: 0 0 0 4px var(--accent-ring);
+    }
+    .btn svg { width: 16px; height: 16px; stroke: currentColor; flex-shrink: 0; }
+
+    /* ─── Preview canvas ──────────────────────────────────────── */
+    .preview-section {
+      margin-top: 16px;
+      display: none;
+    }
+    .preview-section.visible { display: block; }
+    .preview-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .canvas-wrap {
+      border-radius: var(--r-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      line-height: 0;
+    }
+    .canvas-wrap.bg-transparent {
+      background: repeating-conic-gradient(#E8E0D5 0% 25%, #F5F0E8 0% 50%) 50% / 18px 18px;
+    }
+    .canvas-wrap.bg-gray    { background: #9CA3AF; }
+    .canvas-wrap.bg-white   { background: #FFFFFF; }
+    .canvas-wrap.bg-black   { background: #111111; }
+    #cs-preview-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ─── Toast ──────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: var(--cream);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 100px;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none;
+      z-index: 200;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── How it works ───────────────────────────────────────── */
+    .how-it-works {
+      margin-top: 40px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .hiw-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .hiw-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .hiw-step {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .hiw-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .hiw-step-text {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .hiw-step-text strong { color: var(--ink); display: block; margin-bottom: 2px; }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    .site-footer {
+      margin-top: 56px;
+      border-top: 1px solid var(--border);
+      padding: 24px clamp(16px, 4vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 16px;
+      color: var(--accent);
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 560px) {
+      .controls-row { flex-direction: column; align-items: flex-start; }
+      .site-footer { flex-direction: column; align-items: center; text-align: center; }
+    }
+
+    /* ─── Reduced motion ─────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ──────────────────────────────────────────────── -->
+  <header class="site-header">
+    <a class="site-logo" href="#">
+      <span class="site-logo-mark">Chechena Shirts</span>
+      <span class="site-logo-sub">Herramientas</span>
+    </a>
+    <span class="header-tag">Reductor de Bordes</span>
+  </header>
+
+  <!-- ── Main page ───────────────────────────────────────────── -->
+  <main class="page">
+
+    <!-- Hero -->
+    <div class="tool-hero">
+      <p class="tool-hero-eyebrow">Chechena Shirts · Herramienta gratuita</p>
+      <h1>Reductor de Bordes<br>para Diseños DTF</h1>
+      <p>
+        Sube tu diseño en PNG o JPG. Presiona <em>Reducir bordes</em> para eliminar 1px del contorno por clic — ideal para remover halos y bordes indeseados. Al exportar, eliminamos semitransparencias automáticamente para una impresión limpia.
+      </p>
+    </div>
+
+    <!-- Drop zone -->
+    <section class="dropzone" id="cs-dropzone" role="button" tabindex="0" aria-label="Seleccionar imagen">
+      <div class="dz-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <div class="dz-text">
+        <strong>Arrastra tu imagen aquí</strong>
+        o haz clic para elegir un archivo
+      </div>
+      <span class="dz-types">PNG · JPG · JPEG</span>
+      <input id="cs-file" type="file" accept="image/png,image/jpeg">
+
+      <!-- File name badge (appears after load) -->
+      <div class="file-badge" id="cs-file-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <span class="file-badge-name" id="cs-file-name">archivo.png</span>
+        <button class="file-badge-clear" id="cs-clear" title="Quitar imagen" aria-label="Quitar imagen">×</button>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <div class="controls-card">
+
+      <!-- Action buttons -->
+      <div class="controls-row">
+        <button class="btn btn-primary" id="cs-reduce" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          Reducir bordes (−1px)
+        </button>
+        <button class="btn btn-outline" id="cs-export" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Exportar PNG (sin semitransparencias)
+        </button>
+      </div>
+
+      <hr class="controls-divider">
+
+      <!-- Preview background selector -->
+      <div class="controls-row">
+        <span class="controls-label">Fondo de vista previa:</span>
+        <div class="seg-group" id="cs-seg-group">
+          <button class="seg-btn active" data-bg="transparent" type="button">Transparente</button>
+          <button class="seg-btn" data-bg="gray" type="button">Gris</button>
+          <button class="seg-btn" data-bg="white" type="button">Blanco</button>
+          <button class="seg-btn" data-bg="black" type="button">Negro</button>
+        </div>
+      </div>
+
+      <hr class="controls-divider">
+
+      <!-- Meta + counter -->
+      <div class="meta-bar">
+        <span class="meta-chip" id="cs-meta-size">—</span>
+        <span class="meta-chip" id="cs-meta-mem">—</span>
+        <span class="counter-badge" id="cs-counter">0 reducciones</span>
+      </div>
+
+      <p class="controls-hint">
+        La vista previa no altera el archivo final. Puedes presionar <strong>Reducir bordes</strong> varias veces si el halo es muy notorio. Al exportar, los píxeles semitransparentes se convierten en totalmente transparentes para una impresión DTF perfecta.
+      </p>
+    </div>
+
+    <!-- Canvas preview -->
+    <section class="preview-section" id="cs-preview-section">
+      <p class="preview-section-title">Vista previa</p>
+      <div class="canvas-wrap bg-transparent" id="cs-canvas-wrap">
+        <canvas id="cs-preview-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <div class="how-it-works">
+      <h2 class="hiw-title">¿Cómo funciona?</h2>
+      <div class="hiw-steps">
+        <div class="hiw-step">
+          <div class="hiw-step-num">1</div>
+          <div class="hiw-step-text">
+            <strong>Sube tu diseño</strong>
+            Arrastra un PNG o JPG a la zona de carga, o haz clic para seleccionarlo.
+          </div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-step-num">2</div>
+          <div class="hiw-step-text">
+            <strong>Reduce los bordes</strong>
+            Cada clic en "Reducir bordes" erosiona 1px del contorno del canal alfa, eliminando halos o bordes indeseados.
+          </div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-step-num">3</div>
+          <div class="hiw-step-text">
+            <strong>Cambia el fondo de vista previa</strong>
+            Usa los botones de fondo para revisar cómo queda tu diseño sobre diferentes colores antes de exportar.
+          </div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-step-num">4</div>
+          <div class="hiw-step-text">
+            <strong>Exporta listo para impresión</strong>
+            El PNG exportado elimina semitransparencias automáticamente: cada píxel queda opaco o totalmente transparente.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <span class="footer-brand">Chechena Shirts</span>
+    <span class="footer-copy">Herramienta gratuita de diseño DTF · Todos los derechos reservados</span>
+  </footer>
+
+  <!-- ── Toast ────────────────────────────────────────────────── -->
+  <div class="toast" id="cs-toast" role="status" aria-live="polite"></div>
+
+  <script>
+  (() => {
+    // ── Refs ──────────────────────────────────────────────────────
+    const dropzone      = document.getElementById('cs-dropzone');
+    const fileInput     = document.getElementById('cs-file');
+    const fileBadge     = document.getElementById('cs-file-badge');
+    const fileName      = document.getElementById('cs-file-name');
+    const clearBtn      = document.getElementById('cs-clear');
+
+    const btnReduce     = document.getElementById('cs-reduce');
+    const btnExport     = document.getElementById('cs-export');
+
+    const segGroup      = document.getElementById('cs-seg-group');
+    const segButtons    = Array.from(segGroup.querySelectorAll('.seg-btn'));
+
+    const metaSize      = document.getElementById('cs-meta-size');
+    const metaMem       = document.getElementById('cs-meta-mem');
+    const counter       = document.getElementById('cs-counter');
+
+    const previewSection = document.getElementById('cs-preview-section');
+    const canvasWrap    = document.getElementById('cs-canvas-wrap');
+    const previewCanvas = document.getElementById('cs-preview-canvas');
+    const pctx          = previewCanvas.getContext('2d', { willReadFrequently: true });
+
+    const toast         = document.getElementById('cs-toast');
+
+    // ── Internal state ────────────────────────────────────────────
+    const workCanvas    = document.createElement('canvas');
+    const wctx          = workCanvas.getContext('2d', { willReadFrequently: true });
+
+    let imgW = 0, imgH = 0;
+    let currentImageData = null;
+    let reductionCount = 0;
+    let toastTimer = null;
+
+    // ── Toast helper ──────────────────────────────────────────────
+    function showToast(msg, duration = 2200) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    // ── Update meta chips ─────────────────────────────────────────
+    function updateMeta() {
+      if (!currentImageData) {
+        metaSize.classList.remove('visible');
+        metaMem.classList.remove('visible');
+        counter.classList.remove('visible');
+        return;
+      }
+      const mb = (imgW * imgH * 4 / 1024 / 1024).toFixed(1);
+      metaSize.textContent = `${imgW} × ${imgH} px`;
+      metaMem.textContent  = `~${mb} MB en memoria`;
+      metaSize.classList.add('visible');
+      metaMem.classList.add('visible');
+      counter.classList.add('visible');
+      counter.textContent = reductionCount === 0
+        ? 'Sin reducciones'
+        : `${reductionCount} reducción${reductionCount > 1 ? 'es' : ''}`;
+    }
+
+    // ── Scale preview canvas to container width ───────────────────
+    function fitPreview() {
+      if (!currentImageData) return;
+      const containerW = canvasWrap.clientWidth || 800;
+      const scale = containerW / imgW;
+      previewCanvas.width  = Math.max(1, Math.floor(imgW  * scale));
+      previewCanvas.height = Math.max(1, Math.floor(imgH  * scale));
+      pctx.imageSmoothingEnabled  = true;
+      pctx.imageSmoothingQuality  = 'high';
+      pctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+      pctx.drawImage(workCanvas, 0, 0, previewCanvas.width, previewCanvas.height);
+    }
+
+    // ── Morphological erosion on alpha channel (3×3 min) ─────────
+    function erodeAlpha1px(imgData) {
+      const w = imgData.width, h = imgData.height;
+      const src = imgData.data;
+
+      // Extract alpha channel
+      const alpha = new Uint8ClampedArray(w * h);
+      for (let i = 0, j = 3; i < alpha.length; i++, j += 4) alpha[i] = src[j];
+
+      const out = new Uint8ClampedArray(w * h);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          let minVal = 255;
+          outer:
+          for (let dy = -1; dy <= 1; dy++) {
+            const yy = Math.max(0, Math.min(h - 1, y + dy));
+            for (let dx = -1; dx <= 1; dx++) {
+              const xx = Math.max(0, Math.min(w - 1, x + dx));
+              const v = alpha[yy * w + xx];
+              if (v < minVal) {
+                minVal = v;
+                if (minVal === 0) break outer;
+              }
+            }
+          }
+          out[y * w + x] = minVal;
+        }
+      }
+      // Write back
+      for (let i = 0, j = 3; i < out.length; i++, j += 4) src[j] = out[i];
+    }
+
+    // ── Binarize alpha for export: 0 or 255, no semitransparency ──
+    function removeSemitransparencies(imgData, threshold = 254) {
+      const d = imgData.data;
+      for (let i = 3; i < d.length; i += 4) {
+        d[i] = d[i] <= threshold ? 0 : 255;
+      }
+    }
+
+    // ── Load a File object ────────────────────────────────────────
+    async function loadFile(file) {
+      if (!file) return;
+      if (!file.type.match(/^image\/(png|jpeg)$/)) {
+        showToast('⚠️ Solo se aceptan archivos PNG o JPG.');
+        return;
+      }
+
+      try {
+        const bmp = await createImageBitmap(file);
+        imgW = bmp.width;
+        imgH = bmp.height;
+
+        workCanvas.width  = imgW;
+        workCanvas.height = imgH;
+        wctx.clearRect(0, 0, imgW, imgH);
+        wctx.drawImage(bmp, 0, 0);
+        bmp.close();
+
+        currentImageData = wctx.getImageData(0, 0, imgW, imgH);
+        reductionCount = 0;
+
+        // UI state
+        btnReduce.disabled = false;
+        btnExport.disabled = false;
+        dropzone.classList.add('has-image');
+        fileName.textContent = file.name;
+        fileBadge.classList.add('visible');
+        previewSection.classList.add('visible');
+
+        updateMeta();
+        fitPreview();
+        showToast('✓ Imagen cargada correctamente');
+      } catch (err) {
+        showToast('⚠️ No se pudo cargar la imagen. Intenta con otro archivo.');
+        console.error('[CHECHENA] loadFile error:', err);
+      }
+    }
+
+    // ── Reduce one pixel ──────────────────────────────────────────
+    function reduceOnePixel() {
+      if (!currentImageData) return;
+      erodeAlpha1px(currentImageData);
+      wctx.putImageData(currentImageData, 0, 0);
+      reductionCount++;
+      updateMeta();
+      fitPreview();
+      showToast(`Borde reducido · ${reductionCount} vez${reductionCount > 1 ? '' : ''}`);
+    }
+
+    // ── Export PNG (original resolution, no semitransparency) ─────
+    function exportPNG() {
+      if (!currentImageData) return;
+
+      // Clone current state
+      const clone = new ImageData(
+        new Uint8ClampedArray(currentImageData.data),
+        imgW, imgH
+      );
+      removeSemitransparencies(clone, 254);
+
+      // Write clone to work canvas and export
+      workCanvas.width  = imgW;
+      workCanvas.height = imgH;
+      wctx.putImageData(clone, 0, 0);
+
+      workCanvas.toBlob(blob => {
+        const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+        const a  = document.createElement('a');
+        a.href   = URL.createObjectURL(blob);
+        a.download = `ChechenaSHIRTS_bordes-${reductionCount}px_${ts}.png`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          URL.revokeObjectURL(a.href);
+          a.remove();
+        }, 1500);
+
+        // Restore actual currentImageData back to workCanvas
+        wctx.putImageData(currentImageData, 0, 0);
+        fitPreview();
+
+        showToast('✓ PNG exportado sin semitransparencias');
+      }, 'image/png');
+    }
+
+    // ── Reset / clear ─────────────────────────────────────────────
+    function clearImage(e) {
+      e.stopPropagation(); // don't trigger dropzone click
+      currentImageData = null;
+      imgW = imgH = 0;
+      reductionCount = 0;
+
+      workCanvas.width = workCanvas.height = 1;
+      previewCanvas.width = previewCanvas.height = 1;
+      pctx.clearRect(0, 0, 1, 1);
+
+      btnReduce.disabled = true;
+      btnExport.disabled = true;
+      dropzone.classList.remove('has-image');
+      fileBadge.classList.remove('visible');
+      previewSection.classList.remove('visible');
+      fileInput.value = '';
+
+      metaSize.classList.remove('visible');
+      metaMem.classList.remove('visible');
+      counter.classList.remove('visible');
+
+      showToast('Imagen eliminada');
+    }
+
+    // ── Preview background switcher ───────────────────────────────
+    function setPreviewBg(mode) {
+      canvasWrap.className = 'canvas-wrap';
+      const map = { transparent: 'bg-transparent', gray: 'bg-gray', white: 'bg-white', black: 'bg-black' };
+      canvasWrap.classList.add(map[mode] || 'bg-transparent');
+    }
+
+    // ── Event listeners ───────────────────────────────────────────
+
+    // Dropzone click → trigger file picker
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === clearBtn || clearBtn.contains(e.target)) return;
+      fileInput.click();
+    });
+
+    // Keyboard accessibility for dropzone
+    dropzone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+    });
+
+    // File input
+    fileInput.addEventListener('change', e => loadFile(e.target.files?.[0]));
+
+    // Clear button
+    clearBtn.addEventListener('click', clearImage);
+
+    // Drag & drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
+      dropzone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); });
+    });
+    dropzone.addEventListener('dragover',  () => dropzone.classList.add('drag-over'));
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+    dropzone.addEventListener('drop', (e) => {
+      dropzone.classList.remove('drag-over');
+      const f = e.dataTransfer.files?.[0];
+      if (f) loadFile(f);
+    });
+
+    // Also allow drops on the whole page body
+    document.body.addEventListener('dragover',  e => e.preventDefault());
+    document.body.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const f = e.dataTransfer.files?.[0];
+      if (f) loadFile(f);
+    });
+
+    // Action buttons
+    btnReduce.addEventListener('click', reduceOnePixel);
+    btnExport.addEventListener('click', exportPNG);
+
+    // Background segment selector
+    segButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        segButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setPreviewBg(btn.dataset.bg);
+      });
+    });
+
+    // Responsive preview
+    window.addEventListener('resize', fitPreview, { passive: true });
+
+    // Paste from clipboard (Ctrl+V / Cmd+V)
+    document.addEventListener('paste', (e) => {
+      const items = Array.from(e.clipboardData?.items || []);
+      const imgItem = items.find(i => i.type.startsWith('image/'));
+      if (imgItem) {
+        const file = imgItem.getAsFile();
+        if (file) loadFile(file);
+      }
+    });
+
+  })();
+  </script>
+</body>
+</html>
